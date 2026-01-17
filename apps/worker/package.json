@@ -9,18 +9,18 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "hono": "^4.6.17",
+    "@ai-sdk/google": "^1.1.4",
+    "@ai-sdk/openai": "^1.1.9",
     "@hono/zod-validator": "^0.4.2",
     "@mcqs/shared": "workspace:*",
     "ai": "^4.1.21",
-    "@ai-sdk/openai": "^1.1.9",
-    "@ai-sdk/google": "^1.1.4",
-    "zod": "^3.24.1",
-    "nanoid": "^5.0.9"
+    "hono": "^4.6.17",
+    "nanoid": "^5.0.9",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250109.0",
-    "wrangler": "^3.101.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "^4.59.2"
   }
 }
