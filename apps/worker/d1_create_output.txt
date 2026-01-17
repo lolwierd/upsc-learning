@@ -1,0 +1,23 @@
+
+ ⛅️ wrangler 3.114.17 (update available 4.59.2)
+-----------------------------------------------
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mThe version of Wrangler you are using is now out-of-date.[0m
+
+  Please update to the latest version to prevent critical errors.
+  Run `npm install --save-dev wrangler@4` to update to the latest version.
+  After installation, run Wrangler with `npx wrangler`.
+
+
+✅ Successfully created DB 'upsc-mcq-db' in region APAC
+Created your new D1 database.
+
+{
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "upsc-mcq-db",
+      "database_id": "52c504e0-fbb6-4b97-b21b-e7af08426742"
+    }
+  ]
+}

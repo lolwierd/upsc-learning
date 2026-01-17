@@ -1,44 +1,92 @@
-# UPSC MCQ Generator
+# CLAUDE.md
 
-Quiz app for UPSC preparation using AI (Gemini).
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Tech Stack
-- **Frontend:** Next.js 15, React 19, Tailwind CSS (port 3000)
-- **Backend:** Cloudflare Workers + Hono (port 8787)
-- **Database:** Cloudflare D1 (SQLite)
-- **AI:** Gemini 3 Flash Preview
+## Project Overview
 
-## Quick Start
+UPSC MCQ Generator - An AI-powered quiz application for UPSC Civil Services exam preparation. Generates UPSC-style MCQs using Gemini AI and supports BYOK (Bring Your Own Key) for OpenAI/Gemini.
+
+## Commands
+
 ```bash
-pnpm install
-cd apps/worker && npx wrangler d1 migrations apply upsc-mcq-db --local
-# Terminal 1: cd apps/worker && pnpm dev
-# Terminal 2: cd apps/web && pnpm dev
+# Development
+pnpm dev                          # Start all apps (web on :3000, worker on :8787)
+pnpm --filter @mcqs/web dev       # Start only frontend
+pnpm --filter @mcqs/worker dev    # Start only API worker
+
+# Build & Lint
+pnpm build                        # Build all packages
+pnpm lint                         # Lint all packages
+pnpm type-check                   # TypeScript check all packages
+
+# Database
+pnpm db:migrate                   # Alias for local migration
+pnpm --filter @mcqs/db migrate:local   # Apply migrations locally
+pnpm --filter @mcqs/db migrate:remote  # Apply migrations to production
+
+# Deployment
+cd apps/worker && wrangler deploy # Deploy API to Cloudflare Workers
 ```
 
-## Key Files
-| File | Purpose |
-|------|---------|
-| `apps/web/src/app/page.tsx` | Dashboard |
-| `apps/web/src/app/quiz/new/page.tsx` | Quiz creation |
-| `apps/web/src/app/quiz/[id]/page.tsx` | Take quiz |
-| `apps/web/src/components/ContributionGraph.tsx` | Activity heatmap (3 months) |
-| `apps/web/src/components/PerformanceGraph.tsx` | Correct/wrong chart |
-| `apps/web/src/components/GenerationProgress.tsx` | Shimmer progress text |
-| `apps/worker/src/services/llm.ts` | Gemini integration |
-| `apps/worker/src/routes/` | API endpoints |
+## Architecture
 
-## Design Tokens
-- **Primary color:** #0066ff (nicknamed "#dk")
-- **Card shadows:** `shadow-[0_1px_3px_rgba(0,0,0,0.02),0_4px_12px_rgba(0,0,0,0.04),0_8px_32px_rgba(0,0,0,0.04)]`
+### Monorepo Structure (Turborepo + pnpm workspaces)
 
-## Notes
-- `is_correct` in DB is INTEGER (0/1), convert to boolean in API
-- `style` column stores JSON array (handle old string format too)
-- Local dev: set `CORS_ORIGIN=http://localhost:3000` in wrangler.toml
-- Question count presets: 40, 80, 120, 160
+- **apps/web** (`@mcqs/web`): Next.js 15 frontend with React 19, Tailwind CSS
+- **apps/worker** (`@mcqs/worker`): Cloudflare Worker API using Hono framework
+- **packages/shared** (`@mcqs/shared`): Shared types, Zod schemas, constants
+- **packages/db** (`@mcqs/db`): D1 migrations only
 
-## Deployment
-- **API:** `cd apps/worker && npx wrangler deploy`
-- **Frontend:** Auto-deploys via GitHub → Cloudflare Pages
-- **Live:** https://mcqs.dhrumilkherde.com
+### Backend (Cloudflare Worker)
+
+The API (`apps/worker/src/index.ts`) uses Hono with route modules:
+- `routes/quiz.ts` - Quiz generation via LLM
+- `routes/attempt.ts` - Quiz attempt management
+- `routes/history.ts` - User quiz history and stats
+- `routes/settings.ts` - User preferences and API keys
+
+LLM integration (`services/llm.ts`): Uses Vercel AI SDK with Gemini. Prompts are extensively crafted in `prompts/index.ts` to match UPSC exam patterns.
+
+Cloudflare bindings in `types.ts`:
+- `DB`: D1 SQLite database
+- `CACHE`: KV namespace
+- `AI`: Workers AI (not currently used, Gemini preferred)
+
+### Frontend (Next.js)
+
+App Router pages:
+- `/` - Home/quiz creation
+- `/quiz/new` - Quiz configuration form
+- `/quiz/[id]` - Take quiz
+- `/quiz/[id]/results` - Results page
+- `/history` - Past quizzes
+- `/review` - Review wrong answers
+- `/stats` - Performance statistics
+- `/settings` - API key management
+
+API client at `lib/api.ts` makes requests to the worker.
+
+### Shared Package
+
+- `types.ts`: All TypeScript interfaces (Quiz, Attempt, Question, etc.)
+- `schemas.ts`: Zod validation schemas for API requests/responses
+- `constants.ts`: Subject list, difficulties, question styles
+
+## Database Schema
+
+SQLite (D1) tables: `user_settings`, `quizzes`, `questions`, `attempts`, `attempt_answers`
+
+User identification is cookie-based (no auth system).
+
+## Environment Setup
+
+**Web** (`apps/web/.env.local`):
+```
+NEXT_PUBLIC_API_URL=http://localhost:8787
+```
+
+**Worker** (`apps/worker/wrangler.toml`): Copy from `wrangler.toml.example`, then:
+1. Create D1: `npx wrangler d1 create upsc-mcq-db`
+2. Create KV: `npx wrangler kv namespace create CACHE`
+3. Update IDs in wrangler.toml
+4. Set secrets: `npx wrangler secret put GOOGLE_API_KEY`

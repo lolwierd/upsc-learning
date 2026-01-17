@@ -1,0 +1,32 @@
+name = "upsc-mcq-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# -----------------------------------------
+# D1 Database
+# -----------------------------------------
+[[d1_databases]]
+binding = "DB"
+database_name = "upsc-mcq-db"
+database_id = "52c504e0-fbb6-4b97-b21b-e7af08426742"
+migrations_dir = "../../packages/db/migrations"
+
+# -----------------------------------------
+# Workers AI
+# -----------------------------------------
+[ai]
+binding = "AI"
+
+# -----------------------------------------
+# Environment Variables
+# -----------------------------------------
+[vars]
+ENVIRONMENT = "production"
+CORS_ORIGIN = "https://upsc-learning.pages.dev"
+
+# -----------------------------------------
+# Production Overrides
+# -----------------------------------------
+[env.production]
+vars = { ENVIRONMENT = "production", CORS_ORIGIN = "https://upsc-learning.pages.dev" }
