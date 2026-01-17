@@ -496,9 +496,15 @@ export default function QuizPage() {
                   })}
                 </div>
 
-                {/* Learn Mode: Answer Section - Always visible, scroll to reveal */}
+                {/* Learn Mode: Answer Section */}
                 {quiz.learnMode && (
-                  <div className="mt-4 ml-11 space-y-3">
+                  <div
+                    className={cn(
+                      "mt-4 ml-11 space-y-3 transition-all duration-200",
+                      // First 2 questions: blur until hover
+                      i < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
+                    )}
+                  >
                     {/* Feedback after clicking */}
                     {isRevealed && (
                       <div
@@ -525,7 +531,7 @@ export default function QuizPage() {
                       </div>
                     )}
 
-                    {/* Correct Answer - Always shown */}
+                    {/* Correct Answer */}
                     <div className="flex items-center gap-2 text-sm font-medium text-green-700">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -533,7 +539,7 @@ export default function QuizPage() {
                       <span>Correct Answer: {String.fromCharCode(65 + (question.correctOption ?? 0))}</span>
                     </div>
 
-                    {/* Explanation - Always shown */}
+                    {/* Explanation */}
                     {question.explanation && (
                       <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm font-medium text-blue-900 mb-1">Explanation</p>
