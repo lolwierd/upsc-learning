@@ -15,8 +15,22 @@ app.use(
   "*",
   cors({
     origin: (origin, c) => {
-      const allowedOrigin = c.env.CORS_ORIGIN || "http://localhost:3000";
-      return origin === allowedOrigin ? origin : allowedOrigin;
+      const allowedOrigins = (c.env.CORS_ORIGIN || "http://localhost:3000").split(",");
+      
+      for (const allowed of allowedOrigins) {
+        const trimmed = allowed.trim();
+        // Handle wildcard (e.g., *.pages.dev)
+        if (trimmed.startsWith("*")) {
+          const suffix = trimmed.slice(1);
+          if (origin.endsWith(suffix)) return origin;
+        } 
+        // Handle exact match
+        else if (origin === trimmed) {
+          return origin;
+        }
+      }
+      
+      return allowedOrigins[0]; // Fallback to first allowed origin
     },
     allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
