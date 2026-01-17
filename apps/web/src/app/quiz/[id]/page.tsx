@@ -125,7 +125,7 @@ export default function QuizPage() {
         console.error("Failed to save answer:", err);
       }
     },
-    [attemptId, answers, quiz?.learnMode]
+    [attemptId, answers, quiz]
   );
 
   // Handle mark for review
@@ -426,7 +426,21 @@ export default function QuizPage() {
                     return (
                       <button
                         key={optIndex}
-                        onClick={() => !isRevealed && handleAnswer(question.id, optIndex)}
+                        onClick={() => {
+                          if (isRevealed) return;
+
+                          // Handle learn mode directly here with fresh state
+                          if (quiz.learnMode) {
+                            setAnswers((prev) => new Map(prev).set(question.id, {
+                              questionId: question.id,
+                              selectedOption: optIndex,
+                              markedForReview: false,
+                            }));
+                            setRevealedQuestions((prev) => new Set(prev).add(question.id));
+                          } else {
+                            handleAnswer(question.id, optIndex);
+                          }
+                        }}
                         disabled={quiz.learnMode && isRevealed}
                         className={cn(
                           "w-full text-left p-3 rounded-lg border transition-colors flex items-start gap-3",
@@ -482,34 +496,44 @@ export default function QuizPage() {
                   })}
                 </div>
 
-                {/* Learn Mode: Answer Reveal Section */}
-                {quiz.learnMode && isRevealed && (
+                {/* Learn Mode: Answer Section - Always visible, scroll to reveal */}
+                {quiz.learnMode && (
                   <div className="mt-4 ml-11 space-y-3">
-                    {/* Correct/Incorrect feedback */}
-                    <div
-                      className={cn(
-                        "flex items-center gap-2 text-sm font-medium",
-                        isCorrectAnswer ? "text-green-700" : "text-red-700"
-                      )}
-                    >
-                      {isCorrectAnswer ? (
-                        <>
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          <span>Correct!</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                          </svg>
-                          <span>Incorrect - The correct answer is {String.fromCharCode(65 + (question.correctOption ?? 0))}</span>
-                        </>
-                      )}
+                    {/* Feedback after clicking */}
+                    {isRevealed && (
+                      <div
+                        className={cn(
+                          "flex items-center gap-2 text-sm font-medium",
+                          isCorrectAnswer ? "text-green-700" : "text-red-700"
+                        )}
+                      >
+                        {isCorrectAnswer ? (
+                          <>
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span>Correct!</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            <span>Incorrect!</span>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Correct Answer - Always shown */}
+                    <div className="flex items-center gap-2 text-sm font-medium text-green-700">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>Correct Answer: {String.fromCharCode(65 + (question.correctOption ?? 0))}</span>
                     </div>
 
-                    {/* Explanation */}
+                    {/* Explanation - Always shown */}
                     {question.explanation && (
                       <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm font-medium text-blue-900 mb-1">Explanation</p>
