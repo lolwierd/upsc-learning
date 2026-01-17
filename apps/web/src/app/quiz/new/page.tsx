@@ -70,7 +70,7 @@ export default function NewQuizPage() {
         if (settings.defaultQuestionCount) {
           setQuestionCount(settings.defaultQuestionCount);
         }
-      } catch (err) {
+      } catch {
         // Silently fail, use default
       }
     }

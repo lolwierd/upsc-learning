@@ -20,7 +20,7 @@ type TimeRange = "7" | "30" | "90" | "all";
 export function PerformanceGraph({ activity, className = "" }: PerformanceGraphProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>("all");
   const [animationProgress, setAnimationProgress] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [_hasAnimated, setHasAnimated] = useState(false);
   const correctPathRef = useRef<SVGPathElement>(null);
   const wrongPathRef = useRef<SVGPathElement>(null);
 
@@ -84,7 +84,7 @@ export function PerformanceGraph({ activity, className = "" }: PerformanceGraphP
   }, [chartData]);
 
   // Calculate graph dimensions and scales
-  const { maxValue, points, pathLengths } = useMemo(() => {
+  const { maxValue, points, pathLengths: _pathLengths } = useMemo(() => {
     if (chartData.length === 0) {
       return { maxValue: 100, points: { correct: "", wrong: "" }, pathLengths: { correct: 0, wrong: 0 } };
     }
