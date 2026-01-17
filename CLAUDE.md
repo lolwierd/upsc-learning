@@ -5,7 +5,7 @@ A web app to generate and practice UPSC-style MCQ quizzes using AI (Gemini).
 
 **Owner:** Dhrumil
 **Created:** January 17, 2026
-**Status:** MVP working locally
+**Status:** Deployed to Cloudflare
 
 ---
 
@@ -234,9 +234,89 @@ All styles selected by default when creating a quiz. Questions distributed evenl
 
 ---
 
+## Deployment (Production)
+
+### URLs
+
+| Service | URL |
+|---------|-----|
+| **GitHub Repo** | https://github.com/DicKay15/MCQs |
+| **API (Worker)** | https://upsc-mcq-api.dhrumil-kherde.workers.dev |
+| **Frontend (Pages)** | https://mcqs.dhrumilkherde.com |
+| **Frontend (CF URL)** | (via Cloudflare Pages - auto-deploys from GitHub) |
+
+### Cloudflare Resources (Dhrumil's Account)
+
+| Resource | ID |
+|----------|-----|
+| D1 Database | `cee01db0-7e99-435b-9425-fada42d95568` |
+| KV Namespace | `c0610f5cb9424c9394a7025a12bf1bb9` |
+
+### Deploy Worker (API)
+
+```bash
+cd apps/worker
+npx wrangler deploy
+```
+
+Worker config is in `wrangler.toml` (gitignored). Template at `wrangler.toml.example`.
+
+**Secrets set on worker:**
+- `GOOGLE_API_KEY` - Gemini API key for quiz generation
+
+### Deploy Frontend (Pages)
+
+Frontend auto-deploys via GitHub → Cloudflare Pages integration.
+
+**Cloudflare Pages Settings:**
+
+| Setting | Value |
+|---------|-------|
+| Build command | `cd apps/web && npx @cloudflare/next-on-pages` |
+| Build output directory | `apps/web/.vercel/output/static` |
+| Root directory | (empty) |
+
+**Environment Variables (in CF Pages):**
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_API_URL` | `https://upsc-mcq-api.dhrumil-kherde.workers.dev` |
+| `NODE_VERSION` | `18` |
+
+**Compatibility Flags (in Settings → Functions):**
+- `nodejs_compat`
+
+### For Other Contributors
+
+Each person deploying needs their own Cloudflare resources:
+
+```bash
+# 1. Copy wrangler config
+cd apps/worker
+cp wrangler.toml.example wrangler.toml
+
+# 2. Create D1 database
+npx wrangler d1 create upsc-mcq-db
+# Copy the database_id to wrangler.toml
+
+# 3. Create KV namespace
+npx wrangler kv namespace create CACHE
+# Copy the id to wrangler.toml
+
+# 4. Add Gemini API key
+npx wrangler secret put GOOGLE_API_KEY
+
+# 5. Run migrations
+npx wrangler d1 migrations apply upsc-mcq-db --remote
+
+# 6. Deploy
+npx wrangler deploy
+```
+
+---
+
 ## Future Improvements (Not Done Yet)
 
-- [ ] Deploy to Cloudflare (Workers + Pages)
 - [ ] Add Turnstile bot protection
 - [ ] Current affairs with news API
 - [ ] Multi-correct question support
@@ -254,3 +334,10 @@ All styles selected by default when creating a quiz. Questions distributed evenl
 - Check worker logs for API errors
 - Database is local SQLite via D1 simulation
 - When reading styles from DB, handle both old string format and new JSON array
+
+### Deployment Notes
+- Worker deployed via `npx wrangler deploy` from `apps/worker/`
+- Frontend auto-deploys via GitHub → Cloudflare Pages
+- `wrangler.toml` is gitignored - each contributor needs their own
+- Dynamic routes need `export const runtime = "edge"` for CF Pages
+- Turnstile removed for now (was blocking quiz generation)
