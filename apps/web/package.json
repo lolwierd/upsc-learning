@@ -5,28 +5,33 @@
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
     "build": "next build",
+    "build:cf": "npx opennextjs-cloudflare build",
+    "preview": "npx opennextjs-cloudflare preview",
+    "deploy": "npx opennextjs-cloudflare deploy",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@mcqs/shared": "workspace:*",
+    "clsx": "^2.1.1",
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@mcqs/shared": "workspace:*",
-    "clsx": "^2.1.1",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
+    "@opennextjs/cloudflare": "^1.14.9",
     "@types/node": "^22.10.7",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "^15.1.6",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
-    "eslint": "^9.18.0",
-    "eslint-config-next": "^15.1.6"
+    "wrangler": "^3.101.0"
   }
 }
