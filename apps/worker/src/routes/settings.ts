@@ -11,6 +11,7 @@ const updateSettingsSchema = z.object({
   openaiApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
   defaultQuestionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT).optional(),
+  learnModeEnabled: z.boolean().optional(),
 });
 
 // Get user settings
@@ -30,6 +31,7 @@ settings.get("/", async (c) => {
       hasOpenaiKey: false,
       hasGeminiKey: false,
       defaultQuestionCount: 10,
+      learnModeEnabled: false,
     });
   }
 
@@ -38,6 +40,7 @@ settings.get("/", async (c) => {
     hasOpenaiKey: !!result.openai_api_key,
     hasGeminiKey: !!result.gemini_api_key,
     defaultQuestionCount: result.default_question_count || 10,
+    learnModeEnabled: !!result.learn_mode_enabled,
   });
 });
 
@@ -57,8 +60,8 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
   if (!existing) {
     // Create new settings
     await c.env.DB.prepare(
-      `INSERT INTO user_settings (user_id, default_model, openai_api_key, gemini_api_key, default_question_count, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO user_settings (user_id, default_model, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         userId,
@@ -66,6 +69,7 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
         body.openaiApiKey || null,
         body.geminiApiKey || null,
         body.defaultQuestionCount || 10,
+        body.learnModeEnabled ? 1 : 0,
         now,
         now
       )
@@ -90,6 +94,10 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     if (body.defaultQuestionCount !== undefined) {
       updates.push("default_question_count = ?");
       params.push(body.defaultQuestionCount);
+    }
+    if (body.learnModeEnabled !== undefined) {
+      updates.push("learn_mode_enabled = ?");
+      params.push(body.learnModeEnabled ? 1 : 0);
     }
 
     if (updates.length > 0) {

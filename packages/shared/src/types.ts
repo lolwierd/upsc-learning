@@ -44,9 +44,8 @@ export interface QuestionWithAnswer extends BaseQuestion {
   correctOption: number;
 }
 
-export interface QuestionForQuiz extends BaseQuestion {
-  // correctOption is intentionally omitted
-}
+// QuestionForQuiz is the same as BaseQuestion (correctOption is intentionally omitted)
+export type QuestionForQuiz = BaseQuestion;
 
 // Generated question from LLM (no ID yet)
 export interface GeneratedQuestion {
@@ -135,6 +134,7 @@ export interface UserSettings {
   hasOpenaiKey: boolean;
   hasGeminiKey: boolean;
   defaultQuestionCount: number;
+  learnModeEnabled: boolean;
 }
 
 // ============================================

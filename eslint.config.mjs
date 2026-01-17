@@ -25,6 +25,18 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
     },
   },
+  // Cloudflare Workers specific config
+  {
+    files: ["apps/worker/**/*.ts"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        D1Database: "readonly",
+        KVNamespace: "readonly",
+        Ai: "readonly",
+      },
+    },
+  },
   {
     ignores: [
       "**/node_modules/**",

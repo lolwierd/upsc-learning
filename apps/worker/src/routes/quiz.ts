@@ -111,6 +111,18 @@ function parseStyles(styleData: unknown): string[] {
 quiz.get("/:id", async (c) => {
   const quizId = c.req.param("id");
   const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
+  const withAnswers = c.req.query("withAnswers") === "true";
+
+  // Check if user has learn mode enabled (only if withAnswers is requested)
+  let learnModeEnabled = false;
+  if (withAnswers) {
+    const settingsResult = await c.env.DB.prepare(
+      `SELECT learn_mode_enabled FROM user_settings WHERE user_id = ?`
+    )
+      .bind(userId)
+      .first();
+    learnModeEnabled = !!settingsResult?.learn_mode_enabled;
+  }
 
   // Get quiz
   const quizResult = await c.env.DB.prepare(
@@ -130,14 +142,20 @@ quiz.get("/:id", async (c) => {
     .bind(quizId)
     .all();
 
+  const includeAnswers = withAnswers && learnModeEnabled;
+
   const questions = questionsResult.results.map((q: Record<string, unknown>) => ({
     id: q.id,
     sequenceNumber: q.sequence_number,
     questionText: q.question_text,
     questionType: q.question_type,
     options: JSON.parse(q.options as string),
-    // Don't expose correct answer in quiz view
     metadata: q.metadata ? JSON.parse(q.metadata as string) : null,
+    // Include correct answer and explanation only in learn mode
+    ...(includeAnswers && {
+      correctOption: q.correct_option,
+      explanation: q.explanation,
+    }),
   }));
 
   return c.json({
@@ -149,6 +167,7 @@ quiz.get("/:id", async (c) => {
     questionCount: quizResult.question_count,
     createdAt: quizResult.created_at,
     questions,
+    ...(includeAnswers && { learnMode: true }),
   });
 });
 

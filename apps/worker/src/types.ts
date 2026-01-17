@@ -1,6 +1,6 @@
 export interface Env {
   DB: D1Database;
-  AI: any;
+  AI: Ai;
   GOOGLE_API_KEY: string;
   CORS_ORIGIN?: string;
   ENVIRONMENT?: string;

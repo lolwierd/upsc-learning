@@ -22,6 +22,7 @@ export default function SettingsPage() {
   const [defaultQuestionCount, setDefaultQuestionCount] = useState(10);
   const [hasOpenaiKey, setHasOpenaiKey] = useState(false);
   const [hasGeminiKey, setHasGeminiKey] = useState(false);
+  const [learnModeEnabled, setLearnModeEnabled] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -31,6 +32,7 @@ export default function SettingsPage() {
         setDefaultQuestionCount(settings.defaultQuestionCount);
         setHasOpenaiKey(settings.hasOpenaiKey);
         setHasGeminiKey(settings.hasGeminiKey);
+        setLearnModeEnabled(settings.learnModeEnabled);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load settings");
       } finally {
@@ -51,6 +53,7 @@ export default function SettingsPage() {
         openaiApiKey: openaiKey || undefined,
         geminiApiKey: geminiKey || undefined,
         defaultQuestionCount,
+        learnModeEnabled,
       });
       setSuccess(true);
       if (openaiKey) setHasOpenaiKey(true);
@@ -260,6 +263,33 @@ export default function SettingsPage() {
             <p className="text-xs text-gray-500 mt-1">
               Enter a number between {MIN_QUESTION_COUNT} and {MAX_QUESTION_COUNT}
             </p>
+          </div>
+        </Card>
+
+        {/* Learn Mode */}
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-base">Learn Mode</CardTitle>
+              <CardDescription>
+                Show correct answers and explanations instantly after selecting an option. No attempt tracking.
+              </CardDescription>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={learnModeEnabled}
+              onClick={() => setLearnModeEnabled(!learnModeEnabled)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                learnModeEnabled ? "bg-primary-500" : "bg-gray-200"
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  learnModeEnabled ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
           </div>
         </Card>
 

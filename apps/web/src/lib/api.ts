@@ -43,8 +43,9 @@ export async function generateQuiz(
   });
 }
 
-export async function getQuiz(id: string): Promise<QuizWithQuestions> {
-  return fetchAPI(API_ENDPOINTS.QUIZ_GET(id));
+export async function getQuiz(id: string, options?: { withAnswers?: boolean }): Promise<QuizWithQuestions & { learnMode?: boolean }> {
+  const query = options?.withAnswers ? "?withAnswers=true" : "";
+  return fetchAPI(`${API_ENDPOINTS.QUIZ_GET(id)}${query}`);
 }
 
 // Attempt APIs
@@ -120,6 +121,7 @@ export async function updateSettings(
     openaiApiKey: string;
     geminiApiKey: string;
     defaultQuestionCount: number;
+    learnModeEnabled: boolean;
   }>
 ): Promise<{ success: boolean }> {
   return fetchAPI(API_ENDPOINTS.SETTINGS, {
