@@ -24,10 +24,10 @@ binding = "AI"
 [vars]
 ENVIRONMENT = "production"
 # Comma-separated list of allowed origins. Use * as a wildcard prefix
-CORS_ORIGIN = "http://localhost:3000,https://upsc.lolwierd.com,https://upsc-learning.pages.dev,*.upsc-learning.pages.dev"
+CORS_ORIGIN = "https://upsc.lolwierd.com"
 
 # -----------------------------------------
 # Production Overrides
 # -----------------------------------------
 [env.production]
-vars = { ENVIRONMENT = "production", CORS_ORIGIN = "http://localhost:3000,https://upsc.lolwierd.com,https://upsc-learning.pages.dev,*.upsc-learning.pages.dev" }
+vars = { ENVIRONMENT = "production", CORS_ORIGIN = "https://upsc.lolwierd.com" }
