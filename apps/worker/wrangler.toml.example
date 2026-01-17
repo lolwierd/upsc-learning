@@ -1,0 +1,63 @@
+# ===========================================
+# UPSC MCQ API - Cloudflare Worker Config
+# ===========================================
+#
+# SETUP INSTRUCTIONS:
+# 1. Copy this file: cp wrangler.toml.example wrangler.toml
+# 2. Create your D1 database: npx wrangler d1 create upsc-mcq-db
+# 3. Create your KV namespace: npx wrangler kv namespace create CACHE
+# 4. Replace the placeholder IDs below with your actual IDs
+# 5. Run migrations: npx wrangler d1 migrations apply upsc-mcq-db --local
+# 6. Deploy: pnpm deploy
+#
+# ===========================================
+
+name = "upsc-mcq-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# -----------------------------------------
+# D1 Database
+# -----------------------------------------
+# Create with: npx wrangler d1 create upsc-mcq-db
+# Then copy the database_id from the output
+[[d1_databases]]
+binding = "DB"
+database_name = "upsc-mcq-db"
+database_id = "YOUR_D1_DATABASE_ID_HERE"
+migrations_dir = "../../packages/db/migrations"
+
+# -----------------------------------------
+# KV Namespace (for caching)
+# -----------------------------------------
+# Create with: npx wrangler kv namespace create CACHE
+# Then copy the id from the output
+[[kv_namespaces]]
+binding = "CACHE"
+id = "YOUR_KV_NAMESPACE_ID_HERE"
+
+# -----------------------------------------
+# Workers AI (built-in, no config needed)
+# -----------------------------------------
+[ai]
+binding = "AI"
+
+# -----------------------------------------
+# Environment Variables
+# -----------------------------------------
+# These are set in the file. For secrets (API keys), use:
+# npx wrangler secret put GOOGLE_API_KEY
+# npx wrangler secret put OPENAI_API_KEY (optional)
+# npx wrangler secret put TURNSTILE_SECRET_KEY (optional)
+
+[vars]
+ENVIRONMENT = "development"
+CORS_ORIGIN = "http://localhost:3000"
+
+# -----------------------------------------
+# Production Overrides
+# -----------------------------------------
+# Change CORS_ORIGIN to your actual frontend domain
+[env.production]
+vars = { ENVIRONMENT = "production", CORS_ORIGIN = "https://your-frontend-domain.com" }

@@ -1,0 +1,13 @@
+{
+  "name": "@mcqs/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "migrate:local": "wrangler d1 migrations apply upsc-mcq-db --local",
+    "migrate:remote": "wrangler d1 migrations apply upsc-mcq-db --remote",
+    "generate": "wrangler d1 migrations create upsc-mcq-db"
+  },
+  "devDependencies": {
+    "wrangler": "^3.101.0"
+  }
+}
