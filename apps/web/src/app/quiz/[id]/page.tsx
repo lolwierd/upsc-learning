@@ -51,6 +51,7 @@ export default function QuizPage() {
   const [error, setError] = useState<string | null>(null);
   const [startTime] = useState(Date.now());
   const [revealedQuestions, setRevealedQuestions] = useState<Set<string>>(new Set());
+  const [showAnswers, setShowAnswers] = useState(true); // Temp toggle for learn mode
 
   // Load quiz and start attempt
   useEffect(() => {
@@ -262,9 +263,17 @@ export default function QuizPage() {
               {quiz.theme && ` - ${quiz.theme}`}
             </h1>
             {quiz.learnMode && (
-              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-                Learn Mode
-              </span>
+              <button
+                onClick={() => setShowAnswers(!showAnswers)}
+                className={cn(
+                  "text-xs px-2 py-0.5 rounded-full font-medium transition-colors",
+                  showAnswers
+                    ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                )}
+              >
+                {showAnswers ? "Hide Answers" : "Show Answers"}
+              </button>
             )}
           </div>
           <p className="text-sm text-gray-500">
@@ -497,7 +506,7 @@ export default function QuizPage() {
                 </div>
 
                 {/* Learn Mode: Answer Section */}
-                {quiz.learnMode && (
+                {quiz.learnMode && showAnswers && (
                   <div
                     className={cn(
                       "mt-4 ml-11 space-y-3 transition-all duration-200",
