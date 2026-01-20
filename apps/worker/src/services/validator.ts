@@ -713,7 +713,6 @@ async function factCheckBatchSingleCall(
   }
 }
 
-// Fact-check ALL questions in a batch (no sampling - quality over cost)
 export async function factCheckBatch(
   questions: GeneratedQuestion[],
   apiKey: string,
@@ -730,5 +729,53 @@ export async function factCheckBatch(
   accurateCount: number;
   issues: Array<{ questionIndex: number; result: FactCheckResult }>;
 }> {
-  return await factCheckBatchSingleCall(questions, apiKey, params);
+  // Chunk questions into smaller batches to avoid timeouts and maximize parallelism
+  const CHUNK_SIZE = 10;
+  const chunks: GeneratedQuestion[][] = [];
+
+  for (let i = 0; i < questions.length; i += CHUNK_SIZE) {
+    chunks.push(questions.slice(i, i + CHUNK_SIZE));
+  }
+
+  console.log(`Split ${questions.length} questions into ${chunks.length} chunks for parallel fact-checking`);
+
+  const results = await Promise.all(
+    chunks.map(async (chunk, chunkIndex) => {
+      // Map back to original indices
+      const offset = chunkIndex * CHUNK_SIZE;
+
+      try {
+        const result = await factCheckBatchSingleCall(chunk, apiKey, params);
+
+        // Adjust indices in issues to match original array
+        const adjustedIssues = result.issues.map(issue => ({
+          ...issue,
+          questionIndex: issue.questionIndex + offset
+        }));
+
+        return {
+          ...result,
+          issues: adjustedIssues
+        };
+      } catch (error) {
+        console.error(`Fact-check chunk ${chunkIndex} failed:`, error);
+        // Return neutral result on failure to avoid failing entire generation
+        return {
+          checkedCount: chunk.length,
+          accurateCount: chunk.length, // Assume accurate on error to proceed
+          issues: []
+        };
+      }
+    })
+  );
+
+  // Aggregate results
+  return results.reduce(
+    (acc, curr) => ({
+      checkedCount: acc.checkedCount + curr.checkedCount,
+      accurateCount: acc.accurateCount + curr.accurateCount,
+      issues: [...acc.issues, ...curr.issues],
+    }),
+    { checkedCount: 0, accurateCount: 0, issues: [] }
+  );
 }

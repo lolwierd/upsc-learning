@@ -116,61 +116,33 @@ async function saveFingerprints(
   return { attempted: questions.length, insertErrors: errorCount };
 }
 
-export async function generateQuiz(
+// Helper function for a single batch generation
+async function generateQuizBatch(
   env: Env,
-  params: GenerateQuizParams
-): Promise<{ questions: GeneratedQuestion[]; metrics: GenerateQuizMetrics }> {
+  params: GenerateQuizParams,
+  parentCallId: string,
+  batchIndex: number
+): Promise<{
+  questions: GeneratedQuestion[];
+  metrics: Partial<GenerateQuizMetrics>;
+  rawResponse: string;
+}> {
   const {
     subject,
     theme,
     difficulty,
     styles,
     count,
-    apiKey,
     era = "current",
-    enableFactCheck: enableFactCheckParam,
-    enableDeduplication = true,
   } = params;
 
+  // Use a faster model for generation
   const generationModel = "gemini-3-flash-preview";
-  const factCheckModel = env.FACT_CHECK_MODEL ?? "gemini-3-flash-preview";
-  const enableFactCheck = enableFactCheckParam ?? env.ENABLE_FACT_CHECK === "1";
 
-  // Input validation
-  if (!subject?.trim()) {
-    throw new Error("Subject is required.");
-  }
-  if (!Array.isArray(styles) || styles.length === 0) {
-    throw new Error("At least one question style is required.");
-  }
-  if (!Number.isInteger(count) || count <= 0) {
-    throw new Error("Count must be a positive integer.");
-  }
-
-  // Get API key from params or environment
-  // const geminiApiKey = apiKey || env.GOOGLE_API_KEY;
-
-  // if (!geminiApiKey) {
-  //   throw new Error("Gemini API key is required. Please add it in Settings.");
-  // }
-
-  // Warn if deduplication enabled but DB not available
-  if (enableDeduplication && !env.DB) {
-    console.warn("Deduplication enabled but DB not configured - skipping deduplication.");
-  }
-
-  // Load existing fingerprints for deduplication
-  let existingFingerprints = new Set<string>();
-  if (enableDeduplication && env.DB) {
-    existingFingerprints = await loadExistingFingerprints(env.DB, subject);
-    console.log(`Loaded ${existingFingerprints.size} existing fingerprints for ${subject}`);
-  }
-
-  // Distribute questions across styles
+  // Distribute questions across styles for this batch
   const questionsPerStyle = Math.floor(count / styles.length);
   const remainderQuestions = count % styles.length;
 
-  // Create distribution: each style gets base count, first styles get the remainder
   const styleDistribution: { style: QuestionStyle; count: number }[] = styles.map(
     (style, index) => ({
       style,
@@ -231,24 +203,20 @@ Generate exactly ${count} questions now.`;
 
   const totalPromptChars = systemPrompt.length + promptChars;
   const generationCallId = crypto.randomUUID();
-  const maxTokens = Math.min(8000 + count * 300, 32000);
+  const maxTokens = Math.min(8000 + count * 400, 32000); // Increased token buffer
 
-  // Parse service account from env or fallback to error
+  // Parse service account
   let serviceAccount: any;
   try {
     if (env.GCP_SERVICE_ACCOUNT) {
       serviceAccount = JSON.parse(env.GCP_SERVICE_ACCOUNT);
     } else {
-      // Fallback for local dev if the file exists (optional, but better to enforce env var in production)
-      // But since we are moving away from file import in code, we should error if missing in Prod
-      // For local dev, we can still assume .dev.vars injects it or we strictly require it.
       throw new Error("GCP_SERVICE_ACCOUNT environment variable is not set");
     }
   } catch (e: any) {
     throw new Error(`Failed to load Google Service Account: ${e.message}`);
   }
 
-  // Use Vertex AI
   const vertex = createVertex({
     project: serviceAccount.project_id,
     location: env.GOOGLE_VERTEX_LOCATION || "global",
@@ -262,57 +230,40 @@ Generate exactly ${count} questions now.`;
 
   const generationStart = Date.now();
   let text = "";
-  let usage:
-    | {
-      promptTokens?: number;
-      completionTokens?: number;
-      totalTokens?: number;
-    }
-    | undefined;
+  let usage: any;
   let generationDurationMs = 0;
   let responseChars = 0;
 
   try {
+    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions...`);
     const generation = await generateText({
       model: vertex(generationModel),
       system: systemPrompt,
       prompt,
-      maxOutputTokens: maxTokens, // Increased tokens for detailed questions and explanations
+      maxOutputTokens: maxTokens,
     });
     generationDurationMs = Date.now() - generationStart;
     text = generation.text;
-    usage = (generation as {
-      usage?: {
-        promptTokens?: number;
-        completionTokens?: number;
-        totalTokens?: number;
-      };
-    }).usage;
+    usage = (generation as any).usage;
     responseChars = text.length;
+    console.log(`[Batch ${batchIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
   } catch (error) {
-    generationDurationMs = Date.now() - generationStart;
+    console.error(`[Batch ${batchIndex}] Failed:`, error);
 
+    // Dump failure log
     await dumpLlmCall(env, {
       kind: "generation",
       callId: generationCallId,
+      parentCallId,
       model: generationModel,
       provider: "gemini",
       startedAtMs: generationStart,
-      durationMs: generationDurationMs,
+      durationMs: Date.now() - generationStart,
       request: {
         system: systemPrompt,
         prompt,
         maxTokens,
-        metadata: {
-          subject,
-          theme: theme ?? null,
-          difficulty,
-          styles,
-          era,
-          requestedCount: count,
-          enableDeduplication,
-          enableFactCheck,
-        },
+        metadata: { batchIndex, ...params }
       },
       response: {
         text: "",
@@ -323,15 +274,11 @@ Generate exactly ${count} questions now.`;
     throw error;
   }
 
-  if (env.LLM_DEBUG === "1") {
-    console.log(
-      `[generateQuiz] model=${generationModel} durationMs=${generationDurationMs} promptChars=${totalPromptChars} responseChars=${responseChars}`
-    );
-  }
-
+  // Dump success log
   await dumpLlmCall(env, {
     kind: "generation",
     callId: generationCallId,
+    parentCallId,
     model: generationModel,
     provider: "gemini",
     startedAtMs: generationStart,
@@ -340,16 +287,7 @@ Generate exactly ${count} questions now.`;
       system: systemPrompt,
       prompt,
       maxTokens,
-      metadata: {
-        subject,
-        theme: theme ?? null,
-        difficulty,
-        styles,
-        era,
-        requestedCount: count,
-        enableDeduplication,
-        enableFactCheck,
-      },
+      metadata: { batchIndex, ...params }
     },
     response: {
       text,
@@ -361,184 +299,230 @@ Generate exactly ${count} questions now.`;
     },
   });
 
-  // Parse the response
+  // Parse response
+  let rawQuestions: GeneratedQuestion[] = [];
   try {
-    // Clean up response - handle markdown code blocks
     const cleaned = text
       .trim()
       .replace(/^```json\s*/i, "")
       .replace(/^```\s*/i, "")
       .replace(/```\s*$/i, "");
 
-    // Try direct parse first, then fall back to regex extraction
-    let rawQuestions: GeneratedQuestion[];
-    let parseStrategy: "direct" | "extracted" = "direct";
     try {
       rawQuestions = JSON.parse(cleaned);
     } catch {
-      // Fall back to extracting JSON array from response
       const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
-      if (!jsonMatch) {
-        throw new Error("No JSON array found in response");
-      }
-      parseStrategy = "extracted";
+      if (!jsonMatch) throw new Error("No JSON array found");
       rawQuestions = JSON.parse(jsonMatch[0]);
     }
-
-    // Normalize questions first
-    const normalizedQuestions = rawQuestions.slice(0, count).map((q, i) => ({
-      questionText: q.questionText || `Question ${i + 1}`,
-      questionType: q.questionType || "standard",
-      options: Array.isArray(q.options) && q.options.length === 4
-        ? q.options
-        : ["A) Option A", "B) Option B", "C) Option C", "D) Option D"],
-      correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
-        ? q.correctOption
-        : 0,
-      explanation: q.explanation || "No explanation provided.",
-      metadata: q.metadata,
-    }));
-
-    // Auto-fix common issues
-    const fixedQuestions = normalizedQuestions.map(autoFixQuestion);
-
-    // Deduplication: Filter out questions similar to previously generated ones
-    let finalQuestions = fixedQuestions;
-    let dedupFilteredCount = 0;
-    if (enableDeduplication && existingFingerprints.size > 0) {
-      const dedupedQuestions: GeneratedQuestion[] = [];
-      const duplicatesFound: string[] = [];
-
-      for (const question of fixedQuestions) {
-        const fingerprint = generateFingerprint(question);
-        if (existingFingerprints.has(fingerprint)) {
-          duplicatesFound.push(question.questionText.slice(0, 80) + "...");
-        } else {
-          dedupedQuestions.push(question);
-          existingFingerprints.add(fingerprint); // Prevent duplicates within same batch
-        }
-      }
-
-      if (duplicatesFound.length > 0) {
-        dedupFilteredCount = duplicatesFound.length;
-        console.warn(`Filtered ${duplicatesFound.length} duplicate questions`);
-      }
-
-      finalQuestions = dedupedQuestions;
-    }
-
-    // Validate the batch
-    const validationResult = validateBatch(finalQuestions);
-    const validationErrorCount = validationResult.results.reduce(
-      (sum, r) => sum + r.errors.length,
-      0
-    );
-    const validationWarningCount = validationResult.results.reduce(
-      (sum, r) => sum + r.warnings.length,
-      0
-    );
-
-    // Log validation results for debugging (but don't fail the request)
-    if (!validationResult.isValid || validationResult.batchWarnings.length > 0) {
-      console.warn("Question validation issues detected:");
-      validationResult.results.forEach((r) => {
-        if (r.errors.length > 0) {
-          console.warn(`  Q${r.questionIndex + 1} Errors:`, r.errors);
-        }
-        if (r.warnings.length > 0) {
-          console.warn(`  Q${r.questionIndex + 1} Warnings:`, r.warnings);
-        }
-      });
-      if (validationResult.batchWarnings.length > 0) {
-        console.warn("  Batch warnings:", validationResult.batchWarnings);
-      }
-    }
-
-    // Fact-check ALL questions with Gemini Pro (quality over cost)
-    let factCheckDurationMs: number | null = null;
-    let factCheckCheckedCount: number | null = null;
-    let factCheckIssueCount: number | null = null;
-    if (enableFactCheck && finalQuestions.length > 0) {
-      console.log(`Running fact-check with Gemini Pro on ALL ${finalQuestions.length} questions...`);
-      const factCheckStart = Date.now();
-      const factCheckResult = await factCheckBatch(
-        finalQuestions,
-        "", // apiKey ignored as we use service account
-        {
-          env,
-          parentCallId: generationCallId,
-          subject,
-          theme,
-          difficulty,
-          era,
-        }
-      );
-      factCheckDurationMs = Date.now() - factCheckStart;
-      factCheckCheckedCount = factCheckResult.checkedCount;
-      factCheckIssueCount = factCheckResult.issues.length;
-
-      if (factCheckResult.issues.length > 0) {
-        console.warn("Fact-check found potential issues:");
-        for (const issue of factCheckResult.issues) {
-          console.warn(
-            `  Q${issue.questionIndex + 1}: ${issue.result.issues.join(", ")}`
-          );
-        }
-      } else {
-        console.log(
-          `Fact-check passed: ${factCheckResult.accurateCount}/${factCheckResult.checkedCount} verified`
-        );
-      }
-    }
-
-    // Save fingerprints for future deduplication
-    if (enableDeduplication && env.DB && finalQuestions.length > 0) {
-      await saveFingerprints(env.DB, finalQuestions, subject, theme);
-      console.log(`Saved ${finalQuestions.length} fingerprints for future deduplication`);
-    }
-
-    // Warn if returning fewer than requested
-    if (finalQuestions.length < count) {
-      console.warn(`Requested ${count} questions but returning ${finalQuestions.length} after deduplication/validation.`);
-    }
-
+  } catch (e) {
+    console.warn(`[Batch ${batchIndex}] Parse failed, returning empty list`);
     return {
-      questions: finalQuestions,
-      metrics: {
-        provider: "gemini",
-        model: generationModel,
-        factCheckModel,
-        subject,
-        theme,
-        difficulty,
-        styles,
-        era,
-        requestedCount: count,
-        returnedCount: finalQuestions.length,
-        dedupEnabled: enableDeduplication,
-        dedupFilteredCount,
-        validationIsValid: validationResult.isValid,
-        validationInvalidCount: validationResult.invalidQuestions,
-        validationErrorCount,
-        validationWarningCount,
-        validationBatchWarnings: validationResult.batchWarnings,
-        parseStrategy,
-        promptChars: totalPromptChars,
-        responseChars,
-        generationDurationMs,
-        factCheckEnabled: enableFactCheck,
-        factCheckDurationMs,
-        factCheckCheckedCount,
-        factCheckIssueCount,
-        usagePromptTokens: usage?.promptTokens ?? null,
-        usageCompletionTokens: usage?.completionTokens ?? null,
-        usageTotalTokens: usage?.totalTokens ?? null,
-      },
+      questions: [],
+      metrics: { generationDurationMs, responseChars },
+      rawResponse: text
     };
-  } catch (error) {
-    console.error("Failed to parse LLM response:", error);
-    // Truncate raw response to avoid huge log entries and potential data leaks
-    console.error("Raw response (first 2000 chars):", text.slice(0, 2000));
-    throw new Error("Failed to generate valid questions. Please try again.");
   }
+
+  return {
+    questions: rawQuestions,
+    metrics: {
+      promptChars: totalPromptChars,
+      responseChars,
+      generationDurationMs,
+      usagePromptTokens: usage?.promptTokens,
+      usageCompletionTokens: usage?.completionTokens,
+      usageTotalTokens: usage?.totalTokens,
+    },
+    rawResponse: text
+  };
+}
+
+export async function generateQuiz(
+  env: Env,
+  params: GenerateQuizParams
+): Promise<{ questions: GeneratedQuestion[]; metrics: GenerateQuizMetrics }> {
+  const {
+    subject,
+    theme,
+    difficulty,
+    styles,
+    count,
+    apiKey,
+    era = "current",
+    enableFactCheck: enableFactCheckParam,
+    enableDeduplication = true,
+  } = params;
+
+  const generationModel = "gemini-3-flash-preview";
+  const factCheckModel = env.FACT_CHECK_MODEL ?? "gemini-3-flash-preview";
+  const enableFactCheck = enableFactCheckParam ?? env.ENABLE_FACT_CHECK === "1";
+  const overallCallId = crypto.randomUUID();
+
+  // Input validation
+  if (!subject?.trim()) throw new Error("Subject is required.");
+  if (!Array.isArray(styles) || styles.length === 0) throw new Error("Styles required.");
+  if (!Number.isInteger(count) || count <= 0) throw new Error("Count must be positive.");
+
+  // Deduplication setup
+  if (enableDeduplication && !env.DB) console.warn("Deduplication disabled: No DB.");
+
+  let existingFingerprints = new Set<string>();
+  if (enableDeduplication && env.DB) {
+    existingFingerprints = await loadExistingFingerprints(env.DB, subject);
+    console.log(`Loaded ${existingFingerprints.size} existing fingerprints`);
+  }
+
+  // --- BATCHING STRATEGY ---
+  // Split total count into smaller batches (max 10 questions per batch)
+  // This allows parallel generation and reduces timeout risk
+
+  // OVER-GENERATION: Generate 20% extra questions to buffer for potential duplicates
+  // that might occur due to parallel batches lacking shared context.
+  const targetCount = Math.ceil(count * 1.2);
+  const BATCH_SIZE = 10;
+  const batchCount = Math.ceil(targetCount / BATCH_SIZE);
+  const batches: GenerateQuizParams[] = [];
+
+  for (let i = 0; i < batchCount; i++) {
+    const batchSize = Math.min(BATCH_SIZE, targetCount - (i * BATCH_SIZE));
+    batches.push({
+      ...params,
+      count: batchSize,
+    });
+  }
+
+  console.log(`Starting batched generation: Target ${targetCount} (+20% buffer) to get ${count} unique questions in ${batchCount} batches`);
+  const overallStart = Date.now();
+
+  // Execute batches in parallel
+  const batchResults = await Promise.all(
+    batches.map((batchParams, idx) =>
+      generateQuizBatch(env, batchParams, overallCallId, idx)
+    )
+  );
+
+  // Merge results
+  let allQuestions: GeneratedQuestion[] = [];
+  let totalGenerationDuration = 0;
+  let totalPromptChars = 0;
+  let totalResponseChars = 0;
+  let totalPromptTokens = 0;
+  let totalCompletionTokens = 0;
+  let totalTokens = 0;
+
+  for (const res of batchResults) {
+    allQuestions = allQuestions.concat(res.questions);
+    totalGenerationDuration = Math.max(totalGenerationDuration, res.metrics.generationDurationMs || 0); // Max duration is the wall time
+    totalPromptChars += res.metrics.promptChars || 0;
+    totalResponseChars += res.metrics.responseChars || 0;
+    totalPromptTokens += res.metrics.usagePromptTokens || 0;
+    totalCompletionTokens += res.metrics.usageCompletionTokens || 0;
+    totalTokens += res.metrics.usageTotalTokens || 0;
+  }
+
+  console.log(`Generated ${allQuestions.length}/${count} questions total`);
+
+  // Normalize questions
+  const normalizedQuestions = allQuestions.slice(0, count).map((q, i) => ({
+    questionText: q.questionText || `Question ${i + 1}`,
+    questionType: q.questionType || "standard",
+    options: Array.isArray(q.options) && q.options.length === 4
+      ? q.options
+      : ["A) Option A", "B) Option B", "C) Option C", "D) Option D"],
+    correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
+      ? q.correctOption
+      : 0,
+    explanation: q.explanation || "No explanation provided.",
+    metadata: q.metadata,
+  }));
+
+  // Auto-fix
+  const fixedQuestions = normalizedQuestions.map(autoFixQuestion);
+
+  // Deduplication
+  let finalQuestions = fixedQuestions;
+  let dedupFilteredCount = 0;
+
+  if (enableDeduplication && existingFingerprints.size > 0) {
+    const dedupedQuestions: GeneratedQuestion[] = [];
+
+    for (const question of fixedQuestions) {
+      const fingerprint = generateFingerprint(question);
+      if (existingFingerprints.has(fingerprint)) {
+        dedupFilteredCount++;
+      } else {
+        dedupedQuestions.push(question);
+        existingFingerprints.add(fingerprint);
+      }
+    }
+    finalQuestions = dedupedQuestions;
+    if (dedupFilteredCount > 0) {
+      console.warn(`Deduplicated ${dedupFilteredCount} questions`);
+    }
+  }
+
+  // Validation
+  const validationResult = validateBatch(finalQuestions);
+
+  // Fact Check
+  let factCheckResult = { checkedCount: 0, accurateCount: 0, issues: [] as any[] };
+  let factCheckDurationMs = 0;
+
+  if (enableFactCheck && finalQuestions.length > 0) {
+    console.log(`Starting fact check for ${finalQuestions.length} questions...`);
+    const fcStart = Date.now();
+    try {
+      factCheckResult = await factCheckBatch(
+        finalQuestions,
+        "",
+        { env, parentCallId: overallCallId, subject, theme, difficulty, era }
+      );
+      factCheckDurationMs = Date.now() - fcStart;
+    } catch (e) {
+      console.error("Fact check failed:", e);
+    }
+  }
+
+  // Save fingerprints
+  if (enableDeduplication && env.DB && finalQuestions.length > 0) {
+    // Fire and forget fingerprint saving to save time
+    saveFingerprints(env.DB, finalQuestions, subject, theme).catch(err =>
+      console.error("Background fingerprint save failed:", err)
+    );
+  }
+
+  return {
+    questions: finalQuestions,
+    metrics: {
+      provider: "gemini",
+      model: generationModel,
+      factCheckModel,
+      subject,
+      theme,
+      difficulty,
+      styles,
+      era,
+      requestedCount: count,
+      returnedCount: finalQuestions.length,
+      dedupEnabled: enableDeduplication,
+      dedupFilteredCount,
+      validationIsValid: validationResult.isValid,
+      validationInvalidCount: validationResult.invalidQuestions,
+      validationErrorCount: validationResult.results.reduce((s, r) => s + r.errors.length, 0),
+      validationWarningCount: validationResult.results.reduce((s, r) => s + r.warnings.length, 0),
+      validationBatchWarnings: validationResult.batchWarnings,
+      parseStrategy: "direct",
+      promptChars: totalPromptChars,
+      responseChars: totalResponseChars,
+      generationDurationMs: totalGenerationDuration, // Approx max latency
+      factCheckEnabled: enableFactCheck,
+      factCheckDurationMs,
+      factCheckCheckedCount: factCheckResult.checkedCount,
+      factCheckIssueCount: factCheckResult.issues.length,
+      usagePromptTokens: totalPromptTokens,
+      usageCompletionTokens: totalCompletionTokens,
+      usageTotalTokens: totalTokens,
+    },
+  };
 }
