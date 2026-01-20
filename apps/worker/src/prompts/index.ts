@@ -9,9 +9,9 @@ interface StyleDistribution {
 export type QuestionEra = 
   | "2011-2013"  // Foundation: Direct factual, simple 2-statement, NCERT-based
   | "2014-2017"  // Transition: 3-statement dominant, Match List-I/II, current affairs rise
-  | "2018-2020"  // Sophistication: Conceptual, Assertion-Reason, "How many" emerging
-  | "2021-2023"  // Complexity: Multi-statement ~70%, "How many" common from 2022
-  | "2024-2025"  // Current: "How many" dominant, Statement-I/II, 3-column tables (2024)
+  | "2018-2020"  // Sophistication: Conceptual + code-based statement questions (repo PYQs show little/no A-R wording)
+  | "2021-2023"  // Complexity: Multi-statement heavy; "How many" rises (repo PYQs: starts 2022, spikes 2023)
+  | "2024-2025"  // Current: Mixed templates; Statement-I/II + row-correctness tables appear (repo PYQs show mix)
   | "current"    // Alias for latest (2024-2025)
   | "all";       // Mixed: Distribute questions across all eras
 
@@ -64,8 +64,14 @@ FACTUAL QUESTIONS:
 
 HOW MANY PATTERN (VERY IMPORTANT - HIGH FREQUENCY IN 2021-2024):
 - "How many of the above statements is/are correct?"
+- "How many of the above statements are correct?"
+- "How many of the statements given above are correct?"
 - "How many of the above pairs are correctly matched?"
+- "How many of the pairs given above are correctly matched?"
+- "How many pairs given above are correctly matched?"
+- "How many pairs given above are not correctly matched?"
 - "How many of the above is/are..."
+- "In which of the above rows is the given information correctly matched?"
 
 ANSWER CODE PHRASES:
 - "Select the correct answer using the code given below:"
@@ -276,11 +282,11 @@ CRITICAL INSTRUCTION: Generate NEW questions inspired by these patterns.
 `;
 
 // ============================================================================
-// YEAR-WEIGHTED STYLE TENDENCIES (Based on 2013-2025 PYQ Analysis)
+// YEAR-WEIGHTED STYLE TENDENCIES (Based on scraped PYQs in this repo)
 // ============================================================================
 const YEAR_TRENDS = `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-UPSC YEAR-WISE PATTERN EVOLUTION (2013-2025 PYQ ANALYSIS):
+UPSC YEAR-WISE PATTERN EVOLUTION (based on this repo's scraped PYQs):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -324,8 +330,9 @@ Example patterns from 2015-2017:
 - Science & Technology questions increased (space missions, biotech)
 - Contemporary issues as triggers for static concept questions
 - Questions testing nuanced understanding of constitutional provisions
-- "How many statements are correct?" pattern emerged
-- Assertion-Reason format appeared more frequently
+- In this repo's scraped PYQs, the dominant templates are still classic code-based statement/pair questions
+  ("Select the correct answer using the code given below" / "Which of the statements given above is/are correct")
+  with little/no classic "Assertion (A)/Reason (R)" wording.
 
 Example patterns from 2018-2020:
 - "With reference to the Constitution of India, consider the following..."
@@ -336,8 +343,9 @@ Example patterns from 2018-2020:
 ═══════════════════════════════════════════════════════════════════════════════
 2021-2023 ERA (COMPLEXITY PEAK):
 ═══════════════════════════════════════════════════════════════════════════════
-- "How many of the above" became DOMINANT format (~50% of statement questions)
-- Statement-I/Statement-II format for Economy, Environment, Science
+- In this repo's scraped PYQs: "How many" starts showing up clearly in 2022 (especially "How many pairs given above...")
+  and spikes in 2023 ("How many of the above..." becomes very common).
+- Statement-I/Statement-II questions appear prominently in 2023 onwards (modern Assertion-Reason logic with updated labels).
 - Match/pairs with "How many pairs correctly matched?"
 - Multiple dimensions tested in single question
 - Distractors designed to defeat elimination strategies
@@ -356,9 +364,9 @@ Example patterns from 2021-2023:
 ═══════════════════════════════════════════════════════════════════════════════
 2024-2025 ERA (CURRENT STANDARD):
 ═══════════════════════════════════════════════════════════════════════════════
-- "How many of the above" is now ~60% of statement/match questions
-- Statement-I/Statement-II format standardized for all subjects
-- Match questions predominantly use "How many pairs correctly matched?"
+- In this repo's scraped 2024 paper, templates are MIXED: classic statement-code questions still remain common alongside
+  "How many" and Statement-I/Statement-II.
+- Row-correctness tables ("In how many of the above rows..." and also "In which of the above rows...") appear in 2024.
 - Specific emphasis on:
   * Constitutional amendments (recent: 101st-106th)
   * International organizations and India's role
@@ -504,23 +512,18 @@ ERA: 2018-2020 (SOPHISTICATION STYLE)
 Generate questions in the SOPHISTICATED UPSC style (2018-2020 patterns):
 
 QUESTION FORMATS TO USE:
-1. STATEMENT QUESTIONS (50%):
+1. STATEMENT QUESTIONS WITH CODES (55%):
    - Mix of 2, 3, and 4 statement questions
    - "Which of the statements given above is/are correct?"
-   - Start introducing "How many statements are correct?" occasionally
 
 2. APPLICATION-BASED (20%):
    "If [condition/scenario], then..."
    "What would happen if..."
    Testing application of constitutional/legal provisions
 
-3. ASSERTION-REASON FORMAT (15%):
-   "Assertion (A): [Statement]
-   Reason (R): [Statement]
-   (a) Both A and R are correct and R explains A
-   (b) Both A and R are correct but R does not explain A
-   (c) A is correct but R is incorrect
-   (d) A is incorrect but R is correct"
+3. PAIR/MATCH VIA CODES (10%):
+   - "Consider the following pairs:"
+   - Prefer "Which of the pairs given above is/are correctly matched?" with code-style options
 
 4. NUANCED FACTUAL (15%):
    Testing exceptions, special cases, recent amendments
@@ -533,8 +536,9 @@ CHARACTERISTICS:
 - Contemporary issues as triggers for static concepts
 - Testing fine distinctions between related provisions
 
-CAN USE (but sparingly):
-- "How many of the above" (emerging pattern)
+AVOID (for this era, in this repo's scraped PYQs):
+- Statement-I/Statement-II format
+- "How many of the above..." as the primary evaluation template
 `,
 
   "2021-2023": `
@@ -562,19 +566,22 @@ QUESTION FORMATS TO USE:
    1. [Statement]
    2. [Statement]
    3. [Statement]
-   How many of the above statements is/are correct?"
+   How many of the above statements are correct?"
    Options: (a) Only one (b) Only two (c) All three (d) None
 
 3. STATEMENT-I/STATEMENT-II (15%):
    This is essentially a re-skinned Assertion-Reason format.
+   In this repo's scraped PYQs, this shows up prominently in 2023.
    "Statement-I: [Claim]
    Statement-II: [Related statement]
    Which one of the following is correct in respect of the above statements?"
    Uses same 4 options as classic A-R (both correct & explains / both correct no explain / etc.)
 
 4. MATCH THE FOLLOWING (15%):
-   Classic "Match List-I with List-II" 
-   AND emerging "How many pairs correctly matched?" format
+   Prefer the repo-PYQ phrasing variants:
+   - "How many pairs given above are correctly matched?"
+   - "How many of the pairs given above are correctly matched?"
+   - Occasionally: "How many pairs given above are not correctly matched?"
 
 5. DIRECT/STANDALONE (10%):
    Single-answer factual questions
@@ -600,14 +607,16 @@ the most common evaluation template. Assertion-Reason persists (~13%) often
 re-skinned as Statement-I/II. New 3-column match format introduced in 2024.
 
 QUESTION FORMATS TO USE:
-1. "HOW MANY" STATEMENT FORMAT (Very High Frequency):
-   - "How many of the above statements is/are correct?"
-   - "How many of the above pairs are correctly matched?"
-   - "In how many of the above rows is the given information correct?"
+1. "HOW MANY" / COUNTING FORMAT (High Frequency, but not exclusive):
+   - "How many of the above statements are correct?"
+   - "How many of the pairs given above are correctly matched?"
+   - "In how many of the above rows is the given information correctly matched?"
+   - Also seen: "In which of the above rows is the given information correctly matched?"
    Options: Only one / Only two / All three (or four) / None
 
 2. STATEMENT-I/STATEMENT-II (High Frequency - ~13%):
    This is the modern label for Assertion-Reason logic.
+   Also possible (recently): Statement-I with Statement-II and Statement-III as alternative explanations.
    "Statement-I: [Factual claim or observation]
    Statement-II: [Related statement - could be cause, explanation, or independent fact]
    Which one of the following is correct in respect of the above statements?"
@@ -636,7 +645,7 @@ QUESTION FORMATS TO USE:
 - Statement-I/II on syndicated loans, CBDC, star lifecycle, atmospheric heating
 
 EMPHASIS:
-- "How many of the above" is the dominant evaluation template
+- "How many" and classic statement-code templates both appear frequently
 - Statement-I/II (evolved Assertion-Reason) appears across all subjects
 - 3-column row-correctness tables are new and tricky
 - Association questions (species-habitat, party-leader) are high frequency
@@ -654,13 +663,15 @@ most common evaluation template. Assertion-Reason persists (~13%), often labeled
 as Statement-I/II. New 3-column row-correctness tables introduced in 2024.
 
 PRIMARY FORMATS:
-1. "HOW MANY OF THE ABOVE" (Very High Frequency):
-   - Statements: "How many of the above statements is/are correct?"
-   - Pairs: "How many of the above pairs are correctly matched?"
-   - Rows: "In how many of the above rows is the given information correct?"
+1. "HOW MANY" / COUNTING (High Frequency):
+   - Statements: "How many of the above statements are correct?"
+   - Pairs: "How many of the pairs given above are correctly matched?"
+   - Rows: "In how many of the above rows is the given information correctly matched?"
+   - Also seen: "In which of the above rows is the given information correctly matched?"
 
 2. STATEMENT-I/STATEMENT-II (~13%):
    Modern label for Assertion-Reason logic - tests causal/explanatory relationships
+   Also possible: Statement-I + Statement-II + Statement-III explanation template
 
 3. THREE-COLUMN MATCH / ROW-CORRECTNESS (New 2024 pattern):
    Tables with 3+ columns, evaluate row-by-row correctness
@@ -684,14 +695,14 @@ Generate questions spanning ALL UPSC eras to provide comprehensive practice:
 DISTRIBUTION (approximate for mixed practice):
 - ~10% in 2011-2013 style: Direct factual, simple 2-statement "1 only / 2 only / Both / Neither"
 - ~15% in 2014-2017 style: Three-statement with combination codes, classic Match List-I/II
-- ~20% in 2018-2020 style: Application-based, Assertion-Reason format, conceptual
+- ~20% in 2018-2020 style: Conceptual + code-based statement/pair questions
 - ~25% in 2021-2023 style: "How many correct?" emerging (esp. 2022+), multi-statement dominant
 - ~30% in 2024-2025 style: "How many" very frequent, Statement-I/II, 3-column row-correctness
 
 KEY EVOLUTION TO REFLECT:
 1. Multi-statement questions rose from ~40% (2011) to ~70% (2022+)
-2. "How many correct?" emerged around 2018-2020, became common from 2022
-3. Assertion-Reason evolved into Statement-I/II labeling (same logic, different name)
+2. In this repo's scraped PYQs, "How many correct?" becomes common from 2022 and spikes in 2023
+3. Assertion-Reason logic is often labeled Statement-I/II (same logic, different name)
 4. 3-column row-correctness tables are a 2024 innovation
 5. "Which statements is/are correct?" with codes still appears across all eras
 
@@ -1001,16 +1012,16 @@ COMMON UPSC MATCH THEMES:
 
   assertion: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: STATEMENT-I/STATEMENT-II (UPSC 2024 FORMAT - ~15-20 questions per paper)
+QUESTION STYLE: STATEMENT-I/STATEMENT-II (and STATEMENT-I/II/III) - UPSC CURRENT FORMAT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Format: Two statements with logical relationship analysis
+Format: 2 or 3 statements with logical relationship analysis
 questionType: "assertion"
 
 NOTE: UPSC 2024 predominantly uses "Statement-I/Statement-II" format instead of 
 traditional "Assertion (A)/Reason (R)" format. USE THIS FORMAT:
 
-EXACT UPSC 2024 FORMAT (MUST USE):
+EXACT FORMAT A (2-STATEMENT) (MUST USE WORDING):
 "Consider the following statements:
 
 Statement-I: [Statement of fact, claim, or observation]
@@ -1025,13 +1036,30 @@ B) Both Statement-I and Statement-II are correct and Statement-II is not the cor
 C) Statement-I is correct but Statement-II is incorrect
 D) Statement-I is incorrect but Statement-II is correct
 
+EXACT FORMAT B (3-STATEMENT EXPLANATION) (MUST USE WORDING):
+"Consider the following statements:
+
+Statement-I: [Claim/observation]
+
+Statement-II: [Potential explanation 1]
+
+Statement-III: [Potential explanation 2]
+
+Which one of the following is correct in respect of the above statements?"
+
+OPTIONS MUST BE EXACTLY (USE THIS EXACT WORDING):
+A) Both Statement-II and Statement-III are correct and both of them explain Statement-I
+B) Both Statement-II and Statement-III are correct but only one of them explains Statement-I
+C) Only one of the Statements II and III is correct and that explains Statement-I
+D) Neither Statement-II nor Statement-III is correct
+
 CRITICAL DESIGN RULES:
 1. Statement-I must be a clear, verifiable statement of fact or claim
-2. Statement-II must also be independently verifiable as true or false
-3. The relationship between Statement-I and Statement-II is what makes this question hard
-4. Most challenging: Both true but Statement-II doesn't explain Statement-I (tests logical thinking)
-5. If answer is A or B, Statement-II MUST be independently true
-6. If answer is A, Statement-II must be a DIRECT causal/explanatory bridge, not merely correlated
+2. Statement-II (and Statement-III, if used) must be independently verifiable as true or false
+3. The relationship between Statement-I and the explanation statement(s) is what makes this question hard
+4. Most challenging: explanation statement(s) are true but NOT the correct explanation (tests reasoning)
+5. If an option says "explains Statement-I", the explanation statement(s) MUST be independently true
+6. If an option says "explains Statement-I", it MUST be a DIRECT causal/explanatory bridge, not merely correlated
 
 DIFFICULTY CALIBRATION:
 - Easy: Statement-I is false, Statement-II is true (or vice versa) - straightforward

@@ -91,12 +91,22 @@ function validateStatementOptions(
 ): string | null {
   if (question.questionType !== "assertion") return null;
 
-  const expectedOptions = [
-    /both.*statement.*correct.*explanation/i,
-    /both.*statement.*correct.*not.*explanation/i,
-    /statement.?i.*correct.*statement.?ii.*incorrect/i,
-    /statement.?i.*incorrect.*statement.?ii.*correct/i,
-  ];
+  const questionText = question.questionText;
+  const isStatementIii = /statement[-\s]?iii\s*:/i.test(questionText);
+
+  const expectedOptions = isStatementIii
+    ? [
+        /both.*statement.?ii.*and.*statement.?iii.*correct.*both.*explain.*statement.?i/i,
+        /both.*statement.?ii.*and.*statement.?iii.*correct.*only\s+one.*explain.*statement.?i/i,
+        /only\s+one.*statements?\s*(ii|2)\s*(and|&)\s*(iii|3).*correct.*explain.*statement.?i/i,
+        /neither.*statement.?ii.*nor.*statement.?iii.*correct/i,
+      ]
+    : [
+        /both.*statement.*correct.*explanation/i,
+        /both.*statement.*correct.*not.*explanation/i,
+        /statement.?i.*correct.*statement.?ii.*incorrect/i,
+        /statement.?i.*incorrect.*statement.?ii.*correct/i,
+      ];
 
   // Check if at least 3 out of 4 options match expected patterns
   let matchCount = 0;
@@ -107,7 +117,7 @@ function validateStatementOptions(
   }
 
   if (matchCount < 3) {
-    return "Statement-I/II question options don't follow UPSC format";
+    return "Statement-format question options don't follow UPSC format";
   }
   return null;
 }
@@ -369,13 +379,14 @@ export function autoFixQuestion(
       text.includes("pairs")
     ) {
       fixed.questionType = "match";
-    } else if (
-      text.includes("statement-i") ||
-      text.includes("assertion") ||
-      text.includes("reason")
-    ) {
-      fixed.questionType = "assertion";
-    } else {
+  } else if (
+    text.includes("statement-i") ||
+    text.includes("statement i") ||
+    text.includes("assertion") ||
+    text.includes("reason")
+  ) {
+    fixed.questionType = "assertion";
+  } else {
       fixed.questionType = "standard";
     }
   }
