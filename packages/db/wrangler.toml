@@ -1,0 +1,11 @@
+# wrangler.toml for database migrations only
+# This file is used by the @mcqs/db package to apply D1 migrations
+
+name = "upsc-mcq-db-migrations"
+compatibility_date = "2024-12-30"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "upsc-mcq-db"
+database_id = "52c504e0-fbb6-4b97-b21b-e7af08426742"
+migrations_dir = "./migrations"

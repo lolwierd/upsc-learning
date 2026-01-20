@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
+    "dev:dump": "node scripts/llm-dump-server.mjs",
+    "dev:local": "node scripts/dev-local.mjs",
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",

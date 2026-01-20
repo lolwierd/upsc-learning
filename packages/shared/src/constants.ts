@@ -79,6 +79,40 @@ export const QUESTION_STYLE_DESCRIPTIONS: Record<(typeof QUESTION_STYLES)[number
 };
 
 // ============================================
+// Question Era Constants (UPSC PYQ style eras)
+// ============================================
+
+export const QUESTION_ERAS = [
+  "current",
+  "all",
+  "2024-2025",
+  "2021-2023",
+  "2018-2020",
+  "2014-2017",
+  "2011-2013",
+] as const;
+
+export const QUESTION_ERA_LABELS: Record<(typeof QUESTION_ERAS)[number], string> = {
+  current: "Current (2024-2025)",
+  all: "All Eras (Mixed)",
+  "2024-2025": "2024-2025",
+  "2021-2023": "2021-2023",
+  "2018-2020": "2018-2020",
+  "2014-2017": "2014-2017",
+  "2011-2013": "2011-2013",
+};
+
+export const QUESTION_ERA_DESCRIPTIONS: Record<(typeof QUESTION_ERAS)[number], string> = {
+  current: "Latest UPSC patterns - \"How many\" dominant, Statement-I/II, 3-column tables",
+  all: "Mixed distribution across all eras for comprehensive practice",
+  "2024-2025": "\"How many\" very frequent, Statement-I/II, 3-column row-correctness tables",
+  "2021-2023": "Multi-statement ~70%, \"How many\" common from 2022, complexity rise",
+  "2018-2020": "Application-based, Assertion-Reason format, conceptual depth",
+  "2014-2017": "Three-statement dominant, Match List-I/II, current affairs rise",
+  "2011-2013": "Foundation era - Direct factual, simple 2-statement, NCERT-based",
+};
+
+// ============================================
 // Question Count Options
 // ============================================
 

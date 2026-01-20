@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import type { Env } from "../types";
 import { generateQuizRequestSchema } from "@mcqs/shared";
 import { generateQuiz } from "../services/llm";
+import { insertAiGenerationMetric } from "../services/ai-metrics";
 
 const quiz = new Hono<{ Bindings: Env }>();
 
@@ -14,6 +15,7 @@ quiz.post(
   async (c) => {
     const body = c.req.valid("json");
     const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
+    const requestStart = Date.now();
 
     try {
       // Get user settings for API key
@@ -26,13 +28,15 @@ quiz.post(
       const geminiApiKey = (settings?.gemini_api_key as string) || c.env.GOOGLE_API_KEY;
 
       // Generate questions using LLM
-      const questions = await generateQuiz(c.env, {
+      const { questions, metrics } = await generateQuiz(c.env, {
         subject: body.subject,
         theme: body.theme,
         difficulty: body.difficulty,
         styles: body.styles,
         count: body.questionCount,
         apiKey: geminiApiKey,
+        era: body.era,
+        enableFactCheck: c.env.ENABLE_FACT_CHECK === "1",
       });
 
       // Create quiz in database
@@ -53,8 +57,8 @@ quiz.post(
           body.theme || null,
           body.difficulty,
           stylesJson,
-          body.questionCount,
-          "gemini",
+          questions.length,
+          metrics.model,
           now
         )
         .run();
@@ -82,9 +86,93 @@ quiz.post(
           .run();
       }
 
+      // Store AI metrics (best-effort; should not fail the request)
+      try {
+        await insertAiGenerationMetric(c.env.DB, {
+          id: nanoid(),
+          quizId,
+          userId,
+          provider: metrics.provider,
+          model: metrics.model,
+          factCheckModel: metrics.factCheckModel,
+          subject: metrics.subject,
+          theme: metrics.theme ?? null,
+          difficulty: metrics.difficulty,
+          stylesJson,
+          era: metrics.era,
+          status: "success",
+          requestedCount: metrics.requestedCount,
+          returnedCount: metrics.returnedCount,
+          dedupEnabled: metrics.dedupEnabled,
+          dedupFilteredCount: metrics.dedupFilteredCount,
+          validationIsValid: metrics.validationIsValid,
+          validationInvalidCount: metrics.validationInvalidCount,
+          validationErrorCount: metrics.validationErrorCount,
+          validationWarningCount: metrics.validationWarningCount,
+          validationBatchWarningsJson: JSON.stringify(metrics.validationBatchWarnings),
+          parseStrategy: metrics.parseStrategy,
+          promptChars: metrics.promptChars,
+          responseChars: metrics.responseChars,
+          totalDurationMs: Date.now() - requestStart,
+          generationDurationMs: metrics.generationDurationMs,
+          factCheckEnabled: metrics.factCheckEnabled,
+          factCheckDurationMs: metrics.factCheckDurationMs,
+          factCheckCheckedCount: metrics.factCheckCheckedCount,
+          factCheckIssueCount: metrics.factCheckIssueCount,
+          usagePromptTokens: metrics.usagePromptTokens,
+          usageCompletionTokens: metrics.usageCompletionTokens,
+          usageTotalTokens: metrics.usageTotalTokens,
+        });
+      } catch (metricsError) {
+        console.warn("Failed to store AI metrics:", metricsError);
+      }
+
       return c.json({ quizId, questionCount: questions.length });
     } catch (error) {
       console.error("Quiz generation error:", error);
+
+      // Best-effort error metric for debugging
+      try {
+        await insertAiGenerationMetric(c.env.DB, {
+          id: nanoid(),
+          quizId: null,
+          userId,
+          provider: "gemini",
+          model: "gemini-3-flash-preview", // Default generation model
+          factCheckModel: c.env.FACT_CHECK_MODEL ?? null,
+          subject: body.subject,
+          theme: body.theme ?? null,
+          difficulty: body.difficulty,
+          stylesJson: JSON.stringify(body.styles),
+          era: body.era ?? null,
+          status: "error",
+          errorMessage: error instanceof Error ? error.message : String(error),
+          requestedCount: body.questionCount,
+          returnedCount: 0,
+          dedupEnabled: true,
+          dedupFilteredCount: 0,
+          validationIsValid: null,
+          validationInvalidCount: null,
+          validationErrorCount: null,
+          validationWarningCount: null,
+          validationBatchWarningsJson: null,
+          parseStrategy: null,
+          promptChars: null,
+          responseChars: null,
+          totalDurationMs: Date.now() - requestStart,
+          generationDurationMs: null,
+          factCheckEnabled: false,
+          factCheckDurationMs: null,
+          factCheckCheckedCount: null,
+          factCheckIssueCount: null,
+          usagePromptTokens: null,
+          usageCompletionTokens: null,
+          usageTotalTokens: null,
+        });
+      } catch (metricsError) {
+        console.warn("Failed to store AI error metric:", metricsError);
+      }
+
       return c.json({ error: "Failed to generate quiz" }, 500);
     }
   }

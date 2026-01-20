@@ -21,6 +21,9 @@ import {
   QUESTION_STYLES,
   QUESTION_STYLE_LABELS,
   QUESTION_STYLE_DESCRIPTIONS,
+  QUESTION_ERAS,
+  QUESTION_ERA_LABELS,
+  QUESTION_ERA_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -60,6 +63,7 @@ export default function NewQuizPage() {
   const [theme, setTheme] = useState("");
   const [difficulty, setDifficulty] = useState<string>(DIFFICULTIES[1]);
   const [styles, setStyles] = useState<string[]>([...QUESTION_STYLES]);
+  const [era, setEra] = useState<string>(QUESTION_ERAS[0]); // "current" by default
   const [questionCount, setQuestionCount] = useState<number>(40);
 
   // Load default question count from settings
@@ -135,6 +139,7 @@ export default function NewQuizPage() {
         difficulty: difficulty as (typeof DIFFICULTIES)[number],
         styles: styles as (typeof QUESTION_STYLES)[number][],
         questionCount,
+        era: era as (typeof QUESTION_ERAS)[number],
       });
 
       updateStep(5, "complete");
@@ -186,6 +191,12 @@ export default function NewQuizPage() {
     description: QUESTION_STYLE_DESCRIPTIONS[s],
   }));
 
+  const eraOptions = QUESTION_ERAS.map((e) => ({
+    value: e,
+    label: QUESTION_ERA_LABELS[e],
+    description: QUESTION_ERA_DESCRIPTIONS[e],
+  }));
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <Card>
@@ -230,6 +241,15 @@ export default function NewQuizPage() {
             options={styleOptions}
             value={styles}
             onChange={setStyles}
+          />
+
+          {/* Era Selection */}
+          <RadioGroup
+            name="era"
+            label="Question Era (UPSC PYQ Style)"
+            options={eraOptions}
+            value={era}
+            onChange={setEra}
           />
 
           {/* Question Count */}

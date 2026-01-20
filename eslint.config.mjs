@@ -31,6 +31,7 @@ export default [
     languageOptions: {
       globals: {
         console: "readonly",
+        crypto: "readonly",
         D1Database: "readonly",
         KVNamespace: "readonly",
         Ai: "readonly",

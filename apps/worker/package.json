@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^1.1.4",
+    "@ai-sdk/google-vertex": "^4.0.17",
     "@ai-sdk/openai": "^1.1.9",
     "@hono/zod-validator": "^0.4.2",
     "@mcqs/shared": "workspace:*",
-    "ai": "^4.1.21",
+    "ai": "^6.0.42",
     "hono": "^4.6.17",
     "nanoid": "^5.0.9",
     "zod": "^3.24.1"

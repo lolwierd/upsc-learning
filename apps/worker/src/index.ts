@@ -5,6 +5,7 @@ import { quizRoutes } from "./routes/quiz";
 import { attemptRoutes } from "./routes/attempt";
 import { historyRoutes } from "./routes/history";
 import { settingsRoutes } from "./routes/settings";
+import { metricsRoutes } from "./routes/metrics";
 import type { Env } from "./types";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -50,6 +51,7 @@ app.route("/api/quiz", quizRoutes);
 app.route("/api/attempt", attemptRoutes);
 app.route("/api/history", historyRoutes);
 app.route("/api/settings", settingsRoutes);
+app.route("/api/metrics", metricsRoutes);
 
 // 404 handler
 app.notFound((c) => {

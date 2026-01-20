@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants";
+import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, QUESTION_ERAS, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants";
 
 // ============================================
 // Base Schemas
@@ -8,6 +8,7 @@ import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, MIN_QUESTION_COUNT, MAX_QUESTI
 export const subjectSchema = z.enum(SUBJECTS);
 export const difficultySchema = z.enum(DIFFICULTIES);
 export const questionStyleSchema = z.enum(QUESTION_STYLES);
+export const questionEraSchema = z.enum(QUESTION_ERAS);
 export const questionTypeSchema = z.enum(["standard", "statement", "match", "assertion"]);
 export const attemptStatusSchema = z.enum(["in_progress", "completed"]);
 export const modelProviderSchema = z.enum(["gemini", "openai"]);
@@ -22,6 +23,7 @@ export const generateQuizRequestSchema = z.object({
   difficulty: difficultySchema,
   styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
+  era: questionEraSchema.optional().default("current"), // UPSC PYQ style era
   turnstileToken: z.string().optional(), // Required in production
 });
 

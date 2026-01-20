@@ -5,12 +5,32 @@ interface StyleDistribution {
   count: number;
 }
 
+// Era types for generating questions in different UPSC styles
+export type QuestionEra = 
+  | "2011-2013"  // Foundation: Direct factual, simple 2-statement, NCERT-based
+  | "2014-2017"  // Transition: 3-statement dominant, Match List-I/II, current affairs rise
+  | "2018-2020"  // Sophistication: Conceptual, Assertion-Reason, "How many" emerging
+  | "2021-2023"  // Complexity: Multi-statement ~70%, "How many" common from 2022
+  | "2024-2025"  // Current: "How many" dominant, Statement-I/II, 3-column tables (2024)
+  | "current"    // Alias for latest (2024-2025)
+  | "all";       // Mixed: Distribute questions across all eras
+
+// All available eras (excluding aliases)
+export const ALL_ERAS: Exclude<QuestionEra, "current" | "all">[] = [
+  "2011-2013",
+  "2014-2017", 
+  "2018-2020",
+  "2021-2023",
+  "2024-2025",
+];
+
 interface PromptParams {
   subject: string;
   theme?: string;
   difficulty: Difficulty;
   styles: StyleDistribution[];
   totalCount: number;
+  era?: QuestionEra; // Optional: Generate questions in specific era's style
 }
 
 // ============================================================================
@@ -21,6 +41,669 @@ interface PromptParams {
 // - Duration: 2 hours
 // - Cut-off typically ranges from 75-100 marks depending on difficulty
 // - Questions are designed to be elimination-proof with sophisticated distractors
+
+// ============================================================================
+// UPSC STEM TEMPLATES (MUST FOLLOW VERBATIM PATTERNS)
+// ============================================================================
+const UPSC_STEM_TEMPLATES = `
+MANDATORY UPSC PHRASING PATTERNS (Use these exact phrasings):
+
+STATEMENT QUESTIONS:
+- "Consider the following statements:"
+- "Consider the following statements regarding [topic]:"
+- "With reference to [topic], consider the following statements:"
+
+PAIR/MATCH QUESTIONS:
+- "Consider the following pairs:"
+- "Match List-I with List-II and select the correct answer using the code given below:"
+
+FACTUAL QUESTIONS:
+- "Which of the following..."
+- "Which one of the following..."
+- "With reference to..., which of the following statements is/are correct?"
+
+HOW MANY PATTERN (VERY IMPORTANT - HIGH FREQUENCY IN 2021-2024):
+- "How many of the above statements is/are correct?"
+- "How many of the above pairs are correctly matched?"
+- "How many of the above is/are..."
+
+ANSWER CODE PHRASES:
+- "Select the correct answer using the code given below:"
+- "Which of the statements given above is/are correct?"
+- "Which one of the following is correct in respect of the above statements?"
+`;
+
+// ============================================================================
+// MISCONCEPTION-BASED DISTRACTOR BLUEPRINT
+// ============================================================================
+const DISTRACTOR_BLUEPRINT = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DISTRACTOR DESIGN BLUEPRINT (MUST APPLY AT LEAST 2 PER QUESTION):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ADJACENT CONCEPT TRAP:
+   Use a closely related but different concept
+   Examples: CBDC vs cryptocurrency | Repo rate vs Bank rate | Tiger Reserve vs National Park
+   
+2. SCOPE TRAP:
+   Correct principle but wrong scope/jurisdiction
+   Examples: Union List vs State List | Legal tender vs universally accepted | Central vs State subject
+
+3. EXCEPTION TRAP:
+   Statement is broadly true but fails due to a known exception
+   Examples: "All fundamental rights are available to citizens" (wrong - some to all persons)
+   
+4. TERMINOLOGY TRAP:
+   Confusing similar-sounding terms
+   Examples: Delimitation Commission vs Finance Commission | Sterilization vs OMO | Prorogation vs Dissolution
+
+5. TIME/VERSION TRAP:
+   Outdated fact vs latest update (perfect for current affairs integration)
+   Examples: Old article numbers vs post-amendment | Previous committee vs current
+
+6. AUTHORITY TRAP:
+   Wrong institution/act/agency mapping
+   Examples: ISRO vs DRDO vs DAE | FSSAI vs GEAC | RBI vs SEBI | Ministry mapping errors
+
+7. GEOGRAPHY/ENDEMISM TRAP:
+   Wrong habitat/region associations
+   Examples: Species found in Madagascar vs Africa | Western Ghats endemic vs Himalayan
+
+CRITICAL RULE: Wrong options must be *nearly defensible* to a half-prepared student, but falsifiable by one precise fact.
+`;
+
+// ============================================================================
+// SUBJECT-WISE TRAP LIBRARY
+// ============================================================================
+const SUBJECT_TRAP_LIBRARY: Record<string, string> = {
+  polity: `
+POLITY TRAP PATTERNS (Apply at least one per question):
+- Articles vs Parts vs Schedules confusion
+- Committee nature: Statutory vs Constitutional vs Ad-hoc
+- Lapse vs Prorogation vs Dissolution implications
+- Subject in Union/State/Concurrent list mapping
+- Constitutional amendment numbers and what they changed
+- "Borrowed from" which constitution traps
+- Governor's discretionary vs constitutional duties
+- Money Bill vs Finance Bill vs Appropriation Bill
+- CAG vs Comptroller distinction
+- Lokpal vs Lokayukta jurisdiction`,
+
+  economy: `
+ECONOMY TRAP PATTERNS (Apply at least one per question):
+- Instrument vs Market: Money market vs Capital market instruments
+- RBI tools: OMO vs Sterilization vs LAF vs MSF
+- Credit line vs Fixed loan subtle conditions
+- Taxation authority: Central vs State vs Shared
+- External vs Internal debt classifications
+- WTO vs IMF vs World Bank function mapping
+- Fiscal deficit vs Revenue deficit vs Primary deficit
+- FDI vs FPI vs FII distinctions
+- NBFC vs Bank regulatory differences
+- Recent: CBDC properties, PLI schemes, Production-linked distinctions`,
+
+  environment: `
+ENVIRONMENT TRAP PATTERNS (Apply at least one per question):
+- Species distribution: Endemic vs Native vs Invasive
+- Habitat mapping: Country ↔ Species natural habitat
+- Taxonomy: Insect vs Bird vs Reptile classification
+- Pollution sources: Primary vs Secondary pollutants
+- Convention vs Agency mapping: CITES vs Ramsar vs CBD
+- Biosphere reserves vs National Parks vs Wildlife Sanctuaries
+- IUCN categories: Critically Endangered vs Vulnerable vs Near Threatened
+- Coral reef vs Mangrove vs Wetland ecosystem confusions
+- Western Ghats endemic species vs Eastern Himalayas
+- Recent: Microplastics, GM regulations, Carbon markets`,
+
+  science: `
+SCIENCE & TECHNOLOGY TRAP PATTERNS (Apply at least one per question):
+- Space agency programs: ISRO missions and their purposes
+- Nuclear: Fission vs Fusion vs Decay mechanisms
+- Recent tech: AI/ML, Quantum computing, Metaverse definitions
+- Common misconceptions: Star lifecycle, planet classifications
+- Agency mapping: ISRO vs DRDO vs DAE vs BARC
+- Satellite types: GEO vs LEO vs MEO purposes
+- Biotech: Gene editing vs GM vs traditional breeding
+- Health: Disease mechanisms, vaccine types
+- IT: Blockchain vs Crypto vs CBDC distinctions
+- Defense: Indigenous vs Imported systems`,
+
+  history: `
+HISTORY TRAP PATTERNS (Apply at least one per question):
+- Event chronology: Which came first
+- Governor-General vs Viceroy period mapping
+- Act provisions: Which act introduced what
+- Freedom movement: Moderate vs Extremist vs Revolutionary
+- Leader-movement association accuracy
+- Battle-year-outcome combinations
+- Reform movements: Social vs Religious vs Political
+- Pre-independence parties and their founders
+- Constitutional development: Acts from 1773 to 1947
+- Regional movements and their leaders`,
+
+  geography: `
+GEOGRAPHY TRAP PATTERNS (Apply at least one per question):
+- River origin/tributary mapping
+- Pass-state-connection accuracy
+- Soil type-region associations
+- Monsoon mechanism details
+- Mineral-state production mapping
+- Climate zone classifications
+- Agricultural patterns by region
+- Industrial location factors
+- Port-coast-state mapping
+- Boundary-sharing countries`,
+
+  art: `
+ART & CULTURE TRAP PATTERNS (Apply at least one per question):
+- Classical dance forms: Confusing similar mudras, origins, or patrons
+- Folk dance ↔ State mapping: Wrong state associations (Bihu vs Bhangra states)
+- Temple architecture: Nagara vs Dravida vs Vesara style features
+- Painting schools: Mughal vs Rajput vs Pahari miniature confusion
+- UNESCO sites: Wrong state/category (Cultural vs Natural vs Mixed)
+- GI Tags: Product ↔ State/Region mapping
+- Musical instruments: Classification (string/wind/percussion) and region
+- Cave art: Ajanta vs Ellora vs Elephanta ↔ Religion/Dynasty associations
+- Sangeet Natak Akademi: 8 classical dances recognition details
+- Folk paintings: Madhubani vs Warli vs Pattachitra vs Gond regional origins
+- Intangible Cultural Heritage: UNESCO-listed Indian traditions
+- Ancient literature: Vedic vs Classical Sanskrit vs Prakrit texts
+- Bhakti/Sufi saints: Region and philosophy confusion`,
+};
+
+// ============================================================================
+// FEW-SHOT PYQ EXAMPLES BY STYLE
+// ============================================================================
+const PYQ_EXAMPLES = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REAL UPSC PYQ EXAMPLES (USE AS STYLE REFERENCE ONLY - DO NOT COPY):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAMPLE 1 - "HOW MANY" STATEMENT PATTERN (2024 Polity):
+"Consider the following pairs:
+Party - Its Leader
+1. Bhartiya Jana Sangh - Dr. Shyama Prasad Mukherjee
+2. Socialist Party - C. Rajagopalachari
+3. Congress for Democracy - Jagjivan Ram
+4. Swatantra Party - Acharya Narendra Dev
+
+How many of the above are correctly matched?
+(a) Only one  (b) Only two  (c) Only three  (d) All four"
+Answer: (b) Only two [Pairs 1 and 3 correct; 2 and 4 have swapped associations]
+
+EXAMPLE 2 - STATEMENT-I/STATEMENT-II PATTERN (2024 Economy):
+"Consider the following statements:
+Statement-I: Syndicated lending spreads the risk of borrower default across multiple lenders.
+Statement-II: The syndicated loan can be a fixed amount/lump sum of funds, but cannot be a credit line.
+
+Which one of the following is correct in respect of the above statements?
+(a) Both Statement-I and Statement-II are correct and Statement-II explains Statement-I.
+(b) Both Statement-I and Statement-II are correct, but Statement-II does not explain Statement-I.
+(c) Statement-I is correct, but Statement-II is incorrect.
+(d) Statement-I is incorrect, but Statement-II is correct."
+Answer: (c) [Statement-I is true about risk spreading; Statement-II is false - syndicated loans CAN be credit lines]
+
+EXAMPLE 3 - THREE-STATEMENT "HOW MANY" PATTERN (2024 Science):
+"With reference to radioisotope thermoelectric generators (RTGs), consider the following statements:
+1. RTGs are miniature fission reactors.
+2. RTGs are used for powering the onboard systems of spacecrafts.
+3. RTGs can use Plutonium-238, which is a by-product of weapons developments.
+
+Which of the statements given above are correct?
+(a) 1 and 2 only  (b) 2 and 3 only  (c) 1 and 3 only  (d) 1, 2 and 3"
+Answer: (b) [Statement 1 is false - RTGs use decay not fission; 2 and 3 are correct]
+
+EXAMPLE 4 - CLASSIFICATION FACTUAL PATTERN (2024 Environment):
+"The organisms 'Cicada, Froghopper, and Pond skater' are:
+(a) Birds  (b) Fish  (c) Insects  (d) Reptiles"
+Answer: (c) [All three are insects - tests taxonomy knowledge]
+
+EXAMPLE 5 - MATCH WITH "HOW MANY CORRECT" PATTERN (2024 Environment):
+"Consider the following pairs:
+Country - Animal found in its natural habitat
+1. Brazil - Indri
+2. Indonesia - Elk
+3. Madagascar - Bonobo
+
+How many of the pairs given above are correctly matched?
+(a) Only one  (b) Only two  (c) All three  (d) None"
+Answer: (d) [All wrong - Indri is Madagascar, Elk is N.America/Europe, Bonobo is Congo]
+
+CRITICAL INSTRUCTION: Generate NEW questions inspired by these patterns. 
+- Do NOT copy these questions
+- Do NOT reuse the same entities/numbers/combinations
+- Change at least 2 dimensions (entity + mechanism + option set)
+`;
+
+// ============================================================================
+// YEAR-WEIGHTED STYLE TENDENCIES (Based on 2013-2025 PYQ Analysis)
+// ============================================================================
+const YEAR_TRENDS = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UPSC YEAR-WISE PATTERN EVOLUTION (2013-2025 PYQ ANALYSIS):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+═══════════════════════════════════════════════════════════════════════════════
+2011-2013 ERA (FOUNDATION PERIOD):
+═══════════════════════════════════════════════════════════════════════════════
+- Direct factual questions dominated (~60%)
+- Statement questions with 2-3 statements, "1 and 2 only" style options
+- Simple "Which of the following is correct?" format
+- Match-the-following with classic A-1, B-2, C-3, D-4 format
+- Few application-based questions
+- Questions directly from NCERT textbooks
+
+Example patterns from 2011:
+- "Under the constitution of India, which one of the following is not a fundamental duty?"
+- "The authorization for withdrawal of funds from Consolidated Fund must come from:"
+- "What is the difference between 'vote-on-account' and 'interim budget'?"
+
+═══════════════════════════════════════════════════════════════════════════════
+2014-2017 ERA (TRANSITION PERIOD):
+═══════════════════════════════════════════════════════════════════════════════
+- Increase in statement-based questions (~40-45%)
+- Introduction of 4-5 statement questions
+- "Select the correct answer using the code given below" became standard
+- More conceptual questions testing understanding, not just facts
+- Environment & Ecology questions increased significantly
+- Current affairs integration began (schemes, policies, organizations)
+- Extreme words used as traps: "only", "all", "always" in wrong statements
+
+Example patterns from 2015-2017:
+- "Consider the following statements... Which is/are correct?"
+- "In the context of... which of the following is/are true?"
+- Questions testing "NOT" - "Which is NOT a feature of..."
+- Comparing two similar concepts (difference between X and Y)
+
+═══════════════════════════════════════════════════════════════════════════════
+2018-2020 ERA (SOPHISTICATION PERIOD):
+═══════════════════════════════════════════════════════════════════════════════
+- Statement questions dominated (~50-55%)
+- Rise of application and conceptual questions
+- More tricky distractors using scope/exception traps
+- Science & Technology questions increased (space missions, biotech)
+- Contemporary issues as triggers for static concept questions
+- Questions testing nuanced understanding of constitutional provisions
+- "How many statements are correct?" pattern emerged
+- Assertion-Reason format appeared more frequently
+
+Example patterns from 2018-2020:
+- "With reference to the Constitution of India, consider the following..."
+- "If the President exercises power under Article 356, then..."
+- Questions on committees, commissions with specific recommendations
+- Testing exceptions to general rules
+
+═══════════════════════════════════════════════════════════════════════════════
+2021-2023 ERA (COMPLEXITY PEAK):
+═══════════════════════════════════════════════════════════════════════════════
+- "How many of the above" became DOMINANT format (~50% of statement questions)
+- Statement-I/Statement-II format for Economy, Environment, Science
+- Match/pairs with "How many pairs correctly matched?"
+- Multiple dimensions tested in single question
+- Distractors designed to defeat elimination strategies
+- Focus on recent amendments, judgments, policies
+- Questions linking static syllabus to current affairs context
+
+Key shift: From "Which statements are correct?" to "How many are correct?"
+- Forces knowledge of ALL statements, not just 2 to eliminate
+
+Example patterns from 2021-2023:
+- "How many of the above statements is/are correct? (a) Only one (b) Only two..."
+- "How many of the above pairs are correctly matched?"
+- Statement-I/Statement-II with causal relationship analysis
+- 4-5 item classification questions ("How many are insects/birds/reptiles?")
+
+═══════════════════════════════════════════════════════════════════════════════
+2024-2025 ERA (CURRENT STANDARD):
+═══════════════════════════════════════════════════════════════════════════════
+- "How many of the above" is now ~60% of statement/match questions
+- Statement-I/Statement-II format standardized for all subjects
+- Match questions predominantly use "How many pairs correctly matched?"
+- Specific emphasis on:
+  * Constitutional amendments (recent: 101st-106th)
+  * International organizations and India's role
+  * Species habitat/country mapping (endemic species)
+  * Party-leader/founder associations
+  * Scheme-ministry-objective mapping
+  * Scientific concepts with common misconceptions
+
+2024 specific patterns observed:
+- "How many Delimitation Commissions have been constituted?" (factual count)
+- Party-Leader matching with "How many are correctly matched?"
+- Country-Animal habitat pairs
+- Statement-I/Statement-II on syndicated loans, CBDC, star lifecycle
+- "The organisms Cicada, Froghopper, Pond skater are:" (classification)
+
+2025 patterns (expected continuation):
+- Maintain high "How many" density
+- More interdisciplinary questions
+- Avoid predictable answer distributions
+- Test fine distinctions between related concepts
+
+═══════════════════════════════════════════════════════════════════════════════
+GENERATION STRATEGY BY QUESTION TYPE:
+═══════════════════════════════════════════════════════════════════════════════
+
+FOR STATEMENT QUESTIONS (60% of paper):
+- Use "How many of the above is/are correct?" for 60% of statement questions
+- Use classic "Which statements are correct?" for remaining 40%
+- Mix 2-statement, 3-statement (most common), and 4-statement formats
+- Ensure 1-2 statements are wrong with SUBTLE errors (not obvious)
+
+FOR MATCH/PAIRS QUESTIONS:
+- Prefer "How many pairs correctly matched?" over classic A-1, B-2 format
+- Include at least one clearly wrong pair and one tricky pair
+- Use confusable items (similar-sounding entities, related concepts)
+
+FOR STATEMENT-I/STATEMENT-II:
+- Use for analytical questions in Economy, Environment, Science
+- Test causal relationships: "Does Statement-II explain Statement-I?"
+- Avoid simple "both true/both false" - make relationship the challenge
+
+FOR FACTUAL QUESTIONS:
+- Use for testing specific counts, dates, names, classifications
+- Frame as "Which of the following..." or "Which one of the following..."
+- Include plausible but incorrect options based on common misconceptions
+`;
+
+// ============================================================================
+// ERA-SPECIFIC GENERATION INSTRUCTIONS
+// ============================================================================
+const ERA_INSTRUCTIONS: Record<QuestionEra, string> = {
+  "2011-2013": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: 2011-2013 (FOUNDATION STYLE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions in the EARLY UPSC style (2011-2013 patterns):
+
+QUESTION FORMATS TO USE:
+1. DIRECT FACTUAL (60% of questions):
+   - "Which of the following is correct?"
+   - "Which one of the following is NOT a..."
+   - "The [X] is responsible for..."
+   - Simple single-answer questions
+
+2. SIMPLE TWO-STATEMENT (30%):
+   "Consider the following statements:
+   1. [Statement 1]
+   2. [Statement 2]
+   Which of the statements given above is/are correct?"
+   
+   Options: (a) 1 only (b) 2 only (c) Both 1 and 2 (d) Neither 1 nor 2
+
+3. COMPARISON QUESTIONS (10%):
+   - "What is the difference between X and Y?"
+   - Focus on distinguishing similar concepts
+
+CHARACTERISTICS:
+- Questions directly from NCERT textbooks
+- Less tricky distractors
+- Clear, unambiguous language
+- Testing basic recall and understanding
+- Minimal current affairs integration
+
+AVOID:
+- "How many of the above" format
+- Statement-I/Statement-II format
+- Complex 4-5 statement questions
+- Match with "how many pairs" format
+`,
+
+  "2014-2017": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: 2014-2017 (TRANSITION STYLE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions in the TRANSITION UPSC style (2014-2017 patterns):
+
+QUESTION FORMATS TO USE:
+1. THREE-STATEMENT QUESTIONS (40%):
+   "Consider the following statements:
+   1. [Statement 1]
+   2. [Statement 2]
+   3. [Statement 3]
+   Which of the statements given above is/are correct?"
+   
+   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
+
+2. FOUR-ITEM CLASSIFICATION (20%):
+   "Consider the following:
+   1. [Item 1]
+   2. [Item 2]
+   3. [Item 3]
+   4. [Item 4]
+   Which of the above are [category]?"
+   Options: (a) 1, 2 and 3 only (b) 2 and 4 only (c) 1, 3 and 4 only (d) 1, 2, 3 and 4
+
+3. CLASSIC MATCH FORMAT (15%):
+   "Match List-I with List-II"
+   With A-1, B-2, C-3, D-4 style options
+
+4. CONTEXT-BASED FACTUAL (25%):
+   "In the context of [X], which of the following is correct?"
+   "With reference to [X], consider the following..."
+
+CHARACTERISTICS:
+- "Select the correct answer using the code given below" standard
+- Environment/Ecology questions increased
+- Current affairs integration (schemes, organizations)
+- Extreme words ("only", "all") used as traps in wrong options
+- More conceptual understanding required
+
+AVOID:
+- "How many of the above is/are correct" format
+- Statement-I/Statement-II format
+`,
+
+  "2018-2020": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: 2018-2020 (SOPHISTICATION STYLE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions in the SOPHISTICATED UPSC style (2018-2020 patterns):
+
+QUESTION FORMATS TO USE:
+1. STATEMENT QUESTIONS (50%):
+   - Mix of 2, 3, and 4 statement questions
+   - "Which of the statements given above is/are correct?"
+   - Start introducing "How many statements are correct?" occasionally
+
+2. APPLICATION-BASED (20%):
+   "If [condition/scenario], then..."
+   "What would happen if..."
+   Testing application of constitutional/legal provisions
+
+3. ASSERTION-REASON FORMAT (15%):
+   "Assertion (A): [Statement]
+   Reason (R): [Statement]
+   (a) Both A and R are correct and R explains A
+   (b) Both A and R are correct but R does not explain A
+   (c) A is correct but R is incorrect
+   (d) A is incorrect but R is correct"
+
+4. NUANCED FACTUAL (15%):
+   Testing exceptions, special cases, recent amendments
+   Questions on committee recommendations
+
+CHARACTERISTICS:
+- Tricky distractors using scope/exception traps
+- Science & Technology questions increased
+- Questions on constitutional nuances
+- Contemporary issues as triggers for static concepts
+- Testing fine distinctions between related provisions
+
+CAN USE (but sparingly):
+- "How many of the above" (emerging pattern)
+`,
+
+  "2021-2023": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: 2021-2023 (COMPLEXITY RISE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions in the COMPLEX UPSC style (2021-2023 patterns):
+
+KEY INSIGHT: Multi-statement questions dominate (~70% by 2022). "How many correct?"
+format becomes common especially from 2022 onward, but classic "Which statements 
+is/are correct?" with code options still appears frequently in 2021.
+
+QUESTION FORMATS TO USE:
+1. MULTI-STATEMENT WITH CODES (35%):
+   "Consider the following statements:
+   1. [Statement]
+   2. [Statement]
+   3. [Statement]
+   Which of the statements given above is/are correct?"
+   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
+
+2. "HOW MANY" STATEMENTS (25% - rising trend):
+   "Consider the following statements:
+   1. [Statement]
+   2. [Statement]
+   3. [Statement]
+   How many of the above statements is/are correct?"
+   Options: (a) Only one (b) Only two (c) All three (d) None
+
+3. STATEMENT-I/STATEMENT-II (15%):
+   This is essentially a re-skinned Assertion-Reason format.
+   "Statement-I: [Claim]
+   Statement-II: [Related statement]
+   Which one of the following is correct in respect of the above statements?"
+   Uses same 4 options as classic A-R (both correct & explains / both correct no explain / etc.)
+
+4. MATCH THE FOLLOWING (15%):
+   Classic "Match List-I with List-II" 
+   AND emerging "How many pairs correctly matched?" format
+
+5. DIRECT/STANDALONE (10%):
+   Single-answer factual questions
+
+CHARACTERISTICS:
+- Distractors designed to defeat elimination strategies
+- Focus on recent amendments, judgments, committees
+- Questions increasingly require knowledge of ALL statements (no safe elimination)
+- Current affairs as trigger, static syllabus as solution
+
+KEY SHIFT: Strong rise in multi-statement dominance; "How many correct?" emerges prominently from 2022.
+`,
+
+  "2024-2025": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: 2024-2025 (CURRENT STANDARD)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions in the CURRENT UPSC style (2024-2025 patterns):
+
+KEY INSIGHT: Statement-based MCQs dominate (~60%), with "How many correct?" being 
+the most common evaluation template. Assertion-Reason persists (~13%) often 
+re-skinned as Statement-I/II. New 3-column match format introduced in 2024.
+
+QUESTION FORMATS TO USE:
+1. "HOW MANY" STATEMENT FORMAT (Very High Frequency):
+   - "How many of the above statements is/are correct?"
+   - "How many of the above pairs are correctly matched?"
+   - "In how many of the above rows is the given information correct?"
+   Options: Only one / Only two / All three (or four) / None
+
+2. STATEMENT-I/STATEMENT-II (High Frequency - ~13%):
+   This is the modern label for Assertion-Reason logic.
+   "Statement-I: [Factual claim or observation]
+   Statement-II: [Related statement - could be cause, explanation, or independent fact]
+   Which one of the following is correct in respect of the above statements?"
+   Options: Both correct & II explains I / Both correct but II doesn't explain / I correct II incorrect / I incorrect II correct
+
+3. THREE-COLUMN MATCH / ROW-CORRECTNESS (New in 2024):
+   Tables with 3+ columns where you evaluate row-by-row correctness
+   "In how many of the above rows is the given information correctly matched?"
+   This is a significant 2024 innovation.
+
+4. CLASSIC MATCH THE FOLLOWING (~10%):
+   "Match List-I with List-II" with A-1, B-2, C-3, D-4 style options
+   Also appears in "How many pairs correctly matched?" format
+
+5. STANDALONE/DIRECT (~25%):
+   Direct factual questions testing precise knowledge
+   - Party-Leader/Founder associations
+   - Country-Species habitat mapping  
+   - Organisms classification (taxonomy traps)
+   - Amendment-Provision mapping
+
+2024 SPECIFIC EXAMPLES FROM ACTUAL PAPER:
+- Party-Leader matching (Bhartiya Jana Sangh-Mukherjee, Swatantra Party)
+- Country-Animal habitat traps (Brazil-Indri, Indonesia-Elk, Madagascar-Bonobo - all wrong!)
+- Organisms classification (Cicada, Froghopper, Pond skater = all insects)
+- Statement-I/II on syndicated loans, CBDC, star lifecycle, atmospheric heating
+
+EMPHASIS:
+- "How many of the above" is the dominant evaluation template
+- Statement-I/II (evolved Assertion-Reason) appears across all subjects
+- 3-column row-correctness tables are new and tricky
+- Association questions (species-habitat, party-leader) are high frequency
+`,
+
+  "current": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: CURRENT (2024-2025 STANDARD) - DEFAULT
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions matching the LATEST UPSC patterns (2024-2025):
+
+KEY INSIGHT: Statement-based MCQs dominate (~60%). "How many correct?" is the 
+most common evaluation template. Assertion-Reason persists (~13%), often labeled
+as Statement-I/II. New 3-column row-correctness tables introduced in 2024.
+
+PRIMARY FORMATS:
+1. "HOW MANY OF THE ABOVE" (Very High Frequency):
+   - Statements: "How many of the above statements is/are correct?"
+   - Pairs: "How many of the above pairs are correctly matched?"
+   - Rows: "In how many of the above rows is the given information correct?"
+
+2. STATEMENT-I/STATEMENT-II (~13%):
+   Modern label for Assertion-Reason logic - tests causal/explanatory relationships
+
+3. THREE-COLUMN MATCH / ROW-CORRECTNESS (New 2024 pattern):
+   Tables with 3+ columns, evaluate row-by-row correctness
+
+4. CLASSIC MATCH THE FOLLOWING (~10%):
+   "Match List-I with List-II" - also in "How many pairs" format
+
+5. STANDALONE/DIRECT (~25%):
+   Testing precise knowledge with sophisticated distractors
+
+Follow 2024-2025 patterns as the PRIMARY reference.
+`,
+
+  "all": `
+═══════════════════════════════════════════════════════════════════════════════
+ERA: ALL ERAS (MIXED DISTRIBUTION)
+═══════════════════════════════════════════════════════════════════════════════
+
+Generate questions spanning ALL UPSC eras to provide comprehensive practice:
+
+DISTRIBUTION (approximate for mixed practice):
+- ~10% in 2011-2013 style: Direct factual, simple 2-statement "1 only / 2 only / Both / Neither"
+- ~15% in 2014-2017 style: Three-statement with combination codes, classic Match List-I/II
+- ~20% in 2018-2020 style: Application-based, Assertion-Reason format, conceptual
+- ~25% in 2021-2023 style: "How many correct?" emerging (esp. 2022+), multi-statement dominant
+- ~30% in 2024-2025 style: "How many" very frequent, Statement-I/II, 3-column row-correctness
+
+KEY EVOLUTION TO REFLECT:
+1. Multi-statement questions rose from ~40% (2011) to ~70% (2022+)
+2. "How many correct?" emerged around 2018-2020, became common from 2022
+3. Assertion-Reason evolved into Statement-I/II labeling (same logic, different name)
+4. 3-column row-correctness tables are a 2024 innovation
+5. "Which statements is/are correct?" with codes still appears across all eras
+
+This mixed approach helps aspirants:
+- Build foundation with simpler patterns
+- Understand evolution of UPSC questioning style
+- Practice older patterns that occasionally still appear
+- Master current dominant patterns
+
+For EACH question, use the appropriate era's format naturally based on the distribution.
+`,
+};
 
 const DIFFICULTY_INSTRUCTIONS: Record<Difficulty, string> = {
   easy: `
@@ -141,66 +824,143 @@ QUESTION STYLE: STATEMENT-BASED (56% OF UPSC PAPER - MOST IMPORTANT!)
 Format: Multiple statements to evaluate for correctness
 questionType: "statement"
 
-UPSC 2025 Distribution (follow this):
+UPSC 2024-2025 Distribution (follow this):
 - Two-statement questions: ~15 per paper
 - Three-statement questions: ~39 per paper (MOST COMMON)
 - Four-statement questions: ~9 per paper
 - Five+ statement questions: ~4 per paper
 
-TWO-STATEMENT FORMAT:
-"Consider the following statements:
-Statement I: [First statement]
-Statement II: [Second statement]
-Which of the statements given above is/are correct?"
+═══════════════════════════════════════════════════════════════════════════════
+"HOW MANY" FORMAT (DOMINANT IN 2021-2024 - USE THIS 60% OF THE TIME):
+═══════════════════════════════════════════════════════════════════════════════
 
-Options MUST be:
-A) Both Statement I and Statement II are correct
-B) Only Statement I is correct
-C) Only Statement II is correct
-D) Neither Statement I nor Statement II is correct
-
-THREE-STATEMENT FORMAT (MOST USED IN UPSC):
+THREE-STATEMENT "HOW MANY" FORMAT (PREFERRED):
 "Consider the following statements regarding [topic]:
 1. [Statement 1]
 2. [Statement 2]
 3. [Statement 3]
+
 How many of the above statements is/are correct?"
 
-Options MUST be:
+Options MUST be EXACTLY:
 A) Only one
 B) Only two
 C) All three
 D) None
 
-OR Alternative format:
-"Which of the statements given above is/are correct?"
-A) 1 and 2 only
-B) 2 and 3 only
-C) 1 and 3 only
+FOUR-STATEMENT "HOW MANY" FORMAT:
+"Consider the following statements:
+1. [Statement 1]
+2. [Statement 2]
+3. [Statement 3]
+4. [Statement 4]
+
+How many of the above statements is/are correct?"
+
+Options MUST be EXACTLY:
+A) Only one
+B) Only two
+C) Only three
+D) All four
+
+═══════════════════════════════════════════════════════════════════════════════
+CLASSIC "WHICH STATEMENTS" FORMAT (USE 40% OF THE TIME):
+═══════════════════════════════════════════════════════════════════════════════
+
+"Consider the following statements regarding [topic]:
+1. [Statement 1]
+2. [Statement 2]
+3. [Statement 3]
+
+Which of the statements given above is/are correct?"
+
+Options format:
+A) 1 only
+B) 1 and 2 only
+C) 2 and 3 only
 D) 1, 2 and 3
 
-FOUR-STATEMENT FORMAT:
-Same as three-statement but with 4 statements
-Options: A) Only one  B) Only two  C) Only three  D) All four
+TWO-STATEMENT SIMPLE FORMAT:
+"Consider the following statements:
+1. [Statement 1]
+2. [Statement 2]
+
+Which of the statements given above is/are correct?"
+
+Options MUST be:
+A) 1 only
+B) 2 only
+C) Both 1 and 2
+D) Neither 1 nor 2
 
 CRITICAL RULES FOR STATEMENT QUESTIONS:
 1. Each statement must be independently verifiable as true or false
 2. Statements should be related to the same topic but test different aspects
 3. AVOID making all statements true or all false (makes question too easy)
-4. Ideal: 1-2 statements correct, 1-2 incorrect (requires careful analysis)
-5. Wrong statements should contain subtle errors, not obvious mistakes
+4. Ideal distribution: 1-2 statements correct, 1-2 incorrect (requires careful analysis)
+5. Wrong statements should contain SUBTLE errors using trap patterns:
+   - Scope trap: Correct concept, wrong jurisdiction/scope
+   - Exception trap: Generally true but fails due to known exception
+   - Terminology trap: Confuses similar-sounding terms/provisions
+   - Time trap: Outdated information presented as current
 6. Use specific facts (years, numbers, names) in some statements to test precision
-7. Test common misconceptions in incorrect statements`,
+7. Test common misconceptions from the Subject Trap Library in incorrect statements
+8. Ensure answer distribution is varied across a batch (not all "Only two")`,
 
   match: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: MATCH THE FOLLOWING (~8 questions per UPSC paper)
+QUESTION STYLE: MATCH THE FOLLOWING / PAIRS (~8-12 questions per UPSC paper)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Format: Two columns to match with combination options
 questionType: "match"
 
-STANDARD UPSC FORMAT:
+═══════════════════════════════════════════════════════════════════════════════
+FORMAT 1: "HOW MANY PAIRS CORRECTLY MATCHED" (DOMINANT IN 2021-2024):
+═══════════════════════════════════════════════════════════════════════════════
+
+"Consider the following pairs:
+
+[Category A]          [Category B]
+1. [Item 1]     -     [Description 1]
+2. [Item 2]     -     [Description 2]
+3. [Item 3]     -     [Description 3]
+4. [Item 4]     -     [Description 4]
+
+How many of the above pairs are correctly matched?"
+
+Options MUST be EXACTLY:
+A) Only one pair
+B) Only two pairs
+C) Only three pairs
+D) All four pairs
+
+(Can also be 3 pairs with options: Only one / Only two / All three / None)
+
+REAL PYQ EXAMPLE (2024 Polity - Party/Leader):
+"Consider the following pairs:
+Party - Its Leader
+1. Bhartiya Jana Sangh - Dr. Shyama Prasad Mukherjee
+2. Socialist Party - C. Rajagopalachari
+3. Congress for Democracy - Jagjivan Ram
+4. Swatantra Party - Acharya Narendra Dev
+
+How many of the above are correctly matched?"
+Answer: Only two (Pairs 1 and 3 correct)
+
+REAL PYQ EXAMPLE (2024 Environment - Country/Animal):
+"Consider the following pairs:
+Country - Animal found in its natural habitat
+1. Brazil - Indri
+2. Indonesia - Elk
+3. Madagascar - Bonobo
+
+How many of the pairs given above are correctly matched?"
+Answer: None (All wrong - tests precise habitat knowledge)
+
+═══════════════════════════════════════════════════════════════════════════════
+FORMAT 2: CLASSIC MATCH LIST-I WITH LIST-II:
+═══════════════════════════════════════════════════════════════════════════════
+
 "Match List-I with List-II and select the correct answer using the code given below:
 
 List-I (Item)          List-II (Description)
@@ -212,72 +972,90 @@ D. [Item 4]            4. [Description 4]
 Select the correct answer using the code given below:"
 
 Options format:
-A)  A-1, B-2, C-3, D-4
-B)  A-2, B-1, C-4, D-3
-C)  A-3, B-4, C-1, D-2
-D)  A-4, B-3, C-2, D-1
+     A   B   C   D
+(a)  1   2   3   4
+(b)  2   1   4   3
+(c)  3   4   1   2
+(d)  4   3   2   1
 
-DESIGN RULES:
-1. Items in List-I should be of same category (all are rivers, all are acts, all are treaties, etc.)
-2. Descriptions in List-II should be parallel (all are locations, all are years, all are features, etc.)
-3. Include at least 2 items that could plausibly match with same description (creates difficulty)
+DESIGN RULES (CRITICAL FOR UPSC-QUALITY):
+1. Items in List-I MUST be same category (all rivers, all acts, all treaties, etc.)
+2. Descriptions in List-II MUST be parallel (all states, all years, all features, etc.)
+3. Include at least 2 items that could PLAUSIBLY match with same description (creates difficulty)
 4. Commonly confused pairs should be included to test precise knowledge
-5. Ensure only ONE correct matching combination exists
+5. Ensure ONLY ONE correct matching combination exists
+6. For "How many pairs" format: Mix correct and incorrect pairs (ideal: 1-2 correct, 2-3 wrong)
 
 COMMON UPSC MATCH THEMES:
+- Parties ↔ Founders/Leaders (very common in 2024)
+- Country ↔ Endemic/Native species (very common in Environment)
 - Treaties/Agreements ↔ Years/Countries
-- Constitutional Articles ↔ Provisions
-- Rivers ↔ Origins/Tributaries
-- National Parks ↔ States/Species
+- Constitutional Articles ↔ Provisions/Subjects
+- Rivers ↔ Origins/Tributaries/States
+- National Parks/Reserves ↔ States/Flagship Species
 - Government Schemes ↔ Objectives/Ministries
 - International Organizations ↔ Headquarters/Functions
-- Battles/Events ↔ Years/Leaders
-- Authors ↔ Books
-- Folk Arts ↔ States/Regions`,
+- Historical Events ↔ Years/Leaders
+- Folk Arts/Dances ↔ States/Regions
+- Minerals ↔ States (leading producers)`,
 
   assertion: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: ASSERTION-REASON (~7-18 questions per UPSC paper)
+QUESTION STYLE: STATEMENT-I/STATEMENT-II (UPSC 2024 FORMAT - ~15-20 questions per paper)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Format: Assertion and Reason with logical relationship analysis
+Format: Two statements with logical relationship analysis
 questionType: "assertion"
 
-EXACT UPSC FORMAT:
-"Consider the following:
-Assertion (A): [Statement of fact or claim]
-Reason (R): [Statement explaining or related to assertion]
+NOTE: UPSC 2024 predominantly uses "Statement-I/Statement-II" format instead of 
+traditional "Assertion (A)/Reason (R)" format. USE THIS FORMAT:
+
+EXACT UPSC 2024 FORMAT (MUST USE):
+"Consider the following statements:
+
+Statement-I: [Statement of fact, claim, or observation]
+
+Statement-II: [Related statement - could be explanation, cause, or independent fact]
 
 Which one of the following is correct in respect of the above statements?"
 
-Options MUST BE EXACTLY:
-A) Both A and R are correct and R is the correct explanation of A
-B) Both A and R are correct but R is NOT the correct explanation of A
-C) A is correct but R is incorrect
-D) A is incorrect but R is correct
+OPTIONS MUST BE EXACTLY (USE THIS EXACT WORDING):
+A) Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I
+B) Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I
+C) Statement-I is correct but Statement-II is incorrect
+D) Statement-I is incorrect but Statement-II is correct
 
 CRITICAL DESIGN RULES:
-1. Assertion must be a clear, verifiable statement
-2. Reason must also be independently verifiable
-3. The relationship between A and R is what makes this question hard
-4. Most challenging: Both true but R doesn't explain A (tests logical thinking)
+1. Statement-I must be a clear, verifiable statement of fact or claim
+2. Statement-II must also be independently verifiable as true or false
+3. The relationship between Statement-I and Statement-II is what makes this question hard
+4. Most challenging: Both true but Statement-II doesn't explain Statement-I (tests logical thinking)
+5. If answer is A or B, Statement-II MUST be independently true
+6. If answer is A, Statement-II must be a DIRECT causal/explanatory bridge, not merely correlated
 
 DIFFICULTY CALIBRATION:
-- Easy: A is false, R is true (or vice versa) - straightforward
-- Medium: Both true, R clearly explains A - tests knowledge
-- Hard: Both true, but R is NOT the correct explanation - tests reasoning
+- Easy: Statement-I is false, Statement-II is true (or vice versa) - straightforward
+- Medium: Both true, Statement-II clearly explains Statement-I - tests knowledge
+- Hard: Both true, but Statement-II is NOT the correct explanation - tests reasoning
+
+AVOID "DEFINITION EXPLAINS DEFINITION" (TOO EASY)
+PREFER: "principle → implication" (Economy) or "mechanism → outcome" (Environment/Science)
 
 COMMON TRAPS TO CREATE:
-- R is a true statement but explains something else, not A
-- R partially explains A but misses the main reason
-- A and R are both true and seem related but causation is reversed
-- R is the effect, not the cause of A
+- Statement-II is a true statement but explains something else, not Statement-I
+- Statement-II partially explains Statement-I but misses the main reason
+- Statement-I and Statement-II are both true and seem related but causation is reversed
+- Statement-II is the effect, not the cause of Statement-I
 
-EXAMPLE:
-Assertion (A): The Indian Parliament cannot discuss the conduct of judges of Supreme Court and High Courts.
-Reason (R): Judges can be removed only through impeachment.
+REAL PYQ EXAMPLE (2024 Economy):
+"Consider the following statements:
+Statement-I: Syndicated lending spreads the risk of borrower default across multiple lenders.
+Statement-II: The syndicated loan can be a fixed amount/lump sum of funds, but cannot be a credit line.
 
-(Both are true, but R doesn't explain A - the correct explanation relates to judicial independence, not removal process)`,
+Which one of the following is correct in respect of the above statements?"
+
+Answer: (c) Statement-I is correct but Statement-II is incorrect
+[Statement-I is true; Statement-II is false because syndicated loans CAN be credit lines]`,
 };
 
 // ============================================================================
@@ -656,14 +1434,48 @@ function getSubjectContext(subject: string): string {
   return "";
 }
 
+// Get subject-specific trap patterns
+function getSubjectTraps(subject: string): string {
+  const lowerSubject = subject.toLowerCase();
+
+  if (lowerSubject.includes("polity") || lowerSubject.includes("constitution") || lowerSubject.includes("governance")) {
+    return SUBJECT_TRAP_LIBRARY.polity;
+  }
+  if (lowerSubject.includes("history") || lowerSubject.includes("freedom") || lowerSubject.includes("independence") || lowerSubject.includes("ancient") || lowerSubject.includes("medieval") || lowerSubject.includes("modern")) {
+    return SUBJECT_TRAP_LIBRARY.history;
+  }
+  if (lowerSubject.includes("geography") || lowerSubject.includes("geo")) {
+    return SUBJECT_TRAP_LIBRARY.geography;
+  }
+  if (lowerSubject.includes("economy") || lowerSubject.includes("economic") || lowerSubject.includes("finance")) {
+    return SUBJECT_TRAP_LIBRARY.economy;
+  }
+  if (lowerSubject.includes("environment") || lowerSubject.includes("ecology") || lowerSubject.includes("biodiversity")) {
+    return SUBJECT_TRAP_LIBRARY.environment;
+  }
+  if (lowerSubject.includes("science") || lowerSubject.includes("technology") || lowerSubject.includes("space")) {
+    return SUBJECT_TRAP_LIBRARY.science;
+  }
+  if (lowerSubject.includes("art") || lowerSubject.includes("culture") || lowerSubject.includes("heritage")) {
+    return SUBJECT_TRAP_LIBRARY.art;
+  }
+
+  return "";
+}
+
 export function getPrompt(params: PromptParams): string {
-  const { subject, theme, difficulty, styles, totalCount } = params;
+  const { subject, theme, difficulty, styles, totalCount, era = "current" } = params;
 
   const themeContext = theme
     ? `SPECIFIC FOCUS: "${theme}" - Generate questions specifically on this topic/theme within ${subject}.`
     : `COVERAGE: Generate questions covering diverse important topics within ${subject}.`;
 
   const subjectContext = getSubjectContext(subject);
+  const subjectTraps = getSubjectTraps(subject);
+
+  // Get era-specific instructions
+  const eraInstruction = ERA_INSTRUCTIONS[era] || ERA_INSTRUCTIONS["current"];
+  const eraLabel = era === "current" ? "2024-2025 (Current)" : era === "all" ? "All Eras (Mixed)" : era;
 
   // Build style distribution instructions
   const styleInstructions = styles
@@ -687,12 +1499,30 @@ GENERATE ${totalCount} UPSC-STANDARD MCQ QUESTIONS
 SUBJECT: ${subject.toUpperCase()}
 ${themeContext}
 
+TARGET ERA: ${eraLabel}
+${eraInstruction}
+
+${UPSC_STEM_TEMPLATES}
+
+${era === "current" || era === "2024-2025" || era === "2021-2023" ? YEAR_TRENDS : ""}
+
+${PYQ_EXAMPLES}
+
 ${subjectContext ? `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SUBJECT-SPECIFIC CONTEXT & KNOWLEDGE BASE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${subjectContext}
 ` : ""}
+
+${subjectTraps ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUBJECT-SPECIFIC TRAP PATTERNS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${subjectTraps}
+` : ""}
+
+${DISTRACTOR_BLUEPRINT}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DIFFICULTY CALIBRATION:

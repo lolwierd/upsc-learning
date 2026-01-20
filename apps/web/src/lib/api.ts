@@ -110,6 +110,60 @@ export async function getStats(): Promise<UserStats> {
   return fetchAPI(API_ENDPOINTS.STATS);
 }
 
+export type AiMetricStatus = "success" | "error";
+
+export interface AiGenerationMetric {
+  id: string;
+  quizId: string | null;
+  userId: string;
+  provider: "gemini" | "openai";
+  model: string;
+  factCheckModel?: string | null;
+  subject: string;
+  theme: string | null;
+  difficulty: string;
+  styles: unknown;
+  era: string | null;
+  status: AiMetricStatus;
+  errorMessage: string | null;
+  requestedCount: number;
+  returnedCount: number;
+  dedupEnabled: boolean;
+  dedupFilteredCount: number;
+  validationIsValid: boolean | null;
+  validationInvalidCount: number | null;
+  validationErrorCount: number | null;
+  validationWarningCount: number | null;
+  validationBatchWarnings: unknown;
+  parseStrategy: "direct" | "extracted" | null;
+  promptChars: number | null;
+  responseChars: number | null;
+  totalDurationMs: number | null;
+  generationDurationMs: number | null;
+  factCheckEnabled: boolean;
+  factCheckDurationMs: number | null;
+  factCheckCheckedCount: number | null;
+  factCheckIssueCount: number | null;
+  usagePromptTokens: number | null;
+  usageCompletionTokens: number | null;
+  usageTotalTokens: number | null;
+  createdAt: number;
+}
+
+export async function getAiMetrics(params?: {
+  limit?: number;
+  subject?: string;
+  status?: AiMetricStatus;
+}): Promise<{ metrics: AiGenerationMetric[] }> {
+  const searchParams = new URLSearchParams();
+  if (params?.limit) searchParams.set("limit", String(params.limit));
+  if (params?.subject) searchParams.set("subject", params.subject);
+  if (params?.status) searchParams.set("status", params.status);
+
+  const query = searchParams.toString();
+  return fetchAPI(`/api/metrics/ai${query ? `?${query}` : ""}`);
+}
+
 // Settings APIs
 export async function getSettings(): Promise<UserSettings> {
   return fetchAPI(API_ENDPOINTS.SETTINGS);

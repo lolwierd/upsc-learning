@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "migrate": "cd ../../apps/worker && pnpm wrangler d1 migrations apply upsc-mcq-db --local",
     "migrate:local": "wrangler d1 migrations apply upsc-mcq-db --local",
     "migrate:remote": "wrangler d1 migrations apply upsc-mcq-db --remote",
     "generate": "wrangler d1 migrations create upsc-mcq-db"

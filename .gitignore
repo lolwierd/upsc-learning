@@ -34,5 +34,10 @@ pnpm-debug.log*
 .wrangler
 .mf
 
+# Local-only debug artifacts
+.local
+
 # Testing
 coverage
+gemini_key.json
+geminikey.json
