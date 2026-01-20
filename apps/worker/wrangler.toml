@@ -33,7 +33,12 @@ FACT_CHECK_MODEL = "gemini-3-flash-preview"
 # Production Overrides
 # -----------------------------------------
 [env.production]
-vars = { ENVIRONMENT = "production", CORS_ORIGIN = "https://upsc.lolwierd.com", ENABLE_FACT_CHECK = "0", LLM_DEBUG = "0", FACT_CHECK_MODEL = "gemini-3-flash-preview" }
+[env.production.vars]
+ENVIRONMENT = "production"
+CORS_ORIGIN = "https://upsc.lolwierd.com"
+ENABLE_FACT_CHECK = "0"
+LLM_DEBUG = "0"
+FACT_CHECK_MODEL = "gemini-3-pro-preview"
 
 # -----------------------------------------
 # Observability
