@@ -166,7 +166,16 @@ export default function HistoryPage() {
                           {!hasAttempt && (
                             <>
                               <span className="text-gray-300">·</span>
-                              <span className="text-xs font-medium text-primary-500">New</span>
+                              {quiz.status === 'generating' ? (
+                                <span className="text-xs font-medium text-amber-500 flex items-center gap-1">
+                                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                  Generating...
+                                </span>
+                              ) : quiz.status === 'failed' ? (
+                                <span className="text-xs font-medium text-red-500">Failed</span>
+                              ) : (
+                                <span className="text-xs font-medium text-primary-500">New</span>
+                              )}
                             </>
                           )}
                         </div>
@@ -188,15 +197,19 @@ export default function HistoryPage() {
                               percentage >= 80
                                 ? "text-green-600"
                                 : percentage >= 60
-                                ? "text-amber-600"
-                                : "text-red-600"
+                                  ? "text-amber-600"
+                                  : "text-red-600"
                             )}
                           >
                             {quiz.score}/{quiz.questionCount}
                           </span>
                         ) : (
-                          <Button variant="secondary" size="sm">
-                            Take Quiz
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            disabled={quiz.status === 'generating' || quiz.status === 'failed'}
+                          >
+                            {quiz.status === 'generating' ? 'Processing' : quiz.status === 'failed' ? 'Error' : 'Take Quiz'}
                           </Button>
                         )}
                       </div>
@@ -210,8 +223,8 @@ export default function HistoryPage() {
                           percentage >= 80
                             ? "bg-green-50 text-green-600"
                             : percentage >= 60
-                            ? "bg-amber-50 text-amber-600"
-                            : "bg-red-50 text-red-600"
+                              ? "bg-amber-50 text-amber-600"
+                              : "bg-red-50 text-red-600"
                         )}
                       >
                         {percentage}%

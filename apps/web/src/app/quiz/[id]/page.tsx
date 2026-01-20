@@ -29,6 +29,8 @@ interface QuizData {
   questionCount: number;
   questions: LearnModeQuestion[];
   learnMode?: boolean;
+  status: "generating" | "completed" | "failed";
+  error?: string;
 }
 
 interface Answer {
@@ -55,6 +57,8 @@ export default function QuizPage() {
 
   // Load quiz and start attempt
   useEffect(() => {
+    let pollingTimer: NodeJS.Timeout;
+
     async function load() {
       try {
         // Check if learn mode is enabled
@@ -62,33 +66,50 @@ export default function QuizPage() {
         const isLearnMode = settings.learnModeEnabled;
 
         // Fetch quiz (with answers if learn mode)
-        const quizData = await getQuiz(quizId, { withAnswers: isLearnMode });
-        setQuiz(quizData as unknown as QuizData);
+        const quizData = await getQuiz(quizId, { withAnswers: isLearnMode }) as unknown as QuizData;
+        setQuiz(quizData);
 
-        // Initialize answers
-        const initialAnswers = new Map<string, Answer>();
-        quizData.questions.forEach((q) => {
-          initialAnswers.set(q.id, {
-            questionId: q.id,
-            selectedOption: null,
-            markedForReview: false,
-          });
-        });
-        setAnswers(initialAnswers);
-
-        // Only start attempt if not in learn mode
-        if (!quizData.learnMode) {
-          const { attemptId: id } = await startAttempt(quizId);
-          setAttemptId(id);
+        if (quizData.status === "failed") {
+          setError(quizData.error || "Quiz generation failed.");
+          setLoading(false);
+          return;
         }
+
+        if (quizData.status === "generating") {
+          // Poll again in 3 seconds
+          pollingTimer = setTimeout(load, 3000);
+          return;
+        }
+
+        // Initialize answers (only if questions exist)
+        if (quizData.questions && quizData.questions.length > 0) {
+          const initialAnswers = new Map<string, Answer>();
+          quizData.questions.forEach((q) => {
+            initialAnswers.set(q.id, {
+              questionId: q.id,
+              selectedOption: null,
+              markedForReview: false,
+            });
+          });
+          setAnswers(initialAnswers);
+
+          // Only start attempt if not in learn mode and haven't started yet
+          if (!quizData.learnMode && !attemptId) {
+            const { attemptId: id } = await startAttempt(quizId);
+            setAttemptId(id);
+          }
+        }
+
+        setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load quiz");
-      } finally {
         setLoading(false);
       }
     }
     load();
-  }, [quizId]);
+
+    return () => clearTimeout(pollingTimer);
+  }, [quizId]); // Removed attemptId from deps to avoid re-triggering logic unnecessarily check logic
 
   // Handle answer selection
   const handleAnswer = useCallback(
@@ -221,22 +242,25 @@ export default function QuizPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [quiz, currentQuestion, handleAnswer, handleMarkForReview]);
 
-  if (loading) {
+  if (loading || (quiz && quiz.status === "generating")) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card className="text-center py-12">
           <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-gray-600">Loading quiz...</p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Generating Quiz...</h2>
+          <p className="text-gray-600">
+            This usually takes 10-20 seconds. We're crafting high-quality questions for you.
+          </p>
         </Card>
       </div>
     );
   }
 
-  if (error || !quiz) {
+  if (error || !quiz || quiz.status === 'failed') {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card className="text-center py-12">
-          <p className="text-red-600 mb-4">{error || "Quiz not found"}</p>
+          <p className="text-red-600 mb-4 font-medium">{error || quiz?.error || "Quiz not found"}</p>
           <Button onClick={() => router.push("/")}>Go to Dashboard</Button>
         </Card>
       </div>
@@ -327,13 +351,13 @@ export default function QuizPage() {
                         ? isCorrect
                           ? "bg-green-100 text-green-700"
                           : isIncorrect
-                          ? "bg-red-100 text-red-700"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         : isMarked
-                        ? "bg-amber-100 text-amber-700"
-                        : isAnswered
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-amber-100 text-amber-700"
+                          : isAnswered
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     )}
                   >
                     {i + 1}
@@ -457,13 +481,13 @@ export default function QuizPage() {
                             ? showCorrect
                               ? "border-green-500 bg-green-50"
                               : showIncorrect
-                              ? "border-red-500 bg-red-50"
-                              : isSelected
-                              ? "border-gray-300 bg-gray-50"
-                              : "border-gray-200"
+                                ? "border-red-500 bg-red-50"
+                                : isSelected
+                                  ? "border-gray-300 bg-gray-50"
+                                  : "border-gray-200"
                             : isSelected
-                            ? "border-primary-500 bg-primary-50"
-                            : "border-gray-200 hover:bg-gray-50"
+                              ? "border-primary-500 bg-primary-50"
+                              : "border-gray-200 hover:bg-gray-50"
                         )}
                       >
                         <span
@@ -473,13 +497,13 @@ export default function QuizPage() {
                               ? showCorrect
                                 ? "border-green-500 bg-green-500 text-white"
                                 : showIncorrect
-                                ? "border-red-500 bg-red-500 text-white"
-                                : isSelected
-                                ? "border-gray-400 bg-gray-400 text-white"
-                                : "border-gray-300 text-gray-500"
+                                  ? "border-red-500 bg-red-500 text-white"
+                                  : isSelected
+                                    ? "border-gray-400 bg-gray-400 text-white"
+                                    : "border-gray-300 text-gray-500"
                               : isSelected
-                              ? "border-primary-500 bg-primary-500 text-white"
-                              : "border-gray-300 text-gray-500"
+                                ? "border-primary-500 bg-primary-500 text-white"
+                                : "border-gray-300 text-gray-500"
                           )}
                         >
                           {optionLabel}
@@ -491,11 +515,11 @@ export default function QuizPage() {
                               ? showCorrect
                                 ? "text-green-700"
                                 : showIncorrect
-                                ? "text-red-700"
-                                : "text-gray-700"
+                                  ? "text-red-700"
+                                  : "text-gray-700"
                               : isSelected
-                              ? "text-primary-700"
-                              : "text-gray-700"
+                                ? "text-primary-700"
+                                : "text-gray-700"
                           )}
                         >
                           {option}

@@ -70,6 +70,8 @@ export interface Quiz {
   styles: QuestionStyle[];
   questionCount: number;
   modelUsed: ModelProvider;
+  status: "generating" | "completed" | "failed";
+  error?: string;
   createdAt: number;
 }
 
@@ -156,6 +158,8 @@ export interface QuizHistoryItem {
   styles: QuestionStyle[];
   questionCount: number;
   createdAt: number;
+  status: "generating" | "completed" | "failed";
+  error?: string;
   attemptId?: string;
   score?: number;
   attemptStatus?: AttemptStatus;

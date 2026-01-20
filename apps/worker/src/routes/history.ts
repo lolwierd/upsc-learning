@@ -77,6 +77,8 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
     score: q.score,
     attemptStatus: q.attempt_status,
     submittedAt: q.submitted_at,
+    status: q.status || 'completed',
+    error: q.error,
   }));
 
   return c.json({

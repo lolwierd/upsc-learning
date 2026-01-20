@@ -142,30 +142,10 @@ export default function NewQuizPage() {
         era: era as (typeof QUESTION_ERAS)[number],
       });
 
+      // API returned successfully (async started)
       updateStep(5, "complete");
-
-      // Step 6: Parsing response
-      await runProgressStep(6, 350);
-
-      // Step 7: Validating format
-      await runProgressStep(7, 350);
-
-      // Step 8: Shuffling options
-      await runProgressStep(8, 250);
-
-      // Step 9: Writing to database
-      await runProgressStep(9, 300);
-
-      // Step 10: Finalizing
-      await runProgressStep(10, 200);
-
-      // Step 11: Ready!
-      updateStep(11, "complete");
-
-      // Brief pause to show completion
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
       router.push(`/quiz/${result.quizId}`);
+      return; // Stop execution here as we are redirecting
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate quiz");
       setProgressSteps(INITIAL_STEPS);
