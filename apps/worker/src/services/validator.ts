@@ -187,10 +187,10 @@ export function validateQuestion(
   } else if (question.options.length !== 4) {
     errors.push(`Expected 4 options, got ${question.options.length}`);
   } else {
-    // 3. Check option format
-    if (!hasValidOptionFormat(question.options)) {
-      warnings.push("Options should start with A), B), C), D) prefix");
-    }
+    // 3. Check option format - DEPRECATED: We now strip prefixes, so we don't enforce them
+    // if (!hasValidOptionFormat(question.options)) {
+    //   warnings.push("Options should start with A), B), C), D) prefix");
+    // }
 
     // 4. Check for absolute words in wrong options
     // Skip this check for "how many" questions and statement-code options where these words are required
@@ -338,11 +338,10 @@ export function autoFixQuestion(
 ): GeneratedQuestion {
   const fixed = { ...question };
 
-  // Fix option prefixes if missing
-  const prefixes = ["A) ", "B) ", "C) ", "D) "];
-  fixed.options = fixed.options.map((opt, idx) => {
-    const cleanOpt = opt.replace(/^[A-D]\)\s*/i, "").trim();
-    return `${prefixes[idx]}${cleanOpt}`;
+  // Strip option prefixes if present (A), B), 1., etc.)
+  fixed.options = fixed.options.map((opt) => {
+    // Matches "A) ", "A. ", "1. ", "(a) ", etc. at start of string
+    return opt.replace(/^([A-D0-9a-d]+\s*[).]\s*|\([A-D0-9a-d]+\)\s*)/i, "").trim();
   });
 
   // Ensure correctOption is valid
