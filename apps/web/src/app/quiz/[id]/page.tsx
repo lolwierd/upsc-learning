@@ -67,6 +67,7 @@ export default function QuizPage() {
 
         // Fetch quiz (with answers if learn mode)
         const quizData = await getQuiz(quizId, { withAnswers: isLearnMode }) as unknown as QuizData;
+        console.log("Quiz Page Loaded Data:", { id: quizId, status: quizData.status, qCount: quizData.questions?.length });
         setQuiz(quizData);
 
         if (quizData.status === "failed") {
@@ -76,6 +77,7 @@ export default function QuizPage() {
         }
 
         if (quizData.status === "generating") {
+          console.log("Status is generating, polling again in 3s...");
           // Poll again in 3 seconds
           pollingTimer = setTimeout(load, 3000);
           return;
@@ -109,7 +111,8 @@ export default function QuizPage() {
     load();
 
     return () => clearTimeout(pollingTimer);
-  }, [quizId]); // Removed attemptId from deps to avoid re-triggering logic unnecessarily check logic
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quizId]);
 
   // Handle answer selection
   const handleAnswer = useCallback(
@@ -249,7 +252,7 @@ export default function QuizPage() {
           <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Generating Quiz...</h2>
           <p className="text-gray-600">
-            This usually takes 10-20 seconds. We're crafting high-quality questions for you.
+            This usually takes 10-20 seconds. We&apos;re crafting high-quality questions for you.
           </p>
         </Card>
       </div>
