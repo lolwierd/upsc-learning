@@ -25,7 +25,7 @@ binding = "AI"
 [vars]
 ENVIRONMENT = "production"
 CORS_ORIGIN = "https://upsc.lolwierd.com"
-ENABLE_FACT_CHECK = "0"
+ENABLE_FACT_CHECK = "1"
 LLM_DEBUG = "0"
 FACT_CHECK_MODEL = "gemini-3-pro-preview"
 
