@@ -19,21 +19,10 @@ migrations_dir = "../../packages/db/migrations"
 binding = "AI"
 
 # -----------------------------------------
-# Environment Variables (default for local dev)
+# Environment Variables (Production defaults)
+# Local dev will override these using .dev.vars
 # -----------------------------------------
 [vars]
-ENVIRONMENT = "development"
-# Comma-separated list of allowed origins. Use * as a wildcard prefix
-CORS_ORIGIN = "http://localhost:3000,http://127.0.0.1:3000"
-ENABLE_FACT_CHECK = "1"
-LLM_DEBUG = "1"
-FACT_CHECK_MODEL = "gemini-3-flash-preview"
-
-# -----------------------------------------
-# Production Overrides
-# -----------------------------------------
-[env.production]
-[env.production.vars]
 ENVIRONMENT = "production"
 CORS_ORIGIN = "https://upsc.lolwierd.com"
 ENABLE_FACT_CHECK = "0"
