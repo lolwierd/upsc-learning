@@ -25,6 +25,9 @@ export const generateQuizRequestSchema = z.object({
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
   era: questionEraSchema.optional().default("current"), // UPSC PYQ style era
   turnstileToken: z.string().optional(), // Required in production
+  // Current affairs integration
+  enableCurrentAffairs: z.boolean().optional().default(false), // Enable Google Search grounding
+  currentAffairsTheme: z.string().max(200).optional(), // Optional focus area for current affairs
 });
 
 export const startAttemptRequestSchema = z.object({

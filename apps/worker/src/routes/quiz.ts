@@ -63,6 +63,8 @@ quiz.post(
           apiKey: geminiApiKey,
           era: body.era,
           enableFactCheck: c.env.ENABLE_FACT_CHECK === "1",
+          enableCurrentAffairs: body.enableCurrentAffairs,
+          currentAffairsTheme: body.currentAffairsTheme,
         });
 
         // Insert questions

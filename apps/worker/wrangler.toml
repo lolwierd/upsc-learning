@@ -27,7 +27,12 @@ ENVIRONMENT = "production"
 CORS_ORIGIN = "https://upsc.lolwierd.com"
 ENABLE_FACT_CHECK = "1"
 LLM_DEBUG = "0"
-FACT_CHECK_MODEL = "gemini-3-pro-preview"
+# Model configuration:
+# - GENERATION_MODEL: Model for quiz generation (default: gemini-3-pro-preview)
+# - FACT_CHECK_MODEL: Model for fact-checking (default: gemini-3-flash-preview)
+# - ENABLE_WEB_GROUNDING: "1" to enable Google Search grounding for current affairs
+GENERATION_MODEL = "gemini-3-pro-preview"
+FACT_CHECK_MODEL = "gemini-3-flash-preview"
 
 # -----------------------------------------
 # Observability

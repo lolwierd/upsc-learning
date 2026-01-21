@@ -332,6 +332,12 @@ export function validateBatch(
     typeCounts[type] = (typeCounts[type] || 0) + 1;
   });
 
+  // Check "how many" format distribution
+  const formatDistribution = validateFormatDistribution(questions);
+  if (formatDistribution.warning) {
+    batchWarnings.push(formatDistribution.warning);
+  }
+
   return {
     isValid: results.every((r) => r.isValid),
     totalQuestions: questions.length,
@@ -339,6 +345,37 @@ export function validateBatch(
     invalidQuestions: results.filter((r) => !r.isValid).length,
     results,
     batchWarnings,
+  };
+}
+
+// Validate format distribution - check "how many" percentage
+export function validateFormatDistribution(questions: GeneratedQuestion[]): {
+  isValid: boolean;
+  howManyCount: number;
+  howManyPercentage: number;
+  warning: string | null;
+} {
+  if (questions.length === 0) {
+    return { isValid: true, howManyCount: 0, howManyPercentage: 0, warning: null };
+  }
+
+  const howManyCount = questions.filter(q =>
+    q.questionText.toLowerCase().includes("how many")
+  ).length;
+
+  const howManyPercentage = Math.round((howManyCount / questions.length) * 100);
+
+  // Target: <= 45% "how many" questions (with some tolerance over the 35-40% target)
+  const isValid = howManyPercentage <= 45;
+  const warning = howManyPercentage > 40
+    ? `"How many" format at ${howManyPercentage}% (${howManyCount}/${questions.length}) - exceeds 35-40% target for balanced practice`
+    : null;
+
+  return {
+    isValid,
+    howManyCount,
+    howManyPercentage,
+    warning,
   };
 }
 
@@ -504,6 +541,14 @@ MARKED CORRECT: ${String.fromCharCode(65 + question.correctOption)} - ${stripOpt
       system: FACT_CHECK_PROMPT,
       prompt: questionDetails,
       maxOutputTokens: 1000,
+      // Enable thinking mode for better fact verification reasoning
+      providerOptions: {
+        google: {
+          thinkingConfig: {
+            thinkingLevel: "high",
+          },
+        },
+      },
     });
 
     const jsonMatch = text.match(/\{[\s\S]*\}/); if (!jsonMatch) {
@@ -594,6 +639,14 @@ async function factCheckBatchSingleCall(
       system: FACT_CHECK_BATCH_PROMPT,
       prompt: JSON.stringify(payload),
       maxOutputTokens: 6000,
+      // Enable thinking mode for better fact verification reasoning
+      providerOptions: {
+        google: {
+          thinkingConfig: {
+            thinkingLevel: "high",
+          },
+        },
+      },
     });
     const durationMs = Date.now() - startedAt;
     const text = res.text;

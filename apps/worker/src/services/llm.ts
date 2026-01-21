@@ -20,6 +20,8 @@ interface GenerateQuizParams {
   era?: QuestionEra; // UPSC PYQ style era
   enableFactCheck?: boolean; // Use Gemini Pro to verify facts
   enableDeduplication?: boolean; // Check against previously generated questions
+  enableCurrentAffairs?: boolean; // Enable Google Search grounding for current affairs
+  currentAffairsTheme?: string; // Optional focus area for current affairs
 }
 
 export interface GenerateQuizMetrics {
@@ -51,6 +53,11 @@ export interface GenerateQuizMetrics {
   usagePromptTokens: number | null;
   usageCompletionTokens: number | null;
   usageTotalTokens: number | null;
+  // Grounding metrics
+  groundingEnabled: boolean;
+  groundingSourceCount: number | null;
+  // Format distribution metrics
+  howManyFormatPercentage: number | null;
 }
 
 // Load existing fingerprints from database for deduplication
@@ -126,6 +133,7 @@ async function generateQuizBatch(
   questions: GeneratedQuestion[];
   metrics: Partial<GenerateQuizMetrics>;
   rawResponse: string;
+  groundingSourceCount?: number;
 }> {
   const {
     subject,
@@ -134,10 +142,14 @@ async function generateQuizBatch(
     styles,
     count,
     era = "current",
+    enableCurrentAffairs = false,
+    currentAffairsTheme,
   } = params;
 
-  // Use a faster model for generation
-  const generationModel = "gemini-3-flash-preview";
+  // Use Pro model for generation (higher quality), configurable via env
+  // When grounding is enabled, we need Gemini 2.0+ models
+  const baseModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
+  const generationModel = enableCurrentAffairs ? "gemini-2.0-flash" : baseModel;
 
   // Distribute questions across styles for this batch
   const questionsPerStyle = Math.floor(count / styles.length);
@@ -157,6 +169,8 @@ async function generateQuizBatch(
     styles: styleDistribution,
     totalCount: count,
     era,
+    enableCurrentAffairs,
+    currentAffairsTheme,
   });
 
   const promptChars = prompt.length;
@@ -233,19 +247,51 @@ Generate exactly ${count} questions now.`;
   let usage: any;
   let generationDurationMs = 0;
   let responseChars = 0;
+  let groundingSourceCount = 0;
 
   try {
-    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions...`);
-    const generation = await generateText({
+    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with grounding)" : ""}...`);
+
+    // Configure generation with thinking support for better reasoning
+    const generationConfig: Parameters<typeof generateText>[0] = {
       model: vertex(generationModel),
       system: systemPrompt,
       prompt,
       maxOutputTokens: maxTokens,
-    });
+      // Enable thinking mode for Gemini 3 models - improves reasoning for complex UPSC questions
+      providerOptions: {
+        google: {
+          thinkingConfig: {
+            thinkingLevel: "high", // HIGH for best reasoning on complex problems
+          },
+        },
+      },
+    };
+
+    // Add Google Search tool when current affairs grounding is enabled
+    if (enableCurrentAffairs) {
+      generationConfig.tools = {
+        googleSearch: vertex.tools.googleSearch({
+          // Dynamic retrieval for relevant current affairs
+        }),
+      };
+    }
+
+    const generation = await generateText(generationConfig);
     generationDurationMs = Date.now() - generationStart;
     text = generation.text;
     usage = (generation as any).usage;
     responseChars = text.length;
+
+    // Extract grounding metadata if available
+    if (enableCurrentAffairs) {
+      const groundingMetadata = (generation as any).experimental_providerMetadata?.google?.groundingMetadata;
+      if (groundingMetadata?.groundingChunks) {
+        groundingSourceCount = groundingMetadata.groundingChunks.length;
+        console.log(`[Batch ${batchIndex}] Grounding used ${groundingSourceCount} sources`);
+      }
+    }
+
     console.log(`[Batch ${batchIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
   } catch (error) {
     console.error(`[Batch ${batchIndex}] Failed:`, error);
@@ -320,7 +366,8 @@ Generate exactly ${count} questions now.`;
     return {
       questions: [],
       metrics: { generationDurationMs, responseChars },
-      rawResponse: text
+      rawResponse: text,
+      groundingSourceCount,
     };
   }
 
@@ -334,7 +381,8 @@ Generate exactly ${count} questions now.`;
       usageCompletionTokens: usage?.completionTokens,
       usageTotalTokens: usage?.totalTokens,
     },
-    rawResponse: text
+    rawResponse: text,
+    groundingSourceCount,
   };
 }
 
@@ -352,9 +400,14 @@ export async function generateQuiz(
     era = "current",
     enableFactCheck: enableFactCheckParam,
     enableDeduplication = true,
+    enableCurrentAffairs = false,
+    currentAffairsTheme,
   } = params;
 
-  const generationModel = "gemini-3-flash-preview";
+  // Determine if grounding should be enabled (via param or env)
+  const groundingEnabled = enableCurrentAffairs || env.ENABLE_WEB_GROUNDING === "1";
+
+  const generationModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
   const factCheckModel = env.FACT_CHECK_MODEL ?? "gemini-3-flash-preview";
   const enableFactCheck = enableFactCheckParam ?? env.ENABLE_FACT_CHECK === "1";
   const overallCallId = crypto.randomUUID();
@@ -389,6 +442,8 @@ export async function generateQuiz(
     batches.push({
       ...params,
       count: batchSize,
+      enableCurrentAffairs: groundingEnabled,
+      currentAffairsTheme,
     });
   }
 
@@ -410,6 +465,7 @@ export async function generateQuiz(
   let totalPromptTokens = 0;
   let totalCompletionTokens = 0;
   let totalTokens = 0;
+  let totalGroundingSources = 0;
 
   for (const res of batchResults) {
     allQuestions = allQuestions.concat(res.questions);
@@ -419,6 +475,7 @@ export async function generateQuiz(
     totalPromptTokens += res.metrics.usagePromptTokens || 0;
     totalCompletionTokens += res.metrics.usageCompletionTokens || 0;
     totalTokens += res.metrics.usageTotalTokens || 0;
+    totalGroundingSources += res.groundingSourceCount || 0;
   }
 
   console.log(`Generated ${allQuestions.length}/${count} questions total`);
@@ -523,6 +580,22 @@ export async function generateQuiz(
       usagePromptTokens: totalPromptTokens,
       usageCompletionTokens: totalCompletionTokens,
       usageTotalTokens: totalTokens,
+      // Grounding metrics
+      groundingEnabled,
+      groundingSourceCount: groundingEnabled ? totalGroundingSources : null,
+      // Format distribution metrics (calculated from final questions)
+      howManyFormatPercentage: calculateHowManyPercentage(finalQuestions),
     },
   };
+}
+
+// Helper to calculate "how many" format percentage
+function calculateHowManyPercentage(questions: GeneratedQuestion[]): number | null {
+  if (questions.length === 0) return null;
+
+  const howManyCount = questions.filter(q =>
+    q.questionText.toLowerCase().includes("how many")
+  ).length;
+
+  return Math.round((howManyCount / questions.length) * 100);
 }

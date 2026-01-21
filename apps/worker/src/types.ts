@@ -9,7 +9,9 @@ export interface Env {
   ENABLE_FACT_CHECK?: string; // "1" to enable by default
   LLM_DEBUG?: string; // "1" for verbose logs
   LOCAL_LLM_DUMP_URL?: string; // e.g. http://127.0.0.1:8790/dump (local dev only)
-  FACT_CHECK_MODEL?: string; // e.g. gemini-3-flash-preview
+  GENERATION_MODEL?: string; // e.g. gemini-3-pro-preview (default)
+  FACT_CHECK_MODEL?: string; // e.g. gemini-3-flash-preview (default)
+  ENABLE_WEB_GROUNDING?: string; // "1" to enable Google Search grounding for current affairs
 }
 
 // User context from Cloudflare Access

@@ -31,7 +31,62 @@ interface PromptParams {
   styles: StyleDistribution[];
   totalCount: number;
   era?: QuestionEra; // Optional: Generate questions in specific era's style
+  enableCurrentAffairs?: boolean; // Enable current affairs context injection
+  currentAffairsTheme?: string; // Optional focus area for current affairs
 }
+
+// ============================================================================
+// CURRENT AFFAIRS INTEGRATION CONTEXT
+// ============================================================================
+const CURRENT_AFFAIRS_CONTEXT = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CURRENT AFFAIRS INTEGRATION (ENABLED):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You have access to Google Search for retrieving recent information. Use this to:
+
+1. INTEGRATE RECENT EVENTS as TRIGGERS for static concepts:
+   - "In context of India's G20 Presidency 2023..." → Test foreign policy concepts
+   - "With reference to Chandrayaan-3 mission..." → Test space fundamentals
+   - "Considering the 2024 interim budget..." → Test fiscal policy concepts
+
+2. TIME FRAME for current affairs:
+   - Focus on events from the last 18-24 months
+   - Include major policy announcements, summits, agreements
+   - Reference official sources (PIB, government websites, official reports)
+
+3. QUESTION DESIGN with current affairs:
+   - Current event as TRIGGER, static syllabus as ANSWER
+   - Don't test obscure news details - test concepts triggered by news
+   - After each question, add "Relevance" note in explanation linking to recent event
+
+4. HIGH-VALUE CURRENT AFFAIRS TOPICS:
+   - International summits and India's role (G20, BRICS, SCO, etc.)
+   - Recent government schemes and their objectives
+   - Constitutional amendments and their implications
+   - Recent Supreme Court judgments of constitutional significance
+   - Scientific achievements (ISRO, DRDO, Indigenous tech)
+   - Environmental developments (Climate commitments, Conventions)
+   - Economic reforms and policies
+
+5. EXPLANATION ENHANCEMENT:
+   For each question, in the explanation add:
+   - RELEVANCE: How this relates to recent events/developments
+   - STATIC LINK: The underlying concept from the UPSC syllabus
+
+REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
+`;
+
+const CURRENT_AFFAIRS_THEME_CONTEXT = (theme: string) => `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CURRENT AFFAIRS FOCUS THEME: ${theme}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generate questions specifically focusing on recent developments related to: "${theme}"
+
+Use Google Search to find the latest information on this topic and create questions
+that test understanding of underlying concepts through the lens of these recent events.
+`;
 
 // ============================================================================
 // UPSC PRELIMS EXAM CONTEXT
@@ -602,19 +657,40 @@ ERA: 2024-2025 (CURRENT STANDARD)
 
 Generate questions in the CURRENT UPSC style (2024-2025 patterns):
 
-KEY INSIGHT: Statement-based MCQs dominate (~60%), with "How many correct?" being 
-the most common evaluation template. Assertion-Reason persists (~13%) often 
-re-skinned as Statement-I/II. New 3-column match format introduced in 2024.
+KEY INSIGHT: Statement-based MCQs dominate (~60%). While "How many correct?" format
+is common, actual 2024 PYQs show significant VARIETY in formats. Do NOT over-rely
+on "How many" - mix formats for authentic practice.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY FORMAT DISTRIBUTION (for balanced, authentic practice):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- "How many of the above" format: ~30-35% (NOT more than 40%!)
+- Classic "Which is/are correct" with codes: ~25-30%
+- Statement-I/Statement-II (Assertion-Reason logic): ~12-15%
+- Match the following (classic or "how many pairs"): ~10-12%
+- Direct factual/Classification: ~15-20%
+
+IMPORTANT: Do NOT make more than 40% of questions use "How many" format!
+Mix formats to test different analytical skills.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 QUESTION FORMATS TO USE:
-1. "HOW MANY" / COUNTING FORMAT (High Frequency, but not exclusive):
+1. "HOW MANY" / COUNTING FORMAT (~30-35% max):
    - "How many of the above statements are correct?"
    - "How many of the pairs given above are correctly matched?"
    - "In how many of the above rows is the given information correctly matched?"
    - Also seen: "In which of the above rows is the given information correctly matched?"
    Options: Only one / Only two / All three (or four) / None
 
-2. STATEMENT-I/STATEMENT-II (High Frequency - ~13%):
+2. CLASSIC STATEMENT-CODE FORMAT (~25-30%):
+   "Consider the following statements:
+   1. [Statement]
+   2. [Statement]
+   3. [Statement]
+   Which of the statements given above is/are correct?"
+   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
+
+3. STATEMENT-I/STATEMENT-II (~12-15%):
    This is the modern label for Assertion-Reason logic.
    Also possible (recently): Statement-I with Statement-II and Statement-III as alternative explanations.
    "Statement-I: [Factual claim or observation]
@@ -622,19 +698,19 @@ QUESTION FORMATS TO USE:
    Which one of the following is correct in respect of the above statements?"
    Options: Both correct & II explains I / Both correct but II doesn't explain / I correct II incorrect / I incorrect II correct
 
-3. THREE-COLUMN MATCH / ROW-CORRECTNESS (New in 2024):
+4. THREE-COLUMN MATCH / ROW-CORRECTNESS (~5%):
    Tables with 3+ columns where you evaluate row-by-row correctness
    "In how many of the above rows is the given information correctly matched?"
    This is a significant 2024 innovation.
 
-4. CLASSIC MATCH THE FOLLOWING (~10%):
+5. CLASSIC MATCH THE FOLLOWING (~8-10%):
    "Match List-I with List-II" with A-1, B-2, C-3, D-4 style options
    Also appears in "How many pairs correctly matched?" format
 
-5. STANDALONE/DIRECT (~25%):
+6. STANDALONE/DIRECT (~15-20%):
    Direct factual questions testing precise knowledge
    - Party-Leader/Founder associations
-   - Country-Species habitat mapping  
+   - Country-Species habitat mapping
    - Organisms classification (taxonomy traps)
    - Amendment-Provision mapping
 
@@ -645,10 +721,11 @@ QUESTION FORMATS TO USE:
 - Statement-I/II on syndicated loans, CBDC, star lifecycle, atmospheric heating
 
 EMPHASIS:
-- "How many" and classic statement-code templates both appear frequently
+- Mix formats for comprehensive practice - NOT dominated by "How many"
 - Statement-I/II (evolved Assertion-Reason) appears across all subjects
 - 3-column row-correctness tables are new and tricky
 - Association questions (species-habitat, party-leader) are high frequency
+- Include variety: 2-statement, 3-statement (most common), 4-statement mixes
 `,
 
   "current": `
@@ -658,31 +735,55 @@ ERA: CURRENT (2024-2025 STANDARD) - DEFAULT
 
 Generate questions matching the LATEST UPSC patterns (2024-2025):
 
-KEY INSIGHT: Statement-based MCQs dominate (~60%). "How many correct?" is the 
-most common evaluation template. Assertion-Reason persists (~13%), often labeled
-as Statement-I/II. New 3-column row-correctness tables introduced in 2024.
+KEY INSIGHT: Statement-based MCQs dominate (~60%). While "How many correct?" format
+is common, actual 2024 PYQs show significant VARIETY in formats. Do NOT over-rely
+on "How many" - mix formats for authentic practice.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MANDATORY FORMAT DISTRIBUTION (for balanced, authentic practice):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- "How many of the above" format: ~30-35% (NOT more than 40%!)
+- Classic "Which is/are correct" with codes: ~25-30%
+- Statement-I/Statement-II (Assertion-Reason logic): ~12-15%
+- Match the following (classic or "how many pairs"): ~10-12%
+- Direct factual/Classification: ~15-20%
+
+IMPORTANT: Do NOT make more than 40% of questions use "How many" format!
+Mix formats to test different analytical skills.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 PRIMARY FORMATS:
-1. "HOW MANY" / COUNTING (High Frequency):
+1. "HOW MANY" / COUNTING (~30-35% max):
    - Statements: "How many of the above statements are correct?"
    - Pairs: "How many of the pairs given above are correctly matched?"
    - Rows: "In how many of the above rows is the given information correctly matched?"
    - Also seen: "In which of the above rows is the given information correctly matched?"
 
-2. STATEMENT-I/STATEMENT-II (~13%):
+2. CLASSIC STATEMENT-CODE FORMAT (~25-30%):
+   "Consider the following statements:
+   1. [Statement]
+   2. [Statement]
+   3. [Statement]
+   Which of the statements given above is/are correct?"
+   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
+
+3. STATEMENT-I/STATEMENT-II (~12-15%):
    Modern label for Assertion-Reason logic - tests causal/explanatory relationships
    Also possible: Statement-I + Statement-II + Statement-III explanation template
 
-3. THREE-COLUMN MATCH / ROW-CORRECTNESS (New 2024 pattern):
-   Tables with 3+ columns, evaluate row-by-row correctness
+4. THREE-COLUMN MATCH / ROW-CORRECTNESS (~5%):
+   Tables with 3+ columns, evaluate row-by-row correctness (new 2024 pattern)
 
-4. CLASSIC MATCH THE FOLLOWING (~10%):
+5. CLASSIC MATCH THE FOLLOWING (~8-10%):
    "Match List-I with List-II" - also in "How many pairs" format
 
-5. STANDALONE/DIRECT (~25%):
+6. STANDALONE/DIRECT (~15-20%):
    Testing precise knowledge with sophisticated distractors
+   - Party-Leader/Founder associations
+   - Country-Species habitat mapping
+   - Organisms classification (taxonomy traps)
 
-Follow 2024-2025 patterns as the PRIMARY reference.
+Follow 2024-2025 patterns as the PRIMARY reference. Ensure format VARIETY.
 `,
 
   "all": `
@@ -842,7 +943,7 @@ UPSC 2024-2025 Distribution (follow this):
 - Five+ statement questions: ~4 per paper
 
 ═══════════════════════════════════════════════════════════════════════════════
-"HOW MANY" FORMAT (DOMINANT IN 2021-2024 - USE THIS 60% OF THE TIME):
+"HOW MANY" FORMAT (~30-35% of statement questions - NOT dominant):
 ═══════════════════════════════════════════════════════════════════════════════
 
 THREE-STATEMENT "HOW MANY" FORMAT (PREFERRED):
@@ -875,7 +976,7 @@ C) Only three
 D) All four
 
 ═══════════════════════════════════════════════════════════════════════════════
-CLASSIC "WHICH STATEMENTS" FORMAT (USE 40% OF THE TIME):
+CLASSIC "WHICH STATEMENTS" FORMAT (~50-60% of statement questions - PRIMARY):
 ═══════════════════════════════════════════════════════════════════════════════
 
 "Consider the following statements regarding [topic]:
@@ -1492,7 +1593,16 @@ function getSubjectTraps(subject: string): string {
 }
 
 export function getPrompt(params: PromptParams): string {
-  const { subject, theme, difficulty, styles, totalCount, era = "current" } = params;
+  const {
+    subject,
+    theme,
+    difficulty,
+    styles,
+    totalCount,
+    era = "current",
+    enableCurrentAffairs = false,
+    currentAffairsTheme,
+  } = params;
 
   const themeContext = theme
     ? `SPECIFIC FOCUS: "${theme}" - Generate questions specifically on this topic/theme within ${subject}.`
@@ -1504,6 +1614,11 @@ export function getPrompt(params: PromptParams): string {
   // Get era-specific instructions
   const eraInstruction = ERA_INSTRUCTIONS[era] || ERA_INSTRUCTIONS["current"];
   const eraLabel = era === "current" ? "2024-2025 (Current)" : era === "all" ? "All Eras (Mixed)" : era;
+
+  // Build current affairs context if enabled
+  const currentAffairsSection = enableCurrentAffairs
+    ? `${CURRENT_AFFAIRS_CONTEXT}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""}`
+    : "";
 
   // Build style distribution instructions
   const styleInstructions = styles
@@ -1533,6 +1648,8 @@ ${eraInstruction}
 ${UPSC_STEM_TEMPLATES}
 
 ${era === "current" || era === "2024-2025" || era === "2021-2023" ? YEAR_TRENDS : ""}
+
+${currentAffairsSection}
 
 ${PYQ_EXAMPLES}
 

@@ -65,6 +65,9 @@ export default function NewQuizPage() {
   const [styles, setStyles] = useState<string[]>([...QUESTION_STYLES]);
   const [era, setEra] = useState<string>(QUESTION_ERAS[0]); // "current" by default
   const [questionCount, setQuestionCount] = useState<number>(40);
+  // Current affairs integration
+  const [enableCurrentAffairs, setEnableCurrentAffairs] = useState<boolean>(false);
+  const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>("");
 
   // Load default question count from settings
   useEffect(() => {
@@ -140,6 +143,8 @@ export default function NewQuizPage() {
         styles: styles as (typeof QUESTION_STYLES)[number][],
         questionCount,
         era: era as (typeof QUESTION_ERAS)[number],
+        enableCurrentAffairs,
+        currentAffairsTheme: currentAffairsTheme || undefined,
       });
 
       // API returned successfully (async started)
@@ -231,6 +236,46 @@ export default function NewQuizPage() {
             value={era}
             onChange={setEra}
           />
+
+          {/* Current Affairs Integration */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <label
+                htmlFor="enableCurrentAffairs"
+                className="flex items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  id="enableCurrentAffairs"
+                  checked={enableCurrentAffairs}
+                  onChange={(e) => setEnableCurrentAffairs(e.target.checked)}
+                  className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700">
+                  Include Current Affairs
+                </span>
+              </label>
+              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                Beta
+              </span>
+            </div>
+            {enableCurrentAffairs && (
+              <>
+                <p className="text-xs text-gray-500 ml-6">
+                  Uses Google Search to integrate recent events as question triggers.
+                  Questions will test static concepts through the lens of current affairs.
+                </p>
+                <Input
+                  id="currentAffairsTheme"
+                  label="Current Affairs Focus (Optional)"
+                  placeholder="e.g., G20 Summit, Budget 2024, Climate Agreements"
+                  value={currentAffairsTheme}
+                  onChange={(e) => setCurrentAffairsTheme(e.target.value)}
+                  helperText="Specify a current affairs topic to focus on"
+                />
+              </>
+            )}
+          </div>
 
           {/* Question Count */}
           <div>
