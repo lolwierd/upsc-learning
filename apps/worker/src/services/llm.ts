@@ -222,6 +222,7 @@ Generate exactly ${count} questions now.`;
     "gemini-2.0-flash-exp": 8192,
     "gemini-2.0-flash-lite": 8192,
     "gemini-3-pro-preview": 65536,
+    "gemini-3-flash-preview": 65536,
   };
   const maxTokensCap = modelMaxOutputTokens[generationModel] ?? 32000;
   const maxTokens = Math.min(maxTokensBase, maxTokensCap);
@@ -255,6 +256,7 @@ Generate exactly ${count} questions now.`;
   let generationDurationMs = 0;
   let responseChars = 0;
   let groundingSourceCount = 0;
+  let groundingSources: Array<{ uri?: string; title?: string }> = [];
 
   try {
     console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with grounding)" : ""}...`);
@@ -282,6 +284,7 @@ Generate exactly ${count} questions now.`;
           // Dynamic retrieval for relevant current affairs
         }),
       };
+      generationConfig.toolChoice = { type: "tool", toolName: "googleSearch" };
     }
 
     const generation = await generateText(generationConfig);
@@ -292,10 +295,29 @@ Generate exactly ${count} questions now.`;
 
     // Extract grounding metadata if available
     if (enableCurrentAffairs) {
-      const groundingMetadata = (generation as any).experimental_providerMetadata?.google?.groundingMetadata;
-      if (groundingMetadata?.groundingChunks) {
-        groundingSourceCount = groundingMetadata.groundingChunks.length;
+      const providerMetadata =
+        (generation as any).providerMetadata ?? (generation as any).experimental_providerMetadata;
+      const groundingMetadata =
+        providerMetadata?.google?.groundingMetadata ??
+        providerMetadata?.google?.grounding_metadata;
+      const groundingChunks =
+        groundingMetadata?.groundingChunks ?? groundingMetadata?.grounding_chunks;
+
+      if (Array.isArray(groundingChunks)) {
+        groundingSources = groundingChunks
+          .map((chunk: any) => ({
+            uri: chunk?.web?.uri ?? chunk?.uri ?? chunk?.source?.uri,
+            title: chunk?.web?.title ?? chunk?.title ?? chunk?.source?.title,
+          }))
+          .filter((s: { uri?: string; title?: string }) => s.uri || s.title);
+        groundingSourceCount = groundingChunks.length;
         console.log(`[Batch ${batchIndex}] Grounding used ${groundingSourceCount} sources`);
+      } else {
+        groundingSourceCount = 0;
+      }
+
+      if (groundingSourceCount === 0) {
+        throw new Error("Grounding required but no grounding metadata returned");
       }
     }
 
@@ -349,6 +371,12 @@ Generate exactly ${count} questions now.`;
         completionTokens: usage?.completionTokens,
         totalTokens: usage?.totalTokens,
       },
+      metadata: enableCurrentAffairs
+        ? {
+            groundingSourceCount,
+            groundingSources,
+          }
+        : undefined,
     },
   });
 
