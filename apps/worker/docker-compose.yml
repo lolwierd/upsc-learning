@@ -17,6 +17,7 @@ services:
       - upsc-data:/app/data
     environment:
       - NODE_ENV=production
+      - NODE_OPTIONS=--experimental-specifier-resolution=node
       - PORT=3001
       - DATABASE_PATH=/app/data/upsc-mcq.db
       

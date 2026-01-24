@@ -81,6 +81,7 @@ RUN mkdir -p /app/data
 
 # Environment
 ENV NODE_ENV=production
+ENV NODE_OPTIONS=--experimental-specifier-resolution=node
 ENV PORT=3001
 ENV DATABASE_PATH=/app/data/upsc-mcq.db
 
