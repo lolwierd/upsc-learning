@@ -76,10 +76,13 @@ You have access to Google Search for retrieving recent information. Use this to:
    - STATIC LINK: The underlying concept from the UPSC syllabus
    - Append a final bracketed line exactly like:
      [Relevance: <event + month/year + source type>]
+   - Include a SOURCES line with at least one full URL from web search, e.g.:
+     Sources: https://pib.gov.in/... ; https://example.gov.in/...
 
 MANDATORY WEB SEARCH USAGE:
 - You MUST use Google Search for current affairs questions.
 - Do NOT answer from memory when current affairs is enabled.
+- Each question must cite at least one URL in the explanation.
 
 REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
 `;
@@ -1751,7 +1754,7 @@ Each object MUST have these exact fields:
   "questionType": "standard" | "statement" | "match" | "assertion",
   "options": ["A) Option text", "B) Option text", "C) Option text", "D) Option text"],
   "correctOption": 0 | 1 | 2 | 3,  // Index of correct answer (0=A, 1=B, 2=C, 3=D)
-  "explanation": "Detailed explanation with: 1) Why correct answer is correct, 2) Why each distractor is wrong, 3) Source reference (NCERT/Laxmikanth/etc.)"
+  "explanation": "Detailed explanation with: 1) Why correct answer is correct, 2) Why each distractor is wrong, 3) Source reference (NCERT/Laxmikanth/etc.). If current affairs is enabled, append 'Sources: <URL>' with at least one full http(s) URL."
 }
 
 IMPORTANT:

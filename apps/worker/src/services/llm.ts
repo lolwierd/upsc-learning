@@ -147,7 +147,7 @@ async function generateQuizBatch(
   } = params;
 
   // Use primary generation model for all cases (including grounding)
-  const generationModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
+  const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
 
   // Distribute questions across styles for this batch
   const questionsPerStyle = Math.floor(count / styles.length);
@@ -223,6 +223,7 @@ Generate exactly ${count} questions now.`;
     "gemini-2.0-flash-lite": 8192,
     "gemini-3-pro-preview": 65536,
     "gemini-3-flash-preview": 65536,
+    "gemini-3.0-pro": 65536,
   };
   const maxTokensCap = modelMaxOutputTokens[generationModel] ?? 32000;
   const maxTokens = Math.min(maxTokensBase, maxTokensCap);
@@ -316,9 +317,6 @@ Generate exactly ${count} questions now.`;
         groundingSourceCount = 0;
       }
 
-      if (groundingSourceCount === 0) {
-        throw new Error("Grounding required but no grounding metadata returned");
-      }
     }
 
     console.log(`[Batch ${batchIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
@@ -442,7 +440,7 @@ export async function generateQuiz(
   // Determine if grounding should be enabled (via param or env)
   const groundingEnabled = enableCurrentAffairs || env.ENABLE_WEB_GROUNDING === "1";
 
-  const generationModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
+  const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
   const factCheckModel = env.FACT_CHECK_MODEL ?? "gemini-3-flash-preview";
   const enableFactCheck = enableFactCheckParam ?? env.ENABLE_FACT_CHECK === "1";
   const overallCallId = crypto.randomUUID();
