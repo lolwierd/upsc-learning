@@ -7,8 +7,8 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { getAttempt } from "@/lib/api";
-import type { AttemptWithAnswers } from "@mcqs/shared";
+import { getAttempt, getQuizSet, getQuizSetRun } from "@/lib/api";
+import type { AttemptWithAnswers, QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
 import { SUBJECT_LABELS } from "@mcqs/shared";
 
 type FilterType = "all" | "wrong" | "marked";
@@ -19,8 +19,12 @@ export default function ResultsPage() {
   const router = useRouter();
   const quizId = params.id as string;
   const attemptId = searchParams.get("attempt");
+  const setId = searchParams.get("setId");
+  const runId = searchParams.get("runId");
 
   const [attempt, setAttempt] = useState<AttemptWithAnswers | null>(null);
+  const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
+  const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterType>("all");
@@ -75,6 +79,18 @@ export default function ResultsPage() {
           return;
         }
         setAttempt(data);
+        if (setId && runId) {
+          const [runResult, setResult] = await Promise.allSettled([
+            getQuizSetRun(setId, runId),
+            getQuizSet(setId),
+          ]);
+          if (runResult.status === "fulfilled") {
+            setRun(runResult.value);
+          }
+          if (setResult.status === "fulfilled") {
+            setQuizSet(setResult.value);
+          }
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load results");
       } finally {
@@ -82,7 +98,7 @@ export default function ResultsPage() {
       }
     }
     load();
-  }, [attemptId, quizId, router]);
+  }, [attemptId, quizId, router, runId, setId]);
 
   useEffect(() => {
     return () => {
@@ -136,6 +152,24 @@ export default function ResultsPage() {
     return "text-red-600";
   };
 
+  const orderedRunItems = (() => {
+    if (!run) return [];
+    if (!quizSet?.items?.length) return run.runItems;
+    const order = new Map(quizSet.items.map((item, index) => [item.id, index]));
+    return [...run.runItems].sort((a, b) => {
+      const aIndex = order.get(a.quizSetItemId) ?? 0;
+      const bIndex = order.get(b.quizSetItemId) ?? 0;
+      return aIndex - bIndex;
+    });
+  })();
+
+  const orderedQuizIds = orderedRunItems
+    .map((item) => item.quizId)
+    .filter(Boolean) as string[];
+  const currentQuizIndex = orderedQuizIds.findIndex((id) => id === quizId);
+  const nextQuizId =
+    currentQuizIndex >= 0 ? orderedQuizIds[currentQuizIndex + 1] : null;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Score Summary */}
@@ -170,13 +204,31 @@ export default function ResultsPage() {
             </div>
           </div>
 
+          {setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 && (
+            <p className="text-xs text-gray-400 mb-3">
+              Quiz set progress: {currentQuizIndex + 1} of {orderedQuizIds.length}
+            </p>
+          )}
+
           <div className="flex items-center justify-center gap-4">
             <Link href={`/quiz/${quizId}`}>
               <Button variant="secondary">Retake Quiz</Button>
             </Link>
-            <Link href="/quiz/new">
-              <Button>New Quiz</Button>
-            </Link>
+            {setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 ? (
+              nextQuizId ? (
+                <Link href={`/quiz/${nextQuizId}?setId=${setId}&runId=${runId}`}>
+                  <Button>Next Quiz</Button>
+                </Link>
+              ) : (
+                <Link href={`/sets/${setId}/runs/${runId}/summary`}>
+                  <Button>View Set Summary</Button>
+                </Link>
+              )
+            ) : (
+              <Link href="/quiz/new">
+                <Button>New Quiz</Button>
+              </Link>
+            )}
           </div>
         </div>
       </Card>

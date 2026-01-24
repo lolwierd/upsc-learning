@@ -295,6 +295,15 @@ export interface QuizSetRunWithItems extends QuizSetRun {
   runItems: QuizSetRunItem[];
 }
 
+export interface QuizAttemptSummary {
+  attemptId: string;
+  quizId: string;
+  score: number;
+  totalQuestions: number;
+  timeTakenSeconds: number | null;
+  submittedAt: number;
+}
+
 export interface QuizSetListItem {
   id: string;
   name: string;

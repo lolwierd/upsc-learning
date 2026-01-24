@@ -4,48 +4,41 @@ export const runtime = "edge";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Card, CardTitle, Button } from "@/components/ui";
-import { getQuizSet, getQuizSetRun } from "@/lib/api";
-import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
+import { getAttemptsByQuizIds, getQuizSet, getQuizSetRun } from "@/lib/api";
+import type {
+  QuizAttemptSummary,
+  QuizSetRunWithItems,
+  QuizSetWithSchedule,
+} from "@mcqs/shared";
 import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
 import { cn } from "@/lib/utils";
 
-export default function QuizSetRunPage() {
+function orderRunItems(
+  run: QuizSetRunWithItems,
+  quizSet: QuizSetWithSchedule | null
+) {
+  if (!quizSet?.items?.length) return run.runItems;
+  const order = new Map(quizSet.items.map((item, index) => [item.id, index]));
+  return [...run.runItems].sort((a, b) => {
+    const aIndex = order.get(a.quizSetItemId) ?? 0;
+    const bIndex = order.get(b.quizSetItemId) ?? 0;
+    return aIndex - bIndex;
+  });
+}
+
+export default function QuizSetRunAttemptPage() {
   const params = useParams();
+  const router = useRouter();
   const setId = params.id as string;
   const runId = params.runId as string;
 
-  const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
   const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
+  const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
+  const [attempts, setAttempts] = useState<QuizAttemptSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const itemMap = useMemo(() => {
-    if (!quizSet?.items) return new Map();
-    return new Map(quizSet.items.map((item) => [item.id, item]));
-  }, [quizSet]);
-
-  const orderedRunItems = useMemo(() => {
-    if (!run) return [];
-    if (!quizSet?.items?.length) return run.runItems;
-    const order = new Map(quizSet.items.map((item, index) => [item.id, index]));
-    return [...run.runItems].sort((a, b) => {
-      const aIndex = order.get(a.quizSetItemId) ?? 0;
-      const bIndex = order.get(b.quizSetItemId) ?? 0;
-      return aIndex - bIndex;
-    });
-  }, [run, quizSet]);
-
-  const canAttemptRun = useMemo(() => {
-    if (!run) return false;
-    if (run.runItems.length === 0) return false;
-    const allDone = run.runItems.every(
-      (item) => item.status === "completed" || item.status === "failed"
-    );
-    const hasQuiz = run.runItems.some((item) => item.quizId);
-    return allDone && hasQuiz;
-  }, [run]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -73,23 +66,51 @@ export default function QuizSetRunPage() {
     void load();
   }, [load]);
 
-  const formatDateTime = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    return date.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  };
+  const orderedRunItems = useMemo(() => {
+    if (!run) return [];
+    return orderRunItems(run, quizSet);
+  }, [run, quizSet]);
+
+  const quizIds = useMemo(
+    () => orderedRunItems.map((item) => item.quizId).filter(Boolean) as string[],
+    [orderedRunItems]
+  );
+
+  useEffect(() => {
+    if (quizIds.length === 0) {
+      setAttempts([]);
+      return;
+    }
+    void getAttemptsByQuizIds(quizIds)
+      .then((data) => setAttempts(data.attempts))
+      .catch((err) =>
+        console.error("Failed to load attempts for quiz set run:", err)
+      );
+  }, [quizIds]);
+
+  const attemptMap = useMemo(() => {
+    return new Map(attempts.map((attempt) => [attempt.quizId, attempt]));
+  }, [attempts]);
+
+  const isReady =
+    orderedRunItems.length > 0 &&
+    orderedRunItems.every(
+      (item) => item.status === "completed" || item.status === "failed"
+    );
+
+  const nextQuizId = useMemo(() => {
+    for (const quizId of quizIds) {
+      if (!attemptMap.has(quizId)) return quizId;
+    }
+    return quizIds[0];
+  }, [attemptMap, quizIds]);
 
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card className="text-center py-12">
           <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-gray-600">Loading run...</p>
+          <p className="text-gray-600">Loading quiz set run...</p>
         </Card>
       </div>
     );
@@ -100,8 +121,37 @@ export default function QuizSetRunPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card className="text-center py-12">
           <p className="text-red-600 mb-4">{error || "Run not found"}</p>
-          <Link href={`/sets/${setId}`}>
-            <Button>Back to Quiz Set</Button>
+          <Link href={`/sets/${setId}/runs/${runId}`}>
+            <Button>Back to Run</Button>
+          </Link>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!isReady) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <Card className="text-center py-12">
+          <CardTitle className="mb-3">Run still generating</CardTitle>
+          <p className="text-gray-600 mb-6">
+            You can attempt the quiz set once all items finish generating or fail.
+          </p>
+          <Link href={`/sets/${setId}/runs/${runId}`}>
+            <Button>Back to Run</Button>
+          </Link>
+        </Card>
+      </div>
+    );
+  }
+
+  if (quizIds.length === 0) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <Card className="text-center py-12">
+          <p className="text-gray-600 mb-6">No completed quizzes available in this run.</p>
+          <Link href={`/sets/${setId}/runs/${runId}`}>
+            <Button>Back to Run</Button>
           </Link>
         </Card>
       </div>
@@ -112,87 +162,45 @@ export default function QuizSetRunPage() {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <CardTitle className="mb-2">Run Details</CardTitle>
+          <CardTitle className="mb-2">Attempt Quiz Set</CardTitle>
           <p className="text-sm text-gray-600">
             {quizSet?.name ? `${quizSet.name} · ` : ""}Run {run.id}
           </p>
         </div>
-        <Link href={`/sets/${setId}`}>
-          <Button variant="secondary">Back to Quiz Set</Button>
+        <Link href={`/sets/${setId}/runs/${runId}`}>
+          <Button variant="secondary">Back to Run</Button>
         </Link>
       </div>
 
       <Card>
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <p className="text-sm text-gray-500">Status</p>
-            <div className="flex items-center gap-2">
-              <span
-                className={cn(
-                  "h-2.5 w-2.5 rounded-full",
-                  run.status === "completed"
-                    ? "bg-green-500"
-                    : run.status === "running"
-                      ? "bg-amber-500 animate-pulse"
-                      : run.status === "partial"
-                        ? "bg-amber-500"
-                        : "bg-red-500"
-                )}
-              />
-              <span className="font-medium text-gray-900 capitalize">{run.status}</span>
-            </div>
-          </div>
-          <div className="text-sm text-gray-600">
-            {run.triggerType === "scheduled" ? "Scheduled" : "Manual"} ·{" "}
-            {run.totalItems} items
-          </div>
-        </div>
-
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
-          <div>
-            <p className="text-gray-500">Started</p>
-            <p className="font-medium text-gray-900">{formatDateTime(run.startedAt)}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Completed</p>
+            <p className="text-sm text-gray-500">Progress</p>
             <p className="font-medium text-gray-900">
-              {run.completedAt ? formatDateTime(run.completedAt) : "—"}
+              {attempts.length}/{quizIds.length} quizzes attempted
             </p>
           </div>
-          <div>
-            <p className="text-gray-500">Progress</p>
-            <p className="font-medium text-gray-900">
-              {run.completedItems}/{run.totalItems} completed
-              {run.failedItems > 0 ? ` · ${run.failedItems} failed` : ""}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 flex items-center gap-2 flex-wrap">
-          {canAttemptRun ? (
-            <Link href={`/sets/${setId}/runs/${runId}/attempt`}>
-              <Button>Attempt Run</Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() =>
+                router.push(`/quiz/${nextQuizId}?setId=${setId}&runId=${runId}`)
+              }
+            >
+              {attempts.length === quizIds.length ? "Revisit Quizzes" : "Start / Continue"}
+            </Button>
+            <Link href={`/sets/${setId}/runs/${runId}/summary`}>
+              <Button variant="secondary">View Summary</Button>
             </Link>
-          ) : (
-            <Button disabled>Attempt Run</Button>
-          )}
-          <Link href={`/sets/${setId}/runs/${runId}/summary`}>
-            <Button variant="secondary">View Summary</Button>
-          </Link>
-        </div>
-
-        {run.error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-            {run.error}
           </div>
-        )}
+        </div>
       </Card>
 
       <Card>
-        <CardTitle className="text-base mb-4">Run Items</CardTitle>
+        <CardTitle className="text-base mb-4">Quizzes in this run</CardTitle>
         <div className="space-y-2">
           {orderedRunItems.map((item, index) => {
-            const quizSetItem = itemMap.get(item.quizSetItemId);
+            const quizSetItem = quizSet?.items?.find((q) => q.id === item.quizSetItemId);
+            const attempt = item.quizId ? attemptMap.get(item.quizId) : undefined;
             return (
               <div
                 key={item.id}
@@ -228,15 +236,20 @@ export default function QuizSetRunPage() {
                       "text-xs font-medium px-2 py-1 rounded-full capitalize",
                       item.status === "completed"
                         ? "bg-green-100 text-green-700"
-                        : item.status === "generating"
-                          ? "bg-amber-100 text-amber-700"
-                          : item.status === "pending"
-                            ? "bg-gray-100 text-gray-600"
-                            : "bg-red-100 text-red-700"
+                        : item.status === "failed"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-gray-100 text-gray-600"
                     )}
                   >
                     {item.status}
                   </span>
+                  {attempt ? (
+                    <span className="text-xs text-gray-600">
+                      {attempt.score}/{attempt.totalQuestions}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-gray-400">Not attempted</span>
+                  )}
                   {item.quizId && (
                     <Link href={`/quiz/${item.quizId}?setId=${setId}&runId=${runId}`}>
                       <Button size="sm">Open Quiz</Button>

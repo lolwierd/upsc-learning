@@ -3,7 +3,7 @@
 export const runtime = "edge";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getQuiz, getSettings, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
@@ -42,7 +42,10 @@ interface Answer {
 export default function QuizPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const quizId = params.id as string;
+  const setId = searchParams.get("setId");
+  const runId = searchParams.get("runId");
 
   const [quiz, setQuiz] = useState<QuizData | null>(null);
   const [attemptId, setAttemptId] = useState<string | null>(null);
@@ -222,7 +225,9 @@ export default function QuizPage() {
     setSubmitting(true);
     try {
       await submitAttempt(attemptId);
-      router.push(`/quiz/${quizId}/results?attempt=${attemptId}`);
+      const runParams =
+        setId && runId ? `&setId=${encodeURIComponent(setId)}&runId=${encodeURIComponent(runId)}` : "";
+      router.push(`/quiz/${quizId}/results?attempt=${attemptId}${runParams}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit quiz");
       setSubmitting(false);

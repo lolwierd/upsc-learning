@@ -156,6 +156,7 @@ export const API_ENDPOINTS = {
   ATTEMPT_ANSWER: (id: string) => `/api/attempt/${id}/answer`,
   ATTEMPT_SUBMIT: (id: string) => `/api/attempt/${id}/submit`,
   ATTEMPT_GET: (id: string) => `/api/attempt/${id}`,
+  ATTEMPT_BY_QUIZ: "/api/attempt/by-quiz",
   HISTORY: "/api/history",
   REVIEW_WRONG: "/api/history/review/wrong",
   STATS: "/api/history/stats",

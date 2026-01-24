@@ -17,6 +17,7 @@ import type {
   CreateQuizSetRequest,
   UpdateQuizSetRequest,
   QuizSetScheduleRequest,
+  QuizAttemptSummary,
 } from "@mcqs/shared";
 import { API_ENDPOINTS } from "@mcqs/shared";
 
@@ -92,6 +93,13 @@ export async function submitAttempt(
 
 export async function getAttempt(id: string): Promise<AttemptWithAnswers> {
   return fetchAPI(API_ENDPOINTS.ATTEMPT_GET(id));
+}
+
+export async function getAttemptsByQuizIds(
+  quizIds: string[]
+): Promise<{ attempts: QuizAttemptSummary[] }> {
+  const query = quizIds.length > 0 ? `?ids=${quizIds.join(",")}` : "";
+  return fetchAPI(`${API_ENDPOINTS.ATTEMPT_BY_QUIZ}${query}`);
 }
 
 // History APIs

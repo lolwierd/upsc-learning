@@ -57,6 +57,59 @@ const saveAnswerSchema = z.object({
   markedForReview: z.boolean().optional(),
 });
 
+// Get latest completed attempts for a list of quiz IDs
+attempt.get("/by-quiz", async (c) => {
+  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
+  const idsParam = c.req.query("ids") || "";
+  const quizIds = idsParam.split(",").map((id) => id.trim()).filter(Boolean);
+
+  if (quizIds.length === 0) {
+    return c.json({ attempts: [] });
+  }
+
+  const placeholders = quizIds.map(() => "?").join(",");
+
+  const latestRows = await c.env.DB.prepare(
+    `SELECT a.id as attempt_id,
+            a.quiz_id,
+            a.score,
+            a.total_questions,
+            a.time_taken_seconds,
+            a.submitted_at
+     FROM attempts a
+     JOIN (
+       SELECT quiz_id, MAX(submitted_at) as submitted_at
+       FROM attempts
+       WHERE user_id = ?
+         AND status = 'completed'
+         AND quiz_id IN (${placeholders})
+       GROUP BY quiz_id
+     ) latest
+       ON a.quiz_id = latest.quiz_id AND a.submitted_at = latest.submitted_at
+     WHERE a.user_id = ? AND a.status = 'completed'`
+  )
+    .bind(userId, ...quizIds, userId)
+    .all<{
+      attempt_id: string;
+      quiz_id: string;
+      score: number;
+      total_questions: number;
+      time_taken_seconds: number | null;
+      submitted_at: number;
+    }>();
+
+  const attempts = latestRows.results.map((row) => ({
+    attemptId: row.attempt_id,
+    quizId: row.quiz_id,
+    score: row.score,
+    totalQuestions: row.total_questions,
+    timeTakenSeconds: row.time_taken_seconds,
+    submittedAt: row.submitted_at,
+  }));
+
+  return c.json({ attempts });
+});
+
 // Start a new attempt
 attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
   const { quizId } = c.req.valid("json");
