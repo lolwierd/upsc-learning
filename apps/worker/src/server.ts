@@ -7,10 +7,11 @@ import { fileURLToPath } from 'url';
 // Load environment variables
 dotenvConfig();
 
-// Import database and app
+// Import database, app, and scheduler
 import { initDatabase, getDatabase, closeDatabase } from './lib/database.js';
 import app from './index.js';
 import type { Env } from './types.js';
+import { initializeScheduler, stopScheduler } from './services/scheduler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,6 +68,13 @@ async function main() {
         process.exit(1);
     }
 
+    // Initialize scheduler for quiz sets
+    try {
+        await initializeScheduler(env);
+    } catch (error) {
+        console.error('⚠️ Failed to initialize scheduler (non-fatal):', error);
+    }
+
     // Create a modified Hono app that injects env
     const server = serve({
         fetch: (request: Request) => {
@@ -88,6 +96,7 @@ async function main() {
     // Graceful shutdown
     const shutdown = () => {
         console.log('\n🛑 Shutting down gracefully...');
+        stopScheduler();
         closeDatabase();
         process.exit(0);
     };

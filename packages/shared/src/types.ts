@@ -196,3 +196,117 @@ export interface UserStats {
   overall: OverallStats;
   bySubject: SubjectStats[];
 }
+
+// ============================================
+// Quiz Set Types
+// ============================================
+
+export type QuizSetRunStatus = "running" | "completed" | "partial" | "failed";
+export type QuizSetRunTriggerType = "manual" | "scheduled";
+export type QuizSetRunItemStatus = "pending" | "generating" | "completed" | "failed";
+
+export type QuestionEra =
+  | "current"
+  | "all"
+  | "2024-2025"
+  | "2021-2023"
+  | "2018-2020"
+  | "2014-2017"
+  | "2011-2013";
+
+export interface QuizSetItemConfig {
+  subject: Subject;
+  theme?: string;
+  difficulty: Difficulty;
+  styles: QuestionStyle[];
+  questionCount: number;
+  era?: QuestionEra;
+  enableCurrentAffairs?: boolean;
+  currentAffairsTheme?: string;
+}
+
+export interface QuizSetItem extends QuizSetItemConfig {
+  id: string;
+  quizSetId: string;
+  sequenceNumber: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface QuizSet {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface QuizSetWithItems extends QuizSet {
+  items: QuizSetItem[];
+  itemCount: number;
+}
+
+export interface QuizSetSchedule {
+  id: string;
+  quizSetId: string;
+  cronExpression: string;
+  timezone: string;
+  isEnabled: boolean;
+  nextRunAt?: number;
+  lastRunAt?: number;
+  lastRunStatus?: QuizSetRunStatus;
+  lastRunError?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface QuizSetWithSchedule extends QuizSetWithItems {
+  schedule?: QuizSetSchedule;
+}
+
+export interface QuizSetRun {
+  id: string;
+  quizSetId: string;
+  scheduleId?: string;
+  triggerType: QuizSetRunTriggerType;
+  status: QuizSetRunStatus;
+  totalItems: number;
+  completedItems: number;
+  failedItems: number;
+  startedAt: number;
+  completedAt?: number;
+  error?: string;
+}
+
+export interface QuizSetRunItem {
+  id: string;
+  runId: string;
+  quizSetItemId: string;
+  quizId?: string;
+  status: QuizSetRunItemStatus;
+  error?: string;
+  startedAt?: number;
+  completedAt?: number;
+}
+
+export interface QuizSetRunWithItems extends QuizSetRun {
+  runItems: QuizSetRunItem[];
+}
+
+export interface QuizSetListItem {
+  id: string;
+  name: string;
+  description?: string;
+  isActive: boolean;
+  itemCount: number;
+  createdAt: number;
+  updatedAt: number;
+  schedule?: {
+    isEnabled: boolean;
+    nextRunAt?: number;
+    lastRunAt?: number;
+    lastRunStatus?: QuizSetRunStatus;
+  };
+}

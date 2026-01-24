@@ -191,3 +191,135 @@ export type StartAttemptRequest = z.infer<typeof startAttemptRequestSchema>;
 export type SaveAnswerRequest = z.infer<typeof saveAnswerRequestSchema>;
 export type UpdateSettingsRequest = z.infer<typeof updateSettingsRequestSchema>;
 export type HistoryQuery = z.infer<typeof historyQuerySchema>;
+
+// ============================================
+// Quiz Set Schemas
+// ============================================
+
+export const quizSetRunStatusSchema = z.enum(["running", "completed", "partial", "failed"]);
+export const quizSetRunTriggerTypeSchema = z.enum(["manual", "scheduled"]);
+export const quizSetRunItemStatusSchema = z.enum(["pending", "generating", "completed", "failed"]);
+
+// Quiz set item configuration (for creating/updating items)
+export const quizSetItemConfigSchema = z.object({
+  subject: subjectSchema,
+  theme: z.string().max(200).optional(),
+  difficulty: difficultySchema,
+  styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
+  questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
+  era: questionEraSchema.optional(),
+  enableCurrentAffairs: z.boolean().optional(),
+  currentAffairsTheme: z.string().max(200).optional(),
+});
+
+// Create quiz set request
+export const createQuizSetRequestSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100),
+  description: z.string().max(500).optional(),
+  items: z.array(quizSetItemConfigSchema).optional(),
+});
+
+// Update quiz set request
+export const updateQuizSetRequestSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  isActive: z.boolean().optional(),
+});
+
+// Add item to quiz set
+export const addQuizSetItemRequestSchema = quizSetItemConfigSchema;
+
+// Update quiz set item
+export const updateQuizSetItemRequestSchema = quizSetItemConfigSchema.partial();
+
+// Reorder items request
+export const reorderQuizSetItemsRequestSchema = z.object({
+  itemIds: z.array(z.string()).min(1),
+});
+
+// Schedule schemas
+export const quizSetScheduleRequestSchema = z.object({
+  cronExpression: z.string().min(1, "Cron expression is required"),
+  timezone: z.string().default("Asia/Kolkata"),
+  isEnabled: z.boolean().optional().default(true),
+});
+
+export const toggleScheduleRequestSchema = z.object({
+  isEnabled: z.boolean(),
+});
+
+// Response schemas for quiz sets
+export const quizSetItemSchema = z.object({
+  id: z.string(),
+  quizSetId: z.string(),
+  sequenceNumber: z.number(),
+  subject: subjectSchema,
+  theme: z.string().optional(),
+  difficulty: difficultySchema,
+  styles: z.array(questionStyleSchema),
+  questionCount: z.number(),
+  era: questionEraSchema.optional(),
+  enableCurrentAffairs: z.boolean().optional(),
+  currentAffairsTheme: z.string().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+
+export const quizSetSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  isActive: z.boolean(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+
+export const quizSetScheduleSchema = z.object({
+  id: z.string(),
+  quizSetId: z.string(),
+  cronExpression: z.string(),
+  timezone: z.string(),
+  isEnabled: z.boolean(),
+  nextRunAt: z.number().optional(),
+  lastRunAt: z.number().optional(),
+  lastRunStatus: quizSetRunStatusSchema.optional(),
+  lastRunError: z.string().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+
+export const quizSetRunSchema = z.object({
+  id: z.string(),
+  quizSetId: z.string(),
+  scheduleId: z.string().optional(),
+  triggerType: quizSetRunTriggerTypeSchema,
+  status: quizSetRunStatusSchema,
+  totalItems: z.number(),
+  completedItems: z.number(),
+  failedItems: z.number(),
+  startedAt: z.number(),
+  completedAt: z.number().optional(),
+  error: z.string().optional(),
+});
+
+export const quizSetRunItemSchema = z.object({
+  id: z.string(),
+  runId: z.string(),
+  quizSetItemId: z.string(),
+  quizId: z.string().optional(),
+  status: quizSetRunItemStatusSchema,
+  error: z.string().optional(),
+  startedAt: z.number().optional(),
+  completedAt: z.number().optional(),
+});
+
+// Type inference for quiz set schemas
+// Note: QuizSetItemConfig is exported from types.ts to avoid duplicate export
+export type CreateQuizSetRequest = z.infer<typeof createQuizSetRequestSchema>;
+export type UpdateQuizSetRequest = z.infer<typeof updateQuizSetRequestSchema>;
+export type AddQuizSetItemRequest = z.infer<typeof addQuizSetItemRequestSchema>;
+export type UpdateQuizSetItemRequest = z.infer<typeof updateQuizSetItemRequestSchema>;
+export type ReorderQuizSetItemsRequest = z.infer<typeof reorderQuizSetItemsRequestSchema>;
+export type QuizSetScheduleRequest = z.infer<typeof quizSetScheduleRequestSchema>;
+export type ToggleScheduleRequest = z.infer<typeof toggleScheduleRequestSchema>;

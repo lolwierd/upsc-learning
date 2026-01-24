@@ -7,6 +7,16 @@ import type {
   WrongAnswer,
   UserStats,
   UserSettings,
+  QuizSetListItem,
+  QuizSetWithSchedule,
+  QuizSetItem,
+  QuizSetSchedule,
+  QuizSetRun,
+  QuizSetRunWithItems,
+  QuizSetItemConfig,
+  CreateQuizSetRequest,
+  UpdateQuizSetRequest,
+  QuizSetScheduleRequest,
 } from "@mcqs/shared";
 import { API_ENDPOINTS } from "@mcqs/shared";
 
@@ -228,4 +238,164 @@ export async function getStatsTimeline(
 ): Promise<{ timeline: TimelineDay[] }> {
   const query = limit ? `?limit=${limit}` : "";
   return fetchAPI(`${API_ENDPOINTS.STATS}/timeline${query}`);
+}
+
+// ============================================
+// Quiz Sets APIs
+// ============================================
+
+// Get all quiz sets
+export async function getQuizSets(): Promise<{ sets: QuizSetListItem[] }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SETS);
+}
+
+// Create a new quiz set
+export async function createQuizSet(
+  data: CreateQuizSetRequest
+): Promise<QuizSetWithSchedule> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SETS, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+// Get a single quiz set with items and schedule
+export async function getQuizSet(id: string): Promise<QuizSetWithSchedule> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_GET(id));
+}
+
+// Update quiz set metadata
+export async function updateQuizSet(
+  id: string,
+  data: UpdateQuizSetRequest
+): Promise<QuizSetWithSchedule> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_GET(id), {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+// Delete a quiz set
+export async function deleteQuizSet(id: string): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_GET(id), {
+    method: "DELETE",
+  });
+}
+
+// ============================================
+// Quiz Set Items APIs
+// ============================================
+
+// Add item to quiz set
+export async function addQuizSetItem(
+  setId: string,
+  item: QuizSetItemConfig
+): Promise<QuizSetItem> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_ITEMS(setId), {
+    method: "POST",
+    body: JSON.stringify(item),
+  });
+}
+
+// Update quiz set item
+export async function updateQuizSetItem(
+  setId: string,
+  itemId: string,
+  item: Partial<QuizSetItemConfig>
+): Promise<QuizSetItem> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_ITEM(setId, itemId), {
+    method: "PATCH",
+    body: JSON.stringify(item),
+  });
+}
+
+// Delete quiz set item
+export async function deleteQuizSetItem(
+  setId: string,
+  itemId: string
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_ITEM(setId, itemId), {
+    method: "DELETE",
+  });
+}
+
+// Reorder quiz set items
+export async function reorderQuizSetItems(
+  setId: string,
+  itemIds: string[]
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_ITEMS_REORDER(setId), {
+    method: "POST",
+    body: JSON.stringify({ itemIds }),
+  });
+}
+
+// ============================================
+// Quiz Set Generation APIs
+// ============================================
+
+// Start quiz set generation
+export async function generateQuizSet(
+  setId: string
+): Promise<{ runId: string; status: string }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_GENERATE(setId), {
+    method: "POST",
+  });
+}
+
+// Get generation runs for a quiz set
+export async function getQuizSetRuns(
+  setId: string
+): Promise<{ runs: QuizSetRun[] }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_RUNS(setId));
+}
+
+// Get a specific run with items
+export async function getQuizSetRun(
+  setId: string,
+  runId: string
+): Promise<QuizSetRunWithItems> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_RUN(setId, runId));
+}
+
+// ============================================
+// Quiz Set Schedule APIs
+// ============================================
+
+// Get schedule for a quiz set
+export async function getQuizSetSchedule(
+  setId: string
+): Promise<{ schedule: QuizSetSchedule | null }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE(setId));
+}
+
+// Create or update schedule
+export async function setQuizSetSchedule(
+  setId: string,
+  schedule: QuizSetScheduleRequest
+): Promise<{ schedule: QuizSetSchedule }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE(setId), {
+    method: "PUT",
+    body: JSON.stringify(schedule),
+  });
+}
+
+// Delete schedule
+export async function deleteQuizSetSchedule(
+  setId: string
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE(setId), {
+    method: "DELETE",
+  });
+}
+
+// Toggle schedule enabled/disabled
+export async function toggleQuizSetSchedule(
+  setId: string,
+  isEnabled: boolean
+): Promise<{ schedule: QuizSetSchedule }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE_TOGGLE(setId), {
+    method: "POST",
+    body: JSON.stringify({ isEnabled }),
+  });
 }

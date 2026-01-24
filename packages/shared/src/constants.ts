@@ -160,4 +160,15 @@ export const API_ENDPOINTS = {
   REVIEW_WRONG: "/api/history/review/wrong",
   STATS: "/api/history/stats",
   SETTINGS: "/api/settings",
+  // Quiz Sets
+  QUIZ_SETS: "/api/quiz-sets",
+  QUIZ_SET_GET: (id: string) => `/api/quiz-sets/${id}`,
+  QUIZ_SET_ITEMS: (setId: string) => `/api/quiz-sets/${setId}/items`,
+  QUIZ_SET_ITEM: (setId: string, itemId: string) => `/api/quiz-sets/${setId}/items/${itemId}`,
+  QUIZ_SET_ITEMS_REORDER: (setId: string) => `/api/quiz-sets/${setId}/items/reorder`,
+  QUIZ_SET_GENERATE: (setId: string) => `/api/quiz-sets/${setId}/generate`,
+  QUIZ_SET_RUNS: (setId: string) => `/api/quiz-sets/${setId}/runs`,
+  QUIZ_SET_RUN: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}`,
+  QUIZ_SET_SCHEDULE: (setId: string) => `/api/quiz-sets/${setId}/schedule`,
+  QUIZ_SET_SCHEDULE_TOGGLE: (setId: string) => `/api/quiz-sets/${setId}/schedule/toggle`,
 } as const;
