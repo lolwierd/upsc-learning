@@ -8,6 +8,33 @@ import { insertAiGenerationMetric } from "../services/ai-metrics";
 
 const quiz = new Hono<{ Bindings: Env }>();
 
+type LearnModeRow = {
+  learn_mode_enabled: number | null;
+};
+
+type QuizRow = {
+  id: string;
+  subject: string;
+  theme: string | null;
+  difficulty: string;
+  style: string;
+  question_count: number;
+  status: string | null;
+  error: string | null;
+  created_at: number;
+};
+
+type QuestionRow = {
+  id: string;
+  sequence_number: number;
+  question_text: string;
+  question_type: string;
+  options: string;
+  correct_option: number;
+  explanation: string;
+  metadata: string | null;
+};
+
 // Generate a new quiz
 quiz.post(
   "/generate",
@@ -42,15 +69,6 @@ quiz.post(
         )
         .run();
 
-      // Get user settings for API key
-      const settings = await c.env.DB.prepare(
-        `SELECT gemini_api_key FROM user_settings WHERE user_id = ?`
-      )
-        .bind(userId)
-        .first();
-
-      const geminiApiKey = (settings?.gemini_api_key as string) || c.env.GOOGLE_API_KEY;
-
       // 2. Generate Blocking (Synchronously) as requested
       // We explicitly DISABLE fact checking to ensure we stay within the request timeout limits
       try {
@@ -62,7 +80,7 @@ quiz.post(
           difficulty: body.difficulty,
           styles: body.styles,
           count: body.questionCount,
-          apiKey: geminiApiKey,
+          // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
           era: body.era,
           enableFactCheck: c.env.ENABLE_FACT_CHECK === "1",
           enableCurrentAffairs: body.enableCurrentAffairs,
@@ -196,7 +214,7 @@ quiz.get("/:id", async (c) => {
       `SELECT learn_mode_enabled FROM user_settings WHERE user_id = ?`
     )
       .bind(userId)
-      .first();
+      .first<LearnModeRow>();
     learnModeEnabled = !!settingsResult?.learn_mode_enabled;
   }
 
@@ -205,7 +223,7 @@ quiz.get("/:id", async (c) => {
     `SELECT * FROM quizzes WHERE id = ? AND user_id = ?`
   )
     .bind(quizId, userId)
-    .first();
+    .first<QuizRow>();
 
   if (!quizResult) {
     return c.json({ error: "Quiz not found" }, 404);
@@ -216,17 +234,17 @@ quiz.get("/:id", async (c) => {
     `SELECT * FROM questions WHERE quiz_id = ? ORDER BY sequence_number ASC`
   )
     .bind(quizId)
-    .all();
+    .all<QuestionRow>();
 
   const includeAnswers = withAnswers && learnModeEnabled;
 
-  const questions = questionsResult.results.map((q: Record<string, unknown>) => ({
+  const questions = questionsResult.results.map((q) => ({
     id: q.id,
     sequenceNumber: q.sequence_number,
     questionText: q.question_text,
     questionType: q.question_type,
-    options: JSON.parse(q.options as string),
-    metadata: q.metadata ? JSON.parse(q.metadata as string) : null,
+    options: JSON.parse(q.options),
+    metadata: q.metadata ? JSON.parse(q.metadata) : null,
     // Include correct answer and explanation only in learn mode
     ...(includeAnswers && {
       correctOption: q.correct_option,

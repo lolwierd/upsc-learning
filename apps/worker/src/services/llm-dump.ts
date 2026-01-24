@@ -30,6 +30,8 @@ export interface LlmDumpPayload {
 }
 
 function isLocalDumpEnabled(env: Env): boolean {
+  // Allow explicit enable via LLM_DUMP, or default to development-only
+  if (env.LLM_DUMP === "1") return !!env.LOCAL_LLM_DUMP_URL;
   return env.ENVIRONMENT === "development" && !!env.LOCAL_LLM_DUMP_URL;
 }
 

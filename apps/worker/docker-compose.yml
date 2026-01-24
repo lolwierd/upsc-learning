@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # ====================================
+  # UPSC MCQ API Server
+  # ====================================
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+    container_name: upsc-mcq-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      # Persist database
+      - upsc-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_PATH=/app/data/upsc-mcq.db
+      
+      # CORS - update for your frontend domain
+      - CORS_ORIGIN=https://upsc.lolwierd.com,http://localhost:3000
+      
+      # Google Cloud Configuration - REQUIRED
+      - GCP_SERVICE_ACCOUNT=${GCP_SERVICE_ACCOUNT}
+      - GOOGLE_VERTEX_LOCATION=global
+      
+      # Model Configuration
+      - GENERATION_MODEL=gemini-3-pro-preview
+      - FACT_CHECK_MODEL=gemini-3-flash-preview
+      - ENABLE_FACT_CHECK=1
+      - ENABLE_WEB_GROUNDING=0
+      
+      # Debug
+      - LLM_DEBUG=0
+      - LLM_DUMP=${LLM_DUMP}
+      - LOCAL_LLM_DUMP_URL=http://llm-dump:8790/dump
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - upsc-network
+
+  # ====================================
+  # LLM Dump Server (Optional)
+  # ====================================
+  llm-dump:
+    image: node:22-slim
+    container_name: upsc-llm-dump
+    restart: unless-stopped
+    command: node /app/server.mjs
+    environment:
+      - LLM_DUMP_PORT=8790
+      - LLM_DUMP_DIR=/app/dumps
+    volumes:
+      - ../../scripts/llm-dump-server.mjs:/app/server.mjs:ro
+      - ./data/dumps:/app/dumps
+    networks:
+      - upsc-network
+
+  # ====================================
+  # Cloudflare Tunnel (cloudflared)
+  # ====================================
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: upsc-cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - upsc-network
+
+volumes:
+  upsc-data:
+    driver: local
+
+networks:
+  upsc-network:
+    driver: bridge

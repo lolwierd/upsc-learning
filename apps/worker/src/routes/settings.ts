@@ -6,6 +6,14 @@ import { MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "@mcqs/shared";
 
 const settings = new Hono<{ Bindings: Env }>();
 
+type UserSettingsRow = {
+  default_model: string | null;
+  openai_api_key: string | null;
+  gemini_api_key: string | null;
+  default_question_count: number | null;
+  learn_mode_enabled: number | null;
+};
+
 const updateSettingsSchema = z.object({
   defaultModel: z.enum(["gemini", "openai"]).optional(),
   openaiApiKey: z.string().optional(),
@@ -22,7 +30,7 @@ settings.get("/", async (c) => {
     `SELECT * FROM user_settings WHERE user_id = ?`
   )
     .bind(userId)
-    .first();
+    .first<UserSettingsRow>();
 
   if (!result) {
     // Return defaults

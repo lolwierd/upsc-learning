@@ -1,5 +1,6 @@
 import { createVertex } from "@ai-sdk/google-vertex";
 import { generateText } from "ai";
+import { VertexAI, type GenerateContentResult } from "@google-cloud/vertexai";
 import type { Env } from "../types";
 import type { GeneratedQuestion, QuestionStyle, Difficulty } from "@mcqs/shared";
 import { getPrompt, type QuestionEra } from "../prompts";
@@ -121,6 +122,100 @@ async function saveFingerprints(
   }
 
   return { attempted: questions.length, insertErrors: errorCount };
+}
+
+// ============================================================================
+// NATIVE VERTEX AI GENERATION WITH GROUNDING
+// Uses @google-cloud/vertexai directly for Google Search grounding
+// This works in Node.js (Docker) environment with service account auth
+// ============================================================================
+interface VertexGroundingResult {
+  text: string;
+  groundingMetadata?: {
+    groundingChunks?: Array<{ web?: { uri?: string; title?: string } }>;
+    groundingSupports?: any[];
+    webSearchQueries?: string[];
+  };
+  usage?: {
+    promptTokens?: number;
+    completionTokens?: number;
+    totalTokens?: number;
+  };
+}
+
+async function generateWithVertexGrounding(
+  serviceAccount: { project_id: string; client_email: string; private_key: string },
+  model: string,
+  systemPrompt: string,
+  userPrompt: string,
+  maxOutputTokens: number,
+  location: string = "global"
+): Promise<VertexGroundingResult> {
+  // Initialize native Vertex AI client
+  const vertexAI = new VertexAI({
+    project: serviceAccount.project_id,
+    location,
+    apiEndpoint: location === "global" ? "aiplatform.googleapis.com" : undefined,
+    googleAuthOptions: {
+      credentials: {
+        client_email: serviceAccount.client_email,
+        private_key: serviceAccount.private_key,
+      },
+    },
+  });
+
+  // Get the preview generative model with Google Search grounding tool
+  const generativeModel = vertexAI.preview.getGenerativeModel({
+    model,
+    generationConfig: {
+      maxOutputTokens,
+      temperature: 1.0, // Recommended for grounding
+    },
+  });
+
+  const googleSearchTool = {
+    googleSearch: {},
+  };
+
+  // Generate content with grounding
+  const result: GenerateContentResult = await generativeModel.generateContent({
+    contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+    systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
+    tools: [googleSearchTool],
+  } as any);
+  const response = result.response;
+
+  // Extract text from response
+  const text = response.candidates?.[0]?.content?.parts
+    ?.map((part: any) => part.text || "")
+    .join("") || "";
+
+  // Extract grounding metadata
+  const groundingMetadata = response.candidates?.[0]?.groundingMetadata as any;
+  const groundingChunks = groundingMetadata?.groundingChunks;
+  const webSearchQueries = groundingMetadata?.webSearchQueries;
+
+  // Extract usage metadata
+  const usageMetadata = response.usageMetadata;
+
+  return {
+    text,
+    groundingMetadata: groundingChunks
+      ? {
+        groundingChunks: groundingChunks.map((chunk: any) => ({
+          web: chunk?.web,
+        })),
+        webSearchQueries,
+      }
+      : undefined,
+    usage: usageMetadata
+      ? {
+        promptTokens: usageMetadata.promptTokenCount,
+        completionTokens: usageMetadata.candidatesTokenCount,
+        totalTokens: usageMetadata.totalTokenCount,
+      }
+      : undefined,
+  };
 }
 
 // Helper function for a single batch generation
@@ -260,63 +355,81 @@ Generate exactly ${count} questions now.`;
   let groundingSources: Array<{ uri?: string; title?: string }> = [];
 
   try {
-    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with grounding)" : ""}...`);
+    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with NATIVE grounding)" : ""}...`);
 
-    // Configure generation with thinking support for better reasoning
-    const generationConfig: Parameters<typeof generateText>[0] = {
-      model: vertex(generationModel),
-      system: systemPrompt,
-      prompt,
-      maxOutputTokens: maxTokens,
-      // Enable thinking mode for Gemini 3 models - improves reasoning for complex UPSC questions
-      providerOptions: {
-        google: {
-          thinkingConfig: {
-            thinkingLevel: "high", // HIGH for best reasoning on complex problems
-          },
-        },
-      },
-    };
-
-    // Add Google Search tool when current affairs grounding is enabled
+    // BRANCH: Use Gemini API for grounding (fixes Gemini 3 Pro Preview issues with Vertex AI SDK)
+    // Use Vertex AI SDK for all calls (service account auth)
     if (enableCurrentAffairs) {
-      generationConfig.tools = {
-        googleSearch: vertex.tools.googleSearch({
-          // Dynamic retrieval for relevant current affairs
-        }),
+      // ========== VERTEX AI GROUNDING PATH ==========
+      // Using native @google-cloud/vertexai for Google Search grounding
+      console.log(`[Batch ${batchIndex}] Using Vertex AI with Google Search grounding...`);
+
+      const vertexResult = await generateWithVertexGrounding(
+        serviceAccount,
+        generationModel,
+        systemPrompt,
+        prompt,
+        maxTokens,
+        env.GOOGLE_VERTEX_LOCATION || "global"
+      );
+
+      generationDurationMs = Date.now() - generationStart;
+      text = vertexResult.text;
+      responseChars = text.length;
+
+      // Extract usage from Vertex response
+      usage = {
+        promptTokens: vertexResult.usage?.promptTokens,
+        completionTokens: vertexResult.usage?.completionTokens,
+        totalTokens: vertexResult.usage?.totalTokens,
       };
-      generationConfig.toolChoice = { type: "tool", toolName: "googleSearch" };
-    }
 
-    const generation = await generateText(generationConfig);
-    generationDurationMs = Date.now() - generationStart;
-    text = generation.text;
-    usage = (generation as any).usage;
-    responseChars = text.length;
-
-    // Extract grounding metadata if available
-    if (enableCurrentAffairs) {
-      const providerMetadata =
-        (generation as any).providerMetadata ?? (generation as any).experimental_providerMetadata;
-      const groundingMetadata =
-        providerMetadata?.google?.groundingMetadata ??
-        providerMetadata?.google?.grounding_metadata;
-      const groundingChunks =
-        groundingMetadata?.groundingChunks ?? groundingMetadata?.grounding_chunks;
-
+      // Extract grounding metadata from Vertex response
+      const groundingChunks = vertexResult.groundingMetadata?.groundingChunks;
       if (Array.isArray(groundingChunks)) {
         groundingSources = groundingChunks
-          .map((chunk: any) => ({
-            uri: chunk?.web?.uri ?? chunk?.uri ?? chunk?.source?.uri,
-            title: chunk?.web?.title ?? chunk?.title ?? chunk?.source?.title,
+          .map((chunk) => ({
+            uri: chunk?.web?.uri,
+            title: chunk?.web?.title,
           }))
-          .filter((s: { uri?: string; title?: string }) => s.uri || s.title);
+          .filter((s) => s.uri || s.title);
         groundingSourceCount = groundingChunks.length;
         console.log(`[Batch ${batchIndex}] Grounding used ${groundingSourceCount} sources`);
+
+        // Log search queries for debugging
+        const searchQueries = vertexResult.groundingMetadata?.webSearchQueries;
+        if (searchQueries?.length) {
+          console.log(`[Batch ${batchIndex}] Search queries: ${searchQueries.join(", ")}`);
+        }
       } else {
         groundingSourceCount = 0;
+        console.warn(`[Batch ${batchIndex}] No grounding chunks returned - model may not have searched`);
       }
 
+
+    } else {
+      // ========== VERCEL AI SDK PATH (for non-grounding calls) ==========
+      // Configure generation with thinking support for better reasoning
+      const generationConfig: Parameters<typeof generateText>[0] = {
+        model: vertex(generationModel),
+        system: systemPrompt,
+        prompt,
+        maxOutputTokens: maxTokens,
+        // Enable thinking mode for Gemini 3 models - improves reasoning for complex UPSC questions
+        providerOptions: {
+          google: {
+            thinkingConfig: {
+              thinkingLevel: "high", // HIGH for best reasoning on complex problems
+            },
+          },
+        },
+      };
+
+      const generation = await generateText(generationConfig);
+      generationDurationMs = Date.now() - generationStart;
+      text = generation.text;
+      usage = (generation as any).usage;
+      responseChars = text.length;
     }
 
     console.log(`[Batch ${batchIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
@@ -371,9 +484,9 @@ Generate exactly ${count} questions now.`;
       },
       metadata: enableCurrentAffairs
         ? {
-            groundingSourceCount,
-            groundingSources,
-          }
+          groundingSourceCount,
+          groundingSources,
+        }
         : undefined,
     },
   });
@@ -455,7 +568,7 @@ export async function generateQuiz(
 
   let existingFingerprints = new Set<string>();
   if (enableDeduplication && env.DB) {
-    existingFingerprints = await loadExistingFingerprints(env.DB, subject);
+    existingFingerprints = await loadExistingFingerprints(env.DB as any, subject);
     console.log(`Loaded ${existingFingerprints.size} existing fingerprints`);
   }
 
@@ -577,7 +690,7 @@ export async function generateQuiz(
   // Save fingerprints
   if (enableDeduplication && env.DB && finalQuestions.length > 0) {
     // Fire and forget fingerprint saving to save time
-    saveFingerprints(env.DB, finalQuestions, subject, theme).catch(err =>
+    saveFingerprints(env.DB as any, finalQuestions, subject, theme).catch(err =>
       console.error("Background fingerprint save failed:", err)
     );
   }

@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+.wrangler
+.turbo
+
+# Local development
+.dev.vars
+.env
+*.log
+
+# Data files (should be mounted as volumes)
+data/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Test files
+*.test.ts
+__tests__
+coverage

@@ -5,6 +5,70 @@ import type { Env } from "../types";
 
 const history = new Hono<{ Bindings: Env }>();
 
+type QuizHistoryRow = {
+  id: string;
+  subject: string;
+  theme: string | null;
+  difficulty: string;
+  style: string;
+  question_count: number;
+  created_at: number;
+  attempt_id: string | null;
+  score: number | null;
+  attempt_status: string | null;
+  submitted_at: number | null;
+  status: string | null;
+  error: string | null;
+};
+
+type CountRow = {
+  total: number;
+};
+
+type WrongAnswerRow = {
+  question_text: string;
+  question_type: string;
+  options: string;
+  selected_option: number | null;
+  correct_option: number;
+  explanation: string;
+  subject: string;
+  theme: string | null;
+};
+
+type OverallStatsRow = {
+  total_attempts: number | null;
+  total_correct: number | null;
+  total_questions: number | null;
+};
+
+type SubjectStatsRow = {
+  subject: string;
+  attempts: number;
+  correct: number;
+  total: number;
+};
+
+type DailyStatsRow = {
+  date: string;
+  attempts: number;
+  correct: number | null;
+  total: number | null;
+};
+
+type TimelineRow = {
+  attempt_id: string;
+  score: number;
+  total_questions: number;
+  time_taken_seconds: number;
+  submitted_at: number;
+  quiz_id: string;
+  subject: string;
+  theme: string | null;
+  difficulty: string;
+  style: string;
+};
+
 const historyQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().min(1).max(50).default(10),
@@ -50,7 +114,7 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
   query += ` ORDER BY q.created_at DESC LIMIT ? OFFSET ?`;
   params.push(limit, offset);
 
-  const results = await c.env.DB.prepare(query).bind(...params).all();
+  const results = await c.env.DB.prepare(query).bind(...params).all<QuizHistoryRow>();
 
   // Get total count
   let countQuery = `SELECT COUNT(*) as total FROM quizzes WHERE user_id = ?`;
@@ -62,10 +126,10 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
 
   const countResult = await c.env.DB.prepare(countQuery)
     .bind(...countParams)
-    .first();
-  const total = (countResult?.total as number) || 0;
+    .first<CountRow>();
+  const total = countResult?.total || 0;
 
-  const quizzes = results.results.map((q: Record<string, unknown>) => ({
+  const quizzes = results.results.map((q) => ({
     id: q.id,
     subject: q.subject,
     theme: q.theme,
@@ -77,7 +141,7 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
     score: q.score,
     attemptStatus: q.attempt_status,
     submittedAt: q.submitted_at,
-    status: q.status || 'completed',
+    status: q.status || "completed",
     error: q.error,
   }));
 
@@ -115,12 +179,12 @@ history.get("/review/wrong", async (c) => {
 
   query += ` ORDER BY a.submitted_at DESC LIMIT 100`;
 
-  const results = await c.env.DB.prepare(query).bind(...params).all();
+  const results = await c.env.DB.prepare(query).bind(...params).all<WrongAnswerRow>();
 
-  const wrongAnswers = results.results.map((r: Record<string, unknown>) => ({
+  const wrongAnswers = results.results.map((r) => ({
     questionText: r.question_text,
     questionType: r.question_type,
-    options: JSON.parse(r.options as string),
+    options: JSON.parse(r.options),
     selectedOption: r.selected_option,
     correctOption: r.correct_option,
     explanation: r.explanation,
@@ -145,7 +209,7 @@ history.get("/stats", async (c) => {
      WHERE a.user_id = ? AND a.status = 'completed'`
   )
     .bind(userId)
-    .first();
+    .first<OverallStatsRow>();
 
   // Stats by subject
   const subjectStats = await c.env.DB.prepare(
@@ -161,11 +225,11 @@ history.get("/stats", async (c) => {
      ORDER BY attempts DESC`
   )
     .bind(userId)
-    .all();
+    .all<SubjectStatsRow>();
 
-  const totalAttempts = (overallStats?.total_attempts as number) || 0;
-  const totalCorrect = (overallStats?.total_correct as number) || 0;
-  const totalQuestions = (overallStats?.total_questions as number) || 0;
+  const totalAttempts = overallStats?.total_attempts || 0;
+  const totalCorrect = overallStats?.total_correct || 0;
+  const totalQuestions = overallStats?.total_questions || 0;
 
   return c.json({
     overall: {
@@ -174,15 +238,12 @@ history.get("/stats", async (c) => {
       totalCorrect,
       accuracy: totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0,
     },
-    bySubject: subjectStats.results.map((s: Record<string, unknown>) => ({
+    bySubject: subjectStats.results.map((s) => ({
       subject: s.subject,
       attempts: s.attempts,
       correct: s.correct,
       total: s.total,
-      accuracy:
-        (s.total as number) > 0
-          ? Math.round(((s.correct as number) / (s.total as number)) * 100)
-          : 0,
+      accuracy: s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0,
     })),
   });
 });
@@ -207,15 +268,15 @@ history.get("/activity", async (c) => {
      ORDER BY date ASC`
   )
     .bind(userId, days)
-    .all();
+    .all<DailyStatsRow>();
 
-  const activity = dailyStats.results.map((d: Record<string, unknown>) => ({
+  const activity = dailyStats.results.map((d) => ({
     date: d.date,
     attempts: d.attempts,
     correct: d.correct || 0,
     total: d.total || 0,
-    accuracy: (d.total as number) > 0
-      ? Math.round(((d.correct as number) / (d.total as number)) * 100)
+    accuracy: (d.total || 0) > 0
+      ? Math.round(((d.correct || 0) / (d.total || 0)) * 100)
       : 0,
   }));
 
@@ -247,7 +308,7 @@ history.get("/stats/timeline", async (c) => {
      LIMIT ?`
   )
     .bind(userId, limit)
-    .all();
+    .all<TimelineRow>();
 
   // Group by date
   const grouped = new Map<string, Array<{
@@ -263,24 +324,24 @@ history.get("/stats/timeline", async (c) => {
     submittedAt: number;
   }>>();
 
-  results.results.forEach((r: Record<string, unknown>) => {
-    const date = new Date((r.submitted_at as number) * 1000).toISOString().split("T")[0];
+  results.results.forEach((r) => {
+    const date = new Date(r.submitted_at * 1000).toISOString().split("T")[0];
 
     if (!grouped.has(date)) {
       grouped.set(date, []);
     }
 
     grouped.get(date)!.push({
-      attemptId: r.attempt_id as string,
-      quizId: r.quiz_id as string,
-      subject: r.subject as string,
-      theme: r.theme as string | undefined,
-      difficulty: r.difficulty as string,
+      attemptId: r.attempt_id,
+      quizId: r.quiz_id,
+      subject: r.subject,
+      theme: r.theme || undefined,
+      difficulty: r.difficulty,
       styles: parseStyles(r.style),
-      score: r.score as number,
-      totalQuestions: r.total_questions as number,
-      timeTakenSeconds: r.time_taken_seconds as number,
-      submittedAt: r.submitted_at as number,
+      score: r.score,
+      totalQuestions: r.total_questions,
+      timeTakenSeconds: r.time_taken_seconds,
+      submittedAt: r.submitted_at,
     });
   });
 

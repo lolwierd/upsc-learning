@@ -6,6 +6,47 @@ import type { Env } from "../types";
 
 const attempt = new Hono<{ Bindings: Env }>();
 
+type QuizRow = {
+  question_count: number;
+};
+
+type AttemptRow = {
+  id: string;
+  quiz_id: string;
+  user_id: string;
+  started_at: number;
+  total_questions: number;
+  status: string;
+  score: number | null;
+  time_taken_seconds: number | null;
+  submitted_at: number | null;
+};
+
+type AttemptWithQuizRow = AttemptRow & {
+  subject: string;
+  theme: string | null;
+  difficulty: string;
+  style: string;
+};
+
+type QuestionIdRow = {
+  id: string;
+};
+
+type AnswerRow = {
+  id: string;
+  question_id: string;
+  selected_option: number | null;
+  correct_option: number;
+  is_correct: number | null;
+  explanation: string;
+  marked_for_review: number | null;
+  question_text: string;
+  question_type: string;
+  options: string;
+  sequence_number: number;
+};
+
 const startAttemptSchema = z.object({
   quizId: z.string(),
 });
@@ -26,7 +67,7 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     `SELECT * FROM quizzes WHERE id = ? AND user_id = ?`
   )
     .bind(quizId, userId)
-    .first();
+    .first<QuizRow>();
 
   if (!quiz) {
     return c.json({ error: "Quiz not found" }, 404);
@@ -37,7 +78,7 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     `SELECT * FROM attempts WHERE quiz_id = ? AND user_id = ? AND status = 'in_progress'`
   )
     .bind(quizId, userId)
-    .first();
+    .first<AttemptRow>();
 
   if (existingAttempt) {
     return c.json({
@@ -62,7 +103,7 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     `SELECT id FROM questions WHERE quiz_id = ?`
   )
     .bind(quizId)
-    .all();
+    .all<QuestionIdRow>();
 
   for (const q of questions.results) {
     const answerId = nanoid();
@@ -88,7 +129,7 @@ attempt.patch("/:id/answer", zValidator("json", saveAnswerSchema), async (c) => 
     `SELECT * FROM attempts WHERE id = ? AND user_id = ? AND status = 'in_progress'`
   )
     .bind(attemptId, userId)
-    .first();
+    .first<AttemptRow>();
 
   if (!attemptRecord) {
     return c.json({ error: "Attempt not found or already submitted" }, 404);
@@ -124,7 +165,7 @@ attempt.post("/:id/submit", async (c) => {
     `SELECT * FROM attempts WHERE id = ? AND user_id = ? AND status = 'in_progress'`
   )
     .bind(attemptId, userId)
-    .first();
+    .first<AttemptRow>();
 
   if (!attemptRecord) {
     return c.json({ error: "Attempt not found or already submitted" }, 404);
@@ -141,7 +182,7 @@ attempt.post("/:id/submit", async (c) => {
      WHERE aa.attempt_id = ?`
   )
     .bind(attemptId)
-    .all();
+    .all<Pick<AnswerRow, "id" | "selected_option" | "correct_option">>();
 
   let score = 0;
   for (const answer of answers.results) {
@@ -202,7 +243,7 @@ attempt.get("/:id", async (c) => {
      WHERE a.id = ? AND a.user_id = ?`
   )
     .bind(attemptId, userId)
-    .first();
+    .first<AttemptWithQuizRow>();
 
   if (!attemptRecord) {
     return c.json({ error: "Attempt not found" }, 404);
@@ -217,14 +258,14 @@ attempt.get("/:id", async (c) => {
      ORDER BY q.sequence_number ASC`
   )
     .bind(attemptId)
-    .all();
+    .all<AnswerRow>();
 
-  const formattedAnswers = answers.results.map((a: Record<string, unknown>) => ({
+  const formattedAnswers = answers.results.map((a) => ({
     questionId: a.question_id,
     sequenceNumber: a.sequence_number,
     questionText: a.question_text,
     questionType: a.question_type,
-    options: JSON.parse(a.options as string),
+    options: JSON.parse(a.options),
     selectedOption: a.selected_option,
     correctOption: attemptRecord.status === "completed" ? a.correct_option : null,
     isCorrect: a.is_correct === 1 ? true : a.is_correct === 0 ? false : null,

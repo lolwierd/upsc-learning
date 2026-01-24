@@ -1,3 +1,5 @@
+import type { DatabaseLike } from "../types";
+
 export type AiProvider = "gemini" | "openai" | "vertex";
 export type AiMetricStatus = "success" | "error";
 export type AiParseStrategy = "direct" | "extracted";
@@ -55,7 +57,7 @@ function clampErrorMessage(errorMessage: string, maxLen = 400): string {
 }
 
 export async function insertAiGenerationMetric(
-  db: D1Database,
+  db: DatabaseLike | D1Database,
   metric: AiGenerationMetricInsert
 ): Promise<void> {
   const query = `
@@ -195,7 +197,7 @@ function safeJsonParse(input: unknown): unknown {
 }
 
 export async function listAiGenerationMetricsByUser(
-  db: D1Database,
+  db: DatabaseLike | D1Database,
   params: { userId: string; limit: number; subject?: string; status?: AiMetricStatus }
 ): Promise<AiGenerationMetricRow[]> {
   const sqlParts: string[] = [

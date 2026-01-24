@@ -2,25 +2,35 @@
   "name": "@mcqs/worker",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:node": "ENVIRONMENT=development tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.node.json",
+    "start": "node dist/server.js",
     "deploy": "wrangler deploy",
     "type-check": "tsc --noEmit",
     "lint": "eslint src"
   },
   "dependencies": {
-    "@ai-sdk/google": "^1.1.4",
-    "@ai-sdk/google-vertex": "^4.0.17",
+    "@ai-sdk/google-vertex": "^4.0.28",
     "@ai-sdk/openai": "^1.1.9",
+    "@google-cloud/vertexai": "^1.10.0",
+    "@hono/node-server": "^1.13.1",
     "@hono/zod-validator": "^0.4.2",
     "@mcqs/shared": "workspace:*",
-    "ai": "^6.0.42",
+    "ai": "^6.0.49",
+    "better-sqlite3": "^11.6.0",
+    "dotenv": "^16.4.5",
     "hono": "^4.6.17",
     "nanoid": "^5.0.9",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250109.0",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "wrangler": "^4.59.2"
   }
