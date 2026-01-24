@@ -1,5 +1,7 @@
 "use client";
 
+export const runtime = "edge";
+
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -27,6 +29,8 @@ import type {
   QuizSetItemConfig,
 } from "@mcqs/shared";
 import { cn } from "@/lib/utils";
+
+
 
 export default function QuizSetDetailPage() {
   const params = useParams();
