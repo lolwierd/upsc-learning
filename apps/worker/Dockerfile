@@ -75,14 +75,9 @@ RUN pnpm rebuild better-sqlite3
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/apps/worker/dist ./dist
 COPY packages/db/migrations ./packages/db/migrations
-
 # Ensure workspace package in node_modules can resolve dist at runtime
-RUN if [ -d /app/apps/worker/node_modules/@mcqs/shared ]; then \
-      cp -R /app/packages/shared/dist /app/apps/worker/node_modules/@mcqs/shared/; \
-    fi && \
-    if [ -d /app/node_modules/@mcqs/shared ]; then \
-      cp -R /app/packages/shared/dist /app/node_modules/@mcqs/shared/; \
-    fi
+COPY --from=builder /app/packages/shared/dist /app/apps/worker/node_modules/@mcqs/shared/dist
+COPY --from=builder /app/packages/shared/dist /app/node_modules/@mcqs/shared/dist
 
 # Create data directory
 RUN mkdir -p /app/data
