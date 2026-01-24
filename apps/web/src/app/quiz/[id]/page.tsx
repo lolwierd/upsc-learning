@@ -154,6 +154,7 @@ export default function QuizPage() {
     let cancelled = false;
 
     async function loadRun() {
+      if (!setId || !runId) return;
       const [runResult, setResult] = await Promise.allSettled([
         getQuizSetRun(setId, runId),
         getQuizSet(setId),
