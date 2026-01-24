@@ -43,13 +43,22 @@ type WaitUntilContext = {
 };
 
 const queueBackgroundTask = (c: { executionCtx?: WaitUntilContext }, task: Promise<unknown>) => {
-  if (c.executionCtx?.waitUntil) {
-    c.executionCtx.waitUntil(task);
+  let executionCtx: WaitUntilContext | undefined;
+  try {
+    executionCtx = c.executionCtx;
+  } catch {
+    executionCtx = undefined;
+  }
+
+  if (executionCtx?.waitUntil) {
+    executionCtx.waitUntil(task);
     return;
   }
 
   setImmediate(() => {
-    void task;
+    task.catch((error) => {
+      console.error("Background generation task failed:", error);
+    });
   });
 };
 
