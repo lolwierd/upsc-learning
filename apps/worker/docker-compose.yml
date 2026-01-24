@@ -10,8 +10,8 @@ services:
       dockerfile: apps/worker/Dockerfile
     container_name: upsc-mcq-api
     restart: unless-stopped
-    ports:
-      - "3001:3001"
+    # ports:
+    #   - "3001:3001"
     volumes:
       # Persist database
       - upsc-data:/app/data
