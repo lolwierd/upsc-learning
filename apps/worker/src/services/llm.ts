@@ -218,12 +218,12 @@ async function generateWithVertexGrounding(
   };
 }
 
-// Helper function for a single batch generation
-async function generateQuizBatch(
+// Helper function for a single generation call
+async function generateQuizCall(
   env: Env,
   params: GenerateQuizParams,
   parentCallId: string,
-  batchIndex: number
+  callIndex: number
 ): Promise<{
   questions: GeneratedQuestion[];
   metrics: Partial<GenerateQuizMetrics>;
@@ -244,7 +244,7 @@ async function generateQuizBatch(
   // Use primary generation model for all cases (including grounding)
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
 
-  // Distribute questions across styles for this batch
+  // Distribute questions across styles for this call
   const questionsPerStyle = Math.floor(count / styles.length);
   const remainderQuestions = count % styles.length;
 
@@ -268,6 +268,15 @@ async function generateQuizBatch(
 
   const promptChars = prompt.length;
 
+  const currentDate = new Date();
+  const currentDateISO = currentDate.toISOString().slice(0, 10);
+  const currentDateHuman = currentDate.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+
   const systemPrompt = `You are a UPSC Civil Services Preliminary Examination expert question generator with deep knowledge of the Indian civil services examination pattern, syllabus, and question standards.
 
 YOUR ROLE:
@@ -288,6 +297,7 @@ CRITICAL REQUIREMENTS:
 2. SINGLE CORRECT ANSWER: There must be exactly ONE definitively correct answer.
 3. SMART DISTRACTORS: DO NOT use absolute words (only, always, never, all, none) in wrong options - UPSC aspirants know this pattern.
 4. EDUCATIONAL EXPLANATIONS: Explain WHY correct answer is right AND why each distractor is wrong.
+5. TIME CONTEXT: Today's date is ${currentDateHuman} (UTC date: ${currentDateISO}).
 
 OUTPUT FORMAT:
 Respond with ONLY a valid JSON array. No other text, no markdown, no explanations outside JSON.
@@ -355,14 +365,14 @@ Generate exactly ${count} questions now.`;
   let groundingSources: Array<{ uri?: string; title?: string }> = [];
 
   try {
-    console.log(`[Batch ${batchIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with NATIVE grounding)" : ""}...`);
+    console.log(`[Call ${callIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with NATIVE grounding)" : ""}...`);
 
     // BRANCH: Use Gemini API for grounding (fixes Gemini 3 Pro Preview issues with Vertex AI SDK)
     // Use Vertex AI SDK for all calls (service account auth)
     if (enableCurrentAffairs) {
       // ========== VERTEX AI GROUNDING PATH ==========
       // Using native @google-cloud/vertexai for Google Search grounding
-      console.log(`[Batch ${batchIndex}] Using Vertex AI with Google Search grounding...`);
+      console.log(`[Call ${callIndex}] Using Vertex AI with Google Search grounding...`);
 
       const vertexResult = await generateWithVertexGrounding(
         serviceAccount,
@@ -394,16 +404,16 @@ Generate exactly ${count} questions now.`;
           }))
           .filter((s) => s.uri || s.title);
         groundingSourceCount = groundingChunks.length;
-        console.log(`[Batch ${batchIndex}] Grounding used ${groundingSourceCount} sources`);
+        console.log(`[Call ${callIndex}] Grounding used ${groundingSourceCount} sources`);
 
         // Log search queries for debugging
         const searchQueries = vertexResult.groundingMetadata?.webSearchQueries;
         if (searchQueries?.length) {
-          console.log(`[Batch ${batchIndex}] Search queries: ${searchQueries.join(", ")}`);
+          console.log(`[Call ${callIndex}] Search queries: ${searchQueries.join(", ")}`);
         }
       } else {
         groundingSourceCount = 0;
-        console.warn(`[Batch ${batchIndex}] No grounding chunks returned - model may not have searched`);
+        console.warn(`[Call ${callIndex}] No grounding chunks returned - model may not have searched`);
       }
 
 
@@ -432,9 +442,9 @@ Generate exactly ${count} questions now.`;
       responseChars = text.length;
     }
 
-    console.log(`[Batch ${batchIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
+    console.log(`[Call ${callIndex}] Completed in ${generationDurationMs}ms (${responseChars} chars)`);
   } catch (error) {
-    console.error(`[Batch ${batchIndex}] Failed:`, error);
+    console.error(`[Call ${callIndex}] Failed:`, error);
 
     // Dump failure log
     await dumpLlmCall(env, {
@@ -449,7 +459,7 @@ Generate exactly ${count} questions now.`;
         system: systemPrompt,
         prompt,
         maxTokens,
-        metadata: { batchIndex, ...params }
+        metadata: { callIndex, ...params }
       },
       response: {
         text: "",
@@ -473,7 +483,7 @@ Generate exactly ${count} questions now.`;
       system: systemPrompt,
       prompt,
       maxTokens,
-      metadata: { batchIndex, ...params }
+      metadata: { callIndex, ...params }
     },
     response: {
       text,
@@ -508,7 +518,7 @@ Generate exactly ${count} questions now.`;
       rawQuestions = JSON.parse(jsonMatch[0]);
     }
   } catch (e) {
-    console.warn(`[Batch ${batchIndex}] Parse failed, returning empty list`);
+    console.warn(`[Call ${callIndex}] Parse failed, returning empty list`);
     return {
       questions: [],
       metrics: { generationDurationMs, responseChars },
@@ -572,40 +582,22 @@ export async function generateQuiz(
     console.log(`Loaded ${existingFingerprints.size} existing fingerprints`);
   }
 
-  // --- BATCHING STRATEGY ---
-  // Split total count into smaller batches (max 10 questions per batch)
-  // This allows parallel generation and reduces timeout risk
-
-  // OVER-GENERATION: Generate 20% extra questions to buffer for potential duplicates
-  // that might occur due to parallel batches lacking shared context.
-  const targetCount = Math.ceil(count * 1.2);
-  const BATCH_SIZE = 10;
-  const batchCount = Math.ceil(targetCount / BATCH_SIZE);
-  const batches: GenerateQuizParams[] = [];
-
-  for (let i = 0; i < batchCount; i++) {
-    const batchSize = Math.min(BATCH_SIZE, targetCount - (i * BATCH_SIZE));
-    batches.push({
+  console.log(`Starting single-call generation for ${count} questions`);
+  const overallStart = Date.now();
+  const singleResult = await generateQuizCall(
+    env,
+    {
       ...params,
-      count: batchSize,
+      count,
       enableCurrentAffairs: groundingEnabled,
       currentAffairsTheme,
-    });
-  }
-
-  console.log(`Starting batched generation: Target ${targetCount} (+20% buffer) to get ${count} unique questions in ${batchCount} batches`);
-  const overallStart = Date.now();
-
-  // Execute batches in parallel
-  const batchResults = await Promise.all(
-    batches.map((batchParams, idx) =>
-      generateQuizBatch(env, batchParams, overallCallId, idx)
-    )
+    },
+    overallCallId,
+    0
   );
 
   // Merge results
   let allQuestions: GeneratedQuestion[] = [];
-  let totalGenerationDuration = 0;
   let totalPromptChars = 0;
   let totalResponseChars = 0;
   let totalPromptTokens = 0;
@@ -613,16 +605,13 @@ export async function generateQuiz(
   let totalTokens = 0;
   let totalGroundingSources = 0;
 
-  for (const res of batchResults) {
-    allQuestions = allQuestions.concat(res.questions);
-    totalGenerationDuration = Math.max(totalGenerationDuration, res.metrics.generationDurationMs || 0); // Max duration is the wall time
-    totalPromptChars += res.metrics.promptChars || 0;
-    totalResponseChars += res.metrics.responseChars || 0;
-    totalPromptTokens += res.metrics.usagePromptTokens || 0;
-    totalCompletionTokens += res.metrics.usageCompletionTokens || 0;
-    totalTokens += res.metrics.usageTotalTokens || 0;
-    totalGroundingSources += res.groundingSourceCount || 0;
-  }
+  allQuestions = allQuestions.concat(singleResult.questions);
+  totalPromptChars += singleResult.metrics.promptChars || 0;
+  totalResponseChars += singleResult.metrics.responseChars || 0;
+  totalPromptTokens += singleResult.metrics.usagePromptTokens || 0;
+  totalCompletionTokens += singleResult.metrics.usageCompletionTokens || 0;
+  totalTokens += singleResult.metrics.usageTotalTokens || 0;
+  totalGroundingSources += singleResult.groundingSourceCount || 0;
 
   console.log(`Generated ${allQuestions.length}/${count} questions total`);
 
@@ -718,7 +707,7 @@ export async function generateQuiz(
       parseStrategy: "direct",
       promptChars: totalPromptChars,
       responseChars: totalResponseChars,
-      generationDurationMs: totalGenerationDuration, // Approx max latency
+      generationDurationMs: Date.now() - overallStart,
       factCheckEnabled: enableFactCheck,
       factCheckDurationMs,
       factCheckCheckedCount: factCheckResult.checkedCount,

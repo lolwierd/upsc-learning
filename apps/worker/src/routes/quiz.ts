@@ -3,10 +3,13 @@ import { zValidator } from "@hono/zod-validator";
 import { nanoid } from "nanoid";
 import type { Env } from "../types.js";
 import { generateQuizRequestSchema } from "@mcqs/shared";
+import type { z } from "zod";
 import { generateQuiz } from "../services/llm.js";
 import { insertAiGenerationMetric } from "../services/ai-metrics.js";
 
 const quiz = new Hono<{ Bindings: Env }>();
+
+type GenerateQuizRequest = z.infer<typeof generateQuizRequestSchema>;
 
 type LearnModeRow = {
   learn_mode_enabled: number | null;
@@ -33,6 +36,140 @@ type QuestionRow = {
   correct_option: number;
   explanation: string;
   metadata: string | null;
+};
+
+type WaitUntilContext = {
+  waitUntil: (promise: Promise<unknown>) => void;
+};
+
+const queueBackgroundTask = (c: { executionCtx?: WaitUntilContext }, task: Promise<unknown>) => {
+  if (c.executionCtx?.waitUntil) {
+    c.executionCtx.waitUntil(task);
+    return;
+  }
+
+  setImmediate(() => {
+    void task;
+  });
+};
+
+const runQuizGeneration = async ({
+  env,
+  body,
+  quizId,
+  userId,
+  stylesJson,
+  requestStart,
+  now,
+}: {
+  env: Env;
+  body: GenerateQuizRequest;
+  quizId: string;
+  userId: string;
+  stylesJson: string;
+  requestStart: number;
+  now: number;
+}) => {
+  try {
+    const currentAffairsTheme =
+      body.currentAffairsTheme || body.theme || undefined;
+    const { questions, metrics } = await generateQuiz(env, {
+      subject: body.subject,
+      theme: body.theme,
+      difficulty: body.difficulty,
+      styles: body.styles,
+      count: body.questionCount,
+      // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
+      era: body.era,
+      enableFactCheck: env.ENABLE_FACT_CHECK === "1",
+      enableCurrentAffairs: body.enableCurrentAffairs,
+      currentAffairsTheme,
+    });
+
+    // Insert questions
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const questionId = nanoid();
+      await env.DB.prepare(
+        `INSERT INTO questions (id, quiz_id, sequence_number, question_text, question_type, options, correct_option, explanation, metadata, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+        .bind(
+          questionId,
+          quizId,
+          i + 1,
+          q.questionText,
+          q.questionType,
+          JSON.stringify(q.options),
+          q.correctOption,
+          q.explanation,
+          q.metadata ? JSON.stringify(q.metadata) : null,
+          now
+        )
+        .run();
+    }
+
+    // Update quiz status to completed and update model used
+    await env.DB.prepare(
+      `UPDATE quizzes SET status = 'completed', model_used = ? WHERE id = ?`
+    )
+      .bind(metrics.model, quizId)
+      .run();
+
+    // Store AI metrics
+    try {
+      await insertAiGenerationMetric(env.DB, {
+        id: nanoid(),
+        quizId,
+        userId,
+        provider: metrics.provider,
+        model: metrics.model,
+        factCheckModel: metrics.factCheckModel,
+        subject: metrics.subject,
+        theme: metrics.theme ?? null,
+        difficulty: metrics.difficulty,
+        stylesJson,
+        era: metrics.era,
+        status: "success",
+        requestedCount: metrics.requestedCount,
+        returnedCount: metrics.returnedCount,
+        dedupEnabled: metrics.dedupEnabled,
+        dedupFilteredCount: metrics.dedupFilteredCount,
+        validationIsValid: metrics.validationIsValid,
+        validationInvalidCount: metrics.validationInvalidCount,
+        validationErrorCount: metrics.validationErrorCount,
+        validationWarningCount: metrics.validationWarningCount,
+        validationBatchWarningsJson: JSON.stringify(metrics.validationBatchWarnings),
+        parseStrategy: metrics.parseStrategy,
+        promptChars: metrics.promptChars,
+        responseChars: metrics.responseChars,
+        totalDurationMs: Date.now() - requestStart,
+        generationDurationMs: metrics.generationDurationMs,
+        factCheckEnabled: metrics.factCheckEnabled,
+        factCheckDurationMs: metrics.factCheckDurationMs,
+        factCheckCheckedCount: metrics.factCheckCheckedCount,
+        factCheckIssueCount: metrics.factCheckIssueCount,
+        usagePromptTokens: metrics.usagePromptTokens,
+        usageCompletionTokens: metrics.usageCompletionTokens,
+        usageTotalTokens: metrics.usageTotalTokens,
+        groundingEnabled: metrics.groundingEnabled,
+        groundingSourceCount: metrics.groundingSourceCount,
+      });
+    } catch (metricsError) {
+      console.warn("Failed to store AI metrics:", metricsError);
+    }
+  } catch (error) {
+    console.error(`Generation failed for quiz ${quizId}:`, error);
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    // Update quiz status to failed
+    await env.DB.prepare(
+      `UPDATE quizzes SET status = 'failed', error = ? WHERE id = ?`
+    )
+      .bind(errorMessage, quizId)
+      .run();
+  }
 };
 
 // Generate a new quiz
@@ -69,114 +206,21 @@ quiz.post(
         )
         .run();
 
-      // 2. Generate Blocking (Synchronously) as requested
-      // We explicitly DISABLE fact checking to ensure we stay within the request timeout limits
-      try {
-        const currentAffairsTheme =
-          body.currentAffairsTheme || body.theme || undefined;
-        const { questions, metrics } = await generateQuiz(c.env, {
-          subject: body.subject,
-          theme: body.theme,
-          difficulty: body.difficulty,
-          styles: body.styles,
-          count: body.questionCount,
-          // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
-          era: body.era,
-          enableFactCheck: c.env.ENABLE_FACT_CHECK === "1",
-          enableCurrentAffairs: body.enableCurrentAffairs,
-          currentAffairsTheme,
-        });
+      const generationTask = runQuizGeneration({
+        env: c.env,
+        body,
+        quizId,
+        userId,
+        stylesJson,
+        requestStart,
+        now,
+      });
+      queueBackgroundTask(c, generationTask);
 
-        // Insert questions
-        for (let i = 0; i < questions.length; i++) {
-          const q = questions[i];
-          const questionId = nanoid();
-          await c.env.DB.prepare(
-            `INSERT INTO questions (id, quiz_id, sequence_number, question_text, question_type, options, correct_option, explanation, metadata, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-          )
-            .bind(
-              questionId,
-              quizId,
-              i + 1,
-              q.questionText,
-              q.questionType,
-              JSON.stringify(q.options),
-              q.correctOption,
-              q.explanation,
-              q.metadata ? JSON.stringify(q.metadata) : null,
-              now
-            )
-            .run();
-        }
-
-        // Update quiz status to completed and update model used
-        await c.env.DB.prepare(
-          `UPDATE quizzes SET status = 'completed', model_used = ? WHERE id = ?`
-        )
-          .bind(metrics.model, quizId)
-          .run();
-
-        // Store AI metrics
-        try {
-          await insertAiGenerationMetric(c.env.DB, {
-            id: nanoid(),
-            quizId,
-            userId,
-            provider: metrics.provider,
-            model: metrics.model,
-            factCheckModel: metrics.factCheckModel,
-            subject: metrics.subject,
-            theme: metrics.theme ?? null,
-            difficulty: metrics.difficulty,
-            stylesJson,
-            era: metrics.era,
-            status: "success",
-            requestedCount: metrics.requestedCount,
-            returnedCount: metrics.returnedCount,
-            dedupEnabled: metrics.dedupEnabled,
-            dedupFilteredCount: metrics.dedupFilteredCount,
-            validationIsValid: metrics.validationIsValid,
-            validationInvalidCount: metrics.validationInvalidCount,
-            validationErrorCount: metrics.validationErrorCount,
-            validationWarningCount: metrics.validationWarningCount,
-            validationBatchWarningsJson: JSON.stringify(metrics.validationBatchWarnings),
-            parseStrategy: metrics.parseStrategy,
-            promptChars: metrics.promptChars,
-            responseChars: metrics.responseChars,
-            totalDurationMs: Date.now() - requestStart,
-            generationDurationMs: metrics.generationDurationMs,
-            factCheckEnabled: metrics.factCheckEnabled,
-            factCheckDurationMs: metrics.factCheckDurationMs,
-            factCheckCheckedCount: metrics.factCheckCheckedCount,
-            factCheckIssueCount: metrics.factCheckIssueCount,
-            usagePromptTokens: metrics.usagePromptTokens,
-            usageCompletionTokens: metrics.usageCompletionTokens,
-            usageTotalTokens: metrics.usageTotalTokens,
-            groundingEnabled: metrics.groundingEnabled,
-            groundingSourceCount: metrics.groundingSourceCount,
-          });
-        } catch (metricsError) {
-          console.warn("Failed to store AI metrics:", metricsError);
-        }
-
-        // Return successful response with completed status
-        return c.json({ quizId, questionCount: body.questionCount, status: 'completed' });
-
-      } catch (error) {
-        console.error(`Generation failed for quiz ${quizId}:`, error);
-
-        const errorMessage = error instanceof Error ? error.message : String(error);
-
-        // Update quiz status to failed
-        await c.env.DB.prepare(
-          `UPDATE quizzes SET status = 'failed', error = ? WHERE id = ?`
-        )
-          .bind(errorMessage, quizId)
-          .run();
-
-        return c.json({ error: "Failed to generate quiz", details: errorMessage }, 500);
-      }
+      return c.json(
+        { quizId, questionCount: body.questionCount, status: "generating" },
+        202
+      );
     } catch (error) {
       console.error("Quiz initialization error:", error);
       return c.json({ error: "Failed to initialize quiz generation" }, 500);
