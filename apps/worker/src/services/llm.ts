@@ -217,7 +217,9 @@ Generate exactly ${count} questions now.`;
 
   const totalPromptChars = systemPrompt.length + promptChars;
   const generationCallId = crypto.randomUUID();
-  const maxTokens = Math.min(8000 + count * 400, 32000); // Increased token buffer
+  const maxTokensBase = Math.min(8000 + count * 400, 32000); // Increased token buffer
+  const maxTokensCap = generationModel.startsWith("gemini-2.0-flash") ? 8192 : 32000;
+  const maxTokens = Math.min(maxTokensBase, maxTokensCap);
 
   // Parse service account
   let serviceAccount: any;
