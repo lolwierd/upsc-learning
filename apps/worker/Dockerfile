@@ -7,6 +7,13 @@ FROM node:24-slim AS builder
 
 WORKDIR /app
 
+# Build tooling for native deps (better-sqlite3, sharp)
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install pnpm
 RUN npm install -g pnpm
 
