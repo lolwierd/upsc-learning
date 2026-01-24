@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
+    "prebuild": "pnpm --filter @mcqs/shared build",
     "build": "next build",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:preview": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
