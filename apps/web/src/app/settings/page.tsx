@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardTitle, CardDescription, Button, Input } from "@/components/ui";
-import { getSettings, updateSettings, resetApiKey } from "@/lib/api";
+import { Card, CardTitle, CardDescription, Button } from "@/components/ui";
+import { getSettings, updateSettings } from "@/lib/api";
 import {
   MODEL_PROVIDER_LABELS,
   MIN_QUESTION_COUNT,
@@ -12,16 +12,11 @@ import {
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [resetting, setResetting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   const [defaultModel, setDefaultModel] = useState<string>("gemini");
-  const [openaiKey, setOpenaiKey] = useState("");
-  const [geminiKey, setGeminiKey] = useState("");
   const [defaultQuestionCount, setDefaultQuestionCount] = useState(10);
-  const [hasOpenaiKey, setHasOpenaiKey] = useState(false);
-  const [hasGeminiKey, setHasGeminiKey] = useState(false);
   const [learnModeEnabled, setLearnModeEnabled] = useState(false);
 
   useEffect(() => {
@@ -30,8 +25,6 @@ export default function SettingsPage() {
         const settings = await getSettings();
         setDefaultModel(settings.defaultModel);
         setDefaultQuestionCount(settings.defaultQuestionCount);
-        setHasOpenaiKey(settings.hasOpenaiKey);
-        setHasGeminiKey(settings.hasGeminiKey);
         setLearnModeEnabled(settings.learnModeEnabled);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load settings");
@@ -50,42 +43,14 @@ export default function SettingsPage() {
     try {
       await updateSettings({
         defaultModel: defaultModel as "gemini" | "openai",
-        openaiApiKey: openaiKey || undefined,
-        geminiApiKey: geminiKey || undefined,
         defaultQuestionCount,
         learnModeEnabled,
       });
       setSuccess(true);
-      if (openaiKey) setHasOpenaiKey(true);
-      if (geminiKey) setHasGeminiKey(true);
-      setOpenaiKey("");
-      setGeminiKey("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save settings");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleResetKey = async (keyType: "openai" | "gemini") => {
-    setResetting(keyType);
-    setError(null);
-    setSuccess(false);
-
-    try {
-      await resetApiKey(keyType);
-      if (keyType === "openai") {
-        setHasOpenaiKey(false);
-        setOpenaiKey("");
-      } else {
-        setHasGeminiKey(false);
-        setGeminiKey("");
-      }
-      setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to reset key");
-    } finally {
-      setResetting(null);
     }
   };
 
@@ -104,7 +69,7 @@ export default function SettingsPage() {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <CardTitle className="mb-2">Settings</CardTitle>
       <CardDescription className="mb-6">
-        Choose your AI model and configure API keys
+        Choose your AI model
       </CardDescription>
 
       <div className="space-y-4">
@@ -141,40 +106,8 @@ export default function SettingsPage() {
                 </span>
               </div>
               <CardDescription className="mt-1">
-                Uses Gemini 3 Flash Preview - fast and capable. Server provides a default key.
+                Uses Gemini 3 Flash Preview - fast and capable.
               </CardDescription>
-
-              {/* Gemini API Key */}
-              <div className="mt-4" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-end gap-2">
-                  <div className="flex-1">
-                    <Input
-                      id="gemini-key"
-                      label="Your API Key (Optional)"
-                      type="password"
-                      placeholder={hasGeminiKey ? "••••••••••••••••" : "AI..."}
-                      value={geminiKey}
-                      onChange={(e) => setGeminiKey(e.target.value)}
-                      helperText={
-                        hasGeminiKey
-                          ? "Custom key saved. Reset to use server default."
-                          : "Leave empty to use server's default key"
-                      }
-                    />
-                  </div>
-                  {hasGeminiKey && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleResetKey("gemini")}
-                      loading={resetting === "gemini"}
-                      className="mb-5"
-                    >
-                      Reset
-                    </Button>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
         </Card>
@@ -207,40 +140,8 @@ export default function SettingsPage() {
                 {MODEL_PROVIDER_LABELS.openai}
               </CardTitle>
               <CardDescription className="mt-1">
-                Uses GPT-4 - requires your own API key from OpenAI.
+                Uses GPT-4 when enabled by the server.
               </CardDescription>
-
-              {/* OpenAI API Key */}
-              <div className="mt-4" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-end gap-2">
-                  <div className="flex-1">
-                    <Input
-                      id="openai-key"
-                      label="Your API Key"
-                      type="password"
-                      placeholder={hasOpenaiKey ? "••••••••••••••••" : "sk-..."}
-                      value={openaiKey}
-                      onChange={(e) => setOpenaiKey(e.target.value)}
-                      helperText={
-                        hasOpenaiKey
-                          ? "Key saved. Enter new key to replace."
-                          : "Required to use GPT-4"
-                      }
-                    />
-                  </div>
-                  {hasOpenaiKey && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleResetKey("openai")}
-                      loading={resetting === "openai"}
-                      className="mb-5"
-                    >
-                      Reset
-                    </Button>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
         </Card>
