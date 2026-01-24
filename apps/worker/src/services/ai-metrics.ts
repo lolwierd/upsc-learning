@@ -1,4 +1,4 @@
-import type { DatabaseLike } from "../types";
+import type { DatabaseLike } from "../types.js";
 
 export type AiProvider = "gemini" | "openai" | "vertex";
 export type AiMetricStatus = "success" | "error";

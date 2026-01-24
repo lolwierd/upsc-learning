@@ -1,4 +1,4 @@
-import type { Env } from "../types";
+import type { Env } from "../types.js";
 
 export type LlmDumpKind = "generation" | "fact_check";
 

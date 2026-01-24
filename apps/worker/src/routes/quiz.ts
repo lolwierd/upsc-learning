@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { nanoid } from "nanoid";
-import type { Env } from "../types";
+import type { Env } from "../types.js";
 import { generateQuizRequestSchema } from "@mcqs/shared";
-import { generateQuiz } from "../services/llm";
-import { insertAiGenerationMetric } from "../services/ai-metrics";
+import { generateQuiz } from "../services/llm.js";
+import { insertAiGenerationMetric } from "../services/ai-metrics.js";
 
 const quiz = new Hono<{ Bindings: Env }>();
 

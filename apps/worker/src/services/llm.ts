@@ -1,15 +1,15 @@
 import { createVertex } from "@ai-sdk/google-vertex";
 import { generateText } from "ai";
 import { VertexAI, type GenerateContentResult } from "@google-cloud/vertexai";
-import type { Env } from "../types";
+import type { Env } from "../types.js";
 import type { GeneratedQuestion, QuestionStyle, Difficulty } from "@mcqs/shared";
-import { getPrompt, type QuestionEra } from "../prompts";
-import { validateBatch, autoFixQuestion, factCheckBatch } from "./validator";
+import { getPrompt, type QuestionEra } from "../prompts/index.js";
+import { validateBatch, autoFixQuestion, factCheckBatch } from "./validator.js";
 import {
   generateFingerprint,
   FINGERPRINT_QUERIES,
-} from "./deduplication";
-import { dumpLlmCall, serializeError } from "./llm-dump";
+} from "./deduplication.js";
+import { dumpLlmCall, serializeError } from "./llm-dump.js";
 
 interface GenerateQuizParams {
   subject: string;

@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import type { Env } from "../types";
+import type { Env } from "../types.js";
 import {
   listAiGenerationMetricsByUser,
   type AiMetricStatus,
-} from "../services/ai-metrics";
+} from "../services/ai-metrics.js";
 
 const metrics = new Hono<{ Bindings: Env }>();
 

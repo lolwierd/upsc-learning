@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { quizRoutes } from "./routes/quiz";
-import { attemptRoutes } from "./routes/attempt";
-import { historyRoutes } from "./routes/history";
-import { settingsRoutes } from "./routes/settings";
-import { metricsRoutes } from "./routes/metrics";
-import type { Env } from "./types";
+import { quizRoutes } from "./routes/quiz.js";
+import { attemptRoutes } from "./routes/attempt.js";
+import { historyRoutes } from "./routes/history.js";
+import { settingsRoutes } from "./routes/settings.js";
+import { metricsRoutes } from "./routes/metrics.js";
+import type { Env } from "./types.js";
 
 const app = new Hono<{ Bindings: Env }>();
 

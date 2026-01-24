@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, QUESTION_ERAS, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants";
+import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, QUESTION_ERAS, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants.js";
 
 // ============================================
 // Base Schemas

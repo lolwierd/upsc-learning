@@ -1,8 +1,8 @@
 import type { GeneratedQuestion } from "@mcqs/shared";
 import { createVertex } from "@ai-sdk/google-vertex";
 import { generateText } from "ai";
-import type { Env } from "../types";
-import { dumpLlmCall, serializeError } from "./llm-dump";
+import type { Env } from "../types.js";
+import { dumpLlmCall, serializeError } from "./llm-dump.js";
 
 export interface ValidationResult {
   isValid: boolean;
