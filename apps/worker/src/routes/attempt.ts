@@ -62,11 +62,11 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
   const { quizId } = c.req.valid("json");
   const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
-  // Verify quiz exists and belongs to user
+  // Verify quiz exists
   const quiz = await c.env.DB.prepare(
-    `SELECT * FROM quizzes WHERE id = ? AND user_id = ?`
+    `SELECT * FROM quizzes WHERE id = ?`
   )
-    .bind(quizId, userId)
+    .bind(quizId)
     .first<QuizRow>();
 
   if (!quiz) {
@@ -75,9 +75,9 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
 
   // Check for existing in-progress attempt
   const existingAttempt = await c.env.DB.prepare(
-    `SELECT * FROM attempts WHERE quiz_id = ? AND user_id = ? AND status = 'in_progress'`
+    `SELECT * FROM attempts WHERE quiz_id = ? AND status = 'in_progress'`
   )
-    .bind(quizId, userId)
+    .bind(quizId)
     .first<AttemptRow>();
 
   if (existingAttempt) {
@@ -122,13 +122,12 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
 attempt.patch("/:id/answer", zValidator("json", saveAnswerSchema), async (c) => {
   const attemptId = c.req.param("id");
   const { questionId, selectedOption, markedForReview } = c.req.valid("json");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
   // Verify attempt exists and is in progress
   const attemptRecord = await c.env.DB.prepare(
-    `SELECT * FROM attempts WHERE id = ? AND user_id = ? AND status = 'in_progress'`
+    `SELECT * FROM attempts WHERE id = ? AND status = 'in_progress'`
   )
-    .bind(attemptId, userId)
+    .bind(attemptId)
     .first<AttemptRow>();
 
   if (!attemptRecord) {
@@ -158,13 +157,12 @@ attempt.patch("/:id/answer", zValidator("json", saveAnswerSchema), async (c) => 
 // Submit attempt and get results
 attempt.post("/:id/submit", async (c) => {
   const attemptId = c.req.param("id");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
   // Verify attempt exists and is in progress
   const attemptRecord = await c.env.DB.prepare(
-    `SELECT * FROM attempts WHERE id = ? AND user_id = ? AND status = 'in_progress'`
+    `SELECT * FROM attempts WHERE id = ? AND status = 'in_progress'`
   )
-    .bind(attemptId, userId)
+    .bind(attemptId)
     .first<AttemptRow>();
 
   if (!attemptRecord) {
@@ -234,15 +232,14 @@ function parseStyles(styleData: unknown): string[] {
 // Get attempt with results
 attempt.get("/:id", async (c) => {
   const attemptId = c.req.param("id");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
   const attemptRecord = await c.env.DB.prepare(
     `SELECT a.*, q.subject, q.theme, q.difficulty, q.style
      FROM attempts a
      JOIN quizzes q ON a.quiz_id = q.id
-     WHERE a.id = ? AND a.user_id = ?`
+     WHERE a.id = ?`
   )
-    .bind(attemptId, userId)
+    .bind(attemptId)
     .first<AttemptWithQuizRow>();
 
   if (!attemptRecord) {

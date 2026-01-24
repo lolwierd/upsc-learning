@@ -94,7 +94,6 @@ function parseStyles(styleData: unknown): string[] {
 // Get quiz history
 history.get("/", zValidator("query", historyQuerySchema), async (c) => {
   const { page, limit, subject } = c.req.valid("query");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const offset = (page - 1) * limit;
 
   let query = `
@@ -102,9 +101,9 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
            a.id as attempt_id, a.score, a.status as attempt_status, a.submitted_at
     FROM quizzes q
     LEFT JOIN attempts a ON q.id = a.quiz_id AND a.status = 'completed'
-    WHERE q.user_id = ?
+    WHERE 1 = 1
   `;
-  const params: (string | number)[] = [userId];
+  const params: (string | number)[] = [];
 
   if (subject) {
     query += ` AND q.subject = ?`;
@@ -117,8 +116,8 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
   const results = await c.env.DB.prepare(query).bind(...params).all<QuizHistoryRow>();
 
   // Get total count
-  let countQuery = `SELECT COUNT(*) as total FROM quizzes WHERE user_id = ?`;
-  const countParams: string[] = [userId];
+  let countQuery = `SELECT COUNT(*) as total FROM quizzes WHERE 1 = 1`;
+  const countParams: string[] = [];
   if (subject) {
     countQuery += ` AND subject = ?`;
     countParams.push(subject);
@@ -158,7 +157,6 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
 
 // Get wrong answers for review
 history.get("/review/wrong", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const subject = c.req.query("subject");
 
   let query = `
@@ -168,9 +166,9 @@ history.get("/review/wrong", async (c) => {
     JOIN questions q ON aa.question_id = q.id
     JOIN attempts a ON aa.attempt_id = a.id
     JOIN quizzes qz ON a.quiz_id = qz.id
-    WHERE a.user_id = ? AND aa.is_correct = 0 AND a.status = 'completed'
+    WHERE aa.is_correct = 0 AND a.status = 'completed'
   `;
-  const params: string[] = [userId];
+  const params: string[] = [];
 
   if (subject) {
     query += ` AND qz.subject = ?`;
@@ -197,8 +195,6 @@ history.get("/review/wrong", async (c) => {
 
 // Get stats
 history.get("/stats", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
-
   // Overall stats
   const overallStats = await c.env.DB.prepare(
     `SELECT
@@ -206,9 +202,8 @@ history.get("/stats", async (c) => {
        SUM(a.score) as total_correct,
        SUM(a.total_questions) as total_questions
      FROM attempts a
-     WHERE a.user_id = ? AND a.status = 'completed'`
+     WHERE a.status = 'completed'`
   )
-    .bind(userId)
     .first<OverallStatsRow>();
 
   // Stats by subject
@@ -220,11 +215,10 @@ history.get("/stats", async (c) => {
        SUM(a.total_questions) as total
      FROM attempts a
      JOIN quizzes q ON a.quiz_id = q.id
-     WHERE a.user_id = ? AND a.status = 'completed'
+     WHERE a.status = 'completed'
      GROUP BY q.subject
      ORDER BY attempts DESC`
   )
-    .bind(userId)
     .all<SubjectStatsRow>();
 
   const totalAttempts = overallStats?.total_attempts || 0;
@@ -250,7 +244,6 @@ history.get("/stats", async (c) => {
 
 // Get daily activity for contribution graph
 history.get("/activity", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const days = parseInt(c.req.query("days") || "365");
 
   // Get daily stats for the last N days
@@ -261,13 +254,12 @@ history.get("/activity", async (c) => {
        SUM(a.score) as correct,
        SUM(a.total_questions) as total
      FROM attempts a
-     WHERE a.user_id = ?
-       AND a.status = 'completed'
+     WHERE a.status = 'completed'
        AND a.submitted_at >= strftime('%s', 'now', '-' || ? || ' days')
      GROUP BY date(a.submitted_at, 'unixepoch')
      ORDER BY date ASC`
   )
-    .bind(userId, days)
+    .bind(days)
     .all<DailyStatsRow>();
 
   const activity = dailyStats.results.map((d) => ({
@@ -285,7 +277,6 @@ history.get("/activity", async (c) => {
 
 // Get stats timeline (quizzes grouped by date)
 history.get("/stats/timeline", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const limit = parseInt(c.req.query("limit") || "50");
 
   // Get completed attempts with quiz details, ordered by date
@@ -301,13 +292,13 @@ history.get("/stats/timeline", async (c) => {
        q.theme,
        q.difficulty,
        q.style
-     FROM attempts a
-     JOIN quizzes q ON a.quiz_id = q.id
-     WHERE a.user_id = ? AND a.status = 'completed'
-     ORDER BY a.submitted_at DESC
-     LIMIT ?`
+    FROM attempts a
+    JOIN quizzes q ON a.quiz_id = q.id
+    WHERE a.status = 'completed'
+    ORDER BY a.submitted_at DESC
+    LIMIT ?`
   )
-    .bind(userId, limit)
+    .bind(limit)
     .all<TimelineRow>();
 
   // Group by date

@@ -257,25 +257,23 @@ function parseStyles(styleData: unknown): string[] {
 // Get quiz by ID
 quiz.get("/:id", async (c) => {
   const quizId = c.req.param("id");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const withAnswers = c.req.query("withAnswers") === "true";
 
   // Check if user has learn mode enabled (only if withAnswers is requested)
   let learnModeEnabled = false;
   if (withAnswers) {
     const settingsResult = await c.env.DB.prepare(
-      `SELECT learn_mode_enabled FROM user_settings WHERE user_id = ?`
+      `SELECT learn_mode_enabled FROM user_settings ORDER BY updated_at DESC LIMIT 1`
     )
-      .bind(userId)
       .first<LearnModeRow>();
     learnModeEnabled = !!settingsResult?.learn_mode_enabled;
   }
 
   // Get quiz
   const quizResult = await c.env.DB.prepare(
-    `SELECT * FROM quizzes WHERE id = ? AND user_id = ?`
+    `SELECT * FROM quizzes WHERE id = ?`
   )
-    .bind(quizId, userId)
+    .bind(quizId)
     .first<QuizRow>();
 
   if (!quizResult) {

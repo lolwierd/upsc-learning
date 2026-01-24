@@ -24,12 +24,9 @@ const updateSettingsSchema = z.object({
 
 // Get user settings
 settings.get("/", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
-
   const result = await c.env.DB.prepare(
-    `SELECT * FROM user_settings WHERE user_id = ?`
+    `SELECT * FROM user_settings ORDER BY updated_at DESC LIMIT 1`
   )
-    .bind(userId)
     .first<UserSettingsRow>();
 
   if (!result) {
@@ -55,24 +52,21 @@ settings.get("/", async (c) => {
 // Update user settings
 settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
   const body = c.req.valid("json");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const now = Math.floor(Date.now() / 1000);
 
   // Check if settings exist
   const existing = await c.env.DB.prepare(
-    `SELECT * FROM user_settings WHERE user_id = ?`
-  )
-    .bind(userId)
-    .first();
+    `SELECT COUNT(*) as total FROM user_settings`
+  ).first<{ total: number }>();
 
-  if (!existing) {
+  if (!existing || existing.total === 0) {
     // Create new settings
     await c.env.DB.prepare(
       `INSERT INTO user_settings (user_id, default_model, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
-        userId,
+        "global",
         body.defaultModel || "gemini",
         body.openaiApiKey || null,
         body.geminiApiKey || null,
@@ -111,10 +105,9 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     if (updates.length > 0) {
       updates.push("updated_at = ?");
       params.push(now);
-      params.push(userId);
 
       await c.env.DB.prepare(
-        `UPDATE user_settings SET ${updates.join(", ")} WHERE user_id = ?`
+        `UPDATE user_settings SET ${updates.join(", ")}`
       )
         .bind(...params)
         .run();
@@ -127,7 +120,6 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
 // Reset API key (delete user's saved key, revert to default)
 settings.delete("/key/:type", async (c) => {
   const keyType = c.req.param("type");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const now = Math.floor(Date.now() / 1000);
 
   if (keyType !== "openai" && keyType !== "gemini") {
@@ -137,9 +129,9 @@ settings.delete("/key/:type", async (c) => {
   const column = keyType === "openai" ? "openai_api_key" : "gemini_api_key";
 
   await c.env.DB.prepare(
-    `UPDATE user_settings SET ${column} = NULL, updated_at = ? WHERE user_id = ?`
+    `UPDATE user_settings SET ${column} = NULL, updated_at = ?`
   )
-    .bind(now, userId)
+    .bind(now)
     .run();
 
   return c.json({ success: true });

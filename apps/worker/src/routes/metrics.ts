@@ -3,7 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import type { Env } from "../types.js";
 import {
-  listAiGenerationMetricsByUser,
+  listAiGenerationMetrics,
   type AiMetricStatus,
 } from "../services/ai-metrics.js";
 
@@ -17,11 +17,9 @@ const aiMetricsQuerySchema = z.object({
 
 metrics.get("/ai", zValidator("query", aiMetricsQuerySchema), async (c) => {
   const { limit, subject, status } = c.req.valid("query");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
   try {
-    const rows = await listAiGenerationMetricsByUser(c.env.DB, {
-      userId,
+    const rows = await listAiGenerationMetrics(c.env.DB, {
       limit,
       subject,
       status: status as AiMetricStatus | undefined,

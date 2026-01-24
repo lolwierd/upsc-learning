@@ -196,9 +196,9 @@ function safeJsonParse(input: unknown): unknown {
   }
 }
 
-export async function listAiGenerationMetricsByUser(
+export async function listAiGenerationMetrics(
   db: DatabaseLike | D1Database,
-  params: { userId: string; limit: number; subject?: string; status?: AiMetricStatus }
+  params: { limit: number; subject?: string; status?: AiMetricStatus }
 ): Promise<AiGenerationMetricRow[]> {
   const sqlParts: string[] = [
     `SELECT
@@ -240,9 +240,9 @@ export async function listAiGenerationMetricsByUser(
       grounding_source_count,
       created_at
     FROM ai_generation_metrics
-    WHERE user_id = ?`,
+    WHERE 1 = 1`,
   ];
-  const bindParams: (string | number)[] = [params.userId];
+  const bindParams: (string | number)[] = [];
 
   if (params.subject) {
     sqlParts.push(` AND subject = ?`);
