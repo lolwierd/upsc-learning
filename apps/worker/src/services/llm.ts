@@ -146,10 +146,8 @@ async function generateQuizBatch(
     currentAffairsTheme,
   } = params;
 
-  // Use Pro model for generation (higher quality), configurable via env
-  // When grounding is enabled, we need Gemini 2.0+ models
-  const baseModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
-  const generationModel = enableCurrentAffairs ? "gemini-2.0-flash" : baseModel;
+  // Use primary generation model for all cases (including grounding)
+  const generationModel = env.GENERATION_MODEL || "gemini-3-pro-preview";
 
   // Distribute questions across styles for this batch
   const questionsPerStyle = Math.floor(count / styles.length);
@@ -218,7 +216,14 @@ Generate exactly ${count} questions now.`;
   const totalPromptChars = systemPrompt.length + promptChars;
   const generationCallId = crypto.randomUUID();
   const maxTokensBase = Math.min(8000 + count * 400, 32000); // Increased token buffer
-  const maxTokensCap = generationModel.startsWith("gemini-2.0-flash") ? 8192 : 32000;
+  const modelMaxOutputTokens: Record<string, number> = {
+    "gemini-2.0-flash": 8192,
+    "gemini-2.0-flash-001": 8192,
+    "gemini-2.0-flash-exp": 8192,
+    "gemini-2.0-flash-lite": 8192,
+    "gemini-3-pro-preview": 65536,
+  };
+  const maxTokensCap = modelMaxOutputTokens[generationModel] ?? 32000;
   const maxTokens = Math.min(maxTokensBase, maxTokensCap);
 
   // Parse service account
