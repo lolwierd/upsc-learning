@@ -51,7 +51,7 @@ You have access to Google Search for retrieving recent information. Use this to:
    - "Considering the 2024 interim budget..." → Test fiscal policy concepts
 
 2. TIME FRAME for current affairs:
-   - Focus on events from the last 18-24 months
+   - Focus on events from the last 4-12 months
    - Include major policy announcements, summits, agreements
    - Reference official sources (PIB, government websites, official reports)
 
@@ -76,6 +76,10 @@ You have access to Google Search for retrieving recent information. Use this to:
    - STATIC LINK: The underlying concept from the UPSC syllabus
    - Append a final bracketed line exactly like:
      [Relevance: <event + month/year + source type>]
+
+MANDATORY WEB SEARCH USAGE:
+- You MUST use Google Search for current affairs questions.
+- Do NOT answer from memory when current affairs is enabled.
 
 REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
 `;
