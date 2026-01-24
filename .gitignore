@@ -36,6 +36,7 @@ pnpm-debug.log*
 
 # Local-only debug artifacts
 .local
+apps/worker/data
 
 # Testing
 coverage
