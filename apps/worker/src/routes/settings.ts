@@ -27,6 +27,7 @@ settings.get("/", async (c) => {
   const result = await c.env.DB.prepare(
     `SELECT * FROM user_settings ORDER BY updated_at DESC LIMIT 1`
   )
+    .bind()
     .first<UserSettingsRow>();
 
   if (!result) {
@@ -57,7 +58,9 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
   // Check if settings exist
   const existing = await c.env.DB.prepare(
     `SELECT COUNT(*) as total FROM user_settings`
-  ).first<{ total: number }>();
+  )
+    .bind()
+    .first<{ total: number }>();
 
   if (!existing || existing.total === 0) {
     // Create new settings

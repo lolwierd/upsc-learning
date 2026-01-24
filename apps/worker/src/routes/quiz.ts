@@ -265,6 +265,7 @@ quiz.get("/:id", async (c) => {
     const settingsResult = await c.env.DB.prepare(
       `SELECT learn_mode_enabled FROM user_settings ORDER BY updated_at DESC LIMIT 1`
     )
+      .bind()
       .first<LearnModeRow>();
     learnModeEnabled = !!settingsResult?.learn_mode_enabled;
   }

@@ -204,6 +204,7 @@ history.get("/stats", async (c) => {
      FROM attempts a
      WHERE a.status = 'completed'`
   )
+    .bind()
     .first<OverallStatsRow>();
 
   // Stats by subject
@@ -219,6 +220,7 @@ history.get("/stats", async (c) => {
      GROUP BY q.subject
      ORDER BY attempts DESC`
   )
+    .bind()
     .all<SubjectStatsRow>();
 
   const totalAttempts = overallStats?.total_attempts || 0;
@@ -232,7 +234,7 @@ history.get("/stats", async (c) => {
       totalCorrect,
       accuracy: totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0,
     },
-    bySubject: subjectStats.results.map((s) => ({
+    bySubject: subjectStats.results.map((s: SubjectStatsRow) => ({
       subject: s.subject,
       attempts: s.attempts,
       correct: s.correct,
