@@ -50,7 +50,7 @@ services:
   # LLM Dump Server (Optional)
   # ====================================
   llm-dump:
-    image: node:22-slim
+    image: node:24-slim
     container_name: upsc-llm-dump
     restart: unless-stopped
     command: node /app/server.mjs
