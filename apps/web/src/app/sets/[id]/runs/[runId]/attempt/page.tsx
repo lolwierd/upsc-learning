@@ -39,6 +39,7 @@ export default function QuizSetRunAttemptPage() {
   const [attempts, setAttempts] = useState<QuizAttemptSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -105,12 +106,30 @@ export default function QuizSetRunAttemptPage() {
     return quizIds[0];
   }, [attemptMap, quizIds]);
 
+  useEffect(() => {
+    if (loading || redirecting) return;
+    if (!run || !isReady || quizIds.length === 0 || !nextQuizId) return;
+    setRedirecting(true);
+    router.replace(`/quiz/${nextQuizId}?setId=${setId}&runId=${runId}`);
+  }, [loading, redirecting, run, isReady, quizIds.length, nextQuizId, router, runId, setId]);
+
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card className="text-center py-12">
           <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-gray-600">Loading quiz set run...</p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (redirecting) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <Card className="text-center py-12">
+          <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-gray-600">Starting your next quiz...</p>
         </Card>
       </div>
     );

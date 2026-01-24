@@ -6,8 +6,9 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { getQuiz, getSettings, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
+import { getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
 import { SUBJECT_LABELS, DIFFICULTY_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
+import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
 
 interface LearnModeQuestion {
   id: string;
@@ -59,6 +60,8 @@ export default function QuizPage() {
   const [showAnswers, setShowAnswers] = useState(true); // Temp toggle for learn mode
   const [copiedQuestionId, setCopiedQuestionId] = useState<string | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
+  const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
 
   const formatCopyText = (question: LearnModeQuestion, index: number) => {
     const optionLines = question.options.map((option, optIndex) => {
@@ -140,6 +143,38 @@ export default function QuizPage() {
     return () => clearTimeout(pollingTimer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizId]);
+
+  useEffect(() => {
+    if (!setId || !runId) {
+      setRun(null);
+      setQuizSet(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadRun() {
+      const [runResult, setResult] = await Promise.allSettled([
+        getQuizSetRun(setId, runId),
+        getQuizSet(setId),
+      ]);
+
+      if (cancelled) return;
+
+      if (runResult.status === "fulfilled") {
+        setRun(runResult.value);
+      }
+      if (setResult.status === "fulfilled") {
+        setQuizSet(setResult.value);
+      }
+    }
+
+    loadRun();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [runId, setId]);
 
   // Handle answer selection
   const handleAnswer = useCallback(
@@ -315,6 +350,22 @@ export default function QuizPage() {
   ).length;
   const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  const orderedRunItems = (() => {
+    if (!run) return [];
+    if (!quizSet?.items?.length) return run.runItems;
+    const order = new Map(quizSet.items.map((item, index) => [item.id, index]));
+    return [...run.runItems].sort((a, b) => {
+      const aIndex = order.get(a.quizSetItemId) ?? 0;
+      const bIndex = order.get(b.quizSetItemId) ?? 0;
+      return aIndex - bIndex;
+    });
+  })();
+  const orderedQuizIds = orderedRunItems
+    .map((item) => item.quizId)
+    .filter(Boolean) as string[];
+  const currentQuizIndex = orderedQuizIds.findIndex((id) => id === quizId);
+  const nextQuizId =
+    currentQuizIndex >= 0 ? orderedQuizIds[currentQuizIndex + 1] : null;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
@@ -645,9 +696,27 @@ export default function QuizPage() {
               {answeredCount}/{quiz.questionCount} questions {quiz.learnMode ? "studied" : "answered"}
             </p>
             {quiz.learnMode ? (
-              <Button onClick={() => router.push("/")} size="lg">
-                Start New Quiz
-              </Button>
+              setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 ? (
+                nextQuizId ? (
+                  <Button
+                    onClick={() => router.push(`/quiz/${nextQuizId}?setId=${setId}&runId=${runId}`)}
+                    size="lg"
+                  >
+                    Next Quiz
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => router.push(`/sets/${setId}/runs/${runId}/summary`)}
+                    size="lg"
+                  >
+                    View Set Summary
+                  </Button>
+                )
+              ) : (
+                <Button onClick={() => router.push("/")} size="lg">
+                  Start New Quiz
+                </Button>
+              )
             ) : (
               <Button onClick={handleSubmit} loading={submitting} size="lg">
                 Submit Quiz
