@@ -34,7 +34,7 @@ COPY tsconfig.json ./
 
 # Build shared package first
 WORKDIR /app/packages/shared
-RUN pnpm build || true
+RUN pnpm build
 
 # Build worker
 WORKDIR /app/apps/worker
