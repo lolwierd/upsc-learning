@@ -269,6 +269,7 @@ export class QuizSetScheduler {
    * Reload a specific schedule from database
    */
   async reloadSchedule(scheduleId: string): Promise<void> {
+    if (!this.isRunning) return;
     const schedule = await this.env.DB.prepare(
       `SELECT * FROM quiz_set_schedules WHERE id = ?`
     )
@@ -292,6 +293,7 @@ export class QuizSetScheduler {
    * Reload all schedules for a quiz set
    */
   async reloadQuizSetSchedule(quizSetId: string): Promise<void> {
+    if (!this.isRunning) return;
     const schedule = await this.env.DB.prepare(
       `SELECT * FROM quiz_set_schedules WHERE quiz_set_id = ?`
     )

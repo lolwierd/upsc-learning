@@ -20,6 +20,7 @@ import type {
   QuizSetWithSchedule,
 } from "@mcqs/shared";
 import { triggerQuizSetGeneration } from "../services/quiz-set-generator.js";
+import { getScheduler } from "../services/scheduler.js";
 
 const quizSets = new Hono<{ Bindings: Env }>();
 
@@ -881,6 +882,15 @@ quizSets.put(
       .bind(setId)
       .first<QuizSetScheduleRow>();
 
+    try {
+      await getScheduler(c.env).reloadQuizSetSchedule(setId);
+    } catch (error) {
+      console.warn(
+        "Failed to reload quiz set schedule after update:",
+        error instanceof Error ? error.message : error
+      );
+    }
+
     return c.json({ schedule: mapScheduleRowToResponse(scheduleRow!) });
   }
 );
@@ -906,6 +916,15 @@ quizSets.delete("/:id/schedule", async (c) => {
   )
     .bind(setId)
     .run();
+
+  try {
+    await getScheduler(c.env).reloadQuizSetSchedule(setId);
+  } catch (error) {
+    console.warn(
+      "Failed to reload quiz set schedule after delete:",
+      error instanceof Error ? error.message : error
+    );
+  }
 
   return c.json({ success: true });
 });
@@ -946,6 +965,15 @@ quizSets.post(
     )
       .bind(setId)
       .first<QuizSetScheduleRow>();
+
+    try {
+      await getScheduler(c.env).reloadQuizSetSchedule(setId);
+    } catch (error) {
+      console.warn(
+        "Failed to reload quiz set schedule after toggle:",
+        error instanceof Error ? error.message : error
+      );
+    }
 
     return c.json({ schedule: mapScheduleRowToResponse(scheduleRow!) });
   }
