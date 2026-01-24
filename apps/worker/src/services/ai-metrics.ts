@@ -44,6 +44,9 @@ export interface AiGenerationMetricInsert {
   usagePromptTokens?: number | null;
   usageCompletionTokens?: number | null;
   usageTotalTokens?: number | null;
+
+  groundingEnabled?: boolean;
+  groundingSourceCount?: number | null;
 }
 
 function clampErrorMessage(errorMessage: string, maxLen = 400): string {
@@ -67,6 +70,7 @@ export async function insertAiGenerationMetric(
       total_duration_ms, generation_duration_ms,
       fact_check_enabled, fact_check_duration_ms, fact_check_checked_count, fact_check_issue_count,
       usage_prompt_tokens, usage_completion_tokens, usage_total_tokens,
+      grounding_enabled, grounding_source_count,
       created_at
     ) VALUES (
       ?, ?, ?,
@@ -79,6 +83,7 @@ export async function insertAiGenerationMetric(
       ?, ?,
       ?, ?, ?, ?,
       ?, ?, ?,
+      ?, ?,
       unixepoch()
     )
   `;
@@ -132,7 +137,10 @@ export async function insertAiGenerationMetric(
 
       metric.usagePromptTokens ?? null,
       metric.usageCompletionTokens ?? null,
-      metric.usageTotalTokens ?? null
+      metric.usageTotalTokens ?? null,
+
+      metric.groundingEnabled ? 1 : 0,
+      metric.groundingSourceCount ?? null
     )
     .run();
 }
@@ -172,6 +180,8 @@ export interface AiGenerationMetricRow {
   usagePromptTokens: number | null;
   usageCompletionTokens: number | null;
   usageTotalTokens: number | null;
+  groundingEnabled: boolean;
+  groundingSourceCount: number | null;
   createdAt: number;
 }
 
@@ -224,6 +234,8 @@ export async function listAiGenerationMetricsByUser(
       usage_prompt_tokens,
       usage_completion_tokens,
       usage_total_tokens,
+      grounding_enabled,
+      grounding_source_count,
       created_at
     FROM ai_generation_metrics
     WHERE user_id = ?`,
@@ -318,6 +330,11 @@ export async function listAiGenerationMetricsByUser(
       r.usage_total_tokens === null || r.usage_total_tokens === undefined
         ? null
         : Number(r.usage_total_tokens),
+    groundingEnabled: Number(r.grounding_enabled) === 1,
+    groundingSourceCount:
+      r.grounding_source_count === null || r.grounding_source_count === undefined
+        ? null
+        : Number(r.grounding_source_count),
     createdAt: Number(r.created_at),
   }));
 }

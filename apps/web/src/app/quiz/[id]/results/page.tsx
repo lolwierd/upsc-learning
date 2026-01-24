@@ -2,7 +2,7 @@
 
 export const runtime = "edge";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, Button } from "@/components/ui";
@@ -24,6 +24,41 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterType>("all");
+  const [copiedQuestionId, setCopiedQuestionId] = useState<string | null>(null);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const formatCopyText = (
+    questionText: string,
+    options: string[],
+    sequenceNumber: number
+  ) => {
+    const optionLines = options.map((option, optIndex) => {
+      const label = String.fromCharCode(65 + optIndex);
+      const cleaned = option.replace(/^[A-D]\)\s*/i, "");
+      return `${label}) ${cleaned}`;
+    });
+    return `${sequenceNumber}. ${questionText}\n${optionLines.join("\n")}`;
+  };
+
+  const handleCopyQuestion = async (
+    questionId: string,
+    questionText: string,
+    options: string[],
+    sequenceNumber: number
+  ) => {
+    try {
+      await navigator.clipboard.writeText(
+        formatCopyText(questionText, options, sequenceNumber)
+      );
+      setCopiedQuestionId(questionId);
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+      copyTimeoutRef.current = setTimeout(() => setCopiedQuestionId(null), 1500);
+    } catch (err) {
+      console.error("Failed to copy question:", err);
+    }
+  };
 
   useEffect(() => {
     async function load() {
@@ -48,6 +83,14 @@ export default function ResultsPage() {
     }
     load();
   }, [attemptId, quizId, router]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -214,6 +257,25 @@ export default function ResultsPage() {
                     </span>
                   )}
                 </div>
+                <button
+                  onClick={() =>
+                    handleCopyQuestion(
+                      answer.questionId,
+                      answer.questionText,
+                      answer.options,
+                      answer.sequenceNumber
+                    )
+                  }
+                  className={cn(
+                    "flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                    copiedQuestionId === answer.questionId
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  )}
+                  title="Copy question and options"
+                >
+                  {copiedQuestionId === answer.questionId ? "Copied" : "Copy"}
+                </button>
               </div>
 
               <div className="space-y-2 ml-11">
@@ -265,7 +327,9 @@ export default function ResultsPage() {
                   <p className="text-sm font-medium text-blue-800 mb-1">
                     Explanation
                   </p>
-                  <p className="text-sm text-blue-700">{answer.explanation}</p>
+                    <p className="text-sm text-blue-700 whitespace-pre-wrap">
+                      {answer.explanation}
+                    </p>
                 </div>
               )}
             </Card>

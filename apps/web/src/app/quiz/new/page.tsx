@@ -66,7 +66,7 @@ export default function NewQuizPage() {
   const [era, setEra] = useState<string>(QUESTION_ERAS[0]); // "current" by default
   const [questionCount, setQuestionCount] = useState<number>(40);
   // Current affairs integration
-  const [enableCurrentAffairs, setEnableCurrentAffairs] = useState<boolean>(false);
+  const [enableCurrentAffairs, setEnableCurrentAffairs] = useState<boolean>(true);
   const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>("");
 
   // Load default question count from settings
@@ -207,7 +207,7 @@ export default function NewQuizPage() {
             placeholder="e.g., Mughal Empire, Climate Change, Constitutional Amendments"
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
-            helperText="Specify a topic to focus the questions"
+            helperText="Preferred focus only; questions also cover adjacent subtopics"
           />
 
           {/* Difficulty */}
@@ -252,18 +252,18 @@ export default function NewQuizPage() {
                   className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                 />
                 <span className="ml-2 text-sm font-medium text-gray-700">
-                  Include Current Affairs
+                  Include Current Affairs (Web Search)
                 </span>
               </label>
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                Beta
+                Uses web search
               </span>
             </div>
             {enableCurrentAffairs && (
               <>
                 <p className="text-xs text-gray-500 ml-6">
-                  Uses Google Search to integrate recent events as question triggers.
-                  Questions will test static concepts through the lens of current affairs.
+                  Uses web search to integrate recent events as question triggers. Questions
+                  will test static concepts through the lens of current affairs.
                 </p>
                 <Input
                   id="currentAffairsTheme"

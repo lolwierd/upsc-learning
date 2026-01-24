@@ -54,6 +54,8 @@ quiz.post(
       // 2. Generate Blocking (Synchronously) as requested
       // We explicitly DISABLE fact checking to ensure we stay within the request timeout limits
       try {
+        const currentAffairsTheme =
+          body.currentAffairsTheme || body.theme || undefined;
         const { questions, metrics } = await generateQuiz(c.env, {
           subject: body.subject,
           theme: body.theme,
@@ -64,7 +66,7 @@ quiz.post(
           era: body.era,
           enableFactCheck: c.env.ENABLE_FACT_CHECK === "1",
           enableCurrentAffairs: body.enableCurrentAffairs,
-          currentAffairsTheme: body.currentAffairsTheme,
+          currentAffairsTheme,
         });
 
         // Insert questions
@@ -133,6 +135,8 @@ quiz.post(
             usagePromptTokens: metrics.usagePromptTokens,
             usageCompletionTokens: metrics.usageCompletionTokens,
             usageTotalTokens: metrics.usageTotalTokens,
+            groundingEnabled: metrics.groundingEnabled,
+            groundingSourceCount: metrics.groundingSourceCount,
           });
         } catch (metricsError) {
           console.warn("Failed to store AI metrics:", metricsError);

@@ -2,7 +2,7 @@
 
 export const runtime = "edge";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -54,6 +54,30 @@ export default function QuizPage() {
   const [startTime] = useState(Date.now());
   const [revealedQuestions, setRevealedQuestions] = useState<Set<string>>(new Set());
   const [showAnswers, setShowAnswers] = useState(true); // Temp toggle for learn mode
+  const [copiedQuestionId, setCopiedQuestionId] = useState<string | null>(null);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const formatCopyText = (question: LearnModeQuestion, index: number) => {
+    const optionLines = question.options.map((option, optIndex) => {
+      const label = String.fromCharCode(65 + optIndex);
+      const cleaned = option.replace(/^[A-D]\)\s*/i, "");
+      return `${label}) ${cleaned}`;
+    });
+    return `${index + 1}. ${question.questionText}\n${optionLines.join("\n")}`;
+  };
+
+  const handleCopyQuestion = async (question: LearnModeQuestion, index: number) => {
+    try {
+      await navigator.clipboard.writeText(formatCopyText(question, index));
+      setCopiedQuestionId(question.id);
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+      copyTimeoutRef.current = setTimeout(() => setCopiedQuestionId(null), 1500);
+    } catch (err) {
+      console.error("Failed to copy question:", err);
+    }
+  };
 
   // Load quiz and start attempt
   useEffect(() => {
@@ -245,6 +269,14 @@ export default function QuizPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [quiz, currentQuestion, handleAnswer, handleMarkForReview]);
 
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
+
   if (loading || (quiz && quiz.status === "generating")) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -423,32 +455,46 @@ export default function QuizPage() {
                       {question.questionText}
                     </p>
                   </div>
-                  {!quiz.learnMode && (
+                  <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleMarkForReview(question.id)}
+                      onClick={() => handleCopyQuestion(question, i)}
                       className={cn(
-                        "flex-shrink-0 p-2 rounded-lg transition-colors",
-                        isMarked
-                          ? "bg-amber-100 text-amber-700"
-                          : "text-gray-400 hover:bg-gray-100"
+                        "flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                        copiedQuestionId === question.id
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       )}
-                      title={isMarked ? "Unmark" : "Mark for Review"}
+                      title="Copy question and options"
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill={isMarked ? "currentColor" : "none"}
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                        />
-                      </svg>
+                      {copiedQuestionId === question.id ? "Copied" : "Copy"}
                     </button>
-                  )}
+                    {!quiz.learnMode && (
+                      <button
+                        onClick={() => handleMarkForReview(question.id)}
+                        className={cn(
+                          "flex-shrink-0 p-2 rounded-lg transition-colors",
+                          isMarked
+                            ? "bg-amber-100 text-amber-700"
+                            : "text-gray-400 hover:bg-gray-100"
+                        )}
+                        title={isMarked ? "Unmark" : "Mark for Review"}
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill={isMarked ? "currentColor" : "none"}
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2 ml-11">

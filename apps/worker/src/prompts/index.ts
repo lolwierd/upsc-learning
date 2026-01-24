@@ -59,6 +59,7 @@ You have access to Google Search for retrieving recent information. Use this to:
    - Current event as TRIGGER, static syllabus as ANSWER
    - Don't test obscure news details - test concepts triggered by news
    - After each question, add "Relevance" note in explanation linking to recent event
+   - Ensure at least 60% of questions are anchored to a verifiable recent event
 
 4. HIGH-VALUE CURRENT AFFAIRS TOPICS:
    - International summits and India's role (G20, BRICS, SCO, etc.)
@@ -73,6 +74,8 @@ You have access to Google Search for retrieving recent information. Use this to:
    For each question, in the explanation add:
    - RELEVANCE: How this relates to recent events/developments
    - STATIC LINK: The underlying concept from the UPSC syllabus
+   - Append a final bracketed line exactly like:
+     [Relevance: <event + month/year + source type>]
 
 REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
 `;
@@ -1605,7 +1608,7 @@ export function getPrompt(params: PromptParams): string {
   } = params;
 
   const themeContext = theme
-    ? `SPECIFIC FOCUS: "${theme}" - Generate questions specifically on this topic/theme within ${subject}.`
+    ? `SPECIFIC FOCUS: "${theme}" - Prefer this theme but include ~25% adjacent subtopics for breadth within ${subject}.`
     : `COVERAGE: Generate questions covering diverse important topics within ${subject}.`;
 
   const subjectContext = getSubjectContext(subject);
@@ -1686,6 +1689,7 @@ CRITICAL QUALITY REQUIREMENTS (NON-NEGOTIABLE):
 1. FACTUAL ACCURACY (MOST IMPORTANT):
    - Every fact, date, number, name MUST be 100% accurate
    - Cross-reference with NCERT textbooks and standard references
+   - Align with PYQ patterns and factual anchors reflected in the repo trends
    - If uncertain about a fact, DO NOT include it
    - Constitutional articles, amendment numbers must be exact
    - Years of events, treaties, acts must be verified

@@ -285,7 +285,7 @@ export default function MetricsPage() {
                     {statusBadge(m.status)}
                   </div>
 
-                  <div className="mt-2 grid grid-cols-2 md:grid-cols-6 gap-2 text-sm">
+                  <div className="mt-2 grid grid-cols-2 md:grid-cols-7 gap-2 text-sm">
                     <div className="text-gray-600">
                       <span className="text-gray-400">Count:</span>{" "}
                       <span className="font-medium tabular-nums">
@@ -320,6 +320,14 @@ export default function MetricsPage() {
                       <span className="text-gray-400">Total:</span>{" "}
                       <span className="font-medium tabular-nums">
                         {formatMs(m.totalDurationMs)}
+                      </span>
+                    </div>
+                    <div className="text-gray-600">
+                      <span className="text-gray-400">Web:</span>{" "}
+                      <span className="font-medium tabular-nums">
+                        {m.groundingEnabled
+                          ? `${m.groundingSourceCount ?? "—"} src`
+                          : "off"}
                       </span>
                     </div>
                   </div>
@@ -365,6 +373,14 @@ export default function MetricsPage() {
                           <span className="text-gray-400">Fact-check:</span>{" "}
                           <span className="font-medium">
                             {m.factCheckEnabled ? "enabled" : "disabled"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Web search:</span>{" "}
+                          <span className="font-medium">
+                            {m.groundingEnabled
+                              ? `enabled (${m.groundingSourceCount ?? "—"} sources)`
+                              : "disabled"}
                           </span>
                         </div>
                         <div>
