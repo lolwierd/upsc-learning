@@ -6,7 +6,6 @@ import { Card } from "@/components/ui";
 import { getHistory, getQuizSets } from "@/lib/api";
 import type { QuizHistoryItem, QuizSetListItem } from "@mcqs/shared";
 import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
-import { cn } from "@/lib/utils";
 
 export default function Home() {
   const [recentQuizzes, setRecentQuizzes] = useState<QuizHistoryItem[]>([]);

@@ -62,7 +62,7 @@ export default function NewQuizSetPage() {
       const result = await createQuizSet({
         name: name.trim(),
         description: description.trim() || undefined,
-        items: items.map(({ tempId, ...config }) => config),
+        items: items.map(({ tempId: _tempId, ...config }) => config),
       });
       router.push(`/sets/${result.id}`);
     } catch (err) {

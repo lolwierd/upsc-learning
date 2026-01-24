@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Card, CardTitle, CardDescription, Input, Button } from "@/components/ui";
+import { Card, CardTitle, Input, Button } from "@/components/ui";
 import { QuizItemForm } from "@/components/quiz-sets/QuizItemForm";
 import { ScheduleBuilder } from "@/components/quiz-sets/ScheduleBuilder";
 import { ItemReorderList } from "@/components/quiz-sets/ItemReorderList";
@@ -26,16 +26,10 @@ import type {
   QuizSetRun,
   QuizSetItemConfig,
 } from "@mcqs/shared";
-import {
-  SUBJECT_LABELS,
-  DIFFICULTY_LABELS,
-  QUESTION_STYLE_LABELS,
-} from "@mcqs/shared";
 import { cn } from "@/lib/utils";
 
 export default function QuizSetDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const setId = params.id as string;
 
   const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
@@ -56,12 +50,7 @@ export default function QuizSetDetailPage() {
   const [savingName, setSavingName] = useState(false);
   const [savingItem, setSavingItem] = useState(false);
 
-  useEffect(() => {
-    loadQuizSet();
-    loadRuns();
-  }, [setId]);
-
-  async function loadQuizSet() {
+  const loadQuizSet = useCallback(async () => {
     try {
       const data = await getQuizSet(setId);
       setQuizSet(data);
@@ -72,16 +61,21 @@ export default function QuizSetDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [setId]);
 
-  async function loadRuns() {
+  const loadRuns = useCallback(async () => {
     try {
       const data = await getQuizSetRuns(setId);
       setRuns(data.runs);
     } catch (err) {
       console.error("Failed to load runs:", err);
     }
-  }
+  }, [setId]);
+
+  useEffect(() => {
+    void loadQuizSet();
+    void loadRuns();
+  }, [loadQuizSet, loadRuns]);
 
   const handleSaveName = async () => {
     if (!editName.trim()) return;
