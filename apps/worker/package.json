@@ -8,7 +8,7 @@
     "dev:node": "ENVIRONMENT=development tsx watch src/server.ts",
     "build": "tsc -p tsconfig.node.json",
     "start": "node dist/server.js",
-    "deploy": "wrangler deploy",
+    "deploy": "echo \"Deploy disabled (moved to server backend).\" && exit 1",
     "type-check": "tsc --noEmit",
     "lint": "eslint src"
   },
