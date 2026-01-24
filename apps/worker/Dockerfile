@@ -74,7 +74,7 @@ RUN pnpm rebuild better-sqlite3
 # Copy built files
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/apps/worker/dist ./dist
-COPY packages/db/migrations ./packages/db/migrations
+COPY --from=builder /app/packages/db/migrations ./packages/db/migrations
 # Ensure workspace package in node_modules can resolve dist at runtime
 COPY --from=builder /app/packages/shared/dist /app/apps/worker/node_modules/@mcqs/shared/dist
 COPY --from=builder /app/packages/shared/dist /app/node_modules/@mcqs/shared/dist
@@ -87,6 +87,7 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS=--experimental-specifier-resolution=node
 ENV PORT=3001
 ENV DATABASE_PATH=/app/data/upsc-mcq.db
+ENV MIGRATIONS_DIR=/app/packages/db/migrations
 
 EXPOSE 3001
 

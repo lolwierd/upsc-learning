@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server';
 import { config as dotenvConfig } from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -45,8 +46,20 @@ async function main() {
     }
 
     // Initialize database with migrations
-    // Path from src/ -> ../../packages/db/migrations (up to apps/worker, then packages)
-    const migrationsDir = path.resolve(__dirname, '../../../packages/db/migrations');
+    // Prefer explicit MIGRATIONS_DIR, otherwise resolve from common layouts.
+    const migrationCandidates = [
+        process.env.MIGRATIONS_DIR,
+        path.resolve(__dirname, '../../../packages/db/migrations'),
+        path.resolve(process.cwd(), 'packages/db/migrations'),
+    ].filter((candidate): candidate is string => Boolean(candidate));
+    const migrationsDir = migrationCandidates.find((candidate) => fs.existsSync(candidate));
+    if (!migrationsDir) {
+        console.error('❌ Migrations directory not found. Checked:');
+        for (const candidate of migrationCandidates) {
+            console.error(`  - ${candidate}`);
+        }
+        process.exit(1);
+    }
     try {
         env.DB = await initDatabase(migrationsDir);
     } catch (error) {
