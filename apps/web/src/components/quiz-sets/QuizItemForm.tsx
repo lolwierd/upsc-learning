@@ -63,8 +63,8 @@ export function QuizItemForm({
   );
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
     setError(null);
 
     if (styles.length === 0) {
@@ -113,7 +113,7 @@ export function QuizItemForm({
   }));
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="space-y-5">
       {/* Subject */}
       <Select
         id="subject"
@@ -231,10 +231,10 @@ export function QuizItemForm({
         <Button type="button" variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" className="flex-1">
+        <Button type="button" className="flex-1" onClick={handleSubmit}>
           {submitLabel}
         </Button>
       </div>
-    </form>
+    </div>
   );
 }
