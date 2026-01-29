@@ -1531,24 +1531,15 @@ Before finalizing EACH question, verify:
 □ For assertion - reason: Is the relationship between A and R correctly identified ?
 □ Are there NO absolute words(only, always, never, all, none) making distractors obvious ?
 
-OUTPUT FORMAT(STRICT JSON):
+OUTPUT REQUIREMENTS:
 
-Return a JSON array with exactly ${totalCount} question objects.
-
-Each object MUST have these exact fields:
-{
-  "questionText": "The complete question text with all statements/assertions formatted properly",
-    "questionType": "standard" | "statement" | "match" | "assertion",
-      "options": ["A) Option text", "B) Option text", "C) Option text", "D) Option text"],
-        "correctOption": 0 | 1 | 2 | 3,  // Index of correct answer (0=A, 1=B, 2=C, 3=D)
-          "explanation": "Detailed explanation with: 1) Why correct answer is correct, 2) Why each distractor is wrong, 3) Source reference (NCERT/Laxmikanth/etc.). If current affairs is enabled, append 'Sources: <URL>' with at least one full http(s) URL."
-}
-
-IMPORTANT:
-- Options array must have EXACTLY 4 options
-  - Each option must start with "A) ", "B) ", "C) ", "D) " prefix
-    - correctOption is 0 - indexed(0 = A, 1 = B, 2 = C, 3 = D)
-      - Explanation should be educational and cite sources where applicable
+- Generate exactly ${totalCount} questions.
+- Each question must include: questionText, questionType, options, correctOption, explanation.
+- questionType must be one of: standard, statement, match, assertion.
+- options must have exactly four items labeled "A) ", "B) ", "C) ", "D) ".
+- correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
+- Explanation must be educational and cite sources where applicable.
+- If current affairs is enabled, append "Sources: <URL>" with at least one full http(s) URL.
 
 
 NOW GENERATE ${totalCount} HIGH - QUALITY UPSC MCQ QUESTIONS: `;

@@ -25,6 +25,7 @@ export interface LlmDumpPayload {
       totalTokens?: number;
     };
     error?: Record<string, unknown>;
+    raw?: unknown;
     metadata?: Record<string, unknown>;
   };
 }

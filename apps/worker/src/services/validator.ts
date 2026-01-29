@@ -1,8 +1,12 @@
 import type { GeneratedQuestion } from "@mcqs/shared";
-import { createVertex } from "@ai-sdk/google-vertex";
-import { generateText } from "ai";
 import type { Env } from "../types.js";
 import { dumpLlmCall, serializeError } from "./llm-dump.js";
+import {
+  FACT_CHECK_ARRAY_SCHEMA,
+  FACT_CHECK_SCHEMA,
+  GENERATED_QUESTION_SCHEMA,
+} from "./structured-output.js";
+import { generateVertexStructuredContent } from "./vertex-structured.js";
 
 export interface ValidationResult {
   isValid: boolean;
@@ -433,14 +437,8 @@ VERIFY THE FOLLOWING:
 3. All other options are DEFINITELY incorrect
 4. No ambiguity exists - only ONE answer is correct
 
-Respond with ONLY valid JSON in this format:
-{
-  "isAccurate": true/false,
-  "confidence": "high" | "medium" | "low",
-  "issues": ["list of factual errors found, if any"],
-  "suggestions": ["fixes for the errors, if any"],
-  "correctedAnswer": null or 0-3 if the marked answer is wrong
-}
+Return a structured response matching the required schema.
+Do not add extra keys or markdown.
 
 ONLY mark isAccurate=false if you are confident about a specific factual error.
 If unsure, set isAccurate=true and confidence="low" with empty issues/suggestions.`;
@@ -453,15 +451,8 @@ You will receive a JSON array of questions. For EACH question, verify:
 3. All other options are DEFINITELY incorrect
 4. No ambiguity exists - only ONE answer is correct
 
-Return ONLY a valid JSON array of results, same length and order as the input.
-Each element must be:
-{
-  "isAccurate": true/false,
-  "confidence": "high" | "medium" | "low",
-  "issues": ["list of factual errors found, if any"],
-  "suggestions": ["fixes for the errors, if any"],
-  "correctedAnswer": null or 0-3 if the marked answer is wrong
-}
+Return a structured array of results, same length and order as the input.
+Do not add extra keys or markdown.
 
 ONLY mark isAccurate=false if you are confident about a specific factual error.
 If unsure, set isAccurate=true and confidence="low" with empty issues/suggestions.`;
@@ -473,20 +464,44 @@ Rules:
 - Fix ONLY the factual errors described.
 - Ensure exactly one correct answer and all other options are incorrect.
 - Keep the same questionType unless the original is invalid.
-- Return ONLY valid JSON for the corrected question object.
-
-Output format:
-{
-  "questionText": "...",
-  "questionType": "standard" | "statement" | "match" | "assertion",
-  "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
-  "correctOption": 0-3,
-  "explanation": "..."
-}`;
+- Return the corrected question in the required structured format.
+- Do not add extra keys or markdown.`;
 
 // Strip option prefix (A), B), etc.) from option text
 function stripOptionPrefix(opt: string): string {
   return opt.replace(/^[A-D]\)\s*/i, "").trim();
+}
+
+function parseJsonObject<T>(text: string): T | null {
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    // ignore and try to extract
+  }
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return null;
+  try {
+    return JSON.parse(jsonMatch[0]) as T;
+  } catch {
+    return null;
+  }
+}
+
+function parseJsonArray<T>(text: string): T | null {
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    // ignore and try to extract
+  }
+
+  const jsonMatch = text.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) return null;
+  try {
+    return JSON.parse(jsonMatch[0]) as T;
+  } catch {
+    return null;
+  }
 }
 
 export async function factCheckQuestion(
@@ -519,17 +534,6 @@ export async function factCheckQuestion(
     };
   }
 
-  const vertex = createVertex({
-    project: serviceAccount.project_id,
-    location: "global",
-    googleAuthOptions: {
-      credentials: {
-        client_email: serviceAccount.client_email,
-        private_key: serviceAccount.private_key,
-      },
-    },
-  });
-
   // Strip prefixes to avoid "A) A) ..." duplication in prompt
   const questionDetails = `
 QUESTION: ${question.questionText}
@@ -546,22 +550,19 @@ MARKED CORRECT: ${String.fromCharCode(65 + question.correctOption)} - ${stripOpt
 `;
 
   try {
-    const { text } = await generateText({
-      model: vertex("gemini-3-pro-preview"),
-      system: FACT_CHECK_PROMPT,
-      prompt: questionDetails,
+    const vertexResult = await generateVertexStructuredContent({
+      serviceAccount,
+      model: "gemini-3-pro-preview",
+      systemPrompt: FACT_CHECK_PROMPT,
+      userPrompt: questionDetails,
       maxOutputTokens: 1000,
-      // Enable thinking mode for better fact verification reasoning
-      providerOptions: {
-        google: {
-          thinkingConfig: {
-            thinkingLevel: "high",
-          },
-        },
-      },
+      responseSchema: FACT_CHECK_SCHEMA,
+      location: env.GOOGLE_VERTEX_LOCATION || "global",
+      thinkingLevel: "high",
     });
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/); if (!jsonMatch) {
+    const parsed = parseJsonObject<FactCheckResult>(vertexResult.text);
+    if (!parsed) {
       return {
         isAccurate: true,
         confidence: "low",
@@ -570,12 +571,11 @@ MARKED CORRECT: ${String.fromCharCode(65 + question.correctOption)} - ${stripOpt
       };
     }
 
-    const result = JSON.parse(jsonMatch[0]);
     return {
-      isAccurate: result.isAccurate ?? true,
-      confidence: result.confidence ?? "low",
-      issues: result.issues ?? [],
-      suggestions: result.suggestions ?? [],
+      isAccurate: parsed.isAccurate ?? true,
+      confidence: parsed.confidence ?? "low",
+      issues: parsed.issues ?? [],
+      suggestions: parsed.suggestions ?? [],
     };
   } catch (error) {
     console.error("Fact-check failed:", error);
@@ -604,17 +604,6 @@ export async function fixFactCheckIssue(
     return question;
   }
 
-  const vertex = createVertex({
-    project: serviceAccount.project_id,
-    location: env.GOOGLE_VERTEX_LOCATION || "global",
-    googleAuthOptions: {
-      credentials: {
-        client_email: serviceAccount.client_email,
-        private_key: serviceAccount.private_key,
-      },
-    },
-  });
-
   const issueSummary = result.issues?.length
     ? result.issues.join(" ")
     : "Factual error reported without details.";
@@ -629,26 +618,22 @@ export async function fixFactCheckIssue(
   });
 
   try {
-    const { text } = await generateText({
-      model: vertex(env.FACT_CHECK_MODEL || "gemini-3-flash-preview"),
-      system: FACT_FIX_PROMPT,
-      prompt,
+    const vertexResult = await generateVertexStructuredContent({
+      serviceAccount,
+      model: env.FACT_CHECK_MODEL || "gemini-3-flash-preview",
+      systemPrompt: FACT_FIX_PROMPT,
+      userPrompt: prompt,
       maxOutputTokens: 2000,
-      providerOptions: {
-        google: {
-          thinkingConfig: {
-            thinkingLevel: "medium",
-          },
-        },
-      },
+      responseSchema: GENERATED_QUESTION_SCHEMA,
+      location: env.GOOGLE_VERTEX_LOCATION || "global",
+      thinkingLevel: "medium",
     });
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
+    const parsed = parseJsonObject<GeneratedQuestion>(vertexResult.text);
+    if (!parsed) {
       return question;
     }
 
-    const parsed = JSON.parse(jsonMatch[0]) as GeneratedQuestion;
     return autoFixQuestion({
       questionText: parsed.questionText ?? question.questionText,
       questionType: parsed.questionType ?? question.questionType,
@@ -711,40 +696,19 @@ async function factCheckBatchSingleCall(
       throw new Error(`Service Account Error: ${e.message}`);
     }
 
-    const vertex = createVertex({
-      project: serviceAccount.project_id,
-      location: env?.GOOGLE_VERTEX_LOCATION || "global",
-      googleAuthOptions: {
-        credentials: {
-          client_email: serviceAccount.client_email,
-          private_key: serviceAccount.private_key,
-        },
-      },
-    });
-    const res = await generateText({
-      model: vertex(factCheckModel),
-      system: FACT_CHECK_BATCH_PROMPT,
-      prompt: JSON.stringify(payload),
+    const vertexResult = await generateVertexStructuredContent({
+      serviceAccount,
+      model: factCheckModel,
+      systemPrompt: FACT_CHECK_BATCH_PROMPT,
+      userPrompt: JSON.stringify(payload),
       maxOutputTokens: 6000,
-      // Enable thinking mode for better fact verification reasoning
-      providerOptions: {
-        google: {
-          thinkingConfig: {
-            thinkingLevel: "high",
-          },
-        },
-      },
+      responseSchema: FACT_CHECK_ARRAY_SCHEMA,
+      location: env?.GOOGLE_VERTEX_LOCATION || "global",
+      thinkingLevel: "high",
     });
     const durationMs = Date.now() - startedAt;
-    const text = res.text;
-
-    const usage = (res as {
-      usage?: {
-        promptTokens?: number;
-        completionTokens?: number;
-        totalTokens?: number;
-      };
-    }).usage;
+    const text = vertexResult.text;
+    const usage = vertexResult.usage;
 
     if (env) {
       await dumpLlmCall(env, {
@@ -778,6 +742,7 @@ async function factCheckBatchSingleCall(
             completionTokens: usage?.completionTokens,
             totalTokens: usage?.totalTokens,
           },
+          raw: vertexResult.rawResponse,
         },
       });
 
@@ -788,18 +753,15 @@ async function factCheckBatchSingleCall(
       }
     }
 
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) {
-      throw new Error("Could not parse fact-check batch response (no JSON array found)");
-    }
-
-    const parsed = JSON.parse(jsonMatch[0]) as Array<{
+    const parsed = parseJsonArray<Array<{
       isAccurate?: boolean;
       confidence?: "high" | "medium" | "low";
       issues?: string[];
       suggestions?: string[];
-      correctedAnswer?: number | null;
-    }>;
+    }>>(text);
+    if (!parsed) {
+      throw new Error("Could not parse fact-check batch response (no JSON array found)");
+    }
 
     const issues: Array<{ questionIndex: number; result: FactCheckResult }> = [];
     let accurateCount = 0;
