@@ -5,7 +5,6 @@ import {
   Select,
   Input,
   RadioGroup,
-  CheckboxGroup,
   Button,
 } from "@/components/ui";
 import {
@@ -14,9 +13,6 @@ import {
   DIFFICULTIES,
   DIFFICULTY_LABELS,
   DIFFICULTY_DESCRIPTIONS,
-  QUESTION_STYLES,
-  QUESTION_STYLE_LABELS,
-  QUESTION_STYLE_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -45,9 +41,7 @@ export function QuizItemForm({
   const [difficulty, setDifficulty] = useState<string>(
     initialValues?.difficulty || DIFFICULTIES[1]
   );
-  const [styles, setStyles] = useState<string[]>(
-    initialValues?.styles || [...QUESTION_STYLES]
-  );
+  // Styles are auto-distributed based on UPSC pattern - no user selection needed
 
   const [questionCount, setQuestionCount] = useState<number>(
     initialValues?.questionCount || 40
@@ -62,10 +56,7 @@ export function QuizItemForm({
     e?.preventDefault();
     setError(null);
 
-    if (styles.length === 0) {
-      setError("Select at least one question style");
-      return;
-    }
+    // Styles are auto-distributed on backend
 
     if (questionCount < MIN_QUESTION_COUNT || questionCount > MAX_QUESTION_COUNT) {
       setError(`Question count must be between ${MIN_QUESTION_COUNT} and ${MAX_QUESTION_COUNT}`);
@@ -76,7 +67,7 @@ export function QuizItemForm({
       subject: subject as (typeof SUBJECTS)[number],
       theme: theme || undefined,
       difficulty: difficulty as (typeof DIFFICULTIES)[number],
-      styles: styles as (typeof QUESTION_STYLES)[number][],
+      styles: [], // Empty = auto-distribute based on UPSC pattern
       questionCount,
 
       enableCurrentAffairs: true, // Always enabled
@@ -93,12 +84,6 @@ export function QuizItemForm({
     value: d,
     label: DIFFICULTY_LABELS[d],
     description: DIFFICULTY_DESCRIPTIONS[d],
-  }));
-
-  const styleOptions = QUESTION_STYLES.map((s) => ({
-    value: s,
-    label: QUESTION_STYLE_LABELS[s],
-    description: QUESTION_STYLE_DESCRIPTIONS[s],
   }));
 
 
@@ -133,14 +118,19 @@ export function QuizItemForm({
         onChange={setDifficulty}
       />
 
-      {/* Question Styles */}
-      <CheckboxGroup
-        name="styles"
-        label="Question Styles"
-        options={styleOptions}
-        value={styles}
-        onChange={setStyles}
-      />
+      {/* Question Style Distribution (Auto) */}
+      <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="font-medium text-gray-700">📊 Style Distribution</span>
+          <span className="text-[10px] text-white bg-blue-500 px-1.5 py-0.5 rounded">UPSC Pattern</span>
+        </div>
+        <div className="grid grid-cols-2 gap-1">
+          <span>Statement ~56%</span>
+          <span>Match ~20%</span>
+          <span>Assertion ~14%</span>
+          <span>Factual ~10%</span>
+        </div>
+      </div>
 
 
 

@@ -10,7 +10,6 @@ import {
   Select,
   Input,
   RadioGroup,
-  CheckboxGroup,
 } from "@/components/ui";
 import {
   SUBJECTS,
@@ -18,9 +17,6 @@ import {
   DIFFICULTIES,
   DIFFICULTY_LABELS,
   DIFFICULTY_DESCRIPTIONS,
-  QUESTION_STYLES,
-  QUESTION_STYLE_LABELS,
-  QUESTION_STYLE_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -59,7 +55,7 @@ export default function NewQuizPage() {
   const [subject, setSubject] = useState<string>(SUBJECTS[0]);
   const [theme, setTheme] = useState("");
   const [difficulty, setDifficulty] = useState<string>(DIFFICULTIES[1]);
-  const [styles, setStyles] = useState<string[]>([...QUESTION_STYLES]);
+  // Styles are now auto-distributed based on UPSC pattern - no user selection needed
 
   const [questionCount, setQuestionCount] = useState<number>(40);
   // Current affairs theme (current affairs is now always enabled)
@@ -107,11 +103,7 @@ export default function NewQuizPage() {
       return;
     }
 
-    if (styles.length === 0) {
-      setError("Select at least one question style");
-      setLoading(false);
-      return;
-    }
+    // Styles are auto-distributed on the backend
 
     try {
       // Step 0: Warming up
@@ -136,7 +128,7 @@ export default function NewQuizPage() {
         subject: subject as (typeof SUBJECTS)[number],
         theme: theme || undefined,
         difficulty: difficulty as (typeof DIFFICULTIES)[number],
-        styles: styles as (typeof QUESTION_STYLES)[number][],
+        styles: [], // Empty array = auto-distribute based on UPSC pattern
         questionCount,
 
         enableCurrentAffairs: true, // Always enabled
@@ -164,12 +156,6 @@ export default function NewQuizPage() {
     value: d,
     label: DIFFICULTY_LABELS[d],
     description: DIFFICULTY_DESCRIPTIONS[d],
-  }));
-
-  const styleOptions = QUESTION_STYLES.map((s) => ({
-    value: s,
-    label: QUESTION_STYLE_LABELS[s],
-    description: QUESTION_STYLE_DESCRIPTIONS[s],
   }));
 
 
@@ -211,14 +197,26 @@ export default function NewQuizPage() {
             onChange={setDifficulty}
           />
 
-          {/* Question Styles */}
-          <CheckboxGroup
-            name="styles"
-            label="Question Styles"
-            options={styleOptions}
-            value={styles}
-            onChange={setStyles}
-          />
+          {/* Question Style Distribution (Auto) */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">
+                📊 Question Style Distribution
+              </span>
+              <span className="text-xs text-white bg-blue-500 px-2 py-0.5 rounded-full">
+                UPSC Pattern
+              </span>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-1">
+              <div className="flex justify-between"><span>Statement Questions</span><span className="font-medium">~56%</span></div>
+              <div className="flex justify-between"><span>Match-the-Following</span><span className="font-medium">~20%</span></div>
+              <div className="flex justify-between"><span>Assertion-Reason</span><span className="font-medium">~14%</span></div>
+              <div className="flex justify-between"><span>Standard/Factual</span><span className="font-medium">~10%</span></div>
+            </div>
+            <p className="text-xs text-gray-500">
+              Based on UPSC Prelims 2024-2025 analysis. Automatically applied for realistic practice.
+            </p>
+          </div>
 
 
 

@@ -11,11 +11,51 @@ interface PromptParams {
   subject: string;
   theme?: string;
   difficulty: Difficulty;
-  styles: StyleDistribution[];
+  styles?: StyleDistribution[]; // Now optional - auto-distributes if not provided
   totalCount: number;
   enableCurrentAffairs?: boolean; // Enable current affairs context injection
   currentAffairsTheme?: string; // Optional focus area for current affairs
 }
+
+// ============================================================================
+// UPSC 2024-2025 REALISTIC STYLE DISTRIBUTION
+// ============================================================================
+// Based on analysis of actual UPSC Prelims papers:
+// - Statement questions: ~56% (dominant style since 2020)
+// - Match-the-following: ~20%
+// - Assertion-Reason: ~14%
+// - Standard/Factual: ~10%
+// ============================================================================
+
+function calculateStyleDistribution(totalCount: number): StyleDistribution[] {
+  // Calculate counts based on UPSC 2024-2025 pattern
+  const statementCount = Math.round(totalCount * 0.56);
+  const matchCount = Math.round(totalCount * 0.20);
+  const assertionCount = Math.round(totalCount * 0.14);
+
+  // Standard gets the remainder to ensure we hit exact totalCount
+  const standardCount = totalCount - statementCount - matchCount - assertionCount;
+
+  const distribution: StyleDistribution[] = [];
+
+  if (statementCount > 0) {
+    distribution.push({ style: "statement", count: statementCount });
+  }
+  if (matchCount > 0) {
+    distribution.push({ style: "match", count: matchCount });
+  }
+  if (assertionCount > 0) {
+    distribution.push({ style: "assertion", count: assertionCount });
+  }
+  if (standardCount > 0) {
+    distribution.push({ style: "factual", count: standardCount });  // 'factual' is the QuestionStyle for standard questions
+  }
+
+  return distribution;
+}
+
+// Export for use in other modules
+export { calculateStyleDistribution };
 
 
 // ============================================================================
@@ -1430,11 +1470,16 @@ export function getPrompt(params: PromptParams): string {
     subject,
     theme,
     difficulty,
-    styles,
+    styles: providedStyles,
     totalCount,
     enableCurrentAffairs = true, // Current affairs always enabled by default
     currentAffairsTheme,
   } = params;
+
+  // Auto-calculate style distribution if not provided (UPSC 2024-2025 realistic pattern)
+  const styles = providedStyles && providedStyles.length > 0
+    ? providedStyles
+    : calculateStyleDistribution(totalCount);
 
   const themeContext = theme
     ? `SPECIFIC FOCUS: "${theme}" - Prefer this theme but include ~25% adjacent subtopics for breadth within ${subject}.`
