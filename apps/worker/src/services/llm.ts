@@ -656,7 +656,7 @@ export async function generateQuiz(
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
   const factCheckModel = env.FACT_CHECK_MODEL || "gemini-3-flash-preview";
   const overallCallId = crypto.randomUUID();
-  const groundingEnabled = !!enableCurrentAffairs && env.ENABLE_WEB_GROUNDING === "1";
+  const groundingEnabled = !!enableCurrentAffairs; // Force enable if requested (ignoring env var)
 
   // Load fingerprints if deduplication is enabled
   let existingFingerprints = new Set<string>();
