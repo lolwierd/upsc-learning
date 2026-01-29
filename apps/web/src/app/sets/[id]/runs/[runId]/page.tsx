@@ -170,11 +170,19 @@ export default function QuizSetRunPage() {
 
         <div className="mt-4 flex items-center gap-2 flex-wrap">
           {canAttemptRun ? (
-            <Link href={`/sets/${setId}/runs/${runId}/attempt`}>
-              <Button>Attempt Run</Button>
-            </Link>
+            <>
+              <Link href={`/sets/${setId}/runs/${runId}/attempt`}>
+                <Button>Attempt Run</Button>
+              </Link>
+              <Link href={`/sets/${setId}/runs/${runId}/combined`}>
+                <Button variant="secondary">Combined Quiz (Jumbled)</Button>
+              </Link>
+            </>
           ) : (
-            <Button disabled>Attempt Run</Button>
+            <>
+              <Button disabled>Attempt Run</Button>
+              <Button variant="secondary" disabled>Combined Quiz (Jumbled)</Button>
+            </>
           )}
           <Link href={`/sets/${setId}/runs/${runId}/summary`}>
             <Button variant="secondary">View Summary</Button>

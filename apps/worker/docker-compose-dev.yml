@@ -1,0 +1,59 @@
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+    container_name: upsc-mcq-api-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - upsc-data-dev:/app/data
+    environment:
+      - NODE_ENV=development
+      - NODE_OPTIONS=--experimental-specifier-resolution=node
+      - PORT=3001
+      - DATABASE_PATH=/app/data/upsc-mcq.db
+      - MIGRATIONS_DIR=/app/packages/db/migrations
+      - CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+
+      # Google Cloud Configuration - REQUIRED
+      - GCP_SERVICE_ACCOUNT=${GCP_SERVICE_ACCOUNT}
+      - GOOGLE_VERTEX_LOCATION=global
+
+      # Model Configuration
+      - GENERATION_MODEL=gemini-3-pro-preview
+      - FACT_CHECK_MODEL=gemini-3-flash-preview
+      - ENABLE_FACT_CHECK=1
+      - ENABLE_WEB_GROUNDING=0
+
+      # Debug - LLM dump for debugging requests/responses
+      - LLM_DEBUG=1
+      - LLM_DUMP=1
+      - LOCAL_LLM_DUMP_URL=http://llm-dump:8790/dump
+    depends_on:
+      - llm-dump
+    networks:
+      - upsc-dev-network
+
+  llm-dump:
+    image: node:24-slim
+    container_name: upsc-llm-dump-dev
+    restart: unless-stopped
+    command: node /app/server.mjs
+    environment:
+      - LLM_DUMP_PORT=8790
+      - LLM_DUMP_DIR=/app/dumps
+    volumes:
+      - ../../scripts/llm-dump-server.mjs:/app/server.mjs:ro
+      - ./data/dumps:/app/dumps
+    networks:
+      - upsc-dev-network
+
+volumes:
+  upsc-data-dev:
+    driver: local
+
+networks:
+  upsc-dev-network:
+    driver: bridge

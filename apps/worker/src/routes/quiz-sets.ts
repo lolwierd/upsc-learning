@@ -31,7 +31,6 @@ type WaitUntilContext = {
 // Database row types
 interface QuizSetRow {
   id: string;
-  user_id: string;
   name: string;
   description: string | null;
   is_active: number;
@@ -98,7 +97,6 @@ interface QuizSetRunItemRow {
 function mapQuizSetRowToResponse(row: QuizSetRow) {
   return {
     id: row.id,
-    userId: row.user_id,
     name: row.name,
     description: row.description || undefined,
     isActive: row.is_active === 1,
@@ -173,10 +171,8 @@ function mapRunItemRowToResponse(row: QuizSetRunItemRow): QuizSetRunItem {
 // Quiz Sets CRUD
 // ============================================
 
-// GET /api/quiz-sets - List user's quiz sets
+// GET /api/quiz-sets - List quiz sets
 quizSets.get("/", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
-
   const setsResult = await c.env.DB.prepare(
     `SELECT qs.*,
             COUNT(qsi.id) as item_count,
@@ -187,11 +183,9 @@ quizSets.get("/", async (c) => {
      FROM quiz_sets qs
      LEFT JOIN quiz_set_items qsi ON qsi.quiz_set_id = qs.id
      LEFT JOIN quiz_set_schedules qss ON qss.quiz_set_id = qs.id
-     WHERE qs.user_id = ?
      GROUP BY qs.id
      ORDER BY qs.updated_at DESC`
   )
-    .bind(userId)
     .all<QuizSetRow & {
       item_count: number;
       schedule_enabled: number | null;
@@ -224,7 +218,6 @@ quizSets.post(
   "/",
   zValidator("json", createQuizSetRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
     const setId = nanoid();
@@ -234,7 +227,7 @@ quizSets.post(
       `INSERT INTO quiz_sets (id, user_id, name, description, is_active, created_at, updated_at)
        VALUES (?, ?, ?, ?, 1, ?, ?)`
     )
-      .bind(setId, userId, body.name, body.description || null, now, now)
+      .bind(setId, "public", body.name, body.description || null, now, now)
       .run();
 
     // Create items if provided
@@ -290,13 +283,12 @@ quizSets.post(
 
 // GET /api/quiz-sets/:id - Get quiz set with items and schedule
 quizSets.get("/:id", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   const setRow = await c.env.DB.prepare(
-    `SELECT * FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT * FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first<QuizSetRow>();
 
   if (!setRow) {
@@ -330,16 +322,15 @@ quizSets.patch(
   "/:id",
   zValidator("json", updateQuizSetRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+      `SELECT id FROM quiz_sets WHERE id = ?`
     )
-      .bind(setId, userId)
+      .bind(setId)
       .first();
 
     if (!existing) {
@@ -384,14 +375,13 @@ quizSets.patch(
 
 // DELETE /api/quiz-sets/:id - Delete quiz set
 quizSets.delete("/:id", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   // Check ownership
   const existing = await c.env.DB.prepare(
-    `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT id FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first();
 
   if (!existing) {
@@ -415,16 +405,15 @@ quizSets.post(
   "/:id/items",
   zValidator("json", addQuizSetItemRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+      `SELECT id FROM quiz_sets WHERE id = ?`
     )
-      .bind(setId, userId)
+      .bind(setId)
       .first();
 
     if (!existing) {
@@ -484,7 +473,6 @@ quizSets.patch(
   "/:id/items/:itemId",
   zValidator("json", updateQuizSetItemRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const itemId = c.req.param("itemId");
     const body = c.req.valid("json");
@@ -493,10 +481,9 @@ quizSets.patch(
     // Check ownership
     const existing = await c.env.DB.prepare(
       `SELECT qsi.id FROM quiz_set_items qsi
-       JOIN quiz_sets qs ON qs.id = qsi.quiz_set_id
-       WHERE qsi.id = ? AND qsi.quiz_set_id = ? AND qs.user_id = ?`
+       WHERE qsi.id = ? AND qsi.quiz_set_id = ?`
     )
-      .bind(itemId, setId, userId)
+      .bind(itemId, setId)
       .first();
 
     if (!existing) {
@@ -563,7 +550,6 @@ quizSets.patch(
 
 // DELETE /api/quiz-sets/:id/items/:itemId - Remove item
 quizSets.delete("/:id/items/:itemId", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
   const itemId = c.req.param("itemId");
   const now = Math.floor(Date.now() / 1000);
@@ -571,10 +557,9 @@ quizSets.delete("/:id/items/:itemId", async (c) => {
   // Check ownership
   const existing = await c.env.DB.prepare(
     `SELECT qsi.sequence_number FROM quiz_set_items qsi
-     JOIN quiz_sets qs ON qs.id = qsi.quiz_set_id
-     WHERE qsi.id = ? AND qsi.quiz_set_id = ? AND qs.user_id = ?`
+     WHERE qsi.id = ? AND qsi.quiz_set_id = ?`
   )
-    .bind(itemId, setId, userId)
+    .bind(itemId, setId)
     .first<{ sequence_number: number }>();
 
   if (!existing) {
@@ -610,16 +595,15 @@ quizSets.post(
   "/:id/items/reorder",
   zValidator("json", reorderQuizSetItemsRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+      `SELECT id FROM quiz_sets WHERE id = ?`
     )
-      .bind(setId, userId)
+      .bind(setId)
       .first();
 
     if (!existing) {
@@ -653,7 +637,6 @@ quizSets.post(
 
 // POST /api/quiz-sets/:id/generate - Start generation
 quizSets.post("/:id/generate", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   // Check ownership and get item count
@@ -661,10 +644,10 @@ quizSets.post("/:id/generate", async (c) => {
     `SELECT qs.id, COUNT(qsi.id) as item_count
      FROM quiz_sets qs
      LEFT JOIN quiz_set_items qsi ON qsi.quiz_set_id = qs.id
-     WHERE qs.id = ? AND qs.user_id = ?
+     WHERE qs.id = ?
      GROUP BY qs.id`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first<{ id: string; item_count: number }>();
 
   if (!existing) {
@@ -697,7 +680,6 @@ quizSets.post("/:id/generate", async (c) => {
   const { runId } = await triggerQuizSetGeneration(
     c.env,
     setId,
-    userId,
     "manual",
     undefined,
     executionCtx?.waitUntil.bind(executionCtx)
@@ -712,14 +694,13 @@ quizSets.post("/:id/generate", async (c) => {
 
 // GET /api/quiz-sets/:id/runs - List generation runs
 quizSets.get("/:id/runs", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   // Check ownership
   const existing = await c.env.DB.prepare(
-    `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT id FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first();
 
   if (!existing) {
@@ -739,15 +720,14 @@ quizSets.get("/:id/runs", async (c) => {
 
 // GET /api/quiz-sets/:id/runs/:runId - Get run details with items
 quizSets.get("/:id/runs/:runId", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
   const runId = c.req.param("runId");
 
   // Check ownership
   const existing = await c.env.DB.prepare(
-    `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT id FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first();
 
   if (!existing) {
@@ -782,14 +762,13 @@ quizSets.get("/:id/runs/:runId", async (c) => {
 
 // GET /api/quiz-sets/:id/schedule - Get schedule
 quizSets.get("/:id/schedule", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   // Check ownership
   const existing = await c.env.DB.prepare(
-    `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT id FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first();
 
   if (!existing) {
@@ -814,16 +793,15 @@ quizSets.put(
   "/:id/schedule",
   zValidator("json", quizSetScheduleRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+      `SELECT id FROM quiz_sets WHERE id = ?`
     )
-      .bind(setId, userId)
+      .bind(setId)
       .first();
 
     if (!existing) {
@@ -892,14 +870,13 @@ quizSets.put(
 
 // DELETE /api/quiz-sets/:id/schedule - Remove schedule
 quizSets.delete("/:id/schedule", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const setId = c.req.param("id");
 
   // Check ownership
   const existing = await c.env.DB.prepare(
-    `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+    `SELECT id FROM quiz_sets WHERE id = ?`
   )
-    .bind(setId, userId)
+    .bind(setId)
     .first();
 
   if (!existing) {
@@ -929,16 +906,15 @@ quizSets.post(
   "/:id/schedule/toggle",
   zValidator("json", toggleScheduleRequestSchema),
   async (c) => {
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const setId = c.req.param("id");
     const body = c.req.valid("json");
     const now = Math.floor(Date.now() / 1000);
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT id FROM quiz_sets WHERE id = ? AND user_id = ?`
+      `SELECT id FROM quiz_sets WHERE id = ?`
     )
-      .bind(setId, userId)
+      .bind(setId)
       .first();
 
     if (!existing) {

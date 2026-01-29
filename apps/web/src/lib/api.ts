@@ -18,6 +18,9 @@ import type {
   UpdateQuizSetRequest,
   QuizSetScheduleRequest,
   QuizAttemptSummary,
+  CombinedQuestion,
+  RunAttemptWithAnswers,
+  RunAttemptResult,
 } from "@mcqs/shared";
 import { API_ENDPOINTS } from "@mcqs/shared";
 
@@ -133,7 +136,6 @@ export type AiMetricStatus = "success" | "error";
 export interface AiGenerationMetric {
   id: string;
   quizId: string | null;
-  userId: string;
   provider: "gemini" | "openai";
   model: string;
   factCheckModel?: string | null;
@@ -407,5 +409,54 @@ export async function toggleQuizSetSchedule(
   return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE_TOGGLE(setId), {
     method: "POST",
     body: JSON.stringify({ isEnabled }),
+  });
+}
+
+// ============================================
+// Run Attempt APIs (Combined Quiz)
+// ============================================
+
+// Get all questions from a run, shuffled
+export async function getCombinedQuestions(
+  setId: string,
+  runId: string
+): Promise<{ questions: CombinedQuestion[]; totalQuestions: number; learnMode: boolean }> {
+  return fetchAPI(API_ENDPOINTS.RUN_COMBINED_QUESTIONS(setId, runId));
+}
+
+// Start or resume a run attempt
+export async function startRunAttempt(
+  setId: string,
+  runId: string
+): Promise<{ attemptId: string; status: string; message?: string; totalQuestions?: number }> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_START(setId, runId), {
+    method: "POST",
+  });
+}
+
+// Get run attempt with answers
+export async function getRunAttempt(id: string): Promise<RunAttemptWithAnswers> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_GET(id));
+}
+
+// Save an answer for run attempt
+export async function saveRunAttemptAnswer(
+  runAttemptId: string,
+  data: {
+    questionId: string;
+    selectedOption: number | null;
+    markedForReview?: boolean;
+  }
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_ANSWER(runAttemptId), {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+// Submit run attempt and get results
+export async function submitRunAttempt(runAttemptId: string): Promise<RunAttemptResult> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_SUBMIT(runAttemptId), {
+    method: "POST",
   });
 }

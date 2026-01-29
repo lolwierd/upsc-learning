@@ -21,7 +21,7 @@ export const generateQuizRequestSchema = z.object({
   subject: subjectSchema,
   theme: z.string().max(200).optional(),
   difficulty: difficultySchema,
-  styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
+  styles: z.array(questionStyleSchema).optional().default([]),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
 
   turnstileToken: z.string().optional(), // Required in production
@@ -205,7 +205,7 @@ export const quizSetItemConfigSchema = z.object({
   subject: subjectSchema,
   theme: z.string().max(200).optional(),
   difficulty: difficultySchema,
-  styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
+  styles: z.array(questionStyleSchema).optional().default([]),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
 
   enableCurrentAffairs: z.boolean().optional().default(true),
@@ -267,7 +267,6 @@ export const quizSetItemSchema = z.object({
 
 export const quizSetSchema = z.object({
   id: z.string(),
-  userId: z.string(),
   name: z.string(),
   description: z.string().optional(),
   isActive: z.boolean(),

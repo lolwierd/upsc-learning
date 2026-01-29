@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import type { Env, DatabaseLike } from "../types.js";
+import type { Env } from "../types.js";
 import { generateQuiz } from "./llm.js";
 import { insertAiGenerationMetric } from "./ai-metrics.js";
 import type { QuizSetRunStatus } from "@mcqs/shared";
@@ -22,7 +22,6 @@ interface GenerationContext {
   env: Env;
   runId: string;
   quizSetId: string;
-  userId: string;
   triggerType: "manual" | "scheduled";
 }
 
@@ -33,7 +32,6 @@ interface GenerationContext {
 export async function startQuizSetGeneration(
   env: Env,
   quizSetId: string,
-  userId: string,
   triggerType: "manual" | "scheduled",
   scheduleId?: string
 ): Promise<{ runId: string }> {
@@ -82,7 +80,7 @@ export async function startQuizSetGeneration(
 export async function executeQuizSetGeneration(
   ctx: GenerationContext
 ): Promise<void> {
-  const { env, runId, quizSetId, userId, triggerType } = ctx;
+  const { env, runId, quizSetId, triggerType } = ctx;
 
   // Get run items
   const runItemsResult = await env.DB.prepare(
@@ -137,7 +135,7 @@ export async function executeQuizSetGeneration(
       )
         .bind(
           quizId,
-          userId,
+          "public",
           runItem.subject,
           runItem.theme || null,
           runItem.difficulty,
@@ -207,7 +205,6 @@ export async function executeQuizSetGeneration(
         await insertAiGenerationMetric(env.DB as Parameters<typeof insertAiGenerationMetric>[0], {
           id: nanoid(),
           quizId,
-          userId,
           provider: metrics.provider,
           model: metrics.model,
           factCheckModel: metrics.factCheckModel,
@@ -311,7 +308,6 @@ export async function executeQuizSetGeneration(
 export async function triggerQuizSetGeneration(
   env: Env,
   quizSetId: string,
-  userId: string,
   triggerType: "manual" | "scheduled",
   scheduleId?: string,
   waitUntil?: (promise: Promise<unknown>) => void
@@ -319,7 +315,6 @@ export async function triggerQuizSetGeneration(
   const { runId } = await startQuizSetGeneration(
     env,
     quizSetId,
-    userId,
     triggerType,
     scheduleId
   );
@@ -328,7 +323,6 @@ export async function triggerQuizSetGeneration(
     env,
     runId,
     quizSetId,
-    userId,
     triggerType,
   });
 

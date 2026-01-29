@@ -20,21 +20,21 @@ interface PromptParams {
 // ============================================================================
 // UPSC 2024-2025 REALISTIC STYLE DISTRIBUTION
 // ============================================================================
-// Based on analysis of actual UPSC Prelims papers:
-// - Statement questions: ~56% (dominant style since 2020)
-// - Match-the-following: ~20%
-// - Assertion-Reason: ~14%
-// - Standard/Factual: ~10%
+// Prep mix target:
+// - Standard/Factual: ~40%
+// - Non-factual (total): ~60%
+//   - Statement questions: ~35%
+//   - Match-the-following: ~15%
+//   - Assertion-Reason: ~10%
 // ============================================================================
 
 function calculateStyleDistribution(totalCount: number): StyleDistribution[] {
-  // Calculate counts based on UPSC 2024-2025 pattern
-  const statementCount = Math.round(totalCount * 0.56);
-  const matchCount = Math.round(totalCount * 0.20);
-  const assertionCount = Math.round(totalCount * 0.14);
-
-  // Standard gets the remainder to ensure we hit exact totalCount
-  const standardCount = totalCount - statementCount - matchCount - assertionCount;
+  // Calculate counts based on prep mix target
+  const factualCount = Math.round(totalCount * 0.40);
+  const remainingCount = totalCount - factualCount;
+  const statementCount = Math.round(totalCount * 0.35);
+  const matchCount = Math.round(totalCount * 0.15);
+  const assertionCount = remainingCount - statementCount - matchCount;
 
   const distribution: StyleDistribution[] = [];
 
@@ -47,8 +47,8 @@ function calculateStyleDistribution(totalCount: number): StyleDistribution[] {
   if (assertionCount > 0) {
     distribution.push({ style: "assertion", count: assertionCount });
   }
-  if (standardCount > 0) {
-    distribution.push({ style: "factual", count: standardCount });  // 'factual' is the QuestionStyle for standard questions
+  if (factualCount > 0) {
+    distribution.push({ style: "factual", count: factualCount });
   }
 
   return distribution;
@@ -62,9 +62,7 @@ export { calculateStyleDistribution };
 // CURRENT AFFAIRS INTEGRATION CONTEXT
 // ============================================================================
 const CURRENT_AFFAIRS_CONTEXT = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CURRENT AFFAIRS INTEGRATION (ENABLED):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 You have access to Google Search for retrieving recent information. Use this to:
 
@@ -82,8 +80,7 @@ You have access to Google Search for retrieving recent information. Use this to:
 3. QUESTION DESIGN with current affairs:
    - Current event as TRIGGER, static syllabus as ANSWER
    - Don't test obscure news details - test concepts triggered by news
-   - After each question, add "Relevance" note in explanation linking to recent event
-   - Ensure at least 60% of questions are anchored to a verifiable recent event
+   - Aim for ~40% of questions anchored to a verifiable recent event, for such questions add a "Relevance" note in explanation.
 
 4. HIGH-VALUE CURRENT AFFAIRS TOPICS (2025-2026 Focus):
    - International summits and India's evolving role
@@ -94,8 +91,8 @@ You have access to Google Search for retrieving recent information. Use this to:
    - Recent environmental conventions (COP30 etc.)
    - Economic surveys and budget analyses of 2025-26
 
-5. EXPLANATION ENHANCEMENT:
-   For each question, in the explanation add:
+5. EXPLANATION ENHANCEMENT (for current-affairs questions only):
+   For each current-affairs question, in the explanation add:
    - RELEVANCE: How this relates to recent events/developments (MUST BE 2025+)
    - STATIC LINK: The underlying concept from the UPSC syllabus
    - Append a final bracketed line exactly like:
@@ -103,19 +100,17 @@ You have access to Google Search for retrieving recent information. Use this to:
    - Include a SOURCES line with at least one full URL from web search, e.g.:
      Sources: https://pib.gov.in/... ; https://example.gov.in/...
 
-MANDATORY WEB SEARCH USAGE:
+MANDATORY WEB SEARCH USAGE (for current-affairs questions only):
 - You MUST use Google Search for current affairs questions.
 - You MUST filter search results to prioritize 2025 and 2026 dates.
-- Do NOT answer from memory when current affairs is enabled.
-- Each question must cite at least one URL in the explanation.
+- Do NOT answer from memory when using current affairs.
+- Each current-affairs question must cite at least one URL in the explanation.
 
 REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
 `;
 
 const CURRENT_AFFAIRS_THEME_CONTEXT = (theme: string) => `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CURRENT AFFAIRS FOCUS THEME: ${theme}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Generate questions specifically focusing on recent developments related to: "${theme}"
 
@@ -173,9 +168,7 @@ ANSWER CODE PHRASES:
 // MISCONCEPTION-BASED DISTRACTOR BLUEPRINT
 // ============================================================================
 const DISTRACTOR_BLUEPRINT = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISTRACTOR DESIGN BLUEPRINT (MUST APPLY AT LEAST 2 PER QUESTION):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. ADJACENT CONCEPT TRAP:
    Use a closely related but different concept
@@ -311,9 +304,7 @@ ART & CULTURE TRAP PATTERNS (Apply at least one per question):
 // FEW-SHOT PYQ EXAMPLES BY STYLE
 // ============================================================================
 const PYQ_EXAMPLES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 REAL UPSC PYQ EXAMPLES (USE AS STYLE REFERENCE ONLY - DO NOT COPY):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 EXAMPLE 1 - "HOW MANY" STATEMENT PATTERN (2024 Polity):
 "Consider the following pairs:
@@ -375,13 +366,9 @@ CRITICAL INSTRUCTION: Generate NEW questions inspired by these patterns.
 // YEAR-WEIGHTED STYLE TENDENCIES (Based on scraped PYQs in this repo)
 // ============================================================================
 const YEAR_TRENDS = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 UPSC YEAR-WISE PATTERN EVOLUTION (based on this repo's scraped PYQs):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-═══════════════════════════════════════════════════════════════════════════════
 2011-2013 ERA (FOUNDATION PERIOD):
-═══════════════════════════════════════════════════════════════════════════════
 - Direct factual questions dominated (~60%)
 - Statement questions with 2-3 statements, "1 and 2 only" style options
 - Simple "Which of the following is correct?" format
@@ -394,9 +381,7 @@ Example patterns from 2011:
 - "The authorization for withdrawal of funds from Consolidated Fund must come from:"
 - "What is the difference between 'vote-on-account' and 'interim budget'?"
 
-═══════════════════════════════════════════════════════════════════════════════
 2014-2017 ERA (TRANSITION PERIOD):
-═══════════════════════════════════════════════════════════════════════════════
 - Increase in statement-based questions (~40-45%)
 - Introduction of 4-5 statement questions
 - "Select the correct answer using the code given below" became standard
@@ -411,9 +396,7 @@ Example patterns from 2015-2017:
 - Questions testing "NOT" - "Which is NOT a feature of..."
 - Comparing two similar concepts (difference between X and Y)
 
-═══════════════════════════════════════════════════════════════════════════════
 2018-2020 ERA (SOPHISTICATION PERIOD):
-═══════════════════════════════════════════════════════════════════════════════
 - Statement questions dominated (~50-55%)
 - Rise of application and conceptual questions
 - More tricky distractors using scope/exception traps
@@ -430,9 +413,7 @@ Example patterns from 2018-2020:
 - Questions on committees, commissions with specific recommendations
 - Testing exceptions to general rules
 
-═══════════════════════════════════════════════════════════════════════════════
 2021-2023 ERA (COMPLEXITY PEAK):
-═══════════════════════════════════════════════════════════════════════════════
 - In this repo's scraped PYQs: "How many" starts showing up clearly in 2022 (especially "How many pairs given above...")
   and spikes in 2023 ("How many of the above..." becomes very common).
 - Statement-I/Statement-II questions appear prominently in 2023 onwards (modern Assertion-Reason logic with updated labels).
@@ -451,9 +432,7 @@ Example patterns from 2021-2023:
 - Statement-I/Statement-II with causal relationship analysis
 - 4-5 item classification questions ("How many are insects/birds/reptiles?")
 
-═══════════════════════════════════════════════════════════════════════════════
 2024-2025 ERA (CURRENT STANDARD):
-═══════════════════════════════════════════════════════════════════════════════
 - In this repo's scraped 2024 paper, templates are MIXED: classic statement-code questions still remain common alongside
   "How many" and Statement-I/Statement-II.
 - Row-correctness tables ("In how many of the above rows..." and also "In which of the above rows...") appear in 2024.
@@ -478,9 +457,7 @@ Example patterns from 2021-2023:
 - Avoid predictable answer distributions
 - Test fine distinctions between related concepts
 
-═══════════════════════════════════════════════════════════════════════════════
 GENERATION STRATEGY BY QUESTION TYPE:
-═══════════════════════════════════════════════════════════════════════════════
 
 FOR STATEMENT QUESTIONS (60% of paper):
 - Use "How many of the above is/are correct?" for 60% of statement questions
@@ -508,9 +485,7 @@ FOR FACTUAL QUESTIONS:
 // CURRENT ERA GENERATION INSTRUCTIONS (2024-2025 Patterns)
 // ============================================================================
 const CURRENT_ERA_INSTRUCTION = `
-═══════════════════════════════════════════════════════════════════════════════
 ERA: CURRENT (2024-2025 STANDARD)
-═══════════════════════════════════════════════════════════════════════════════
 
 Generate questions matching the LATEST UPSC patterns (2024-2025):
 
@@ -518,9 +493,7 @@ KEY INSIGHT: Statement-based MCQs dominate (~60%). While "How many correct?" for
 is common, actual 2024 PYQs show significant VARIETY in formats. Do NOT over-rely
 on "How many" - mix formats for authentic practice.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 MANDATORY FORMAT DISTRIBUTION (for balanced, authentic practice):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 - "How many of the above" format: ~30-35% (NOT more than 40%!)
 - Classic "Which is/are correct" with codes: ~25-30%
 - Statement-I/Statement-II (Assertion-Reason logic): ~12-15%
@@ -529,7 +502,6 @@ MANDATORY FORMAT DISTRIBUTION (for balanced, authentic practice):
 
 IMPORTANT: Do NOT make more than 40% of questions use "How many" format!
 Mix formats to test different analytical skills.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 PRIMARY FORMATS:
 1. "HOW MANY" / COUNTING (~30-35% max):
@@ -569,9 +541,7 @@ Follow 2024-2025 patterns as the PRIMARY reference. Ensure format VARIETY.
 // 2026 PRELIMS FOCUS - CRITICAL STRATEGIC GUIDANCE
 // ============================================================================
 const PRELIMS_2026_FOCUS = `
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    🎯 CRITICAL: 2026 PRELIMS FOCUS 🎯                         ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+🎯 CRITICAL: 2026 PRELIMS FOCUS 🎯
 
 YOUR GOAL: Generate questions that would likely appear in UPSC PRELIMS 2026.
 
@@ -594,9 +564,7 @@ UPSC EVOLUTION INSIGHT:
 `;
 
 const CONTENT_BALANCE_RATIO = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 CONTENT BALANCE: 60% STATIC + 40% DYNAMIC (Aspirational Target)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTENT BALANCE: 60% STATIC + 40% DYNAMIC (Aspirational Target)
 
 ~60% STATIC CONCEPTS (with modern framing):
 - Constitutional provisions, fundamental geography, ecological principles
@@ -625,9 +593,7 @@ recent inter-state water disputes..."
 `;
 
 const RELEVANCE_FILTER = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔍 RELEVANCE FILTER FOR 2026 PRELIMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⛔ AVOID generating questions on:
 - Schemes that have ENDED or MERGED (unless historically tested)
@@ -651,9 +617,7 @@ it's likely DEPRIORITIZED by UPSC. Don't focus on it.
 `;
 
 const PATTERN_ADHERENCE_2024 = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚡ STRICT 2024/2025 PATTERN ADHERENCE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT 2024/2025 PATTERN ADHERENCE
 
 Your FRAMING STYLE, TRAPPING LOGIC, and DISTRACTOR DESIGN must mirror 2024/2025 PYQs.
 
@@ -684,82 +648,29 @@ Apply 2024/2025 framing to ALL topics.
 5. CONTEMPORARY HOOKS:
    - Reference recent events as question context
    - Link static to current (G20, climate summits, recent judgments)
-
-🚫 AVOID old patterns:
-- Simple "Which of the following is correct?" without depth
-- Pure chronological recall (years, sequence of events)
-- "All of the above" / "None of the above" as lazy options
-- Questions answerable by elimination using absolute words
 `;
-
-const DIFFICULTY_INSTRUCTIONS: Record<Difficulty, string> = {
-  easy: `
-DIFFICULTY: EASY(NCERT Level - ~33 % of actual UPSC paper)
-Target: Foundation - level questions that test basic recall and fundamental understanding.
-
-  Characteristics:
-- Questions answerable directly from NCERT textbooks(Class 6 - 12)
-  - Tests basic facts, definitions, and fundamental concepts
-    - Clear, unambiguous language without tricky phrasing
-      - One option should be obviously correct to a prepared candidate
-        - Distractors should be clearly wrong but not absurd
-
-Example difficulty benchmark:
-- "Which Article of the Constitution deals with Right to Education?"(Factual recall)
-  - "The Indus Valley Civilization was primarily known for:"(Basic NCERT fact)
-  - Simple cause - effect relationships from textbooks`,
-
-  medium: `
-DIFFICULTY: MEDIUM(Application Level - ~35 % of actual UPSC paper)
-Target: Questions requiring conceptual understanding and application of knowledge.
-
-  Characteristics:
-- Requires connecting multiple concepts or applying knowledge to scenarios
-  - Tests understanding beyond mere memorization
-    - May require elimination strategy to arrive at correct answer
-      - Distractors are plausible and test fine distinctions
-        - Questions from standard reference books(Laxmikanth, Spectrum, Ramesh Singh)
-
-Example difficulty benchmark:
-- Comparing two constitutional provisions and their implications
-  - Understanding why a particular policy was implemented(not just what)
-    - Questions linking current affairs to static syllabus concepts
-      - Questions requiring understanding of exceptions and special cases`,
-
-  hard: `
-DIFFICULTY: HARD(Analytical Level - ~32 % of actual UPSC paper)
-Target: Questions requiring deep analysis, multi - concept integration, and nuanced understanding.
-
-  Characteristics:
-- Multi - layered reasoning required
-  - Tests obscure facts or fine distinctions between similar concepts
-    - Elimination techniques alone won't work - needs solid knowledge
-      - Sophisticated distractors that appear correct on surface reading
-        - Questions that integrate current affairs with deep static knowledge
-          - May test exceptions, recent amendments, or lesser - known provisions
-
-Example difficulty benchmark:
-- Statement questions where 2 - 3 statements appear correct but have subtle errors
-  - Questions on recent constitutional amendments and their implications
-    - Match - the - following with similar - sounding options
-      - Assertion - Reason where both seem independently true but relationship is tricky
-        - Questions on international conventions / treaties with specific provisions`,
-};
 
 const STYLE_INSTRUCTIONS: Record<QuestionStyle, string> = {
   factual: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUESTION STYLE: STANDARD / FACTUAL MCQ
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: Direct question with 4 options(A, B, C, D)
 questionType: "standard"
 
 UPSC Pattern Guidelines:
 - Question should test specific knowledge or understanding
-  - Frame questions as "Which of the following...", "Consider the following...", or direct questions
+  - Frame questions as "Which of the following...", "What/Who/Where...", or direct questions
+  - Favor direct one-line factual stems like the 2024/2025 paper examples
+    (e.g., "The irrigation device called 'Araghatta' was", "The longest border between any two countries...",
+    "The first Gandharva Mahavidyalaya ... was set up in 1901 by ... in")
+  - Statement-style stems belong to statement questions; keep factual questions direct
     - All four options must be grammatically consistent with the question stem
       - Correct answer must be definitively correct, not "most correct"
+
+Examples (2024/2025 direct factual):
+- "The irrigation device called 'Araghatta' was"
+- "The longest border between any two countries in the world is between"
+- "The first Gandharva Mahavidyalaya, a music training school, was set up in 1901 by Vishnu Digambar Paluskar in"
 
 Distractor Design(CRITICAL):
 - DO NOT use absolute words like "only", "always", "never", "all", "none" in wrong options
@@ -778,9 +689,7 @@ D) Bicameral legislature
   (Here C is correct - Single citizenship is from British; others are also from British but the "NOT" makes it tricky)`,
 
   conceptual: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUESTION STYLE: CONCEPTUAL / APPLICATION MCQ
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: Scenario - based or concept - testing question with 4 options
 questionType: "standard"
@@ -804,12 +713,14 @@ Distractor Design:
       - Include options that mix up similar - sounding provisions`,
 
   statement: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUESTION STYLE: STATEMENT - BASED(56 % OF UPSC PAPER - MOST IMPORTANT!)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: Multiple statements to evaluate for correctness
 questionType: "statement"
+
+Examples (statement format):
+- "Consider the following statements: ... Which of the statements given above is/are correct?"
+- "How many of the above statements is/are correct?"
 
 UPSC 2024 - 2025 Distribution(follow this):
 - Two - statement questions: ~15 per paper
@@ -817,9 +728,7 @@ UPSC 2024 - 2025 Distribution(follow this):
     - Four - statement questions: ~9 per paper
       - Five + statement questions: ~4 per paper
 
-═══════════════════════════════════════════════════════════════════════════════
 "HOW MANY" FORMAT(~30 - 35 % of statement questions - NOT dominant):
-═══════════════════════════════════════════════════════════════════════════════
 
 THREE - STATEMENT "HOW MANY" FORMAT(PREFERRED):
 "Consider the following statements regarding [topic]:
@@ -850,9 +759,7 @@ B) Only two
 C) Only three
 D) All four
 
-═══════════════════════════════════════════════════════════════════════════════
 CLASSIC "WHICH STATEMENTS" FORMAT(~50 - 60 % of statement questions - PRIMARY):
-═══════════════════════════════════════════════════════════════════════════════
 
 "Consider the following statements regarding [topic]:
 1.[Statement 1]
@@ -895,15 +802,11 @@ CRITICAL RULES FOR STATEMENT QUESTIONS:
 8. Ensure answer distribution is varied across a batch(not all "Only two")`,
 
   match: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUESTION STYLE: MATCH THE FOLLOWING / PAIRS(~8 - 12 questions per UPSC paper)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 questionType: "match"
 
-═══════════════════════════════════════════════════════════════════════════════
 FORMAT 1: "HOW MANY PAIRS CORRECTLY MATCHED"(DOMINANT IN 2021 - 2024):
-═══════════════════════════════════════════════════════════════════════════════
 
 "Consider the following pairs:
 
@@ -944,9 +847,7 @@ Country - Animal found in its natural habitat
 How many of the pairs given above are correctly matched ? "
 Answer: None(All wrong - tests precise habitat knowledge)
 
-═══════════════════════════════════════════════════════════════════════════════
 FORMAT 2: CLASSIC MATCH LIST - I WITH LIST - II:
-═══════════════════════════════════════════════════════════════════════════════
 
 "Match List-I with List-II and select the correct answer using the code given below:
 
@@ -987,9 +888,7 @@ COMMON UPSC MATCH THEMES:
                     - Minerals ↔ States(leading producers)`,
 
   assertion: `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 QUESTION STYLE: STATEMENT - I / STATEMENT - II(and STATEMENT - I / II / III) - UPSC CURRENT FORMAT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: 2 or 3 statements with logical relationship analysis
 questionType: "assertion"
@@ -1036,11 +935,6 @@ CRITICAL DESIGN RULES:
 4. Most challenging: explanation statement(s) are true but NOT the correct explanation(tests reasoning)
 5. If an option says "explains Statement-I", the explanation statement(s) MUST be independently true
 6. If an option says "explains Statement-I", it MUST be a DIRECT causal / explanatory bridge, not merely correlated
-
-DIFFICULTY CALIBRATION:
-- Easy: Statement - I is false, Statement - II is true(or vice versa) - straightforward
-  - Medium: Both true, Statement - II clearly explains Statement - I - tests knowledge
-    - Hard: Both true, but Statement - II is NOT the correct explanation - tests reasoning
 
 AVOID "DEFINITION EXPLAINS DEFINITION"(TOO EASY)
 PREFER: "principle → implication"(Economy) or "mechanism → outcome"(Environment / Science)
@@ -1471,7 +1365,6 @@ export function getPrompt(params: PromptParams): string {
   const {
     subject,
     theme,
-    difficulty,
     styles: providedStyles,
     totalCount,
     enableCurrentAffairs = true, // Current affairs always enabled by default
@@ -1516,18 +1409,13 @@ export function getPrompt(params: PromptParams): string {
   const styleInstructions = styles
     .map(({ style, count }) => {
       return `
-═══════════════════════════════════════════════════════════════════════════════
 GENERATE ${count} QUESTION(S) IN THE FOLLOWING STYLE:
-═══════════════════════════════════════════════════════════════════════════════
 ${STYLE_INSTRUCTIONS[style]} `;
     })
     .join("\n");
 
   return `
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    UPSC CIVIL SERVICES PRELIMINARY EXAMINATION                ║
-║                         MCQ GENERATION TASK                                   ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+UPSC CIVIL SERVICES PRELIMINARY EXAMINATION MCQ GENERATION TASK
 
 GENERATE ${totalCount} UPSC - STANDARD MCQ QUESTIONS
 
@@ -1554,68 +1442,47 @@ ${currentAffairsSection}
 ${PYQ_EXAMPLES}
 
 ${subjectContext ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SUBJECT-SPECIFIC CONTEXT & KNOWLEDGE BASE:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${subjectContext}
 ` : ""
     }
 
 ${subjectTraps ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SUBJECT-SPECIFIC TRAP PATTERNS (Basic):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${subjectTraps}
 ` : ""
     }
 
 ${subjectAnalysis ? `
-═══════════════════════════════════════════════════════════════════════════════
 SUBJECT ANALYSIS (UPSC EVOLUTION) - FROM DETAILED PYQ ANALYSIS:
-═══════════════════════════════════════════════════════════════════════════════
 ${subjectAnalysis}
 ` : ""
     }
 
 ${subjectThemes ? `
-═══════════════════════════════════════════════════════════════════════════════
 SUBJECT THEMES & PATTERNS (HIGH-PRIORITY TOPICS FOR QUESTION GENERATION):
-═══════════════════════════════════════════════════════════════════════════════
 ${subjectThemes}
 ` : ""
     }
 
 ${subjectStrategicTraps ? `
-═══════════════════════════════════════════════════════════════════════════════
 STRATEGIC NOTES & TRAP CUES (USE THESE FOR DISTRACTOR DESIGN):
-═══════════════════════════════════════════════════════════════════════════════
 ${subjectStrategicTraps}
 ` : ""
     }
 
 ${strategicSynthesis ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 THEME USAGE GUIDANCE (How to Apply the Above):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${strategicSynthesis}
 ` : ""
     }
 
 ${DISTRACTOR_BLUEPRINT}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DIFFICULTY CALIBRATION:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${DIFFICULTY_INSTRUCTIONS[difficulty]}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE DISTRIBUTION:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ QUESTION STYLE DISTRIBUTION:
 ${styleInstructions}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CRITICAL QUALITY REQUIREMENTS(NON - NEGOTIABLE):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. FACTUAL ACCURACY(MOST IMPORTANT):
 - Every fact, date, number, name MUST be 100 % accurate
@@ -1649,9 +1516,7 @@ CRITICAL QUALITY REQUIREMENTS(NON - NEGOTIABLE):
     - No questions on ongoing court cases
       - Avoid religious content unless historically factual
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 MANDATORY SELF - VERIFICATION CHECKLIST:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Before finalizing EACH question, verify:
 
@@ -1666,9 +1531,7 @@ Before finalizing EACH question, verify:
 □ For assertion - reason: Is the relationship between A and R correctly identified ?
 □ Are there NO absolute words(only, always, never, all, none) making distractors obvious ?
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OUTPUT FORMAT(STRICT JSON):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Return a JSON array with exactly ${totalCount} question objects.
 
@@ -1687,7 +1550,6 @@ IMPORTANT:
     - correctOption is 0 - indexed(0 = A, 1 = B, 2 = C, 3 = D)
       - Explanation should be educational and cite sources where applicable
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 NOW GENERATE ${totalCount} HIGH - QUALITY UPSC MCQ QUESTIONS: `;
 }

@@ -4,7 +4,12 @@ import { VertexAI, type GenerateContentResult } from "@google-cloud/vertexai";
 import type { Env } from "../types.js";
 import type { GeneratedQuestion, QuestionStyle, Difficulty } from "@mcqs/shared";
 import { getPrompt } from "../prompts/index.js";
-import { validateBatch, autoFixQuestion, factCheckBatch } from "./validator.js";
+import {
+  validateBatch,
+  autoFixQuestion,
+  factCheckBatch,
+  fixFactCheckIssue,
+} from "./validator.js";
 import {
   generateFingerprint,
   FINGERPRINT_QUERIES,
@@ -44,6 +49,7 @@ export interface GenerateQuizMetrics {
   returnedCount: number;
   dedupEnabled: boolean;
   dedupFilteredCount: number;
+  standardReclassifiedCount: number;
   validationIsValid: boolean;
   validationInvalidCount: number;
   validationErrorCount: number;
@@ -391,9 +397,8 @@ UPSC EXAM CONTEXT:
 - UPSC Prelims has 100 questions worth 200 marks (2 marks each)
 - Negative marking: 0.66 marks deducted per wrong answer
 - Cut-off typically ranges from 75-100 marks
-- 56% of questions are statement-based (2-5 statements to evaluate)
-- ~8 match-the-following questions per paper
-- ~7-18 assertion-reason questions per paper
+  - Target mix: ~40% direct factual questions, ~60% pattern-based (statement/match/assertion)
+  - Balance statement, match, and assertion styles within the 60%
 
 CRITICAL REQUIREMENTS:
 1. FACTUAL ACCURACY: Every fact, date, article number, year MUST be 100% accurate. Cross-reference with NCERT, Laxmikanth, Spectrum, Ramesh Singh.
@@ -408,7 +413,7 @@ Respond with ONLY a valid JSON array. No other text, no markdown, no explanation
 
 Each question object must have:
 {
-  "questionText": "Complete question with proper formatting for statements/assertions",
+  "questionText": "Complete question text formatted for the chosen questionType",
   "questionType": "standard" | "statement" | "match" | "assertion",
   "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
   "correctOption": 0-3 (index: 0=A, 1=B, 2=C, 3=D),
@@ -416,6 +421,7 @@ Each question object must have:
 }
 
 QUESTION TYPE FORMATS:
+- STANDARD/FACTUAL: Direct one-line factual stem (no statements), e.g. "The irrigation device called 'Araghatta' was..."
 - STATEMENT: "Consider the following statements: 1. ... 2. ... 3. ... How many of the above statements is/are correct?" Options: A) Only one B) Only two C) All three D) None
 - ASSERTION-REASON: "Assertion (A): ... Reason (R): ... Which is correct?" Options must be the standard 4 A-R options.
 - MATCH: "Match List-I with List-II..." with proper table format and combination options like "A-1, B-2, C-3, D-4"
@@ -423,7 +429,6 @@ QUESTION TYPE FORMATS:
 Generate exactly ${count} questions now.`;
 
   const fullPrompt = `${systemPrompt}\n\n=== USER PROMPT ===\n\n${prompt}`;
-  const totalPromptChars = systemPrompt.length + promptChars;
 
   const generationCallId = crypto.randomUUID();
   const maxTokensBase = Math.min(8000 + count * 400, 32000); // Increased token buffer
@@ -611,6 +616,7 @@ Generate exactly ${count} questions now.`;
     questions: cleanLlmResponse(text),
     metrics: {
       generationDurationMs,
+      promptChars: systemPrompt.length + promptChars,
       responseChars,
       usagePromptTokens: usage?.promptTokens,
       usageCompletionTokens: usage?.completionTokens,
@@ -627,14 +633,18 @@ function cleanLlmResponse(text: string): GeneratedQuestion[] {
     // 1. naive try
     try {
       return JSON.parse(text);
-    } catch { }
+    } catch {
+      // ignore parse failure and try fallback strategies
+    }
 
     // 2. Extract from markdown
     const jsonMatch = text.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
       try {
         return JSON.parse(jsonMatch[0]);
-      } catch { }
+      } catch {
+        // ignore and try next fallback
+      }
     }
 
     // 3. Try to clean markdown code blocks
@@ -738,19 +748,22 @@ export async function generateQuiz(
 
   console.log(`Generated ${allQuestions.length}/${count} questions total`);
 
+  const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
+    questions.map((q, i) => ({
+      questionText: q.questionText || `Question ${offset + i + 1}`,
+      questionType: q.questionType || "standard",
+      options: Array.isArray(q.options) && q.options.length === 4
+        ? q.options
+        : ["A) Option A", "B) Option B", "C) Option D", "D) Option D"],
+      correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
+        ? q.correctOption
+        : 0,
+      explanation: q.explanation || "No explanation provided.",
+      metadata: q.metadata,
+    }));
+
   // Normalize questions
-  const normalizedQuestions = allQuestions.slice(0, count).map((q, i) => ({
-    questionText: q.questionText || `Question ${i + 1}`,
-    questionType: q.questionType || "standard",
-    options: Array.isArray(q.options) && q.options.length === 4
-      ? q.options
-      : ["A) Option A", "B) Option B", "C) Option D", "D) Option D"],
-    correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
-      ? q.correctOption
-      : 0,
-    explanation: q.explanation || "No explanation provided.",
-    metadata: q.metadata,
-  }));
+  const normalizedQuestions = normalizeQuestions(allQuestions.slice(0, count), 0);
 
   // Auto-fix
   const fixedQuestions = normalizedQuestions.map(autoFixQuestion);
@@ -758,8 +771,9 @@ export async function generateQuiz(
   // Deduplication
   let finalQuestions = fixedQuestions;
   let dedupFilteredCount = 0;
+  let standardReclassifiedCount = 0;
 
-  if (enableDeduplication && existingFingerprints.size > 0) {
+  if (enableDeduplication) {
     const dedupedQuestions: GeneratedQuestion[] = [];
 
     for (const question of fixedQuestions) {
@@ -777,10 +791,145 @@ export async function generateQuiz(
     }
   }
 
+  if (finalQuestions.length > 0) {
+    for (const question of finalQuestions) {
+      if (question.questionType !== "standard") continue;
+      const text = question.questionText.toLowerCase();
+      if (
+        text.includes("consider the following statements") ||
+        text.includes("how many of the above") ||
+        text.includes("which of the statements")
+      ) {
+        question.questionType = "statement";
+        standardReclassifiedCount++;
+      }
+    }
+    if (standardReclassifiedCount > 0) {
+      console.warn(`Reclassified ${standardReclassifiedCount} standard questions as statement style`);
+    }
+  }
+
+  const factualMinimum = Math.round(count * 0.40);
+  const getFactualCount = () =>
+    finalQuestions.filter(q => q.questionType === "standard").length;
+  const hasFactualMinimum = () => getFactualCount() >= factualMinimum;
+  const shouldRegenerate = () =>
+    (enableDeduplication && finalQuestions.length < count) || !hasFactualMinimum();
+
+  if (shouldRegenerate()) {
+    let remaining = enableDeduplication
+      ? Math.max(count - finalQuestions.length, factualMinimum - getFactualCount())
+      : Math.max(factualMinimum - getFactualCount(), 0);
+    let regenerationIndex = 1;
+    const regenerationLimit = 3;
+
+    while (remaining > 0 && regenerationIndex <= regenerationLimit) {
+      const factualNeededNow = Math.max(factualMinimum - getFactualCount(), 0);
+      const factualOnly = factualNeededNow > 0;
+      const reason = enableDeduplication
+        ? factualOnly
+          ? "to meet factual minimum"
+          : "after dedup"
+        : "to meet factual minimum";
+      console.log(`Regenerating ${remaining} question(s) ${reason} (attempt ${regenerationIndex})...`);
+      const regenerated = await retryWithBackoff(
+        async () => {
+          const result = await generateQuizCall(
+            env,
+            {
+              ...params,
+              count: remaining,
+              styles: factualOnly ? ["factual"] : params.styles,
+              enableCurrentAffairs: groundingEnabled,
+              currentAffairsTheme,
+            },
+            overallCallId,
+            regenerationIndex
+          );
+
+          if (result.questions.length === 0) {
+            const parseError = new Error(
+              `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
+            );
+            (parseError as any).isParseFailure = true;
+            throw parseError;
+          }
+
+          return result;
+        },
+        {
+          maxRetries,
+          baseDelayMs,
+          rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
+          operationName: `Quiz Regeneration (${subject}/${theme || 'no-theme'})`,
+        }
+      );
+
+      totalPromptChars += regenerated.metrics.promptChars || 0;
+      totalResponseChars += regenerated.metrics.responseChars || 0;
+      totalPromptTokens += regenerated.metrics.usagePromptTokens || 0;
+      totalCompletionTokens += regenerated.metrics.usageCompletionTokens || 0;
+      totalTokens += regenerated.metrics.usageTotalTokens || 0;
+      totalGroundingSources += regenerated.groundingSourceCount || 0;
+
+      const normalizedRegenerated = normalizeQuestions(
+        regenerated.questions,
+        finalQuestions.length
+      );
+      const fixedRegenerated = normalizedRegenerated.map(autoFixQuestion);
+
+      for (const question of fixedRegenerated) {
+        if (enableDeduplication) {
+          const fingerprint = generateFingerprint(question);
+          if (existingFingerprints.has(fingerprint)) {
+            dedupFilteredCount++;
+            continue;
+          }
+          existingFingerprints.add(fingerprint);
+        }
+
+        const text = question.questionText.toLowerCase();
+        if (
+          question.questionType === "standard" &&
+          (
+            text.includes("consider the following statements") ||
+            text.includes("how many of the above") ||
+            text.includes("which of the statements")
+          )
+        ) {
+          question.questionType = "statement";
+          standardReclassifiedCount++;
+        }
+
+        if (factualOnly && question.questionType !== "standard") {
+          continue;
+        }
+
+        finalQuestions.push(question);
+      }
+
+      if (enableDeduplication) {
+        remaining = Math.max(count - finalQuestions.length, factualMinimum - getFactualCount());
+      } else {
+        remaining = Math.max(factualMinimum - getFactualCount(), 0);
+      }
+
+      regenerationIndex += 1;
+    }
+  }
+
+  if (finalQuestions.length > count) {
+    const factualQuestions = finalQuestions.filter(q => q.questionType === "standard");
+    const nonFactualQuestions = finalQuestions.filter(q => q.questionType !== "standard");
+    finalQuestions = [...factualQuestions, ...nonFactualQuestions].slice(0, count);
+  } else {
+    finalQuestions = finalQuestions.slice(0, count);
+  }
+
   // Validation
   const validationResult = validateBatch(finalQuestions);
 
-  // Fact Check
+  // Fact Check + Fix
   let factCheckResult = { checkedCount: 0, accurateCount: 0, issues: [] as any[] };
   let factCheckDurationMs = 0;
 
@@ -796,6 +945,37 @@ export async function generateQuiz(
       factCheckDurationMs = Date.now() - fcStart;
     } catch (e) {
       console.error("Fact check failed:", e);
+    }
+
+    if (factCheckResult.issues.length > 0) {
+      console.log(`Fact-check flagged ${factCheckResult.issues.length} questions. Attempting fixes...`);
+      for (const issue of factCheckResult.issues) {
+        const idx = issue.questionIndex;
+        const question = finalQuestions[idx];
+        if (!question) continue;
+        try {
+          finalQuestions[idx] = await fixFactCheckIssue(question, issue.result, env);
+        } catch (error) {
+          console.error("Fact-fix failed for question", idx, error);
+        }
+      }
+
+      const fcRetryStart = Date.now();
+      try {
+        const refactored = await factCheckBatch(
+          finalQuestions,
+          "",
+          { env, parentCallId: overallCallId, subject, theme, difficulty }
+        );
+        factCheckDurationMs += Date.now() - fcRetryStart;
+        factCheckResult = {
+          checkedCount: refactored.checkedCount,
+          accurateCount: refactored.accurateCount,
+          issues: refactored.issues,
+        };
+      } catch (error) {
+        console.error("Fact check retry failed:", error);
+      }
     }
   }
 
@@ -829,6 +1009,7 @@ export async function generateQuiz(
       returnedCount: finalQuestions.length,
       dedupEnabled: enableDeduplication || false,
       dedupFilteredCount,
+      standardReclassifiedCount,
       validationIsValid: validationResult.isValid,
       validationInvalidCount: validationResult.invalidQuestions,
       validationErrorCount: validationResult.results.reduce((s, r) => s + r.errors.length, 0),

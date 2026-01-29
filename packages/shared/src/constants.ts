@@ -140,4 +140,10 @@ export const API_ENDPOINTS = {
   QUIZ_SET_RUN: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}`,
   QUIZ_SET_SCHEDULE: (setId: string) => `/api/quiz-sets/${setId}/schedule`,
   QUIZ_SET_SCHEDULE_TOGGLE: (setId: string) => `/api/quiz-sets/${setId}/schedule/toggle`,
+  // Run Attempts (Combined Quiz)
+  RUN_COMBINED_QUESTIONS: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/combined-questions`,
+  RUN_ATTEMPT_START: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/attempt/start`,
+  RUN_ATTEMPT_GET: (id: string) => `/api/run-attempt/${id}`,
+  RUN_ATTEMPT_ANSWER: (id: string) => `/api/run-attempt/${id}/answer`,
+  RUN_ATTEMPT_SUBMIT: (id: string) => `/api/run-attempt/${id}/submit`,
 } as const;

@@ -63,7 +63,6 @@ export interface GeneratedQuestion {
 
 export interface Quiz {
   id: string;
-  userId: string;
   subject: Subject;
   theme?: string;
   difficulty: Difficulty;
@@ -90,7 +89,6 @@ export interface QuizWithAnswers extends Quiz {
 export interface Attempt {
   id: string;
   quizId: string;
-  userId: string;
   startedAt: number;
   submittedAt?: number;
   score?: number;
@@ -131,7 +129,6 @@ export interface AttemptWithAnswers extends Attempt {
 // ============================================
 
 export interface UserSettings {
-  userId: string;
   defaultModel: ModelProvider;
   hasOpenaiKey: boolean;
   hasGeminiKey: boolean;
@@ -224,7 +221,6 @@ export interface QuizSetItem extends QuizSetItemConfig {
 
 export interface QuizSet {
   id: string;
-  userId: string;
   name: string;
   description?: string;
   isActive: boolean;
@@ -307,4 +303,90 @@ export interface QuizSetListItem {
     lastRunAt?: number;
     lastRunStatus?: QuizSetRunStatus;
   };
+}
+
+// ============================================
+// Run Attempt Types (Combined Quiz)
+// ============================================
+
+export type RunAttemptStatus = "in_progress" | "completed";
+
+export interface RunAttempt {
+  id: string;
+  runId: string;
+  startedAt: number;
+  submittedAt?: number;
+  score?: number;
+  totalQuestions: number;
+  timeTakenSeconds?: number;
+  status: RunAttemptStatus;
+  shuffleSeed: string;
+}
+
+export interface RunAttemptAnswer {
+  id: string;
+  runAttemptId: string;
+  questionId: string;
+  quizId: string;
+  shuffledIndex: number;
+  selectedOption: number | null;
+  isCorrect?: boolean;
+  markedForReview: boolean;
+  answeredAt?: number;
+}
+
+export interface CombinedQuestion {
+  id: string;
+  quizId: string;
+  subject: Subject;
+  theme?: string;
+  sequenceNumber: number;
+  shuffledIndex: number;
+  questionText: string;
+  questionType: QuestionType;
+  options: string[];
+  correctOption?: number; // Only included after submission or in learn mode
+  explanation?: string; // Only included after submission or in learn mode
+  metadata?: Record<string, unknown>;
+}
+
+export interface RunAttemptAnswerWithQuestion extends RunAttemptAnswer {
+  questionText: string;
+  questionType: QuestionType;
+  options: string[];
+  correctOption: number | null; // null until submitted
+  explanation: string | null; // null until submitted
+  subject: Subject;
+  theme?: string;
+  sequenceNumber: number;
+}
+
+export interface RunAttemptWithAnswers extends RunAttempt {
+  quizSetName: string;
+  answers: RunAttemptAnswerWithQuestion[];
+}
+
+export interface QuizScoreBreakdown {
+  quizId: string;
+  subject: Subject;
+  theme?: string;
+  score: number;
+  totalQuestions: number;
+  accuracy: number;
+}
+
+export interface SubjectScoreBreakdown {
+  subject: Subject;
+  score: number;
+  totalQuestions: number;
+  accuracy: number;
+}
+
+export interface RunAttemptResult {
+  score: number;
+  totalQuestions: number;
+  timeTakenSeconds: number;
+  accuracy: number;
+  byQuiz: QuizScoreBreakdown[];
+  bySubject: SubjectScoreBreakdown[];
 }

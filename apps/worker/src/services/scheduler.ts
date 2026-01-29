@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import parser from "cron-parser";
-import type { Env, DatabaseLike } from "../types.js";
+import type { Env } from "../types.js";
 import { triggerQuizSetGeneration } from "./quiz-set-generator.js";
 
 interface ScheduleRow {
@@ -14,7 +14,7 @@ interface ScheduleRow {
 }
 
 interface QuizSetRow {
-  user_id: string;
+  id: string;
 }
 
 interface ScheduledJob {
@@ -161,9 +161,9 @@ export class QuizSetScheduler {
     );
 
     try {
-      // Get the quiz set owner
+      // Get the quiz set
       const quizSet = await this.env.DB.prepare(
-        `SELECT user_id FROM quiz_sets WHERE id = ?`
+        `SELECT id FROM quiz_sets WHERE id = ?`
       )
         .bind(quizSetId)
         .first<QuizSetRow>();
@@ -177,7 +177,6 @@ export class QuizSetScheduler {
       const { runId } = await triggerQuizSetGeneration(
         this.env,
         quizSetId,
-        quizSet.user_id,
         "scheduled",
         scheduleId
       );

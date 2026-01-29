@@ -66,7 +66,6 @@ const runQuizGeneration = async ({
   env,
   body,
   quizId,
-  userId,
   stylesJson,
   requestStart,
   now,
@@ -74,7 +73,6 @@ const runQuizGeneration = async ({
   env: Env;
   body: GenerateQuizRequest;
   quizId: string;
-  userId: string;
   stylesJson: string;
   requestStart: number;
   now: number;
@@ -129,7 +127,6 @@ const runQuizGeneration = async ({
       await insertAiGenerationMetric(env.DB, {
         id: nanoid(),
         quizId,
-        userId,
         provider: metrics.provider,
         model: metrics.model,
         factCheckModel: metrics.factCheckModel,
@@ -187,7 +184,6 @@ quiz.post(
   zValidator("json", generateQuizRequestSchema),
   async (c) => {
     const body = c.req.valid("json");
-    const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
     const requestStart = Date.now();
     const quizId = nanoid();
     const now = Math.floor(Date.now() / 1000);
@@ -203,7 +199,7 @@ quiz.post(
       )
         .bind(
           quizId,
-          userId,
+          "public",
           body.subject,
           body.theme || null,
           body.difficulty,
@@ -219,7 +215,6 @@ quiz.post(
         env: c.env,
         body,
         quizId,
-        userId,
         stylesJson,
         requestStart,
         now,

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 dotenvConfig();
 
 // Import database, app, and scheduler
-import { initDatabase, getDatabase, closeDatabase } from './lib/database.js';
+import { initDatabase, closeDatabase } from './lib/database.js';
 import app from './index.js';
 import type { Env } from './types.js';
 import { initializeScheduler, stopScheduler } from './services/scheduler.js';
@@ -86,11 +86,10 @@ async function main() {
     }
 
     // Create a modified Hono app that injects env
-    const server = serve({
+    serve({
         fetch: (request: Request) => {
             // Inject environment into request context
-            // @ts-ignore - Hono expects env in Bindings
-            return app.fetch(request, env);
+            return (app as unknown as { fetch: (req: Request, env: Env) => Response | Promise<Response> }).fetch(request, env);
         },
         port: PORT,
         hostname: HOST,

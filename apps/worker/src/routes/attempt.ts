@@ -13,7 +13,6 @@ type QuizRow = {
 type AttemptRow = {
   id: string;
   quiz_id: string;
-  user_id: string;
   started_at: number;
   total_questions: number;
   status: string;
@@ -59,7 +58,6 @@ const saveAnswerSchema = z.object({
 
 // Get latest completed attempts for a list of quiz IDs
 attempt.get("/by-quiz", async (c) => {
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
   const idsParam = c.req.query("ids") || "";
   const quizIds = idsParam.split(",").map((id) => id.trim()).filter(Boolean);
 
@@ -80,15 +78,14 @@ attempt.get("/by-quiz", async (c) => {
      JOIN (
        SELECT quiz_id, MAX(submitted_at) as submitted_at
        FROM attempts
-       WHERE user_id = ?
-         AND status = 'completed'
+       WHERE status = 'completed'
          AND quiz_id IN (${placeholders})
        GROUP BY quiz_id
      ) latest
        ON a.quiz_id = latest.quiz_id AND a.submitted_at = latest.submitted_at
-     WHERE a.user_id = ? AND a.status = 'completed'`
+     WHERE a.status = 'completed'`
   )
-    .bind(userId, ...quizIds, userId)
+    .bind(...quizIds)
     .all<{
       attempt_id: string;
       quiz_id: string;
@@ -113,7 +110,6 @@ attempt.get("/by-quiz", async (c) => {
 // Start a new attempt
 attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
   const { quizId } = c.req.valid("json");
-  const userId = c.req.header("CF-Access-Authenticated-User-Email") || "anonymous";
 
   // Verify quiz exists
   const quiz = await c.env.DB.prepare(
@@ -148,7 +144,7 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     `INSERT INTO attempts (id, quiz_id, user_id, started_at, total_questions, status)
      VALUES (?, ?, ?, ?, ?, 'in_progress')`
   )
-    .bind(attemptId, quizId, userId, now, quiz.question_count)
+    .bind(attemptId, quizId, "public", now, quiz.question_count)
     .run();
 
   // Create empty answer records for each question

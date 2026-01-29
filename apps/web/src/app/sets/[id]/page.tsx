@@ -294,6 +294,32 @@ export default function QuizSetDetailPage() {
         </div>
       )}
 
+      {/* Quick Start - Combined Quiz */}
+      {(() => {
+        const completedRuns = runs.filter(r => r.status === "completed" || r.status === "partial");
+        const latestRun = completedRuns.length > 0 ? completedRuns[0] : null;
+        if (!latestRun) return null;
+
+        // Calculate total questions from quiz set items
+        const totalQuestions = quizSet.items.reduce((sum, item) => sum + item.questionCount, 0);
+
+        return (
+          <Card className="bg-gradient-to-r from-primary-50 to-primary-100 border-primary-200">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-semibold text-primary-900 mb-1">Quick Start</h3>
+                <p className="text-sm text-primary-700">
+                  Take a combined quiz with all {totalQuestions} questions from the latest run (shuffled)
+                </p>
+              </div>
+              <Link href={`/sets/${setId}/runs/${latestRun.id}/combined`}>
+                <Button>Start Combined Quiz</Button>
+              </Link>
+            </div>
+          </Card>
+        );
+      })()}
+
       {/* Schedule Section */}
       <Card>
         <div className="flex items-center justify-between mb-4">

@@ -1,13 +1,14 @@
 // Database interface that works with both D1 (Cloudflare) and better-sqlite3 (Node.js)
 // The actual implementation is chosen at runtime based on the environment
+export interface DatabaseLikeStatement {
+  bind(...values: unknown[]): DatabaseLikeStatement;
+  first<T = unknown>(columnName?: string): Promise<T | null>;
+  run(): Promise<{ success: boolean; meta?: { changes: number; last_row_id: number } }>;
+  all<T = unknown>(): Promise<{ results: T[]; success: boolean }>;
+}
+
 export interface DatabaseLike {
-  prepare(sql: string): {
-    bind(...values: unknown[]): {
-      first<T = unknown>(columnName?: string): Promise<T | null>;
-      run(): Promise<{ success: boolean; meta?: { changes: number; last_row_id: number } }>;
-      all<T = unknown>(): Promise<{ results: T[]; success: boolean }>;
-    };
-  };
+  prepare(sql: string): DatabaseLikeStatement;
 }
 
 export interface Env {
@@ -27,10 +28,3 @@ export interface Env {
   LLM_MAX_RETRIES?: string; // Max retry attempts for LLM calls (default: 3)
   LLM_RETRY_DELAY_MS?: string; // Base delay for exponential backoff in ms (default: 2000)
 }
-
-// User context from Cloudflare Access
-export interface UserContext {
-  userId: string;
-  email?: string;
-}
-

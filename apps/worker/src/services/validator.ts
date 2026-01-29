@@ -57,16 +57,6 @@ function hasAbsoluteWords(text: string): boolean {
   });
 }
 
-// Validate option format (should start with A), B), C), D))
-function hasValidOptionFormat(options: string[]): boolean {
-  const expectedPrefixes = ["A)", "B)", "C)", "D)"];
-  return options.every(
-    (opt, idx) =>
-      opt.startsWith(expectedPrefixes[idx]) ||
-      opt.startsWith(expectedPrefixes[idx].toLowerCase())
-  );
-}
-
 // Check for "All of the above" or "None of the above" patterns
 function hasAllNoneAbovePattern(options: string[]): string | null {
   const patterns = [
@@ -452,7 +442,8 @@ Respond with ONLY valid JSON in this format:
   "correctedAnswer": null or 0-3 if the marked answer is wrong
 }
 
-BE STRICT. If unsure about any fact, mark confidence as "low".`;
+ONLY mark isAccurate=false if you are confident about a specific factual error.
+If unsure, set isAccurate=true and confidence="low" with empty issues/suggestions.`;
 
 const FACT_CHECK_BATCH_PROMPT = `You are a UPSC exam expert fact-checker. Your job is to verify the factual accuracy of MCQ questions.
 
@@ -472,7 +463,26 @@ Each element must be:
   "correctedAnswer": null or 0-3 if the marked answer is wrong
 }
 
-BE STRICT. If unsure about any fact, mark confidence as "low".`;
+ONLY mark isAccurate=false if you are confident about a specific factual error.
+If unsure, set isAccurate=true and confidence="low" with empty issues/suggestions.`;
+
+const FACT_FIX_PROMPT = `You are a UPSC question editor. Fix factual errors in a single MCQ.
+
+Rules:
+- Preserve the original question style.
+- Fix ONLY the factual errors described.
+- Ensure exactly one correct answer and all other options are incorrect.
+- Keep the same questionType unless the original is invalid.
+- Return ONLY valid JSON for the corrected question object.
+
+Output format:
+{
+  "questionText": "...",
+  "questionType": "standard" | "statement" | "match" | "assertion",
+  "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+  "correctOption": 0-3,
+  "explanation": "..."
+}`;
 
 // Strip option prefix (A), B), etc.) from option text
 function stripOptionPrefix(opt: string): string {
@@ -500,7 +510,7 @@ export async function factCheckQuestion(
     } else {
       throw new Error("GCP_SERVICE_ACCOUNT not set");
     }
-  } catch (e) {
+  } catch {
     return {
       isAccurate: true,
       confidence: "low",
@@ -575,6 +585,83 @@ MARKED CORRECT: ${String.fromCharCode(65 + question.correctOption)} - ${stripOpt
       issues: ["Fact-check service unavailable"],
       suggestions: [],
     };
+  }
+}
+
+export async function fixFactCheckIssue(
+  question: GeneratedQuestion,
+  result: FactCheckResult,
+  env: Env
+): Promise<GeneratedQuestion> {
+  let serviceAccount: any;
+  try {
+    if (env.GCP_SERVICE_ACCOUNT) {
+      serviceAccount = JSON.parse(env.GCP_SERVICE_ACCOUNT);
+    } else {
+      throw new Error("GCP_SERVICE_ACCOUNT not set");
+    }
+  } catch {
+    return question;
+  }
+
+  const vertex = createVertex({
+    project: serviceAccount.project_id,
+    location: env.GOOGLE_VERTEX_LOCATION || "global",
+    googleAuthOptions: {
+      credentials: {
+        client_email: serviceAccount.client_email,
+        private_key: serviceAccount.private_key,
+      },
+    },
+  });
+
+  const issueSummary = result.issues?.length
+    ? result.issues.join(" ")
+    : "Factual error reported without details.";
+  const suggestionSummary = result.suggestions?.length
+    ? result.suggestions.join(" ")
+    : "";
+
+  const prompt = JSON.stringify({
+    question,
+    issues: issueSummary,
+    suggestions: suggestionSummary,
+  });
+
+  try {
+    const { text } = await generateText({
+      model: vertex(env.FACT_CHECK_MODEL || "gemini-3-flash-preview"),
+      system: FACT_FIX_PROMPT,
+      prompt,
+      maxOutputTokens: 2000,
+      providerOptions: {
+        google: {
+          thinkingConfig: {
+            thinkingLevel: "medium",
+          },
+        },
+      },
+    });
+
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return question;
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]) as GeneratedQuestion;
+    return autoFixQuestion({
+      questionText: parsed.questionText ?? question.questionText,
+      questionType: parsed.questionType ?? question.questionType,
+      options: parsed.options ?? question.options,
+      correctOption: typeof parsed.correctOption === "number"
+        ? parsed.correctOption
+        : question.correctOption,
+      explanation: parsed.explanation ?? question.explanation,
+      metadata: question.metadata,
+    });
+  } catch (error) {
+    console.error("Fact-fix failed:", error);
+    return question;
   }
 }
 
@@ -726,7 +813,7 @@ async function factCheckBatchSingleCall(
         suggestions: item?.suggestions ?? [],
       };
 
-      if (!result.isAccurate || result.confidence === "low") {
+      if (!result.isAccurate) {
         issues.push({ questionIndex: idx, result });
       } else {
         accurateCount++;

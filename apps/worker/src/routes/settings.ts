@@ -69,7 +69,7 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
-        "global",
+        "public",
         body.defaultModel || "gemini",
         body.openaiApiKey || null,
         body.geminiApiKey || null,

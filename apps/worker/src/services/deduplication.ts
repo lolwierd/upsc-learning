@@ -218,7 +218,7 @@ export const FINGERPRINT_QUERIES = {
     FROM question_fingerprints 
     WHERE subject = ? 
     ORDER BY created_at DESC 
-    LIMIT 500
+    LIMIT 600
   `,
 
   // Use INSERT OR IGNORE to handle race conditions and duplicate fingerprints gracefully

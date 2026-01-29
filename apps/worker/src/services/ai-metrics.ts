@@ -7,7 +7,6 @@ export type AiParseStrategy = "direct" | "extracted";
 export interface AiGenerationMetricInsert {
   id: string;
   quizId?: string | null;
-  userId: string;
 
   provider: AiProvider;
   model: string;
@@ -100,7 +99,7 @@ export async function insertAiGenerationMetric(
     .bind(
       metric.id,
       metric.quizId ?? null,
-      metric.userId,
+      "public",
 
       metric.provider,
       metric.model,
@@ -158,7 +157,6 @@ export async function insertAiGenerationMetric(
 export interface AiGenerationMetricRow {
   id: string;
   quizId: string | null;
-  userId: string;
   provider: AiProvider;
   model: string;
   factCheckModel: string | null;
@@ -214,7 +212,6 @@ export async function listAiGenerationMetrics(
     `SELECT
       id,
       quiz_id,
-      user_id,
       provider,
       model,
       fact_check_model,
@@ -274,7 +271,6 @@ export async function listAiGenerationMetrics(
   return rows.map((r) => ({
     id: String(r.id),
     quizId: (r.quiz_id as string) ?? null,
-    userId: String(r.user_id),
     provider: r.provider as AiProvider,
     model: String(r.model),
     factCheckModel: (r.fact_check_model as string) ?? null,

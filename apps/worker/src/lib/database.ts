@@ -117,6 +117,7 @@ class BetterSqliteDatabase implements D1Database {
 
         const transaction = this.db.transaction(() => {
             for (const stmt of statements) {
+                void stmt;
                 // Run each statement
                 results.push({
                     results: [],
