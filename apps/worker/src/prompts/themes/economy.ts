@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Economy_All_Themes.md
 
 export const ECONOMY_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ECONOMY THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -66,7 +64,7 @@ AGRICULTURE & RURAL ECONOMY:
 - MSP: procurement limits and price dynamics
 - Kisan Credit Card: short-term credit purposes
 - Pulses production: Kharif/Rabi share; trends
-- SHG–Bank linkage: origin, joint liability
+- SHG-Bank linkage: origin, joint liability
 
 EXTERNAL SECTOR & TRADE:
 - Exchange rates: NEER vs REER; competitiveness
@@ -117,9 +115,7 @@ ECONOMIC INTELLIGENCE & ENFORCEMENT:
 - Serious Fraud Investigation Office (SFIO): company fraud
 - Directorate General of GST Intelligence (DGGI): indirect tax evasion
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "TOOLCHAIN" & "DEFICIT ZOO":
 - Monetary Policy: Master the toolchain (Repo, Reverse, OMOs, SDF) and transmission channels

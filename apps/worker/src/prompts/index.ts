@@ -541,7 +541,7 @@ Follow 2024-2025 patterns as the PRIMARY reference. Ensure format VARIETY.
 // 2026 PRELIMS FOCUS - CRITICAL STRATEGIC GUIDANCE
 // ============================================================================
 const PRELIMS_2026_FOCUS = `
-🎯 CRITICAL: 2026 PRELIMS FOCUS 🎯
+CRITICAL: 2026 PRELIMS FOCUS
 
 YOUR GOAL: Generate questions that would likely appear in UPSC PRELIMS 2026.
 
@@ -578,13 +578,13 @@ CONTENT BALANCE: 60% STATIC + 40% DYNAMIC (Aspirational Target)
 
 FRAMING EXAMPLES:
 
-❌ OUTDATED (2015-style pure static):
+OUTDATED (2015-style pure static):
 "What are the features of Panchayati Raj?"
 
 ✓ MODERN (2024-style dynamic trigger):
 "In the context of the 30th anniversary of the 73rd Constitutional Amendment (2023)..."
 
-❌ OUTDATED (2013-style deep static):
+OUTDATED (2013-style deep static):
 "Which of the following rivers originates from the Amarkantak plateau?"
 
 ✓ MODERN (2024-style application):
@@ -593,16 +593,16 @@ recent inter-state water disputes..."
 `;
 
 const RELEVANCE_FILTER = `
-🔍 RELEVANCE FILTER FOR 2026 PRELIMS
+RELEVANCE FILTER FOR 2026 PRELIMS
 
-⛔ AVOID generating questions on:
+AVOID generating questions on:
 - Schemes that have ENDED or MERGED (unless historically tested)
 - Topics with DECLINING frequency in 2021-2024 PYQs
 - Very deep static minutiae that UPSC has moved away from
 - Specific dates/numbers unless absolutely fundamental
 - Regional details that are too narrow in scope
 
-✅ PRIORITIZE generating questions on:
+PRIORITIZE generating questions on:
 - Topics with INCREASING frequency in 2021-2024 (see trends)
 - Cross-linkage questions (Environment + Economy, Polity + Current Affairs)
 - Constitutional provisions with RECENT amendments or interpretations
@@ -860,11 +860,11 @@ D. [Item 4]4.[Description 4]
 Select the correct answer using the code given below: "
 
 Options format:
-     A   B   C   D
+       A   B   C   D
   (a)  1   2   3   4
-    (b)  2   1   4   3
-      (c)  3   4   1   2
-        (d)  4   3   2   1
+  (b)  2   1   4   3
+  (c)  3   4   1   2
+  (d)  4   3   2   1
 
 DESIGN RULES(CRITICAL FOR UPSC - QUALITY):
 1. Items in List - I MUST be same category(all rivers, all acts, all treaties, etc.)
@@ -1520,16 +1520,16 @@ MANDATORY SELF - VERIFICATION CHECKLIST:
 
 Before finalizing EACH question, verify:
 
-□ Is every fact in the question 100 % accurate ?
-□ Is the correct answer definitively correct ?
-□ Are ALL distractors definitively incorrect ?
-□ Would a UPSC subject expert agree with the answer ?
-□ Is the explanation accurate and educational ?
-□ Does the explanation cite proper reasoning(not just "this is correct") ?
-□ For statement questions: Is each statement independently verifiable ?
-□ For match questions: Is only ONE combination correct ?
-□ For assertion - reason: Is the relationship between A and R correctly identified ?
-□ Are there NO absolute words(only, always, never, all, none) making distractors obvious ?
+- Is every fact in the question 100 % accurate ?
+- Is the correct answer definitively correct ?
+- Are ALL distractors definitively incorrect ?
+- Would a UPSC subject expert agree with the answer ?
+- Is the explanation accurate and educational ?
+- Does the explanation cite proper reasoning(not just "this is correct") ?
+- For statement questions: Is each statement independently verifiable ?
+- For match questions: Is only ONE combination correct ?
+- For assertion - reason: Is the relationship between A and R correctly identified ?
+- Are there NO absolute words(only, always, never, all, none) making distractors obvious ?
 
 OUTPUT REQUIREMENTS:
 

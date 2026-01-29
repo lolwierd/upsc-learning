@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Art_and_Culture_All_Themes.md
 
 export const ART_CULTURE_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ART & CULTURE THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -101,9 +99,7 @@ MEDIEVAL TERMS & TERMINOLOGY:
 - Araghatta: Persian wheel water-lifting device
 - Taccavi: agricultural loans in medieval period
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "IDENTIFIERS" & "GRIDS":
 

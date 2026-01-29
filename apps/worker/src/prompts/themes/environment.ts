@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Environment_All_Themes.md
 
 export const ENVIRONMENT_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ENVIRONMENT & ECOLOGY THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -47,7 +45,7 @@ BIODIVERSITY & SPECIES:
 - Animal behaviour: lions, cheetah, leopard
 - Native vs exotic species (cashew, papaya, red sanders)
 - Peacock (Gooty) tarantula habitat
-- Fig–fig wasp obligate pollination mutualism
+- Fig-fig wasp obligate pollination mutualism
 - Parasitoid species occurrence
 - Animal behaviour: waggle dance (honeybees)
 - Animal cognition/tool use: stick tool
@@ -132,9 +130,7 @@ GLOBAL ENVIRONMENTAL LEGISLATION:
 - US Inflation Reduction Act: green incentives
 - Border Carbon Adjustment Mechanisms (CBAM)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "GRIDS" & "HIERARCHIES":
 - Acts/Rules: Scope → Authority → Penalty → Appeal Route → 1 current tweak

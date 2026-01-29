@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Polity_All_Themes.md
 
 export const POLITY_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 POLITY & GOVERNANCE THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -55,7 +53,7 @@ JUDICIARY:
 - Impeachment of judges: Judges (Inquiry) Act 1968
 
 FEDERALISM & LOCAL GOVERNANCE:
-- Centre–State: minor minerals rule-making
+- Centre-State: minor minerals rule-making
 - Fifth Schedule: Scheduled Areas administration
 - Panchayati Raj: intermediate panchayats; SFC
 - PESA Act, 1996: objectives & tribal self-governance
@@ -75,7 +73,7 @@ RIGHTS & LIBERTIES:
 - Right to Property: constitutional position & human right
 - Equality (Article 14): arbitrariness and rule of law
 - Fundamental Duties: enforceability
-- Right against Exploitation (Art 23–24)
+- Right against Exploitation (Art 23-24)
 - Aadhaar: data sharing, mandatory use, welfare linkage
 
 INTERNATIONAL RELATIONS & REGIONAL GROUPINGS:
@@ -133,9 +131,7 @@ POLITICAL THEORY DEFINITIONS:
 - "Law" definition: Hart vs Austin theories
 - "Constitutionalism" vs "Constitution"
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "SWITCHBOARDS" & "TRAPS":
 - Focus on articles that behave like 'switchboards': 13, 32/226, 72/161, 110/117, 123/213, 200, 239AA, 280, 323A/323B

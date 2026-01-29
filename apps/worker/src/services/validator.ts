@@ -90,17 +90,17 @@ function validateStatementOptions(
 
   const expectedOptions = isStatementIii
     ? [
-        /both.*statement.?ii.*and.*statement.?iii.*correct.*both.*explain.*statement.?i/i,
-        /both.*statement.?ii.*and.*statement.?iii.*correct.*only\s+one.*explain.*statement.?i/i,
-        /only\s+one.*statements?\s*(ii|2)\s*(and|&)\s*(iii|3).*correct.*explain.*statement.?i/i,
-        /neither.*statement.?ii.*nor.*statement.?iii.*correct/i,
-      ]
+      /both.*statement.?ii.*and.*statement.?iii.*correct.*both.*explain.*statement.?i/i,
+      /both.*statement.?ii.*and.*statement.?iii.*correct.*only\s+one.*explain.*statement.?i/i,
+      /only\s+one.*statements?\s*(ii|2)\s*(and|&)\s*(iii|3).*correct.*explain.*statement.?i/i,
+      /neither.*statement.?ii.*nor.*statement.?iii.*correct/i,
+    ]
     : [
-        /both.*statement.*correct.*explanation/i,
-        /both.*statement.*correct.*not.*explanation/i,
-        /statement.?i.*correct.*statement.?ii.*incorrect/i,
-        /statement.?i.*incorrect.*statement.?ii.*correct/i,
-      ];
+      /both.*statement.*correct.*explanation/i,
+      /both.*statement.*correct.*not.*explanation/i,
+      /statement.?i.*correct.*statement.?ii.*incorrect/i,
+      /statement.?i.*incorrect.*statement.?ii.*correct/i,
+    ];
 
   // Check if at least 3 out of 4 options match expected patterns
   let matchCount = 0;
@@ -156,7 +156,7 @@ function validateMatchFormat(question: GeneratedQuestion): string | null {
   }
 
   // Classic match format should have A-1, B-2 style options
-  const matchPatterns = [/[a-d]\s*[-–]\s*[1-4]/i, /[1-4]\s*[-–]\s*[a-d]/i];
+  const matchPatterns = [/[a-d]\s*[--]\s*[1-4]/i, /[1-4]\s*[--]\s*[a-d]/i];
 
   let hasMatchFormat = false;
   for (const option of question.options) {
@@ -410,14 +410,14 @@ export function autoFixQuestion(
       text.includes("pairs")
     ) {
       fixed.questionType = "match";
-  } else if (
-    text.includes("statement-i") ||
-    text.includes("statement i") ||
-    text.includes("assertion") ||
-    text.includes("reason")
-  ) {
-    fixed.questionType = "assertion";
-  } else {
+    } else if (
+      text.includes("statement-i") ||
+      text.includes("statement i") ||
+      text.includes("assertion") ||
+      text.includes("reason")
+    ) {
+      fixed.questionType = "assertion";
+    } else {
       fixed.questionType = "standard";
     }
   }

@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/History_All_Themes.md
 
 export const HISTORY_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 HISTORY THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -39,7 +37,7 @@ MEDIEVAL INDIA:
 - Medieval term "Fanam" (coinage)
 - 18th-century successor states: Arcot, Mysore, Rohilkhand
 - Ancient/medieval legal: Mitakshara vs Dayabhaga
-- Mughal administration: Pargana–Sarkar–Suba
+- Mughal administration: Pargana-Sarkar-Suba
 - Vijayanagara irrigation works
 - Vijayanagara social history (Nuniz): women's roles
 - Delhi Sultanate administration: Amil, Iqta, Mir Bakshi
@@ -67,13 +65,13 @@ MODERN INDIA - BRITISH RULE:
 - Subsidiary Alliance (Wellesley): objectives
 - Wood's Dispatch (1854): education policy
 - Fort William College: training British civil servants
-- English education: Charter Act 1813, Anglicist–Orientalist
+- English education: Charter Act 1813, Anglicist-Orientalist
 - Colonial education: Calcutta Madarsa, Sanskrit College
 - Factories Act 1881; NM Lokhande
 - Trade Disputes Act, 1929
 - Rowlatt Act/Rowlatt Satyagraha
 - Butler Committee (1927)
-- Montagu–Chelmsford reforms
+- Montagu-Chelmsford reforms
 - Simon Commission: reasons for opposition (no Indian member)
 - Constituent Assembly: Sachchidananda Sinha (Provisional President)
 
@@ -90,7 +88,7 @@ MODERN INDIA - FREEDOM STRUGGLE:
 - Gandhi's programme shift: Harijan upliftment
 - Non-Cooperation: objective of Swaraj
 - Chauri Chaura aftermath: legal defence
-- Gandhi–Irwin Pact features
+- Gandhi-Irwin Pact features
 - Freedom struggle: 8 August 1942—Quit India
 - Quit India Movement: immediate trigger (Cripps Proposals)
 - INA and post-war trials: Shah Nawaz Khan, Sehgal
@@ -148,15 +146,13 @@ TEMPLE ARCHITECTURE & HISTORY:
 MUSIC & PERFORMING ARTS INSTITUTIONS:
 - Gandharva Mahavidyalaya: music education institution
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "TIME-SPINES" & "SIGNATURES":
 - Viceroys & Signatures: Ripon (Local self-govt), Curzon (Partition/1904 Act), Irwin (Pact), Linlithgow (Aug Offer), Mountbatten (Plan)
 - Constitutional Politics (1919-39): Dyarchy anatomy, franchise, 1937 ministries acts
 - Trap Cues:
-  * Dates: 1857 centres; Swadeshi milestones (7 Aug vs 16 Oct 1905); CDM timeline (12 Mar–6 Apr 1930)
+  * Dates: 1857 centres; Swadeshi milestones (7 Aug vs 16 Oct 1905); CDM timeline (12 Mar-6 Apr 1930)
   * Pairs: Match papers to editors; "Associated with" questions (aim for 30 high-yield pairs)
 
 HIGH YIELD TRAPS (Ancient/Medieval):

@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Geography_All_Themes.md
 
 export const GEOGRAPHY_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 GEOGRAPHY THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -12,11 +10,11 @@ PHYSICAL GEOGRAPHY - CLIMATOLOGY:
 - Climatology: atmospheric dust distribution
 - Climatology: isotherm bending in January
 - Atmospheric heating: solar vs terrestrial; greenhouse
-- Isotherms in January; land–sea contrast
+- Isotherms in January; land-sea contrast
 - Troposphere thickness variation (equator vs poles)
 - Water vapour distribution with altitude/latitude
 - Coriolis force properties
-- Land–sea thermal contrast: specific heat
+- Land-sea thermal contrast: specific heat
 - Jet streams, cyclone eye formation & temperature
 - Climate type identification (marine west coast)
 - Monsoon as seasonal wind reversal
@@ -44,7 +42,7 @@ WORLD GEOGRAPHY - MAPPING:
 - European regions: Mallorca/Normandy/Sardinia
 - North Sea bordering countries
 - Red Sea physical geography: aridity
-- SUMED pipeline: Red Sea–Mediterranean
+- SUMED pipeline: Red Sea-Mediterranean
 - Conflict areas: Donbas/Kachin/Tigray location
 - Ukraine's land borders
 - Central Asia political geography: Afghanistan's neighbours
@@ -56,14 +54,14 @@ WORLD GEOGRAPHY - MAPPING:
 INDIAN GEOGRAPHY - RIVERS & DRAINAGE:
 - Ganga tributaries downstream of Prayagraj
 - Indian waterfalls: location/river matching
-- Indian rivers & lakes linkage (Jhelum–Wular)
+- Indian rivers & lakes linkage (Jhelum-Wular)
 - Indus river system: tributary joining directly
 - World rivers and outflows (Mekong/Thames/Volga)
 - Himalayan glaciers & river origins
 - Brahmaputra tributaries
 - Godavari tributaries
 - Rivers rising from Eastern Ghats
-- Teesta–Rangeet; outfall
+- Teesta-Rangeet; outfall
 - River geomorphology: Gandikota canyon
 
 INDIAN GEOGRAPHY - PHYSIOGRAPHY:
@@ -125,9 +123,7 @@ FOREST STATISTICS & HAZARDS:
 - Glacial Lake Outburst Floods (GLOFs): Sikkim, Uttarakhand
 - Himalayan hazard zones
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "LOCATION CLUSTERS" & "INTEGRATORS":
 - Clusters: Straits (Palk, Malacca, Hormuz), Gulfs, Plateaus, and Biosphere Reserve triads

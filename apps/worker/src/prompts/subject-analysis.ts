@@ -7,9 +7,9 @@ POLITY & GOVERNANCE - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2016 (Static Era): Direct Constitutional Articles, standard features (Parliament, Fundamental Rights)
-• 2017–2021 (Conceptual Era): Shift to political theory - "Liberty," "Constitutionalism," "Rule of Law" definitions
-• 2022–2025 (Legal & Judicial Era): Focus on Acts of Parliament, Supreme Court Judgments, practical application
+• 2013-2016 (Static Era): Direct Constitutional Articles, standard features (Parliament, Fundamental Rights)
+• 2017-2021 (Conceptual Era): Shift to political theory - "Liberty," "Constitutionalism," "Rule of Law" definitions
+• 2022-2025 (Legal & Judicial Era): Focus on Acts of Parliament, Supreme Court Judgments, practical application
 
 CURRENT AFFAIRS PATTERN - "DERIVED STATIC":
 UPSC rarely asks about political controversies directly. Instead, they test the Constitutional machinery involved.
@@ -28,10 +28,10 @@ ECONOMY - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2015 (Macro-Fundamentals): Focus on Inflation, Deficits, Balance of Payments
-• 2016–2018 (Scheme & Banking Era): Government Schemes (Jan Dhan, Mudra), NPA crisis, Banking reforms
-• 2019–2022 (Agri-Economy & Crisis): Massive pivot to Agriculture (MSP, Crops), Recession economics post-COVID
-• 2024–2025 (Regulatory & Financial): Specific regulations of SEBI and RBI (AIFs, ESG norms, Derivatives)
+• 2013-2015 (Macro-Fundamentals): Focus on Inflation, Deficits, Balance of Payments
+• 2016-2018 (Scheme & Banking Era): Government Schemes (Jan Dhan, Mudra), NPA crisis, Banking reforms
+• 2019-2022 (Agri-Economy & Crisis): Massive pivot to Agriculture (MSP, Crops), Recession economics post-COVID
+• 2024-2025 (Regulatory & Financial): Specific regulations of SEBI and RBI (AIFs, ESG norms, Derivatives)
 
 CURRENT AFFAIRS PATTERN - "APPLIED MACROECONOMICS":
 Questions test the transmission of global events to the Indian economy.
@@ -50,10 +50,10 @@ ENVIRONMENT & ECOLOGY - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2015 (Organizations & Funds): "Who funds what?" (GEF, BioCarbon Fund), International Conventions
-• 2016–2019 (Pollution & Laws): Domestic legislation (WPA, EPA, Forest Act), specific pollutants (PM2.5, Benzene)
-• 2020–2023 (Agri-Ecology & Behavior): Agriculture + Environment intersection, Animal Behavior (Ethology)
-• 2024–2025 (Solutions & Climate Finance): "Hard-to-abate" sectors, Carbon Markets (Art 6), PFAS
+• 2013-2015 (Organizations & Funds): "Who funds what?" (GEF, BioCarbon Fund), International Conventions
+• 2016-2019 (Pollution & Laws): Domestic legislation (WPA, EPA, Forest Act), specific pollutants (PM2.5, Benzene)
+• 2020-2023 (Agri-Ecology & Behavior): Agriculture + Environment intersection, Animal Behavior (Ethology)
+• 2024-2025 (Solutions & Climate Finance): "Hard-to-abate" sectors, Carbon Markets (Art 6), PFAS
 
 CURRENT AFFAIRS PATTERN - "SCIENTIFIC SOLUTIONS":
 Instead of asking about problems (Climate Change), UPSC asks about solutions.
@@ -72,9 +72,9 @@ GEOGRAPHY - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2016 (Resource Geography): Minerals, industries, energy resources
-• 2017–2021 (Dormant/Agri-Focus): Core geography declined; merged with Environment/Agriculture
-• 2022–2024 (Conflict Mapping & Climatology): Resurgence of World Mapping (Ukraine, Israel, Sahel), Physical Geography return
+• 2013-2016 (Resource Geography): Minerals, industries, energy resources
+• 2017-2021 (Dormant/Agri-Focus): Core geography declined; merged with Environment/Agriculture
+• 2022-2024 (Conflict Mapping & Climatology): Resurgence of World Mapping (Ukraine, Israel, Sahel), Physical Geography return
 • 2025 (Critical Minerals): Heavy focus on strategic resources (Lithium, Cobalt, Nickel)
 
 CURRENT AFFAIRS PATTERN - "GEOPOLITICS = GEOGRAPHY":
@@ -94,9 +94,9 @@ HISTORY & CULTURE - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2016 (Static & Culture): Standard Modern History and Classical Culture (Dance/Music)
-• 2017–2020 (The "Term" Era): Difficulty spike with obscure Medieval/Ancient administrative terms
-• 2021–2024 (Anniversaries & UNESCO): Questions driven by Centenaries, Golden Jubilees, UNESCO inscriptions
+• 2013-2016 (Static & Culture): Standard Modern History and Classical Culture (Dance/Music)
+• 2017-2020 (The "Term" Era): Difficulty spike with obscure Medieval/Ancient administrative terms
+• 2021-2024 (Anniversaries & UNESCO): Questions driven by Centenaries, Golden Jubilees, UNESCO inscriptions
 • 2025 (Back to Basics): Return to foundational personalities (Gandhi, Periyar) and dynasties
 
 CURRENT AFFAIRS PATTERN - "COMMEMORATIVE HISTORY":
@@ -120,10 +120,10 @@ SCIENCE & TECHNOLOGY - UPSC PATTERN ANALYSIS (2013-2025)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 TREND EVOLUTION:
-• 2013–2015 (General Science): Biology and Public Health (Diseases)
-• 2016–2019 (Emerging Tech): AI, IoT, Blockchain, 3D Printing
-• 2020–2022 (Applied Biotech): Heavily influenced by COVID-19 (Vaccines, Genomics, mRNA)
-• 2023–2025 (Future Tech & Energy): Energy Transition (Green Hydrogen, Battery Tech), Space, Quantum Computing
+• 2013-2015 (General Science): Biology and Public Health (Diseases)
+• 2016-2019 (Emerging Tech): AI, IoT, Blockchain, 3D Printing
+• 2020-2022 (Applied Biotech): Heavily influenced by COVID-19 (Vaccines, Genomics, mRNA)
+• 2023-2025 (Future Tech & Energy): Energy Transition (Green Hydrogen, Battery Tech), Space, Quantum Computing
 
 CURRENT AFFAIRS PATTERN - "APPLICATION OVER THEORY":
 Questions ask "What can this technology DO?" (Applications) rather than "How was it invented?"

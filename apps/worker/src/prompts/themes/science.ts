@@ -2,9 +2,7 @@
 // Source: pyqs/GS/themes/consolidated/Science_and_Tech_All_Themes.md
 
 export const SCIENCE_THEMES = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SCIENCE & TECHNOLOGY THEMES (Extracted from 13 Years of UPSC PYQs)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 HIGH-FREQUENCY THEMES:
 
@@ -162,9 +160,7 @@ MISCELLANEOUS:
 - Remote sensing applications: vegetation, GHG, LST
 - Qubit and quantum computing
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRATEGIC NOTES & TRAP CUES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CORE STRATEGY - "APPLICATION MAPS" & "TECH STACKS":
 - Space: Launchers (PSLV vs LVM3); Payloads: SAR (Clouds) vs LiDAR (Canopy/Elevation) vs Hyperspectral (Material signatures)
