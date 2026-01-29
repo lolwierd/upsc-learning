@@ -11,8 +11,6 @@ export type Subject =
   | "environment"
   | "art_culture";
 
-export type Difficulty = "easy" | "medium" | "hard";
-
 export type QuestionStyle =
   | "factual"
   | "conceptual"
@@ -65,7 +63,6 @@ export interface Quiz {
   id: string;
   subject: Subject;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
   questionCount: number;
   modelUsed: ModelProvider;
@@ -119,7 +116,6 @@ export interface AttemptAnswerWithQuestion extends AttemptAnswer {
 export interface AttemptWithAnswers extends Attempt {
   subject: Subject;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
   answers: AttemptAnswerWithQuestion[];
 }
@@ -129,11 +125,11 @@ export interface AttemptWithAnswers extends Attempt {
 // ============================================
 
 export interface UserSettings {
-  defaultModel: ModelProvider;
   hasOpenaiKey: boolean;
   hasGeminiKey: boolean;
   defaultQuestionCount: number;
   learnModeEnabled: boolean;
+  defaultQuizSetId: string | null;
 }
 
 // ============================================
@@ -151,7 +147,6 @@ export interface QuizHistoryItem {
   id: string;
   subject: Subject;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
   questionCount: number;
   createdAt: number;
@@ -204,7 +199,6 @@ export type QuizSetRunItemStatus = "pending" | "generating" | "completed" | "fai
 export interface QuizSetItemConfig {
   subject: Subject;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
   questionCount: number;
   enableCurrentAffairs?: boolean;

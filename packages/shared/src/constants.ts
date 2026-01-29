@@ -33,24 +33,6 @@ export const SUBJECT_DESCRIPTIONS: Record<(typeof SUBJECTS)[number], string> = {
 };
 
 // ============================================
-// Difficulty Constants
-// ============================================
-
-export const DIFFICULTIES = ["easy", "medium", "hard"] as const;
-
-export const DIFFICULTY_LABELS: Record<(typeof DIFFICULTIES)[number], string> = {
-  easy: "Easy",
-  medium: "Medium",
-  hard: "Hard",
-};
-
-export const DIFFICULTY_DESCRIPTIONS: Record<(typeof DIFFICULTIES)[number], string> = {
-  easy: "Basic facts and fundamental concepts",
-  medium: "Application-based questions with plausible distractors",
-  hard: "Deep analytical thinking, similar to actual UPSC prelims",
-};
-
-// ============================================
 // Question Style Constants
 // ============================================
 
@@ -98,7 +80,7 @@ export const QUESTION_COUNTS = [5, 10, 15, 20, 25, 30] as const;
 export const MODEL_PROVIDERS = ["gemini", "openai"] as const;
 
 export const MODEL_PROVIDER_LABELS: Record<(typeof MODEL_PROVIDERS)[number], string> = {
-  gemini: "Google Gemini (Default)",
+  gemini: "Google Gemini",
   openai: "OpenAI GPT-4 (BYOK)",
 };
 

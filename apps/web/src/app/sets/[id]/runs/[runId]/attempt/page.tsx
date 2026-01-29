@@ -12,7 +12,7 @@ import type {
   QuizSetRunWithItems,
   QuizSetWithSchedule,
 } from "@mcqs/shared";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS } from "@mcqs/shared";
 import { cn } from "@/lib/utils";
 
 function orderRunItems(
@@ -244,7 +244,6 @@ export default function QuizSetRunAttemptPage() {
                   </div>
                   {quizSetItem && (
                     <div className="text-xs text-gray-500 mt-0.5">
-                      {DIFFICULTY_LABELS[quizSetItem.difficulty as keyof typeof DIFFICULTY_LABELS]} ·{" "}
                       {quizSetItem.questionCount} questions
                     </div>
                   )}

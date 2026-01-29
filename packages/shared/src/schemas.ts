@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants.js";
+import { SUBJECTS, QUESTION_STYLES, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants.js";
 
 // ============================================
 // Base Schemas
 // ============================================
 
 export const subjectSchema = z.enum(SUBJECTS);
-export const difficultySchema = z.enum(DIFFICULTIES);
 export const questionStyleSchema = z.enum(QUESTION_STYLES);
 
 export const questionTypeSchema = z.enum(["standard", "statement", "match", "assertion"]);
@@ -20,7 +19,6 @@ export const modelProviderSchema = z.enum(["gemini", "openai"]);
 export const generateQuizRequestSchema = z.object({
   subject: subjectSchema,
   theme: z.string().max(200).optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema).optional().default([]),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
 
@@ -41,10 +39,11 @@ export const saveAnswerRequestSchema = z.object({
 });
 
 export const updateSettingsRequestSchema = z.object({
-  defaultModel: modelProviderSchema.optional(),
   openaiApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
   defaultQuestionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT).optional(),
+  learnModeEnabled: z.boolean().optional(),
+  defaultQuizSetId: z.string().nullable().optional(),
 });
 
 export const historyQuerySchema = z.object({
@@ -84,7 +83,6 @@ export const quizResponseSchema = z.object({
   id: z.string(),
   subject: subjectSchema,
   theme: z.string().optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema),
   questionCount: z.number(),
   createdAt: z.number(),
@@ -109,7 +107,6 @@ export const attemptResponseSchema = z.object({
   quizId: z.string(),
   subject: subjectSchema,
   theme: z.string().optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema),
   status: attemptStatusSchema,
   score: z.number().nullable(),
@@ -131,7 +128,6 @@ export const quizHistoryItemSchema = z.object({
   id: z.string(),
   subject: subjectSchema,
   theme: z.string().optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema),
   questionCount: z.number(),
   createdAt: z.number(),
@@ -176,10 +172,11 @@ export const userStatsSchema = z.object({
 });
 
 export const userSettingsSchema = z.object({
-  defaultModel: modelProviderSchema,
   hasOpenaiKey: z.boolean(),
   hasGeminiKey: z.boolean(),
   defaultQuestionCount: z.number(),
+  learnModeEnabled: z.boolean(),
+  defaultQuizSetId: z.string().nullable(),
 });
 
 // ============================================
@@ -204,7 +201,6 @@ export const quizSetRunItemStatusSchema = z.enum(["pending", "generating", "comp
 export const quizSetItemConfigSchema = z.object({
   subject: subjectSchema,
   theme: z.string().max(200).optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema).optional().default([]),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
 
@@ -255,7 +251,6 @@ export const quizSetItemSchema = z.object({
   sequenceNumber: z.number(),
   subject: subjectSchema,
   theme: z.string().optional(),
-  difficulty: difficultySchema,
   styles: z.array(questionStyleSchema),
   questionCount: z.number(),
 

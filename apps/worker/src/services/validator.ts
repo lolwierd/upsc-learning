@@ -658,7 +658,6 @@ async function factCheckBatchSingleCall(
     parentCallId?: string;
     subject?: string;
     theme?: string;
-    difficulty?: string;
     era?: string;
   }
 ): Promise<{
@@ -731,7 +730,6 @@ async function factCheckBatchSingleCall(
             count: payload.length,
             subject: params?.subject ?? null,
             theme: params?.theme ?? null,
-            difficulty: params?.difficulty ?? null,
             era: params?.era ?? null,
           },
         },
@@ -811,7 +809,6 @@ async function factCheckBatchSingleCall(
             count: payload.length,
             subject: params?.subject ?? null,
             theme: params?.theme ?? null,
-            difficulty: params?.difficulty ?? null,
             era: params?.era ?? null,
           },
         },
@@ -834,7 +831,6 @@ export async function factCheckBatch(
     parentCallId?: string;
     subject?: string;
     theme?: string;
-    difficulty?: string;
     era?: string;
   }
 ): Promise<{

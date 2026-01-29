@@ -19,7 +19,6 @@ type QuizRow = {
   id: string;
   subject: string;
   theme: string | null;
-  difficulty: string;
   style: string;
   question_count: number;
   status: string | null;
@@ -83,7 +82,6 @@ const runQuizGeneration = async ({
     const { questions, metrics } = await generateQuiz(env, {
       subject: body.subject,
       theme: body.theme,
-      difficulty: body.difficulty,
       styles: body.styles,
       count: body.questionCount,
       // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
@@ -132,7 +130,6 @@ const runQuizGeneration = async ({
         factCheckModel: metrics.factCheckModel,
         subject: metrics.subject,
         theme: metrics.theme ?? null,
-        difficulty: metrics.difficulty,
         stylesJson,
         status: "success",
         requestedCount: metrics.requestedCount,
@@ -194,15 +191,14 @@ quiz.post(
     try {
       // 1. Create quiz placeholder immediately with 'generating' status
       await c.env.DB.prepare(
-        `INSERT INTO quizzes (id, user_id, subject, theme, difficulty, style, question_count, model_used, status, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT INTO quizzes (id, user_id, subject, theme, style, question_count, model_used, status, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
         .bind(
           quizId,
           "public",
           body.subject,
           body.theme || null,
-          body.difficulty,
           stylesJson,
           body.questionCount,
           "gemini-3-flash-preview", // Default, will update if different
@@ -303,7 +299,6 @@ quiz.get("/:id", async (c) => {
     id: quizResult.id,
     subject: quizResult.subject,
     theme: quizResult.theme,
-    difficulty: quizResult.difficulty,
     styles: parseStyles(quizResult.style),
     questionCount: quizResult.question_count,
     status: quizResult.status || 'completed', // Backfill default for old rows

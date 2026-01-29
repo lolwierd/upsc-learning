@@ -44,7 +44,6 @@ interface QuizSetItemRow {
   sequence_number: number;
   subject: string;
   theme: string | null;
-  difficulty: string;
   styles: string;
   question_count: number;
   era: string | null;
@@ -112,7 +111,6 @@ function mapQuizSetItemRowToResponse(row: QuizSetItemRow): QuizSetItem {
     sequenceNumber: row.sequence_number,
     subject: row.subject as QuizSetItem["subject"],
     theme: row.theme || undefined,
-    difficulty: row.difficulty as QuizSetItem["difficulty"],
     styles: JSON.parse(row.styles) as QuizSetItem["styles"],
     questionCount: row.question_count,
     enableCurrentAffairs: row.enable_current_affairs === 1,
@@ -236,8 +234,8 @@ quizSets.post(
         const item = body.items[i];
         const itemId = nanoid();
         await c.env.DB.prepare(
-          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, difficulty, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         )
           .bind(
             itemId,
@@ -245,7 +243,6 @@ quizSets.post(
             i + 1,
             item.subject,
             item.theme || null,
-            item.difficulty,
             JSON.stringify(item.styles),
             item.questionCount,
             "current", // Always use current era
@@ -431,8 +428,8 @@ quizSets.post(
     const itemId = nanoid();
 
     await c.env.DB.prepare(
-      `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, difficulty, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         itemId,
@@ -440,7 +437,6 @@ quizSets.post(
         sequenceNumber,
         body.subject,
         body.theme || null,
-        body.difficulty,
         JSON.stringify(body.styles),
         body.questionCount,
         "current", // Always use current era
@@ -501,10 +497,6 @@ quizSets.patch(
     if (body.theme !== undefined) {
       updates.push("theme = ?");
       values.push(body.theme || null);
-    }
-    if (body.difficulty !== undefined) {
-      updates.push("difficulty = ?");
-      values.push(body.difficulty);
     }
     if (body.styles !== undefined) {
       updates.push("styles = ?");

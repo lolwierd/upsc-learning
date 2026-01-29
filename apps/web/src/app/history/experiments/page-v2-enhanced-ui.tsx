@@ -9,7 +9,6 @@ import type { QuizHistoryItem, PaginationInfo } from "@mcqs/shared";
 import {
   SUBJECTS,
   SUBJECT_LABELS,
-  DIFFICULTY_LABELS,
   QUESTION_STYLE_LABELS,
 } from "@mcqs/shared";
 
@@ -50,20 +49,6 @@ const SubjectIcons: Record<string, React.ReactNode> = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
     </svg>
   ),
-};
-
-// Difficulty colors
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case "easy":
-      return "text-green-600 bg-green-50";
-    case "medium":
-      return "text-amber-600 bg-amber-50";
-    case "hard":
-      return "text-red-600 bg-red-50";
-    default:
-      return "text-gray-600 bg-gray-50";
-  }
 };
 
 // Circular progress component
@@ -268,16 +253,8 @@ export default function HistoryPage() {
                         <span className="text-[13px] text-gray-400">{formatRelativeTime(quiz.createdAt)}</span>
                       </div>
 
-                      {/* Row 2: Difficulty pill + Questions + New badge */}
+                      {/* Row 2: Questions + New badge */}
                       <div className="flex items-center gap-2 mt-2">
-                        <span
-                          className={cn(
-                            "text-xs font-medium px-2 py-0.5 rounded",
-                            getDifficultyColor(quiz.difficulty)
-                          )}
-                        >
-                          {DIFFICULTY_LABELS[quiz.difficulty as keyof typeof DIFFICULTY_LABELS]}
-                        </span>
                         <span className="text-sm text-gray-500">{quiz.questionCount} questions</span>
                         {!hasAttempt && (
                           <span className="text-xs font-medium px-2 py-0.5 rounded bg-primary-50 text-primary-600">

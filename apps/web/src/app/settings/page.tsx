@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardTitle, CardDescription, Button } from "@/components/ui";
-import { getSettings, updateSettings } from "@/lib/api";
-import {
-  MODEL_PROVIDER_LABELS,
-  MIN_QUESTION_COUNT,
-  MAX_QUESTION_COUNT,
-} from "@mcqs/shared";
+import { getQuizSets, getSettings, updateSettings } from "@/lib/api";
+import { MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "@mcqs/shared";
+import type { QuizSetListItem } from "@mcqs/shared";
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -15,17 +12,32 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const [defaultModel, setDefaultModel] = useState<string>("gemini");
   const [defaultQuestionCount, setDefaultQuestionCount] = useState(10);
   const [learnModeEnabled, setLearnModeEnabled] = useState(false);
+  const [defaultQuizSetId, setDefaultQuizSetId] = useState<string | null>(null);
+  const [quizSets, setQuizSets] = useState<QuizSetListItem[]>([]);
 
   useEffect(() => {
     async function load() {
       try {
-        const settings = await getSettings();
-        setDefaultModel(settings.defaultModel);
-        setDefaultQuestionCount(settings.defaultQuestionCount);
-        setLearnModeEnabled(settings.learnModeEnabled);
+        const [settingsResult, setsResult] = await Promise.allSettled([
+          getSettings(),
+          getQuizSets(),
+        ]);
+        if (settingsResult.status === "fulfilled") {
+          setDefaultQuestionCount(settingsResult.value.defaultQuestionCount);
+          setLearnModeEnabled(settingsResult.value.learnModeEnabled);
+          setDefaultQuizSetId(settingsResult.value.defaultQuizSetId ?? null);
+        } else {
+          setError(
+            settingsResult.reason instanceof Error
+              ? settingsResult.reason.message
+              : "Failed to load settings"
+          );
+        }
+        if (setsResult.status === "fulfilled") {
+          setQuizSets(setsResult.value.sets);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load settings");
       } finally {
@@ -42,9 +54,9 @@ export default function SettingsPage() {
 
     try {
       await updateSettings({
-        defaultModel: defaultModel as "gemini" | "openai",
         defaultQuestionCount,
         learnModeEnabled,
+        defaultQuizSetId,
       });
       setSuccess(true);
     } catch (err) {
@@ -69,83 +81,10 @@ export default function SettingsPage() {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <CardTitle className="mb-2">Settings</CardTitle>
       <CardDescription className="mb-6">
-        Choose your AI model
+        Manage your quiz preferences
       </CardDescription>
 
       <div className="space-y-4">
-        {/* Gemini Card */}
-        <Card
-          className={`cursor-pointer transition-all ${
-            defaultModel === "gemini"
-              ? "ring-2 ring-primary-500 bg-primary-50/30"
-              : "hover:bg-gray-50"
-          }`}
-          onClick={() => setDefaultModel("gemini")}
-        >
-          <div className="flex items-start gap-3">
-            <div className="pt-0.5">
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  defaultModel === "gemini"
-                    ? "border-primary-500 bg-primary-500"
-                    : "border-gray-300"
-                }`}
-              >
-                {defaultModel === "gemini" && (
-                  <div className="w-2 h-2 bg-white rounded-full" />
-                )}
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-base">
-                  {MODEL_PROVIDER_LABELS.gemini}
-                </CardTitle>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                  Default
-                </span>
-              </div>
-              <CardDescription className="mt-1">
-                Uses Gemini 3 Flash Preview - fast and capable.
-              </CardDescription>
-            </div>
-          </div>
-        </Card>
-
-        {/* OpenAI Card */}
-        <Card
-          className={`cursor-pointer transition-all ${
-            defaultModel === "openai"
-              ? "ring-2 ring-primary-500 bg-primary-50/30"
-              : "hover:bg-gray-50"
-          }`}
-          onClick={() => setDefaultModel("openai")}
-        >
-          <div className="flex items-start gap-3">
-            <div className="pt-0.5">
-              <div
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  defaultModel === "openai"
-                    ? "border-primary-500 bg-primary-500"
-                    : "border-gray-300"
-                }`}
-              >
-                {defaultModel === "openai" && (
-                  <div className="w-2 h-2 bg-white rounded-full" />
-                )}
-              </div>
-            </div>
-            <div className="flex-1">
-              <CardTitle className="text-base">
-                {MODEL_PROVIDER_LABELS.openai}
-              </CardTitle>
-              <CardDescription className="mt-1">
-                Uses GPT-4 when enabled by the server.
-              </CardDescription>
-            </div>
-          </div>
-        </Card>
-
         {/* Default Question Count */}
         <Card>
           <CardTitle className="text-base">Default Question Count</CardTitle>
@@ -163,6 +102,35 @@ export default function SettingsPage() {
             />
             <p className="text-xs text-gray-500 mt-1">
               Enter a number between {MIN_QUESTION_COUNT} and {MAX_QUESTION_COUNT}
+            </p>
+          </div>
+        </Card>
+
+        {/* Default Quiz Set */}
+        <Card>
+          <CardTitle className="text-base">Default Quiz Set</CardTitle>
+          <CardDescription>
+            Jump to the latest combined run when opening the dashboard
+          </CardDescription>
+          <div className="mt-4">
+            <select
+              value={defaultQuizSetId ?? ""}
+              onChange={(e) => setDefaultQuizSetId(e.target.value || null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="">None (show dashboard)</option>
+              {defaultQuizSetId &&
+                !quizSets.some((set) => set.id === defaultQuizSetId) && (
+                  <option value={defaultQuizSetId}>Unknown set (missing)</option>
+                )}
+              {quizSets.map((set) => (
+                <option key={set.id} value={set.id}>
+                  {set.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              If no completed run exists yet, you will stay on the dashboard.
             </p>
           </div>
         </Card>

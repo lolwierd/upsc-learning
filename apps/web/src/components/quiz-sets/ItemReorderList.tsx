@@ -2,7 +2,7 @@
 
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import type { QuizSetItem } from "@mcqs/shared";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
 
 interface ItemReorderListProps {
   items: QuizSetItem[];
@@ -82,7 +82,7 @@ export function ItemReorderList({
                         )}
                       </div>
                       <div className="text-xs text-gray-500 mt-0.5">
-                        {DIFFICULTY_LABELS[item.difficulty as keyof typeof DIFFICULTY_LABELS]} · {item.questionCount} questions
+                        {item.questionCount} questions
                       </div>
                       <div className="text-xs text-gray-400 mt-0.5 truncate">
                         {item.styles.map((s) => QUESTION_STYLE_LABELS[s as keyof typeof QUESTION_STYLE_LABELS]).join(" · ")}

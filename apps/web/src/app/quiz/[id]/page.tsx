@@ -7,7 +7,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
 import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
 
 interface LearnModeQuestion {
@@ -25,7 +25,6 @@ interface QuizData {
   id: string;
   subject: string;
   theme?: string;
-  difficulty: string;
   style: string;
   questionCount: number;
   questions: LearnModeQuestion[];
@@ -393,7 +392,6 @@ export default function QuizPage() {
             )}
           </div>
           <p className="text-sm text-gray-500">
-            {DIFFICULTY_LABELS[quiz.difficulty as keyof typeof DIFFICULTY_LABELS]} •{" "}
             {QUESTION_STYLE_LABELS[quiz.style as keyof typeof QUESTION_STYLE_LABELS]}
           </p>
         </div>

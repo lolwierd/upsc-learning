@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 import { Card, CardTitle, Button } from "@/components/ui";
 import { getQuizSet, getQuizSetRun } from "@/lib/api";
 import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS } from "@mcqs/shared";
 import { cn } from "@/lib/utils";
 
 export default function QuizSetRunPage() {
@@ -225,7 +225,6 @@ export default function QuizSetRunPage() {
                   </div>
                   {quizSetItem && (
                     <div className="text-xs text-gray-500 mt-0.5">
-                      {DIFFICULTY_LABELS[quizSetItem.difficulty as keyof typeof DIFFICULTY_LABELS]} ·{" "}
                       {quizSetItem.questionCount} questions
                     </div>
                   )}

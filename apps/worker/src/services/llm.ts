@@ -1,5 +1,5 @@
 import type { Env } from "../types.js";
-import type { GeneratedQuestion, QuestionStyle, Difficulty } from "@mcqs/shared";
+import type { GeneratedQuestion, QuestionStyle } from "@mcqs/shared";
 import { getPrompt } from "../prompts/index.js";
 import {
   validateBatch,
@@ -25,7 +25,6 @@ const RATE_LIMIT_RETRY_DELAY_MS = 60000; // 60s for 429 errors
 interface GenerateQuizParams {
   subject: string;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
   count: number;
   apiKey?: string;
@@ -41,7 +40,6 @@ export interface GenerateQuizMetrics {
   factCheckModel: string;
   subject: string;
   theme?: string;
-  difficulty: Difficulty;
   styles: QuestionStyle[];
 
   requestedCount: number;
@@ -253,7 +251,6 @@ async function generateQuizCall(
   const {
     subject,
     theme,
-    difficulty,
     styles,
     count,
     enableCurrentAffairs = true,
@@ -277,7 +274,6 @@ async function generateQuizCall(
   const prompt = getPrompt({
     subject,
     theme,
-    difficulty,
     styles: styleDistribution,
     totalCount: count,
     enableCurrentAffairs,
@@ -541,7 +537,6 @@ export async function generateQuiz(
   const {
     subject,
     theme,
-    difficulty,
     styles,
     count,
     enableFactCheck,
@@ -817,7 +812,7 @@ export async function generateQuiz(
       factCheckResult = await factCheckBatch(
         finalQuestions,
         "",
-        { env, parentCallId: overallCallId, subject, theme, difficulty }
+        { env, parentCallId: overallCallId, subject, theme }
       );
       factCheckDurationMs = Date.now() - fcStart;
     } catch (e) {
@@ -842,7 +837,7 @@ export async function generateQuiz(
         const refactored = await factCheckBatch(
           finalQuestions,
           "",
-          { env, parentCallId: overallCallId, subject, theme, difficulty }
+          { env, parentCallId: overallCallId, subject, theme }
         );
         factCheckDurationMs += Date.now() - fcRetryStart;
         factCheckResult = {
@@ -880,7 +875,6 @@ export async function generateQuiz(
       factCheckModel,
       subject,
       theme,
-      difficulty,
       styles,
       requestedCount: count,
       returnedCount: finalQuestions.length,

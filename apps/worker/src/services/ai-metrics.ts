@@ -13,7 +13,6 @@ export interface AiGenerationMetricInsert {
   factCheckModel?: string | null;
   subject: string;
   theme?: string | null;
-  difficulty: string;
   stylesJson: string;
   era?: string | null;
 
@@ -65,7 +64,7 @@ export async function insertAiGenerationMetric(
   const query = `
     INSERT INTO ai_generation_metrics (
       id, quiz_id, user_id,
-      provider, model, fact_check_model, subject, theme, difficulty, styles, era,
+      provider, model, fact_check_model, subject, theme, styles, era,
       status, error_message,
       requested_count, returned_count,
       dedup_enabled, dedup_filtered_count,
@@ -79,7 +78,7 @@ export async function insertAiGenerationMetric(
       created_at
     ) VALUES (
       ?, ?, ?,
-      ?, ?, ?, ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?, ?, ?,
       ?, ?,
       ?, ?,
       ?, ?,
@@ -106,7 +105,6 @@ export async function insertAiGenerationMetric(
       metric.factCheckModel ?? null,
       metric.subject,
       metric.theme ?? null,
-      metric.difficulty,
       metric.stylesJson,
       metric.era ?? null,
 
@@ -162,7 +160,6 @@ export interface AiGenerationMetricRow {
   factCheckModel: string | null;
   subject: string;
   theme: string | null;
-  difficulty: string;
   styles: unknown;
   era: string | null;
   status: AiMetricStatus;
@@ -217,7 +214,6 @@ export async function listAiGenerationMetrics(
       fact_check_model,
       subject,
       theme,
-      difficulty,
       styles,
       era,
       status,
@@ -276,7 +272,6 @@ export async function listAiGenerationMetrics(
     factCheckModel: (r.fact_check_model as string) ?? null,
     subject: String(r.subject),
     theme: (r.theme as string) ?? null,
-    difficulty: String(r.difficulty),
     styles: safeJsonParse(r.styles),
     era: (r.era as string) ?? null,
     status: r.status as AiMetricStatus,

@@ -1,4 +1,4 @@
-import type { QuestionStyle, Difficulty } from "@mcqs/shared";
+import type { QuestionStyle } from "@mcqs/shared";
 import { getSubjectThemes, getSubjectStrategicTraps } from "./themes/index.js";
 import { getSubjectAnalysis, getStrategicSynthesis } from "./subject-analysis.js";
 
@@ -10,7 +10,6 @@ interface StyleDistribution {
 interface PromptParams {
   subject: string;
   theme?: string;
-  difficulty: Difficulty;
   styles?: StyleDistribution[]; // Now optional - auto-distributes if not provided
   totalCount: number;
   enableCurrentAffairs?: boolean; // Enable current affairs context injection

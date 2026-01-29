@@ -7,19 +7,19 @@ import { MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "@mcqs/shared";
 const settings = new Hono<{ Bindings: Env }>();
 
 type UserSettingsRow = {
-  default_model: string | null;
   openai_api_key: string | null;
   gemini_api_key: string | null;
   default_question_count: number | null;
   learn_mode_enabled: number | null;
+  default_quiz_set_id: string | null;
 };
 
 const updateSettingsSchema = z.object({
-  defaultModel: z.enum(["gemini", "openai"]).optional(),
   openaiApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
   defaultQuestionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT).optional(),
   learnModeEnabled: z.boolean().optional(),
+  defaultQuizSetId: z.string().nullable().optional(),
 });
 
 // Get user settings
@@ -33,20 +33,20 @@ settings.get("/", async (c) => {
   if (!result) {
     // Return defaults
     return c.json({
-      defaultModel: "gemini",
       hasOpenaiKey: false,
       hasGeminiKey: false,
       defaultQuestionCount: 10,
       learnModeEnabled: false,
+      defaultQuizSetId: null,
     });
   }
 
   return c.json({
-    defaultModel: result.default_model || "gemini",
     hasOpenaiKey: !!result.openai_api_key,
     hasGeminiKey: !!result.gemini_api_key,
     defaultQuestionCount: result.default_question_count || 10,
     learnModeEnabled: !!result.learn_mode_enabled,
+    defaultQuizSetId: result.default_quiz_set_id || null,
   });
 });
 
@@ -64,17 +64,19 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
 
   if (!existing || existing.total === 0) {
     // Create new settings
+    const defaultQuizSetId = body.defaultQuizSetId ? body.defaultQuizSetId : null;
+
     await c.env.DB.prepare(
-      `INSERT INTO user_settings (user_id, default_model, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, created_at, updated_at)
+      `INSERT INTO user_settings (user_id, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, default_quiz_set_id, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         "public",
-        body.defaultModel || "gemini",
         body.openaiApiKey || null,
         body.geminiApiKey || null,
         body.defaultQuestionCount || 10,
         body.learnModeEnabled ? 1 : 0,
+        defaultQuizSetId,
         now,
         now
       )
@@ -84,10 +86,6 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     const updates: string[] = [];
     const params: (string | number | null)[] = [];
 
-    if (body.defaultModel !== undefined) {
-      updates.push("default_model = ?");
-      params.push(body.defaultModel);
-    }
     if (body.openaiApiKey !== undefined) {
       updates.push("openai_api_key = ?");
       params.push(body.openaiApiKey || null);
@@ -103,6 +101,10 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     if (body.learnModeEnabled !== undefined) {
       updates.push("learn_mode_enabled = ?");
       params.push(body.learnModeEnabled ? 1 : 0);
+    }
+    if (body.defaultQuizSetId !== undefined) {
+      updates.push("default_quiz_set_id = ?");
+      params.push(body.defaultQuizSetId ? body.defaultQuizSetId : null);
     }
 
     if (updates.length > 0) {

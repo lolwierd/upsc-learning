@@ -6,7 +6,7 @@ import { Card, CardTitle, CardDescription, Input, Button } from "@/components/ui
 import { QuizItemForm } from "@/components/quiz-sets/QuizItemForm";
 import { createQuizSet } from "@/lib/api";
 import type { QuizSetItemConfig } from "@mcqs/shared";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS } from "@mcqs/shared";
 
 interface DraftItem extends QuizSetItemConfig {
   tempId: string;
@@ -145,7 +145,7 @@ export default function NewQuizSetPage() {
                         )}
                       </div>
                       <div className="text-xs text-gray-500 mt-0.5">
-                        {DIFFICULTY_LABELS[item.difficulty as keyof typeof DIFFICULTY_LABELS]} · {item.questionCount} questions
+                        {item.questionCount} questions
                       </div>
                     </div>
                     <div className="flex items-center gap-1 ml-2">

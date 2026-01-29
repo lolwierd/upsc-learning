@@ -10,7 +10,6 @@ interface QuizSetItemRow {
   sequence_number: number;
   subject: string;
   theme: string | null;
-  difficulty: string;
   styles: string;
   question_count: number;
   era: string | null;
@@ -84,7 +83,7 @@ export async function executeQuizSetGeneration(
 
   // Get run items
   const runItemsResult = await env.DB.prepare(
-    `SELECT ri.*, qsi.subject, qsi.theme, qsi.difficulty, qsi.styles, qsi.question_count, qsi.era, qsi.enable_current_affairs, qsi.current_affairs_theme
+    `SELECT ri.*, qsi.subject, qsi.theme, qsi.styles, qsi.question_count, qsi.era, qsi.enable_current_affairs, qsi.current_affairs_theme
      FROM quiz_set_run_items ri
      JOIN quiz_set_items qsi ON qsi.id = ri.quiz_set_item_id
      WHERE ri.run_id = ?
@@ -99,7 +98,6 @@ export async function executeQuizSetGeneration(
       status: string;
       subject: string;
       theme: string | null;
-      difficulty: string;
       styles: string;
       question_count: number;
       era: string | null;
@@ -130,15 +128,14 @@ export async function executeQuizSetGeneration(
       const styles = JSON.parse(stylesJson);
 
       await env.DB.prepare(
-        `INSERT INTO quizzes (id, user_id, subject, theme, difficulty, style, question_count, model_used, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT INTO quizzes (id, user_id, subject, theme, style, question_count, model_used, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
         .bind(
           quizId,
           "public",
           runItem.subject,
           runItem.theme || null,
-          runItem.difficulty,
           stylesJson,
           runItem.question_count,
           "gemini-3-flash-preview",
@@ -152,7 +149,6 @@ export async function executeQuizSetGeneration(
       const { questions, metrics } = await generateQuiz(env, {
         subject: runItem.subject as Parameters<typeof generateQuiz>[1]["subject"],
         theme: runItem.theme || undefined,
-        difficulty: runItem.difficulty as Parameters<typeof generateQuiz>[1]["difficulty"],
         styles: styles,
         count: runItem.question_count,
         enableFactCheck: env.ENABLE_FACT_CHECK === "1",
@@ -210,7 +206,6 @@ export async function executeQuizSetGeneration(
           factCheckModel: metrics.factCheckModel,
           subject: metrics.subject,
           theme: metrics.theme ?? null,
-          difficulty: metrics.difficulty,
           stylesJson,
           status: "success",
           requestedCount: metrics.requestedCount,

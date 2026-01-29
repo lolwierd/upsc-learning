@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui";
-import { getHistory, getQuizSets } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { getHistory, getQuizSetRun, getQuizSetRuns, getQuizSets, getSettings } from "@/lib/api";
 import type { QuizHistoryItem, QuizSetListItem } from "@mcqs/shared";
-import { SUBJECT_LABELS, DIFFICULTY_LABELS } from "@mcqs/shared";
+import { SUBJECT_LABELS } from "@mcqs/shared";
 
 export default function Home() {
+  const router = useRouter();
   const [recentQuizzes, setRecentQuizzes] = useState<QuizHistoryItem[]>([]);
   const [quizSets, setQuizSets] = useState<QuizSetListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,6 +17,53 @@ export default function Home() {
   useEffect(() => {
     async function loadData() {
       try {
+        let defaultQuizSetId: string | null = null;
+        try {
+          const settings = await getSettings();
+          defaultQuizSetId = settings.defaultQuizSetId ?? null;
+        } catch (err) {
+          console.warn("Failed to load settings for default quiz set:", err);
+        }
+
+        if (defaultQuizSetId) {
+          try {
+            const runsData = await getQuizSetRuns(defaultQuizSetId);
+            const latestRun = runsData.runs[0];
+            let redirectRun = null;
+
+            if (latestRun) {
+              if (latestRun.status === "running") {
+                try {
+                  const runDetail = await getQuizSetRun(defaultQuizSetId, latestRun.id);
+                  const hasCompleted = runDetail.runItems.some(
+                    (item) => item.status === "completed" && item.quizId
+                  );
+                  if (hasCompleted) {
+                    redirectRun = latestRun;
+                  }
+                } catch (err) {
+                  console.warn("Failed to load latest run details:", err);
+                }
+              } else if (latestRun.status !== "failed") {
+                redirectRun = latestRun;
+              }
+            }
+
+            if (!redirectRun) {
+              redirectRun = runsData.runs.find(
+                (run) => run.status === "completed" || run.status === "partial"
+              );
+            }
+
+            if (redirectRun) {
+              router.replace(`/sets/${defaultQuizSetId}/runs/${redirectRun.id}/combined`);
+              return;
+            }
+          } catch (err) {
+            console.warn("Failed to load quiz set runs for default set:", err);
+          }
+        }
+
         const [historyData, setsData] = await Promise.all([
           getHistory({ limit: 10 }),
           getQuizSets(),
@@ -28,7 +77,7 @@ export default function Home() {
       }
     }
     loadData();
-  }, []);
+  }, [router]);
 
   // Show only first 4 quizzes in grid
   const displayedQuizzes = recentQuizzes.slice(0, 4);
@@ -195,8 +244,7 @@ export default function Home() {
                         {quiz.theme && ` - ${quiz.theme}`}
                       </p>
                       <p className="text-xs text-gray-500 mt-0.5">
-                        {formatDateTime(quiz.createdAt)} &middot; {quiz.questionCount} questions &middot;{" "}
-                        {DIFFICULTY_LABELS[quiz.difficulty as keyof typeof DIFFICULTY_LABELS]}
+                        {formatDateTime(quiz.createdAt)} &middot; {quiz.questionCount} questions
                       </p>
                     </div>
                     <div className="text-right ml-3 flex-shrink-0">

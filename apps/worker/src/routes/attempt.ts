@@ -24,7 +24,6 @@ type AttemptRow = {
 type AttemptWithQuizRow = AttemptRow & {
   subject: string;
   theme: string | null;
-  difficulty: string;
   style: string;
 };
 
@@ -283,7 +282,7 @@ attempt.get("/:id", async (c) => {
   const attemptId = c.req.param("id");
 
   const attemptRecord = await c.env.DB.prepare(
-    `SELECT a.*, q.subject, q.theme, q.difficulty, q.style
+    `SELECT a.*, q.subject, q.theme, q.style
      FROM attempts a
      JOIN quizzes q ON a.quiz_id = q.id
      WHERE a.id = ?`
@@ -324,7 +323,6 @@ attempt.get("/:id", async (c) => {
     quizId: attemptRecord.quiz_id,
     subject: attemptRecord.subject,
     theme: attemptRecord.theme,
-    difficulty: attemptRecord.difficulty,
     styles: parseStyles(attemptRecord.style),
     status: attemptRecord.status,
     score: attemptRecord.score,

@@ -4,15 +4,11 @@ import { useState } from "react";
 import {
   Select,
   Input,
-  RadioGroup,
   Button,
 } from "@/components/ui";
 import {
   SUBJECTS,
   SUBJECT_LABELS,
-  DIFFICULTIES,
-  DIFFICULTY_LABELS,
-  DIFFICULTY_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -38,9 +34,6 @@ export function QuizItemForm({
     initialValues?.subject || SUBJECTS[0]
   );
   const [theme, setTheme] = useState(initialValues?.theme || "");
-  const [difficulty, setDifficulty] = useState<string>(
-    initialValues?.difficulty || DIFFICULTIES[1]
-  );
   // Styles are auto-distributed based on UPSC pattern - no user selection needed
 
   const [questionCount, setQuestionCount] = useState<number>(
@@ -66,7 +59,6 @@ export function QuizItemForm({
     onSubmit({
       subject: subject as (typeof SUBJECTS)[number],
       theme: theme || undefined,
-      difficulty: difficulty as (typeof DIFFICULTIES)[number],
       styles: [], // Empty = auto-distribute based on UPSC pattern
       questionCount,
 
@@ -79,14 +71,6 @@ export function QuizItemForm({
     value: s,
     label: SUBJECT_LABELS[s],
   }));
-
-  const difficultyOptions = DIFFICULTIES.map((d) => ({
-    value: d,
-    label: DIFFICULTY_LABELS[d],
-    description: DIFFICULTY_DESCRIPTIONS[d],
-  }));
-
-
 
   return (
     <div className="space-y-5">
@@ -107,15 +91,6 @@ export function QuizItemForm({
         value={theme}
         onChange={(e) => setTheme(e.target.value)}
         helperText="Preferred focus only; questions also cover adjacent subtopics"
-      />
-
-      {/* Difficulty */}
-      <RadioGroup
-        name="difficulty"
-        label="Difficulty"
-        options={difficultyOptions}
-        value={difficulty}
-        onChange={setDifficulty}
       />
 
       {/* Question Style Distribution (Auto) */}

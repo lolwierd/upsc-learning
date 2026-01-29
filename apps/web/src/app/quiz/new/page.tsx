@@ -9,14 +9,10 @@ import {
   Button,
   Select,
   Input,
-  RadioGroup,
 } from "@/components/ui";
 import {
   SUBJECTS,
   SUBJECT_LABELS,
-  DIFFICULTIES,
-  DIFFICULTY_LABELS,
-  DIFFICULTY_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -35,7 +31,7 @@ const INITIAL_STEPS: ProgressStep[] = [
   { label: "Warming up the AI engine...", status: "pending" },
   { label: "Loading IFS 2026...", status: "pending" },
   { label: "Analyzing subject matter...", status: "pending" },
-  { label: "Crafting difficulty parameters...", status: "pending" },
+  { label: "Crafting quiz parameters...", status: "pending" },
   { label: "Building prompt for Gemini...", status: "pending" },
   { label: "Generating questions...", status: "pending" },
   { label: "Parsing AI response...", status: "pending" },
@@ -54,7 +50,6 @@ export default function NewQuizPage() {
 
   const [subject, setSubject] = useState<string>(SUBJECTS[0]);
   const [theme, setTheme] = useState("");
-  const [difficulty, setDifficulty] = useState<string>(DIFFICULTIES[1]);
   // Styles are now auto-distributed based on UPSC pattern - no user selection needed
 
   const [questionCount, setQuestionCount] = useState<number>(40);
@@ -115,7 +110,7 @@ export default function NewQuizPage() {
       // Step 2: Analyzing subject
       await runProgressStep(2, 350);
 
-      // Step 3: Crafting difficulty
+      // Step 3: Crafting quiz parameters
       await runProgressStep(3, 300);
 
       // Step 4: Building prompt
@@ -127,7 +122,6 @@ export default function NewQuizPage() {
       const result = await generateQuiz({
         subject: subject as (typeof SUBJECTS)[number],
         theme: theme || undefined,
-        difficulty: difficulty as (typeof DIFFICULTIES)[number],
         styles: [], // Empty array = auto-distribute based on UPSC pattern
         questionCount,
 
@@ -151,14 +145,6 @@ export default function NewQuizPage() {
     value: s,
     label: SUBJECT_LABELS[s],
   }));
-
-  const difficultyOptions = DIFFICULTIES.map((d) => ({
-    value: d,
-    label: DIFFICULTY_LABELS[d],
-    description: DIFFICULTY_DESCRIPTIONS[d],
-  }));
-
-
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -186,15 +172,6 @@ export default function NewQuizPage() {
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
             helperText="Preferred focus only; questions also cover adjacent subtopics"
-          />
-
-          {/* Difficulty */}
-          <RadioGroup
-            name="difficulty"
-            label="Difficulty"
-            options={difficultyOptions}
-            value={difficulty}
-            onChange={setDifficulty}
           />
 
           {/* Question Style Distribution (Auto) */}

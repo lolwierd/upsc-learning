@@ -141,7 +141,6 @@ export interface AiGenerationMetric {
   factCheckModel?: string | null;
   subject: string;
   theme: string | null;
-  difficulty: string;
   styles: unknown;
   era: string | null;
   status: AiMetricStatus;
@@ -195,11 +194,11 @@ export async function getSettings(): Promise<UserSettings> {
 
 export async function updateSettings(
   data: Partial<{
-    defaultModel: "gemini" | "openai";
     openaiApiKey: string;
     geminiApiKey: string;
     defaultQuestionCount: number;
     learnModeEnabled: boolean;
+    defaultQuizSetId: string | null;
   }>
 ): Promise<{ success: boolean }> {
   return fetchAPI(API_ENDPOINTS.SETTINGS, {
@@ -230,7 +229,6 @@ export interface TimelineQuiz {
   quizId: string;
   subject: string;
   theme?: string;
-  difficulty: string;
   styles: string[];
   score: number;
   totalQuestions: number;

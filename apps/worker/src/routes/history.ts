@@ -9,7 +9,6 @@ type QuizHistoryRow = {
   id: string;
   subject: string;
   theme: string | null;
-  difficulty: string;
   style: string;
   question_count: number;
   created_at: number;
@@ -65,7 +64,6 @@ type TimelineRow = {
   quiz_id: string;
   subject: string;
   theme: string | null;
-  difficulty: string;
   style: string;
 };
 
@@ -132,7 +130,6 @@ history.get("/", zValidator("query", historyQuerySchema), async (c) => {
     id: q.id,
     subject: q.subject,
     theme: q.theme,
-    difficulty: q.difficulty,
     styles: parseStyles(q.style),
     questionCount: q.question_count,
     createdAt: q.created_at,
@@ -292,7 +289,6 @@ history.get("/stats/timeline", async (c) => {
        q.id as quiz_id,
        q.subject,
        q.theme,
-       q.difficulty,
        q.style
     FROM attempts a
     JOIN quizzes q ON a.quiz_id = q.id
@@ -309,7 +305,6 @@ history.get("/stats/timeline", async (c) => {
     quizId: string;
     subject: string;
     theme?: string;
-    difficulty: string;
     styles: string[];
     score: number;
     totalQuestions: number;
@@ -329,7 +324,6 @@ history.get("/stats/timeline", async (c) => {
       quizId: r.quiz_id,
       subject: r.subject,
       theme: r.theme || undefined,
-      difficulty: r.difficulty,
       styles: parseStyles(r.style),
       score: r.score,
       totalQuestions: r.total_questions,

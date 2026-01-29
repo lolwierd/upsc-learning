@@ -9,7 +9,6 @@ import type { QuizHistoryItem, PaginationInfo } from "@mcqs/shared";
 import {
   SUBJECTS,
   SUBJECT_LABELS,
-  DIFFICULTY_LABELS,
   QUESTION_STYLE_LABELS,
 } from "@mcqs/shared";
 
@@ -156,12 +155,8 @@ export default function HistoryPage() {
                           <span className="text-[13px] text-gray-400">{formatDateTime(quiz.createdAt)}</span>
                         </div>
 
-                        {/* Row 2: Level · Questions · New */}
+                        {/* Row 2: Questions · New */}
                         <div className="flex items-center gap-2 mt-1.5 text-sm text-gray-500">
-                          <span>
-                            {DIFFICULTY_LABELS[quiz.difficulty as keyof typeof DIFFICULTY_LABELS]}
-                          </span>
-                          <span className="text-gray-300">·</span>
                           <span>{quiz.questionCount} questions</span>
                           {!hasAttempt && (
                             <>
