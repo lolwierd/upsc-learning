@@ -656,7 +656,7 @@ export async function generateQuiz(
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
   const factCheckModel = env.FACT_CHECK_MODEL || "gemini-3-flash-preview";
   const overallCallId = crypto.randomUUID();
-  const groundingEnabled = enableCurrentAffairs && env.ENABLE_WEB_GROUNDING === "1";
+  const groundingEnabled = !!enableCurrentAffairs && env.ENABLE_WEB_GROUNDING === "1";
 
   // Load fingerprints if deduplication is enabled
   let existingFingerprints = new Set<string>();
@@ -668,45 +668,62 @@ export async function generateQuiz(
     console.log(`Loaded ${existingFingerprints.size} existing fingerprints for ${subject}`);
   }
 
-  console.log(`Starting single-call generation for ${count} questions`);
+  // Calculate chunks
+  const CHUNK_SIZE = 5;
+  const chunkCount = Math.ceil(count / CHUNK_SIZE);
+  const chunkConfigs: Array<{ count: number; index: number }> = [];
+
+  for (let i = 0; i < chunkCount; i++) {
+    const chunkQuestions = Math.min(CHUNK_SIZE, count - (i * CHUNK_SIZE));
+    if (chunkQuestions > 0) {
+      chunkConfigs.push({ count: chunkQuestions, index: i });
+    }
+  }
+
+  console.log(`Starting generation for ${count} questions in ${chunkConfigs.length} chunks (parallel)`);
   const overallStart = Date.now();
 
   // Get retry config from env or use defaults
   const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
   const baseDelayMs = parseInt(env.LLM_RETRY_DELAY_MS || String(DEFAULT_RETRY_DELAY_MS), 10);
 
-  const singleResult = await retryWithBackoff(
-    async () => {
-      const result = await generateQuizCall(
-        env,
-        {
-          ...params,
-          count,
-          enableCurrentAffairs: groundingEnabled,
-          currentAffairsTheme,
-        },
-        overallCallId,
-        0
-      );
-
-      // Treat empty result (parse failure) as retryable error
-      if (result.questions.length === 0) {
-        const parseError = new Error(
-          `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
+  // Execute chunks in parallel
+  const chunkPromises = chunkConfigs.map(config =>
+    retryWithBackoff(
+      async () => {
+        const result = await generateQuizCall(
+          env,
+          {
+            ...params,
+            count: config.count,
+            enableCurrentAffairs: groundingEnabled,
+            currentAffairsTheme,
+          },
+          overallCallId,
+          config.index
         );
-        (parseError as any).isParseFailure = true;
-        throw parseError;
-      }
 
-      return result;
-    },
-    {
-      maxRetries,
-      baseDelayMs,
-      rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
-      operationName: `Quiz Generation (${subject}/${theme || 'no-theme'})`,
-    }
+        // Treat empty result (parse failure) as retryable error
+        if (result.questions.length === 0) {
+          const parseError = new Error(
+            `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
+          );
+          (parseError as any).isParseFailure = true;
+          throw parseError;
+        }
+
+        return result;
+      },
+      {
+        maxRetries,
+        baseDelayMs,
+        rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
+        operationName: `Quiz Generation Chunk ${config.index + 1}/${chunkConfigs.length}`,
+      }
+    )
   );
+
+  const chunkResults = await Promise.all(chunkPromises);
 
   // Merge results
   let allQuestions: GeneratedQuestion[] = [];
@@ -717,15 +734,17 @@ export async function generateQuiz(
   let totalTokens = 0;
   let totalGroundingSources = 0;
 
-  allQuestions = allQuestions.concat(singleResult.questions);
-  totalPromptChars += singleResult.metrics.promptChars || 0;
-  totalResponseChars += singleResult.metrics.responseChars || 0;
-  totalPromptTokens += singleResult.metrics.usagePromptTokens || 0;
-  totalCompletionTokens += singleResult.metrics.usageCompletionTokens || 0;
-  totalTokens += singleResult.metrics.usageTotalTokens || 0;
-  totalGroundingSources += singleResult.groundingSourceCount || 0;
+  for (const result of chunkResults) {
+    allQuestions = allQuestions.concat(result.questions);
+    totalPromptChars += result.metrics.promptChars || 0;
+    totalResponseChars += result.metrics.responseChars || 0;
+    totalPromptTokens += result.metrics.usagePromptTokens || 0;
+    totalCompletionTokens += result.metrics.usageCompletionTokens || 0;
+    totalTokens += result.metrics.usageTotalTokens || 0;
+    totalGroundingSources += result.groundingSourceCount || 0;
+  }
 
-  console.log(`Generated ${allQuestions.length}/${count} questions total`);
+  console.log(`Generated ${allQuestions.length}/${count} questions total across ${chunkResults.length} chunks`);
 
   // Normalize questions
   const normalizedQuestions = allQuestions.slice(0, count).map((q, i) => ({
@@ -733,7 +752,7 @@ export async function generateQuiz(
     questionType: q.questionType || "standard",
     options: Array.isArray(q.options) && q.options.length === 4
       ? q.options
-      : ["A) Option A", "B) Option B", "C) Option C", "D) Option D"],
+      : ["A) Option A", "B) Option B", "C) Option D", "D) Option D"],
     correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
       ? q.correctOption
       : 0,
@@ -796,6 +815,14 @@ export async function generateQuiz(
     );
   }
 
+  // Calculate howMany percentage
+  const howManyCount = finalQuestions.filter(q =>
+    q.questionText.toLowerCase().includes("how many")
+  ).length;
+  const howManyFormatPercentage = finalQuestions.length > 0
+    ? Math.round((howManyCount / finalQuestions.length) * 100)
+    : 0;
+
   return {
     questions: finalQuestions,
     metrics: {
@@ -826,26 +853,11 @@ export async function generateQuiz(
       usagePromptTokens: totalPromptTokens,
       usageCompletionTokens: totalCompletionTokens,
       usageTotalTokens: totalTokens,
-      // Grounding metrics
-      groundingEnabled: !!groundingEnabled,
-      groundingSourceCount: groundingEnabled ? totalGroundingSources : null,
-      // Format distribution metrics (calculated from final questions)
-      howManyFormatPercentage: calculateHowManyPercentage(finalQuestions),
-
-      // Prompt logging
-      requestPrompt: singleResult.fullPrompt,
-      rawResponse: singleResult.rawResponse,
+      groundingEnabled,
+      groundingSourceCount: totalGroundingSources,
+      howManyFormatPercentage,
+      requestPrompt: null,
+      rawResponse: null,
     },
   };
-}
-
-// Helper to calculate "how many" format percentage
-function calculateHowManyPercentage(questions: GeneratedQuestion[]): number | null {
-  if (questions.length === 0) return null;
-
-  const howManyCount = questions.filter(q =>
-    q.questionText.toLowerCase().includes("how many")
-  ).length;
-
-  return Math.round((howManyCount / questions.length) * 100);
 }

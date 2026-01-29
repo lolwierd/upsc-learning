@@ -26,7 +26,7 @@ export const generateQuizRequestSchema = z.object({
 
   turnstileToken: z.string().optional(), // Required in production
   // Current affairs integration
-  enableCurrentAffairs: z.boolean().optional().default(false), // Enable Google Search grounding
+  enableCurrentAffairs: z.boolean().optional().default(true), // Enable Google Search grounding
   currentAffairsTheme: z.string().max(200).optional(), // Optional focus area for current affairs
 });
 
@@ -208,7 +208,7 @@ export const quizSetItemConfigSchema = z.object({
   styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
 
-  enableCurrentAffairs: z.boolean().optional(),
+  enableCurrentAffairs: z.boolean().optional().default(true),
   currentAffairsTheme: z.string().max(200).optional(),
 });
 
