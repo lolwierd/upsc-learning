@@ -401,6 +401,7 @@ CRITICAL REQUIREMENTS:
 3. SMART DISTRACTORS: DO NOT use absolute words (only, always, never, all, none) in wrong options - UPSC aspirants know this pattern.
 4. EDUCATIONAL EXPLANATIONS: Explain WHY correct answer is right AND why each distractor is wrong.
 5. TIME CONTEXT: Today's date is ${currentDateHuman} (UTC date: ${currentDateISO}).
+6. CURRENT AFFAIRS FOCUS: When generating current affairs questions or using search, STRICTLY PRIORITY news/events from JANUARY 2025 TO PRESENT (2026). Do NOT use 2023 or 2024 news unless absolutely necessary for historical context. The target exam is UPSC 2026.
 
 OUTPUT FORMAT:
 Respond with ONLY a valid JSON array. No other text, no markdown, no explanations outside JSON.

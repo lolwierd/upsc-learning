@@ -69,14 +69,15 @@ CURRENT AFFAIRS INTEGRATION (ENABLED):
 You have access to Google Search for retrieving recent information. Use this to:
 
 1. INTEGRATE RECENT EVENTS as TRIGGERS for static concepts:
-   - "In context of India's G20 Presidency 2023..." → Test foreign policy concepts
-   - "With reference to Chandrayaan-3 mission..." → Test space fundamentals
-   - "Considering the 2024 interim budget..." → Test fiscal policy concepts
+   - "In context of India's recent diplomatic engagements in 2025..." → Test foreign policy concepts
+   - "With reference to the Gaganyaan mission progress..." → Test space fundamentals
+   - "Considering the Union Budget 2025-26..." → Test fiscal policy concepts
 
-2. TIME FRAME for current affairs:
-   - Focus on events from the last 4-12 months
-   - Include major policy announcements, summits, agreements
-   - Reference official sources (PIB, government websites, official reports)
+2. TIME FRAME for current affairs (STRICT):
+   - STRICTLY PRIORITY events from JANUARY 2025 TO PRESENT (2026).
+   - DO NOT USE 2023 or 2024 news sources. They are considered stale for UPSC 2026.
+   - Focus on the 18 months leading up to the May 2026 exam.
+   - Reference official sources (PIB, government websites, official reports) dated 2025+.
 
 3. QUESTION DESIGN with current affairs:
    - Current event as TRIGGER, static syllabus as ANSWER
@@ -84,18 +85,18 @@ You have access to Google Search for retrieving recent information. Use this to:
    - After each question, add "Relevance" note in explanation linking to recent event
    - Ensure at least 60% of questions are anchored to a verifiable recent event
 
-4. HIGH-VALUE CURRENT AFFAIRS TOPICS:
-   - International summits and India's role (G20, BRICS, SCO, etc.)
-   - Recent government schemes and their objectives
-   - Constitutional amendments and their implications
-   - Recent Supreme Court judgments of constitutional significance
-   - Scientific achievements (ISRO, DRDO, Indigenous tech)
-   - Environmental developments (Climate commitments, Conventions)
-   - Economic reforms and policies
+4. HIGH-VALUE CURRENT AFFAIRS TOPICS (2025-2026 Focus):
+   - International summits and India's evolving role
+   - New government schemes launched in 2025/2026
+   - Recent Constitutional amendments and bills
+   - Supreme Court judgments from 2025 onwards
+   - Major scientific achievements and milestones
+   - Recent environmental conventions (COP30 etc.)
+   - Economic surveys and budget analyses of 2025-26
 
 5. EXPLANATION ENHANCEMENT:
    For each question, in the explanation add:
-   - RELEVANCE: How this relates to recent events/developments
+   - RELEVANCE: How this relates to recent events/developments (MUST BE 2025+)
    - STATIC LINK: The underlying concept from the UPSC syllabus
    - Append a final bracketed line exactly like:
      [Relevance: <event + month/year + source type>]
@@ -104,6 +105,7 @@ You have access to Google Search for retrieving recent information. Use this to:
 
 MANDATORY WEB SEARCH USAGE:
 - You MUST use Google Search for current affairs questions.
+- You MUST filter search results to prioritize 2025 and 2026 dates.
 - Do NOT answer from memory when current affairs is enabled.
 - Each question must cite at least one URL in the explanation.
 
