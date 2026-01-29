@@ -85,8 +85,11 @@ function isRetryableError(error: unknown): boolean {
   // Parse failures (empty LLM response)
   if (err.isParseFailure) return true;
 
-  // 429 Rate Limiting
+  // 429 Rate Limiting (Check properties and message content)
   if (err.code === 429 || err.status === 'RESOURCE_EXHAUSTED') return true;
+  if (err.message?.includes('429') || err.message?.includes('RESOURCE_EXHAUSTED')) return true;
+  if (err.message?.includes('Resource exhausted')) return true;
+  if (err.message?.includes('Too Many Requests')) return true;
 
   // Network/Timeout errors
   const cause = err.cause as { code?: string } | undefined;
@@ -103,7 +106,14 @@ function isRetryableError(error: unknown): boolean {
 function isRateLimitError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
   const err = error as RetryableError;
-  return err.code === 429 || err.status === 'RESOURCE_EXHAUSTED';
+  const msg = err.message || '';
+  return (
+    err.code === 429 ||
+    err.status === 'RESOURCE_EXHAUSTED' ||
+    msg.includes('429') ||
+    msg.includes('RESOURCE_EXHAUSTED') ||
+    msg.includes('Resource exhausted')
+  );
 }
 
 async function sleep(ms: number): Promise<void> {
