@@ -158,7 +158,7 @@ export async function executeQuizSetGeneration(
         styles: styles,
         count: runItem.question_count,
         enableFactCheck: env.ENABLE_FACT_CHECK === "1",
-        enableCurrentAffairs: runItem.enable_current_affairs === 1,
+        enableCurrentAffairs: true, // Force enable current affairs for all quiz sets
         currentAffairsTheme,
       });
 

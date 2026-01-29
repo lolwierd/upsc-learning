@@ -14,7 +14,7 @@ import { dumpLlmCall, serializeError } from "./llm-dump.js";
 // ============================================================================
 // RETRY CONFIGURATION
 // ============================================================================
-const DEFAULT_MAX_RETRIES = 3;
+const DEFAULT_MAX_RETRIES = 5;
 const DEFAULT_RETRY_DELAY_MS = 2000; // Base delay for exponential backoff
 const RATE_LIMIT_RETRY_DELAY_MS = 60000; // 60s for 429 errors
 
@@ -140,7 +140,7 @@ async function retryWithBackoff<T>(
 
       // Determine delay based on error type
       const delay = isRateLimitError(error)
-        ? rateLimitDelayMs
+        ? rateLimitDelayMs * Math.pow(1.5, attempt) // Exponential for rate limits too
         : baseDelayMs * Math.pow(2, attempt); // Exponential backoff
 
       console.warn(
@@ -837,8 +837,8 @@ export async function generateQuiz(
       groundingEnabled,
       groundingSourceCount: totalGroundingSources,
       howManyFormatPercentage,
-      requestPrompt: null,
-      rawResponse: null,
+      requestPrompt: singleResult.fullPrompt,
+      rawResponse: singleResult.rawResponse,
     },
   };
 }

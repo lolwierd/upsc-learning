@@ -90,7 +90,7 @@ const runQuizGeneration = async ({
       count: body.questionCount,
       // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
       enableFactCheck: env.ENABLE_FACT_CHECK === "1",
-      enableCurrentAffairs: body.enableCurrentAffairs,
+      enableCurrentAffairs: true, // Force enable current affairs for all quizzes
       currentAffairsTheme,
     });
 
