@@ -204,23 +204,12 @@ export interface UserStats {
 export type QuizSetRunStatus = "running" | "completed" | "partial" | "failed";
 export type QuizSetRunTriggerType = "manual" | "scheduled";
 export type QuizSetRunItemStatus = "pending" | "generating" | "completed" | "failed";
-
-export type QuestionEra =
-  | "current"
-  | "all"
-  | "2024-2025"
-  | "2021-2023"
-  | "2018-2020"
-  | "2014-2017"
-  | "2011-2013";
-
 export interface QuizSetItemConfig {
   subject: Subject;
   theme?: string;
   difficulty: Difficulty;
   styles: QuestionStyle[];
   questionCount: number;
-  era?: QuestionEra;
   enableCurrentAffairs?: boolean;
   currentAffairsTheme?: string;
 }

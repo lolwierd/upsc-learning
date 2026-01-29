@@ -17,9 +17,6 @@ import {
   QUESTION_STYLES,
   QUESTION_STYLE_LABELS,
   QUESTION_STYLE_DESCRIPTIONS,
-  QUESTION_ERAS,
-  QUESTION_ERA_LABELS,
-  QUESTION_ERA_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -51,13 +48,11 @@ export function QuizItemForm({
   const [styles, setStyles] = useState<string[]>(
     initialValues?.styles || [...QUESTION_STYLES]
   );
-  const [era, setEra] = useState<string>(initialValues?.era || QUESTION_ERAS[0]);
+
   const [questionCount, setQuestionCount] = useState<number>(
     initialValues?.questionCount || 40
   );
-  const [enableCurrentAffairs, setEnableCurrentAffairs] = useState<boolean>(
-    initialValues?.enableCurrentAffairs || false
-  );
+  // Current affairs is always enabled, only theme is configurable
   const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>(
     initialValues?.currentAffairsTheme || ""
   );
@@ -83,8 +78,8 @@ export function QuizItemForm({
       difficulty: difficulty as (typeof DIFFICULTIES)[number],
       styles: styles as (typeof QUESTION_STYLES)[number][],
       questionCount,
-      era: era as (typeof QUESTION_ERAS)[number],
-      enableCurrentAffairs,
+
+      enableCurrentAffairs: true, // Always enabled
       currentAffairsTheme: currentAffairsTheme || undefined,
     });
   };
@@ -106,11 +101,7 @@ export function QuizItemForm({
     description: QUESTION_STYLE_DESCRIPTIONS[s],
   }));
 
-  const eraOptions = QUESTION_ERAS.map((e) => ({
-    value: e,
-    label: QUESTION_ERA_LABELS[e],
-    description: QUESTION_ERA_DESCRIPTIONS[e],
-  }));
+
 
   return (
     <div className="space-y-5">
@@ -151,40 +142,26 @@ export function QuizItemForm({
         onChange={setStyles}
       />
 
-      {/* Era Selection */}
-      <RadioGroup
-        name="era"
-        label="Question Era"
-        options={eraOptions}
-        value={era}
-        onChange={setEra}
-      />
 
-      {/* Current Affairs */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-3">
-          <label htmlFor="enableCurrentAffairs" className="flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              id="enableCurrentAffairs"
-              checked={enableCurrentAffairs}
-              onChange={(e) => setEnableCurrentAffairs(e.target.checked)}
-              className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
-            />
-            <span className="ml-2 text-sm font-medium text-gray-700">
-              Include Current Affairs
-            </span>
-          </label>
+
+      {/* Current Affairs (Always On) */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-700">
+            🌐 Current Affairs
+          </span>
+          <span className="text-xs text-white bg-green-500 px-2 py-0.5 rounded-full">
+            Always On
+          </span>
         </div>
-        {enableCurrentAffairs && (
-          <Input
-            id="currentAffairsTheme"
-            label="Current Affairs Focus (Optional)"
-            placeholder="e.g., G20 Summit, Budget 2024"
-            value={currentAffairsTheme}
-            onChange={(e) => setCurrentAffairsTheme(e.target.value)}
-          />
-        )}
+        <Input
+          id="currentAffairsTheme"
+          label="Current Affairs Focus (Optional)"
+          placeholder="e.g., G20 Summit, Budget 2024"
+          value={currentAffairsTheme}
+          onChange={(e) => setCurrentAffairsTheme(e.target.value)}
+          helperText="Optionally focus on specific current affairs topics"
+        />
       </div>
 
       {/* Question Count */}

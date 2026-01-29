@@ -89,7 +89,6 @@ const runQuizGeneration = async ({
       styles: body.styles,
       count: body.questionCount,
       // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
-      era: body.era,
       enableFactCheck: env.ENABLE_FACT_CHECK === "1",
       enableCurrentAffairs: body.enableCurrentAffairs,
       currentAffairsTheme,
@@ -138,7 +137,6 @@ const runQuizGeneration = async ({
         theme: metrics.theme ?? null,
         difficulty: metrics.difficulty,
         stylesJson,
-        era: metrics.era,
         status: "success",
         requestedCount: metrics.requestedCount,
         returnedCount: metrics.returnedCount,

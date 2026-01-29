@@ -21,9 +21,6 @@ import {
   QUESTION_STYLES,
   QUESTION_STYLE_LABELS,
   QUESTION_STYLE_DESCRIPTIONS,
-  QUESTION_ERAS,
-  QUESTION_ERA_LABELS,
-  QUESTION_ERA_DESCRIPTIONS,
   MIN_QUESTION_COUNT,
   MAX_QUESTION_COUNT,
 } from "@mcqs/shared";
@@ -63,10 +60,9 @@ export default function NewQuizPage() {
   const [theme, setTheme] = useState("");
   const [difficulty, setDifficulty] = useState<string>(DIFFICULTIES[1]);
   const [styles, setStyles] = useState<string[]>([...QUESTION_STYLES]);
-  const [era, setEra] = useState<string>(QUESTION_ERAS[0]); // "current" by default
+
   const [questionCount, setQuestionCount] = useState<number>(40);
-  // Current affairs integration
-  const [enableCurrentAffairs, setEnableCurrentAffairs] = useState<boolean>(true);
+  // Current affairs theme (current affairs is now always enabled)
   const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>("");
 
   // Load default question count from settings
@@ -142,8 +138,8 @@ export default function NewQuizPage() {
         difficulty: difficulty as (typeof DIFFICULTIES)[number],
         styles: styles as (typeof QUESTION_STYLES)[number][],
         questionCount,
-        era: era as (typeof QUESTION_ERAS)[number],
-        enableCurrentAffairs,
+
+        enableCurrentAffairs: true, // Always enabled
         currentAffairsTheme: currentAffairsTheme || undefined,
       });
 
@@ -176,11 +172,7 @@ export default function NewQuizPage() {
     description: QUESTION_STYLE_DESCRIPTIONS[s],
   }));
 
-  const eraOptions = QUESTION_ERAS.map((e) => ({
-    value: e,
-    label: QUESTION_ERA_LABELS[e],
-    description: QUESTION_ERA_DESCRIPTIONS[e],
-  }));
+
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -228,53 +220,30 @@ export default function NewQuizPage() {
             onChange={setStyles}
           />
 
-          {/* Era Selection */}
-          <RadioGroup
-            name="era"
-            label="Question Era (UPSC PYQ Style)"
-            options={eraOptions}
-            value={era}
-            onChange={setEra}
-          />
 
-          {/* Current Affairs Integration */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <label
-                htmlFor="enableCurrentAffairs"
-                className="flex items-center cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  id="enableCurrentAffairs"
-                  checked={enableCurrentAffairs}
-                  onChange={(e) => setEnableCurrentAffairs(e.target.checked)}
-                  className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
-                />
-                <span className="ml-2 text-sm font-medium text-gray-700">
-                  Include Current Affairs (Web Search)
-                </span>
-              </label>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                Uses web search
+
+          {/* Current Affairs Theme (always enabled, optional focus) */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">
+                🌐 Current Affairs Integration
+              </span>
+              <span className="text-xs text-white bg-green-500 px-2 py-0.5 rounded-full">
+                Always On
               </span>
             </div>
-            {enableCurrentAffairs && (
-              <>
-                <p className="text-xs text-gray-500 ml-6">
-                  Uses web search to integrate recent events as question triggers. Questions
-                  will test static concepts through the lens of current affairs.
-                </p>
-                <Input
-                  id="currentAffairsTheme"
-                  label="Current Affairs Focus (Optional)"
-                  placeholder="e.g., G20 Summit, Budget 2024, Climate Agreements"
-                  value={currentAffairsTheme}
-                  onChange={(e) => setCurrentAffairsTheme(e.target.value)}
-                  helperText="Specify a current affairs topic to focus on"
-                />
-              </>
-            )}
+            <p className="text-xs text-gray-500">
+              Uses web search to integrate recent events as question triggers. 20% of questions
+              will be AI predictions for UPSC 2026 based on emerging topics.
+            </p>
+            <Input
+              id="currentAffairsTheme"
+              label="Current Affairs Focus (Optional)"
+              placeholder="e.g., G20 Summit, Budget 2024, Climate Agreements"
+              value={currentAffairsTheme}
+              onChange={(e) => setCurrentAffairsTheme(e.target.value)}
+              helperText="Optionally specify a current affairs topic to prioritize"
+            />
           </div>
 
           {/* Question Count */}

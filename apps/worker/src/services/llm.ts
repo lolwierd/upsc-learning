@@ -3,7 +3,7 @@ import { generateText } from "ai";
 import { VertexAI, type GenerateContentResult } from "@google-cloud/vertexai";
 import type { Env } from "../types.js";
 import type { GeneratedQuestion, QuestionStyle, Difficulty } from "@mcqs/shared";
-import { getPrompt, type QuestionEra } from "../prompts/index.js";
+import { getPrompt } from "../prompts/index.js";
 import { validateBatch, autoFixQuestion, factCheckBatch } from "./validator.js";
 import {
   generateFingerprint,
@@ -18,7 +18,6 @@ interface GenerateQuizParams {
   styles: QuestionStyle[];
   count: number;
   apiKey?: string;
-  era?: QuestionEra; // UPSC PYQ style era
   enableFactCheck?: boolean; // Use Gemini Pro to verify facts
   enableDeduplication?: boolean; // Check against previously generated questions
   enableCurrentAffairs?: boolean; // Enable Google Search grounding for current affairs
@@ -33,7 +32,7 @@ export interface GenerateQuizMetrics {
   theme?: string;
   difficulty: Difficulty;
   styles: QuestionStyle[];
-  era: QuestionEra;
+
   requestedCount: number;
   returnedCount: number;
   dedupEnabled: boolean;
@@ -236,7 +235,6 @@ async function generateQuizCall(
     difficulty,
     styles,
     count,
-    era = "current",
     enableCurrentAffairs = false,
     currentAffairsTheme,
   } = params;
@@ -261,7 +259,6 @@ async function generateQuizCall(
     difficulty,
     styles: styleDistribution,
     totalCount: count,
-    era,
     enableCurrentAffairs,
     currentAffairsTheme,
   });
@@ -553,7 +550,6 @@ export async function generateQuiz(
     styles,
     count,
     apiKey,
-    era = "current",
     enableFactCheck: enableFactCheckParam,
     enableDeduplication = true,
     enableCurrentAffairs = false,
@@ -668,7 +664,7 @@ export async function generateQuiz(
       factCheckResult = await factCheckBatch(
         finalQuestions,
         "",
-        { env, parentCallId: overallCallId, subject, theme, difficulty, era }
+        { env, parentCallId: overallCallId, subject, theme, difficulty }
       );
       factCheckDurationMs = Date.now() - fcStart;
     } catch (e) {
@@ -694,7 +690,6 @@ export async function generateQuiz(
       theme,
       difficulty,
       styles,
-      era,
       requestedCount: count,
       returnedCount: finalQuestions.length,
       dedupEnabled: enableDeduplication,

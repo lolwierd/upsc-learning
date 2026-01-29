@@ -157,7 +157,6 @@ export async function executeQuizSetGeneration(
         difficulty: runItem.difficulty as Parameters<typeof generateQuiz>[1]["difficulty"],
         styles: styles,
         count: runItem.question_count,
-        era: (runItem.era as Parameters<typeof generateQuiz>[1]["era"]) || undefined,
         enableFactCheck: env.ENABLE_FACT_CHECK === "1",
         enableCurrentAffairs: runItem.enable_current_affairs === 1,
         currentAffairsTheme,
@@ -216,7 +215,6 @@ export async function executeQuizSetGeneration(
           theme: metrics.theme ?? null,
           difficulty: metrics.difficulty,
           stylesJson,
-          era: metrics.era,
           status: "success",
           requestedCount: metrics.requestedCount,
           returnedCount: metrics.returnedCount,
@@ -279,7 +277,7 @@ export async function executeQuizSetGeneration(
   // Determine final run status
   const finalStatus: QuizSetRunStatus =
     failedCount === runItems.length ? "failed" :
-    failedCount > 0 ? "partial" : "completed";
+      failedCount > 0 ? "partial" : "completed";
 
   const completedAt = Math.floor(Date.now() / 1000);
 

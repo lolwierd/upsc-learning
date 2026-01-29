@@ -117,7 +117,6 @@ function mapQuizSetItemRowToResponse(row: QuizSetItemRow): QuizSetItem {
     difficulty: row.difficulty as QuizSetItem["difficulty"],
     styles: JSON.parse(row.styles) as QuizSetItem["styles"],
     questionCount: row.question_count,
-    era: (row.era as QuizSetItem["era"]) || undefined,
     enableCurrentAffairs: row.enable_current_affairs === 1,
     currentAffairsTheme: row.current_affairs_theme || undefined,
     createdAt: row.created_at,
@@ -256,7 +255,7 @@ quizSets.post(
             item.difficulty,
             JSON.stringify(item.styles),
             item.questionCount,
-            item.era || "current",
+            "current", // Always use current era
             item.enableCurrentAffairs ? 1 : 0,
             item.currentAffairsTheme || null,
             now,
@@ -455,7 +454,7 @@ quizSets.post(
         body.difficulty,
         JSON.stringify(body.styles),
         body.questionCount,
-        body.era || "current",
+        "current", // Always use current era
         body.enableCurrentAffairs ? 1 : 0,
         body.currentAffairsTheme || null,
         now,
@@ -527,10 +526,6 @@ quizSets.patch(
     if (body.questionCount !== undefined) {
       updates.push("question_count = ?");
       values.push(body.questionCount);
-    }
-    if (body.era !== undefined) {
-      updates.push("era = ?");
-      values.push(body.era || "current");
     }
     if (body.enableCurrentAffairs !== undefined) {
       updates.push("enable_current_affairs = ?");

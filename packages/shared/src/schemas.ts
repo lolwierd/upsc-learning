@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, QUESTION_ERAS, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants.js";
+import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, MIN_QUESTION_COUNT, MAX_QUESTION_COUNT } from "./constants.js";
 
 // ============================================
 // Base Schemas
@@ -8,7 +8,7 @@ import { SUBJECTS, DIFFICULTIES, QUESTION_STYLES, QUESTION_ERAS, MIN_QUESTION_CO
 export const subjectSchema = z.enum(SUBJECTS);
 export const difficultySchema = z.enum(DIFFICULTIES);
 export const questionStyleSchema = z.enum(QUESTION_STYLES);
-export const questionEraSchema = z.enum(QUESTION_ERAS);
+
 export const questionTypeSchema = z.enum(["standard", "statement", "match", "assertion"]);
 export const attemptStatusSchema = z.enum(["in_progress", "completed"]);
 export const modelProviderSchema = z.enum(["gemini", "openai"]);
@@ -23,7 +23,7 @@ export const generateQuizRequestSchema = z.object({
   difficulty: difficultySchema,
   styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
-  era: questionEraSchema.optional().default("current"), // UPSC PYQ style era
+
   turnstileToken: z.string().optional(), // Required in production
   // Current affairs integration
   enableCurrentAffairs: z.boolean().optional().default(false), // Enable Google Search grounding
@@ -207,7 +207,7 @@ export const quizSetItemConfigSchema = z.object({
   difficulty: difficultySchema,
   styles: z.array(questionStyleSchema).min(1, "Select at least one question style"),
   questionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
-  era: questionEraSchema.optional(),
+
   enableCurrentAffairs: z.boolean().optional(),
   currentAffairsTheme: z.string().max(200).optional(),
 });
@@ -258,7 +258,7 @@ export const quizSetItemSchema = z.object({
   difficulty: difficultySchema,
   styles: z.array(questionStyleSchema),
   questionCount: z.number(),
-  era: questionEraSchema.optional(),
+
   enableCurrentAffairs: z.boolean().optional(),
   currentAffairsTheme: z.string().optional(),
   createdAt: z.number(),

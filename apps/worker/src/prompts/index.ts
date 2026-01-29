@@ -1,28 +1,11 @@
 import type { QuestionStyle, Difficulty } from "@mcqs/shared";
+import { getSubjectThemes, getSubjectStrategicTraps } from "./themes/index.js";
+import { getSubjectAnalysis, getStrategicSynthesis } from "./subject-analysis.js";
 
 interface StyleDistribution {
   style: QuestionStyle;
   count: number;
 }
-
-// Era types for generating questions in different UPSC styles
-export type QuestionEra = 
-  | "2011-2013"  // Foundation: Direct factual, simple 2-statement, NCERT-based
-  | "2014-2017"  // Transition: 3-statement dominant, Match List-I/II, current affairs rise
-  | "2018-2020"  // Sophistication: Conceptual + code-based statement questions (repo PYQs show little/no A-R wording)
-  | "2021-2023"  // Complexity: Multi-statement heavy; "How many" rises (repo PYQs: starts 2022, spikes 2023)
-  | "2024-2025"  // Current: Mixed templates; Statement-I/II + row-correctness tables appear (repo PYQs show mix)
-  | "current"    // Alias for latest (2024-2025)
-  | "all";       // Mixed: Distribute questions across all eras
-
-// All available eras (excluding aliases)
-export const ALL_ERAS: Exclude<QuestionEra, "current" | "all">[] = [
-  "2011-2013",
-  "2014-2017", 
-  "2018-2020",
-  "2021-2023",
-  "2024-2025",
-];
 
 interface PromptParams {
   subject: string;
@@ -30,10 +13,10 @@ interface PromptParams {
   difficulty: Difficulty;
   styles: StyleDistribution[];
   totalCount: number;
-  era?: QuestionEra; // Optional: Generate questions in specific era's style
   enableCurrentAffairs?: boolean; // Enable current affairs context injection
   currentAffairsTheme?: string; // Optional focus area for current affairs
 }
+
 
 // ============================================================================
 // CURRENT AFFAIRS INTEGRATION CONTEXT
@@ -480,267 +463,11 @@ FOR FACTUAL QUESTIONS:
 `;
 
 // ============================================================================
-// ERA-SPECIFIC GENERATION INSTRUCTIONS
+// CURRENT ERA GENERATION INSTRUCTIONS (2024-2025 Patterns)
 // ============================================================================
-const ERA_INSTRUCTIONS: Record<QuestionEra, string> = {
-  "2011-2013": `
+const CURRENT_ERA_INSTRUCTION = `
 ═══════════════════════════════════════════════════════════════════════════════
-ERA: 2011-2013 (FOUNDATION STYLE)
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate questions in the EARLY UPSC style (2011-2013 patterns):
-
-QUESTION FORMATS TO USE:
-1. DIRECT FACTUAL (60% of questions):
-   - "Which of the following is correct?"
-   - "Which one of the following is NOT a..."
-   - "The [X] is responsible for..."
-   - Simple single-answer questions
-
-2. SIMPLE TWO-STATEMENT (30%):
-   "Consider the following statements:
-   1. [Statement 1]
-   2. [Statement 2]
-   Which of the statements given above is/are correct?"
-   
-   Options: (a) 1 only (b) 2 only (c) Both 1 and 2 (d) Neither 1 nor 2
-
-3. COMPARISON QUESTIONS (10%):
-   - "What is the difference between X and Y?"
-   - Focus on distinguishing similar concepts
-
-CHARACTERISTICS:
-- Questions directly from NCERT textbooks
-- Less tricky distractors
-- Clear, unambiguous language
-- Testing basic recall and understanding
-- Minimal current affairs integration
-
-AVOID:
-- "How many of the above" format
-- Statement-I/Statement-II format
-- Complex 4-5 statement questions
-- Match with "how many pairs" format
-`,
-
-  "2014-2017": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: 2014-2017 (TRANSITION STYLE)
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate questions in the TRANSITION UPSC style (2014-2017 patterns):
-
-QUESTION FORMATS TO USE:
-1. THREE-STATEMENT QUESTIONS (40%):
-   "Consider the following statements:
-   1. [Statement 1]
-   2. [Statement 2]
-   3. [Statement 3]
-   Which of the statements given above is/are correct?"
-   
-   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
-
-2. FOUR-ITEM CLASSIFICATION (20%):
-   "Consider the following:
-   1. [Item 1]
-   2. [Item 2]
-   3. [Item 3]
-   4. [Item 4]
-   Which of the above are [category]?"
-   Options: (a) 1, 2 and 3 only (b) 2 and 4 only (c) 1, 3 and 4 only (d) 1, 2, 3 and 4
-
-3. CLASSIC MATCH FORMAT (15%):
-   "Match List-I with List-II"
-   With A-1, B-2, C-3, D-4 style options
-
-4. CONTEXT-BASED FACTUAL (25%):
-   "In the context of [X], which of the following is correct?"
-   "With reference to [X], consider the following..."
-
-CHARACTERISTICS:
-- "Select the correct answer using the code given below" standard
-- Environment/Ecology questions increased
-- Current affairs integration (schemes, organizations)
-- Extreme words ("only", "all") used as traps in wrong options
-- More conceptual understanding required
-
-AVOID:
-- "How many of the above is/are correct" format
-- Statement-I/Statement-II format
-`,
-
-  "2018-2020": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: 2018-2020 (SOPHISTICATION STYLE)
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate questions in the SOPHISTICATED UPSC style (2018-2020 patterns):
-
-QUESTION FORMATS TO USE:
-1. STATEMENT QUESTIONS WITH CODES (55%):
-   - Mix of 2, 3, and 4 statement questions
-   - "Which of the statements given above is/are correct?"
-
-2. APPLICATION-BASED (20%):
-   "If [condition/scenario], then..."
-   "What would happen if..."
-   Testing application of constitutional/legal provisions
-
-3. PAIR/MATCH VIA CODES (10%):
-   - "Consider the following pairs:"
-   - Prefer "Which of the pairs given above is/are correctly matched?" with code-style options
-
-4. NUANCED FACTUAL (15%):
-   Testing exceptions, special cases, recent amendments
-   Questions on committee recommendations
-
-CHARACTERISTICS:
-- Tricky distractors using scope/exception traps
-- Science & Technology questions increased
-- Questions on constitutional nuances
-- Contemporary issues as triggers for static concepts
-- Testing fine distinctions between related provisions
-
-AVOID (for this era, in this repo's scraped PYQs):
-- Statement-I/Statement-II format
-- "How many of the above..." as the primary evaluation template
-`,
-
-  "2021-2023": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: 2021-2023 (COMPLEXITY RISE)
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate questions in the COMPLEX UPSC style (2021-2023 patterns):
-
-KEY INSIGHT: Multi-statement questions dominate (~70% by 2022). "How many correct?"
-format becomes common especially from 2022 onward, but classic "Which statements 
-is/are correct?" with code options still appears frequently in 2021.
-
-QUESTION FORMATS TO USE:
-1. MULTI-STATEMENT WITH CODES (35%):
-   "Consider the following statements:
-   1. [Statement]
-   2. [Statement]
-   3. [Statement]
-   Which of the statements given above is/are correct?"
-   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
-
-2. "HOW MANY" STATEMENTS (25% - rising trend):
-   "Consider the following statements:
-   1. [Statement]
-   2. [Statement]
-   3. [Statement]
-   How many of the above statements are correct?"
-   Options: (a) Only one (b) Only two (c) All three (d) None
-
-3. STATEMENT-I/STATEMENT-II (15%):
-   This is essentially a re-skinned Assertion-Reason format.
-   In this repo's scraped PYQs, this shows up prominently in 2023.
-   "Statement-I: [Claim]
-   Statement-II: [Related statement]
-   Which one of the following is correct in respect of the above statements?"
-   Uses same 4 options as classic A-R (both correct & explains / both correct no explain / etc.)
-
-4. MATCH THE FOLLOWING (15%):
-   Prefer the repo-PYQ phrasing variants:
-   - "How many pairs given above are correctly matched?"
-   - "How many of the pairs given above are correctly matched?"
-   - Occasionally: "How many pairs given above are not correctly matched?"
-
-5. DIRECT/STANDALONE (10%):
-   Single-answer factual questions
-
-CHARACTERISTICS:
-- Distractors designed to defeat elimination strategies
-- Focus on recent amendments, judgments, committees
-- Questions increasingly require knowledge of ALL statements (no safe elimination)
-- Current affairs as trigger, static syllabus as solution
-
-KEY SHIFT: Strong rise in multi-statement dominance; "How many correct?" emerges prominently from 2022.
-`,
-
-  "2024-2025": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: 2024-2025 (CURRENT STANDARD)
-═══════════════════════════════════════════════════════════════════════════════
-
-Generate questions in the CURRENT UPSC style (2024-2025 patterns):
-
-KEY INSIGHT: Statement-based MCQs dominate (~60%). While "How many correct?" format
-is common, actual 2024 PYQs show significant VARIETY in formats. Do NOT over-rely
-on "How many" - mix formats for authentic practice.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MANDATORY FORMAT DISTRIBUTION (for balanced, authentic practice):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- "How many of the above" format: ~30-35% (NOT more than 40%!)
-- Classic "Which is/are correct" with codes: ~25-30%
-- Statement-I/Statement-II (Assertion-Reason logic): ~12-15%
-- Match the following (classic or "how many pairs"): ~10-12%
-- Direct factual/Classification: ~15-20%
-
-IMPORTANT: Do NOT make more than 40% of questions use "How many" format!
-Mix formats to test different analytical skills.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-QUESTION FORMATS TO USE:
-1. "HOW MANY" / COUNTING FORMAT (~30-35% max):
-   - "How many of the above statements are correct?"
-   - "How many of the pairs given above are correctly matched?"
-   - "In how many of the above rows is the given information correctly matched?"
-   - Also seen: "In which of the above rows is the given information correctly matched?"
-   Options: Only one / Only two / All three (or four) / None
-
-2. CLASSIC STATEMENT-CODE FORMAT (~25-30%):
-   "Consider the following statements:
-   1. [Statement]
-   2. [Statement]
-   3. [Statement]
-   Which of the statements given above is/are correct?"
-   Options: (a) 1 only (b) 1 and 2 only (c) 2 and 3 only (d) 1, 2 and 3
-
-3. STATEMENT-I/STATEMENT-II (~12-15%):
-   This is the modern label for Assertion-Reason logic.
-   Also possible (recently): Statement-I with Statement-II and Statement-III as alternative explanations.
-   "Statement-I: [Factual claim or observation]
-   Statement-II: [Related statement - could be cause, explanation, or independent fact]
-   Which one of the following is correct in respect of the above statements?"
-   Options: Both correct & II explains I / Both correct but II doesn't explain / I correct II incorrect / I incorrect II correct
-
-4. THREE-COLUMN MATCH / ROW-CORRECTNESS (~5%):
-   Tables with 3+ columns where you evaluate row-by-row correctness
-   "In how many of the above rows is the given information correctly matched?"
-   This is a significant 2024 innovation.
-
-5. CLASSIC MATCH THE FOLLOWING (~8-10%):
-   "Match List-I with List-II" with A-1, B-2, C-3, D-4 style options
-   Also appears in "How many pairs correctly matched?" format
-
-6. STANDALONE/DIRECT (~15-20%):
-   Direct factual questions testing precise knowledge
-   - Party-Leader/Founder associations
-   - Country-Species habitat mapping
-   - Organisms classification (taxonomy traps)
-   - Amendment-Provision mapping
-
-2024 SPECIFIC EXAMPLES FROM ACTUAL PAPER:
-- Party-Leader matching (Bhartiya Jana Sangh-Mukherjee, Swatantra Party)
-- Country-Animal habitat traps (Brazil-Indri, Indonesia-Elk, Madagascar-Bonobo - all wrong!)
-- Organisms classification (Cicada, Froghopper, Pond skater = all insects)
-- Statement-I/II on syndicated loans, CBDC, star lifecycle, atmospheric heating
-
-EMPHASIS:
-- Mix formats for comprehensive practice - NOT dominated by "How many"
-- Statement-I/II (evolved Assertion-Reason) appears across all subjects
-- 3-column row-correctness tables are new and tricky
-- Association questions (species-habitat, party-leader) are high frequency
-- Include variety: 2-statement, 3-statement (most common), 4-statement mixes
-`,
-
-  "current": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: CURRENT (2024-2025 STANDARD) - DEFAULT
+ERA: CURRENT (2024-2025 STANDARD)
 ═══════════════════════════════════════════════════════════════════════════════
 
 Generate questions matching the LATEST UPSC patterns (2024-2025):
@@ -794,175 +521,271 @@ PRIMARY FORMATS:
    - Organisms classification (taxonomy traps)
 
 Follow 2024-2025 patterns as the PRIMARY reference. Ensure format VARIETY.
-`,
+`;
 
-  "all": `
-═══════════════════════════════════════════════════════════════════════════════
-ERA: ALL ERAS (MIXED DISTRIBUTION)
-═══════════════════════════════════════════════════════════════════════════════
+// ============================================================================
+// 2026 PRELIMS FOCUS - CRITICAL STRATEGIC GUIDANCE
+// ============================================================================
+const PRELIMS_2026_FOCUS = `
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🎯 CRITICAL: 2026 PRELIMS FOCUS 🎯                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 
-Generate questions spanning ALL UPSC eras to provide comprehensive practice:
+YOUR GOAL: Generate questions that would likely appear in UPSC PRELIMS 2026.
 
-DISTRIBUTION (approximate for mixed practice):
-- ~10% in 2011-2013 style: Direct factual, simple 2-statement "1 only / 2 only / Both / Neither"
-- ~15% in 2014-2017 style: Three-statement with combination codes, classic Match List-I/II
-- ~20% in 2018-2020 style: Conceptual + code-based statement/pair questions
-- ~25% in 2021-2023 style: "How many correct?" emerging (esp. 2022+), multi-statement dominant
-- ~30% in 2024-2025 style: "How many" very frequent, Statement-I/II, 3-column row-correctness
+⚠️ IMPORTANT DISTINCTION:
+- The theme data provided comes from analyzing 2013-2025 PYQs
+- BUT you are NOT trying to recreate old PYQ patterns
+- Use theme data for TOPIC COVERAGE, apply ONLY 2024-2025 FRAMING
 
-KEY EVOLUTION TO REFLECT:
-1. Multi-statement questions rose from ~40% (2011) to ~70% (2022+)
-2. In this repo's scraped PYQs, "How many correct?" becomes common from 2022 and spikes in 2023
-3. Assertion-Reason logic is often labeled Statement-I/II (same logic, different name)
-4. 3-column row-correctness tables are a 2024 innovation
-5. "Which statements is/are correct?" with codes still appears across all eras
+WHAT THIS MEANS:
+✗ DO NOT: Generate deep/specific questions in the style of 2013-2017
+✓ DO: Take topics from themes but frame them with 2024-2025 sophistication
+✗ DO NOT: Focus on outdated schemes, ended programs, or historical minutiae
+✓ DO: Focus on currently relevant provisions, active policies, recent developments
 
-This mixed approach helps aspirants:
-- Build foundation with simpler patterns
-- Understand evolution of UPSC questioning style
-- Practice older patterns that occasionally still appear
-- Master current dominant patterns
+UPSC EVOLUTION INSIGHT:
+- Static content has REDUCED by ~50% compared to 2013-2017 era
+- Questions now test UNDERSTANDING + APPLICATION, not just RECALL
+- Cross-subject integration has INCREASED significantly
+- Current affairs TRIGGERS static concepts (not standalone static)
+`;
 
-For EACH question, use the appropriate era's format naturally based on the distribution.
-`,
-};
+const CONTENT_BALANCE_RATIO = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 CONTENT BALANCE: 60% STATIC + 40% DYNAMIC (Aspirational Target)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+~60% STATIC CONCEPTS (with modern framing):
+- Constitutional provisions, fundamental geography, ecological principles
+- Historical facts, scientific concepts, cultural heritage
+- BUT: Frame with sophisticated 2024-style question structures
+- NOT: Pure recall like "In which year was X established?"
+
+~40% DYNAMIC LINKAGE (current affairs triggered):
+- Static concepts triggered by recent developments (last 18 months)
+- Policy changes, recent amendments, new schemes, international developments
+
+FRAMING EXAMPLES:
+
+❌ OUTDATED (2015-style pure static):
+"What are the features of Panchayati Raj?"
+
+✓ MODERN (2024-style dynamic trigger):
+"In the context of the 30th anniversary of the 73rd Constitutional Amendment (2023)..."
+
+❌ OUTDATED (2013-style deep static):
+"Which of the following rivers originates from the Amarkantak plateau?"
+
+✓ MODERN (2024-style application):
+"Consider the following rivers and their characteristics in context of 
+recent inter-state water disputes..."
+`;
+
+const RELEVANCE_FILTER = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 RELEVANCE FILTER FOR 2026 PRELIMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⛔ AVOID generating questions on:
+- Schemes that have ENDED or MERGED (unless historically tested)
+- Topics with DECLINING frequency in 2021-2024 PYQs
+- Very deep static minutiae that UPSC has moved away from
+- Specific dates/numbers unless absolutely fundamental
+- Regional details that are too narrow in scope
+
+✅ PRIORITIZE generating questions on:
+- Topics with INCREASING frequency in 2021-2024 (see trends)
+- Cross-linkage questions (Environment + Economy, Polity + Current Affairs)
+- Constitutional provisions with RECENT amendments or interpretations
+- International agreements/frameworks India has engaged with recently
+- Application-based understanding over pure recall
+- Governance reforms, new institutional mechanisms
+- Climate, biodiversity, and sustainability themes (rising trend)
+
+TOPIC RELEVANCE HEURISTIC:
+If a topic was asked 3+ times in 2013-2017 but ZERO times in 2021-2024,
+it's likely DEPRIORITIZED by UPSC. Don't focus on it.
+`;
+
+const PATTERN_ADHERENCE_2024 = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ STRICT 2024/2025 PATTERN ADHERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your FRAMING STYLE, TRAPPING LOGIC, and DISTRACTOR DESIGN must mirror 2024/2025 PYQs.
+
+Even if theme files mention older patterns or topics, IGNORE outdated patterns.
+Apply 2024/2025 framing to ALL topics.
+
+2024/2025 SIGNATURE PATTERNS TO USE:
+
+1. STATEMENT-I/STATEMENT-II with EXPLANATION LOGIC:
+   - Tests causal/explanatory relationships
+   - "Does Statement-II explain Statement-I?"
+   - Both statements can be true but NOT explanatory
+
+2. "HOW MANY CORRECT" with ALL STATEMENTS VERIFIABLE:
+   - Each statement must be independently checkable
+   - Mix of correct and incorrect (not all true/all false)
+
+3. THREE-COLUMN ROW CORRECTNESS (2024 innovation):
+   - Tables with 3+ columns
+   - Evaluate row-by-row correctness
+   - "In how many rows is the information correctly matched?"
+
+4. ASSOCIATION TRAPS (Party-Leader, Species-Habitat):
+   - Pairs matching format
+   - Tests precise knowledge, not vague associations
+   - Common in Polity, Environment, History
+
+5. CONTEMPORARY HOOKS:
+   - Reference recent events as question context
+   - Link static to current (G20, climate summits, recent judgments)
+
+🚫 AVOID old patterns:
+- Simple "Which of the following is correct?" without depth
+- Pure chronological recall (years, sequence of events)
+- "All of the above" / "None of the above" as lazy options
+- Questions answerable by elimination using absolute words
+`;
 
 const DIFFICULTY_INSTRUCTIONS: Record<Difficulty, string> = {
   easy: `
-DIFFICULTY: EASY (NCERT Level - ~33% of actual UPSC paper)
-Target: Foundation-level questions that test basic recall and fundamental understanding.
+DIFFICULTY: EASY(NCERT Level - ~33 % of actual UPSC paper)
+Target: Foundation - level questions that test basic recall and fundamental understanding.
 
-Characteristics:
-- Questions answerable directly from NCERT textbooks (Class 6-12)
-- Tests basic facts, definitions, and fundamental concepts
-- Clear, unambiguous language without tricky phrasing
-- One option should be obviously correct to a prepared candidate
-- Distractors should be clearly wrong but not absurd
+  Characteristics:
+- Questions answerable directly from NCERT textbooks(Class 6 - 12)
+  - Tests basic facts, definitions, and fundamental concepts
+    - Clear, unambiguous language without tricky phrasing
+      - One option should be obviously correct to a prepared candidate
+        - Distractors should be clearly wrong but not absurd
 
 Example difficulty benchmark:
-- "Which Article of the Constitution deals with Right to Education?" (Factual recall)
-- "The Indus Valley Civilization was primarily known for:" (Basic NCERT fact)
-- Simple cause-effect relationships from textbooks`,
+- "Which Article of the Constitution deals with Right to Education?"(Factual recall)
+  - "The Indus Valley Civilization was primarily known for:"(Basic NCERT fact)
+  - Simple cause - effect relationships from textbooks`,
 
   medium: `
-DIFFICULTY: MEDIUM (Application Level - ~35% of actual UPSC paper)
+DIFFICULTY: MEDIUM(Application Level - ~35 % of actual UPSC paper)
 Target: Questions requiring conceptual understanding and application of knowledge.
 
-Characteristics:
+  Characteristics:
 - Requires connecting multiple concepts or applying knowledge to scenarios
-- Tests understanding beyond mere memorization
-- May require elimination strategy to arrive at correct answer
-- Distractors are plausible and test fine distinctions
-- Questions from standard reference books (Laxmikanth, Spectrum, Ramesh Singh)
+  - Tests understanding beyond mere memorization
+    - May require elimination strategy to arrive at correct answer
+      - Distractors are plausible and test fine distinctions
+        - Questions from standard reference books(Laxmikanth, Spectrum, Ramesh Singh)
 
 Example difficulty benchmark:
 - Comparing two constitutional provisions and their implications
-- Understanding why a particular policy was implemented (not just what)
-- Questions linking current affairs to static syllabus concepts
-- Questions requiring understanding of exceptions and special cases`,
+  - Understanding why a particular policy was implemented(not just what)
+    - Questions linking current affairs to static syllabus concepts
+      - Questions requiring understanding of exceptions and special cases`,
 
   hard: `
-DIFFICULTY: HARD (Analytical Level - ~32% of actual UPSC paper)
-Target: Questions requiring deep analysis, multi-concept integration, and nuanced understanding.
+DIFFICULTY: HARD(Analytical Level - ~32 % of actual UPSC paper)
+Target: Questions requiring deep analysis, multi - concept integration, and nuanced understanding.
 
-Characteristics:
-- Multi-layered reasoning required
-- Tests obscure facts or fine distinctions between similar concepts
-- Elimination techniques alone won't work - needs solid knowledge
-- Sophisticated distractors that appear correct on surface reading
-- Questions that integrate current affairs with deep static knowledge
-- May test exceptions, recent amendments, or lesser-known provisions
+  Characteristics:
+- Multi - layered reasoning required
+  - Tests obscure facts or fine distinctions between similar concepts
+    - Elimination techniques alone won't work - needs solid knowledge
+      - Sophisticated distractors that appear correct on surface reading
+        - Questions that integrate current affairs with deep static knowledge
+          - May test exceptions, recent amendments, or lesser - known provisions
 
 Example difficulty benchmark:
-- Statement questions where 2-3 statements appear correct but have subtle errors
-- Questions on recent constitutional amendments and their implications
-- Match-the-following with similar-sounding options
-- Assertion-Reason where both seem independently true but relationship is tricky
-- Questions on international conventions/treaties with specific provisions`,
+- Statement questions where 2 - 3 statements appear correct but have subtle errors
+  - Questions on recent constitutional amendments and their implications
+    - Match - the - following with similar - sounding options
+      - Assertion - Reason where both seem independently true but relationship is tricky
+        - Questions on international conventions / treaties with specific provisions`,
 };
 
 const STYLE_INSTRUCTIONS: Record<QuestionStyle, string> = {
   factual: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: STANDARD/FACTUAL MCQ
+QUESTION STYLE: STANDARD / FACTUAL MCQ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Format: Direct question with 4 options (A, B, C, D)
+Format: Direct question with 4 options(A, B, C, D)
 questionType: "standard"
 
 UPSC Pattern Guidelines:
 - Question should test specific knowledge or understanding
-- Frame questions as "Which of the following...", "Consider the following...", or direct questions
-- All four options must be grammatically consistent with the question stem
-- Correct answer must be definitively correct, not "most correct"
+  - Frame questions as "Which of the following...", "Consider the following...", or direct questions
+    - All four options must be grammatically consistent with the question stem
+      - Correct answer must be definitively correct, not "most correct"
 
-Distractor Design (CRITICAL):
+Distractor Design(CRITICAL):
 - DO NOT use absolute words like "only", "always", "never", "all", "none" in wrong options
   (UPSC aspirants know these are usually wrong - your distractors must be smarter)
-- Each distractor should be a plausible misconception or commonly confused fact
-- Distractors should test genuine knowledge gaps, not trick through wordplay
-- Include distractors that would trap someone who studied superficially
+  - Each distractor should be a plausible misconception or commonly confused fact
+    - Distractors should test genuine knowledge gaps, not trick through wordplay
+      - Include distractors that would trap someone who studied superficially
 
 Example Structure:
-Q: Which of the following is NOT a feature of the Indian Constitution borrowed from the British Constitution?
-A) Parliamentary system of government
+Q: Which of the following is NOT a feature of the Indian Constitution borrowed from the British Constitution ?
+  A) Parliamentary system of government
 B) Rule of law
 C) Single citizenship
 D) Bicameral legislature
 
-(Here C is correct - Single citizenship is from British; others are also from British but the "NOT" makes it tricky)`,
+  (Here C is correct - Single citizenship is from British; others are also from British but the "NOT" makes it tricky)`,
 
   conceptual: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: CONCEPTUAL/APPLICATION MCQ
+QUESTION STYLE: CONCEPTUAL / APPLICATION MCQ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Format: Scenario-based or concept-testing question with 4 options
+Format: Scenario - based or concept - testing question with 4 options
 questionType: "standard"
 
 UPSC Pattern Guidelines:
 - Tests understanding of WHY, not just WHAT
-- May present a scenario and ask for correct interpretation
-- Tests ability to apply constitutional/legal/economic principles
-- Often connects theoretical knowledge to real-world application
+  - May present a scenario and ask for correct interpretation
+    - Tests ability to apply constitutional / legal / economic principles
+      - Often connects theoretical knowledge to real - world application
 
 Question Framing:
 - "In the context of..., which statement is correct?"
-- "Which of the following best explains...?"
-- "The primary objective of [policy/provision] is:"
-- Present a situation and ask what provision/article applies
+  - "Which of the following best explains...?"
+  - "The primary objective of [policy/provision] is:"
+  - Present a situation and ask what provision / article applies
 
 Distractor Design:
 - Include options that would be correct in a different context
-- Use commonly held misconceptions as distractors
-- Test understanding of scope and limitations of concepts
-- Include options that mix up similar-sounding provisions`,
+  - Use commonly held misconceptions as distractors
+    - Test understanding of scope and limitations of concepts
+      - Include options that mix up similar - sounding provisions`,
 
   statement: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: STATEMENT-BASED (56% OF UPSC PAPER - MOST IMPORTANT!)
+QUESTION STYLE: STATEMENT - BASED(56 % OF UPSC PAPER - MOST IMPORTANT!)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: Multiple statements to evaluate for correctness
 questionType: "statement"
 
-UPSC 2024-2025 Distribution (follow this):
-- Two-statement questions: ~15 per paper
-- Three-statement questions: ~39 per paper (MOST COMMON)
-- Four-statement questions: ~9 per paper
-- Five+ statement questions: ~4 per paper
+UPSC 2024 - 2025 Distribution(follow this):
+- Two - statement questions: ~15 per paper
+  - Three - statement questions: ~39 per paper(MOST COMMON)
+    - Four - statement questions: ~9 per paper
+      - Five + statement questions: ~4 per paper
 
 ═══════════════════════════════════════════════════════════════════════════════
-"HOW MANY" FORMAT (~30-35% of statement questions - NOT dominant):
+"HOW MANY" FORMAT(~30 - 35 % of statement questions - NOT dominant):
 ═══════════════════════════════════════════════════════════════════════════════
 
-THREE-STATEMENT "HOW MANY" FORMAT (PREFERRED):
+THREE - STATEMENT "HOW MANY" FORMAT(PREFERRED):
 "Consider the following statements regarding [topic]:
-1. [Statement 1]
-2. [Statement 2]
-3. [Statement 3]
+1.[Statement 1]
+2.[Statement 2]
+3.[Statement 3]
 
-How many of the above statements is/are correct?"
+How many of the above statements is / are correct ? "
 
 Options MUST be EXACTLY:
 A) Only one
@@ -970,14 +793,14 @@ B) Only two
 C) All three
 D) None
 
-FOUR-STATEMENT "HOW MANY" FORMAT:
+FOUR - STATEMENT "HOW MANY" FORMAT:
 "Consider the following statements:
-1. [Statement 1]
-2. [Statement 2]
-3. [Statement 3]
-4. [Statement 4]
+1.[Statement 1]
+2.[Statement 2]
+3.[Statement 3]
+4.[Statement 4]
 
-How many of the above statements is/are correct?"
+How many of the above statements is / are correct ? "
 
 Options MUST be EXACTLY:
 A) Only one
@@ -986,15 +809,15 @@ C) Only three
 D) All four
 
 ═══════════════════════════════════════════════════════════════════════════════
-CLASSIC "WHICH STATEMENTS" FORMAT (~50-60% of statement questions - PRIMARY):
+CLASSIC "WHICH STATEMENTS" FORMAT(~50 - 60 % of statement questions - PRIMARY):
 ═══════════════════════════════════════════════════════════════════════════════
 
 "Consider the following statements regarding [topic]:
-1. [Statement 1]
-2. [Statement 2]
-3. [Statement 3]
+1.[Statement 1]
+2.[Statement 2]
+3.[Statement 3]
 
-Which of the statements given above is/are correct?"
+Which of the statements given above is / are correct ? "
 
 Options format:
 A) 1 only
@@ -1002,12 +825,12 @@ B) 1 and 2 only
 C) 2 and 3 only
 D) 1, 2 and 3
 
-TWO-STATEMENT SIMPLE FORMAT:
+TWO - STATEMENT SIMPLE FORMAT:
 "Consider the following statements:
-1. [Statement 1]
-2. [Statement 2]
+1.[Statement 1]
+2.[Statement 2]
 
-Which of the statements given above is/are correct?"
+Which of the statements given above is / are correct ? "
 
 Options MUST be:
 A) 1 only
@@ -1018,37 +841,37 @@ D) Neither 1 nor 2
 CRITICAL RULES FOR STATEMENT QUESTIONS:
 1. Each statement must be independently verifiable as true or false
 2. Statements should be related to the same topic but test different aspects
-3. AVOID making all statements true or all false (makes question too easy)
-4. Ideal distribution: 1-2 statements correct, 1-2 incorrect (requires careful analysis)
+3. AVOID making all statements true or all false(makes question too easy)
+4. Ideal distribution: 1 - 2 statements correct, 1 - 2 incorrect(requires careful analysis)
 5. Wrong statements should contain SUBTLE errors using trap patterns:
-   - Scope trap: Correct concept, wrong jurisdiction/scope
-   - Exception trap: Generally true but fails due to known exception
-   - Terminology trap: Confuses similar-sounding terms/provisions
-   - Time trap: Outdated information presented as current
-6. Use specific facts (years, numbers, names) in some statements to test precision
+   - Scope trap: Correct concept, wrong jurisdiction / scope
+  - Exception trap: Generally true but fails due to known exception
+    - Terminology trap: Confuses similar - sounding terms / provisions
+      - Time trap: Outdated information presented as current
+6. Use specific facts(years, numbers, names) in some statements to test precision
 7. Test common misconceptions from the Subject Trap Library in incorrect statements
-8. Ensure answer distribution is varied across a batch (not all "Only two")`,
+8. Ensure answer distribution is varied across a batch(not all "Only two")`,
 
   match: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: MATCH THE FOLLOWING / PAIRS (~8-12 questions per UPSC paper)
+QUESTION STYLE: MATCH THE FOLLOWING / PAIRS(~8 - 12 questions per UPSC paper)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 questionType: "match"
 
 ═══════════════════════════════════════════════════════════════════════════════
-FORMAT 1: "HOW MANY PAIRS CORRECTLY MATCHED" (DOMINANT IN 2021-2024):
+FORMAT 1: "HOW MANY PAIRS CORRECTLY MATCHED"(DOMINANT IN 2021 - 2024):
 ═══════════════════════════════════════════════════════════════════════════════
 
 "Consider the following pairs:
 
-[Category A]          [Category B]
-1. [Item 1]     -     [Description 1]
-2. [Item 2]     -     [Description 2]
-3. [Item 3]     -     [Description 3]
-4. [Item 4]     -     [Description 4]
+[Category A][Category B]
+1.[Item 1]-[Description 1]
+2.[Item 2]-[Description 2]
+3.[Item 3]-[Description 3]
+4.[Item 4]-[Description 4]
 
-How many of the above pairs are correctly matched?"
+How many of the above pairs are correctly matched ? "
 
 Options MUST be EXACTLY:
 A) Only one pair
@@ -1056,145 +879,145 @@ B) Only two pairs
 C) Only three pairs
 D) All four pairs
 
-(Can also be 3 pairs with options: Only one / Only two / All three / None)
+  (Can also be 3 pairs with options: Only one / Only two / All three / None)
 
-REAL PYQ EXAMPLE (2024 Polity - Party/Leader):
+REAL PYQ EXAMPLE(2024 Polity - Party / Leader):
 "Consider the following pairs:
 Party - Its Leader
-1. Bhartiya Jana Sangh - Dr. Shyama Prasad Mukherjee
-2. Socialist Party - C. Rajagopalachari
+1. Bhartiya Jana Sangh - Dr.Shyama Prasad Mukherjee
+2. Socialist Party - C.Rajagopalachari
 3. Congress for Democracy - Jagjivan Ram
 4. Swatantra Party - Acharya Narendra Dev
 
-How many of the above are correctly matched?"
-Answer: Only two (Pairs 1 and 3 correct)
+How many of the above are correctly matched ? "
+Answer: Only two(Pairs 1 and 3 correct)
 
-REAL PYQ EXAMPLE (2024 Environment - Country/Animal):
+REAL PYQ EXAMPLE(2024 Environment - Country / Animal):
 "Consider the following pairs:
 Country - Animal found in its natural habitat
 1. Brazil - Indri
 2. Indonesia - Elk
 3. Madagascar - Bonobo
 
-How many of the pairs given above are correctly matched?"
-Answer: None (All wrong - tests precise habitat knowledge)
+How many of the pairs given above are correctly matched ? "
+Answer: None(All wrong - tests precise habitat knowledge)
 
 ═══════════════════════════════════════════════════════════════════════════════
-FORMAT 2: CLASSIC MATCH LIST-I WITH LIST-II:
+FORMAT 2: CLASSIC MATCH LIST - I WITH LIST - II:
 ═══════════════════════════════════════════════════════════════════════════════
 
 "Match List-I with List-II and select the correct answer using the code given below:
 
-List-I (Item)          List-II (Description)
-A. [Item 1]            1. [Description 1]
-B. [Item 2]            2. [Description 2]
-C. [Item 3]            3. [Description 3]
-D. [Item 4]            4. [Description 4]
+List - I(Item)          List - II(Description)
+A. [Item 1]1.[Description 1]
+B. [Item 2]2.[Description 2]
+C. [Item 3]3.[Description 3]
+D. [Item 4]4.[Description 4]
 
-Select the correct answer using the code given below:"
+Select the correct answer using the code given below: "
 
 Options format:
      A   B   C   D
-(a)  1   2   3   4
-(b)  2   1   4   3
-(c)  3   4   1   2
-(d)  4   3   2   1
+  (a)  1   2   3   4
+    (b)  2   1   4   3
+      (c)  3   4   1   2
+        (d)  4   3   2   1
 
-DESIGN RULES (CRITICAL FOR UPSC-QUALITY):
-1. Items in List-I MUST be same category (all rivers, all acts, all treaties, etc.)
-2. Descriptions in List-II MUST be parallel (all states, all years, all features, etc.)
-3. Include at least 2 items that could PLAUSIBLY match with same description (creates difficulty)
+DESIGN RULES(CRITICAL FOR UPSC - QUALITY):
+1. Items in List - I MUST be same category(all rivers, all acts, all treaties, etc.)
+2. Descriptions in List - II MUST be parallel(all states, all years, all features, etc.)
+3. Include at least 2 items that could PLAUSIBLY match with same description(creates difficulty)
 4. Commonly confused pairs should be included to test precise knowledge
 5. Ensure ONLY ONE correct matching combination exists
-6. For "How many pairs" format: Mix correct and incorrect pairs (ideal: 1-2 correct, 2-3 wrong)
+6. For "How many pairs" format: Mix correct and incorrect pairs(ideal: 1 - 2 correct, 2 - 3 wrong)
 
 COMMON UPSC MATCH THEMES:
-- Parties ↔ Founders/Leaders (very common in 2024)
-- Country ↔ Endemic/Native species (very common in Environment)
-- Treaties/Agreements ↔ Years/Countries
-- Constitutional Articles ↔ Provisions/Subjects
-- Rivers ↔ Origins/Tributaries/States
-- National Parks/Reserves ↔ States/Flagship Species
-- Government Schemes ↔ Objectives/Ministries
-- International Organizations ↔ Headquarters/Functions
-- Historical Events ↔ Years/Leaders
-- Folk Arts/Dances ↔ States/Regions
-- Minerals ↔ States (leading producers)`,
+- Parties ↔ Founders / Leaders(very common in 2024)
+  - Country ↔ Endemic / Native species(very common in Environment)
+    - Treaties / Agreements ↔ Years / Countries
+      - Constitutional Articles ↔ Provisions / Subjects
+        - Rivers ↔ Origins / Tributaries / States
+          - National Parks / Reserves ↔ States / Flagship Species
+            - Government Schemes ↔ Objectives / Ministries
+              - International Organizations ↔ Headquarters / Functions
+                - Historical Events ↔ Years / Leaders
+                  - Folk Arts / Dances ↔ States / Regions
+                    - Minerals ↔ States(leading producers)`,
 
   assertion: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-QUESTION STYLE: STATEMENT-I/STATEMENT-II (and STATEMENT-I/II/III) - UPSC CURRENT FORMAT
+QUESTION STYLE: STATEMENT - I / STATEMENT - II(and STATEMENT - I / II / III) - UPSC CURRENT FORMAT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Format: 2 or 3 statements with logical relationship analysis
 questionType: "assertion"
 
 NOTE: UPSC 2024 predominantly uses "Statement-I/Statement-II" format instead of 
-traditional "Assertion (A)/Reason (R)" format. USE THIS FORMAT:
+traditional "Assertion (A)/Reason (R)" format.USE THIS FORMAT:
 
-EXACT FORMAT A (2-STATEMENT) (MUST USE WORDING):
+EXACT FORMAT A(2 - STATEMENT)(MUST USE WORDING):
 "Consider the following statements:
 
-Statement-I: [Statement of fact, claim, or observation]
+Statement - I: [Statement of fact, claim, or observation]
 
-Statement-II: [Related statement - could be explanation, cause, or independent fact]
+Statement - II: [Related statement - could be explanation, cause, or independent fact]
 
-Which one of the following is correct in respect of the above statements?"
+Which one of the following is correct in respect of the above statements ? "
 
-OPTIONS MUST BE EXACTLY (USE THIS EXACT WORDING):
-A) Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I
-B) Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I
-C) Statement-I is correct but Statement-II is incorrect
-D) Statement-I is incorrect but Statement-II is correct
+OPTIONS MUST BE EXACTLY(USE THIS EXACT WORDING):
+A) Both Statement - I and Statement - II are correct and Statement - II is the correct explanation for Statement - I
+B) Both Statement - I and Statement - II are correct and Statement - II is not the correct explanation for Statement - I
+C) Statement - I is correct but Statement - II is incorrect
+D) Statement - I is incorrect but Statement - II is correct
 
-EXACT FORMAT B (3-STATEMENT EXPLANATION) (MUST USE WORDING):
+EXACT FORMAT B(3 - STATEMENT EXPLANATION)(MUST USE WORDING):
 "Consider the following statements:
 
-Statement-I: [Claim/observation]
+Statement - I: [Claim / observation]
 
-Statement-II: [Potential explanation 1]
+Statement - II: [Potential explanation 1]
 
-Statement-III: [Potential explanation 2]
+Statement - III: [Potential explanation 2]
 
-Which one of the following is correct in respect of the above statements?"
+Which one of the following is correct in respect of the above statements ? "
 
-OPTIONS MUST BE EXACTLY (USE THIS EXACT WORDING):
-A) Both Statement-II and Statement-III are correct and both of them explain Statement-I
-B) Both Statement-II and Statement-III are correct but only one of them explains Statement-I
-C) Only one of the Statements II and III is correct and that explains Statement-I
-D) Neither Statement-II nor Statement-III is correct
+OPTIONS MUST BE EXACTLY(USE THIS EXACT WORDING):
+A) Both Statement - II and Statement - III are correct and both of them explain Statement - I
+B) Both Statement - II and Statement - III are correct but only one of them explains Statement - I
+C) Only one of the Statements II and III is correct and that explains Statement - I
+D) Neither Statement - II nor Statement - III is correct
 
 CRITICAL DESIGN RULES:
-1. Statement-I must be a clear, verifiable statement of fact or claim
-2. Statement-II (and Statement-III, if used) must be independently verifiable as true or false
-3. The relationship between Statement-I and the explanation statement(s) is what makes this question hard
-4. Most challenging: explanation statement(s) are true but NOT the correct explanation (tests reasoning)
+1. Statement - I must be a clear, verifiable statement of fact or claim
+2. Statement - II(and Statement - III, if used) must be independently verifiable as true or false
+3. The relationship between Statement - I and the explanation statement(s) is what makes this question hard
+4. Most challenging: explanation statement(s) are true but NOT the correct explanation(tests reasoning)
 5. If an option says "explains Statement-I", the explanation statement(s) MUST be independently true
-6. If an option says "explains Statement-I", it MUST be a DIRECT causal/explanatory bridge, not merely correlated
+6. If an option says "explains Statement-I", it MUST be a DIRECT causal / explanatory bridge, not merely correlated
 
 DIFFICULTY CALIBRATION:
-- Easy: Statement-I is false, Statement-II is true (or vice versa) - straightforward
-- Medium: Both true, Statement-II clearly explains Statement-I - tests knowledge
-- Hard: Both true, but Statement-II is NOT the correct explanation - tests reasoning
+- Easy: Statement - I is false, Statement - II is true(or vice versa) - straightforward
+  - Medium: Both true, Statement - II clearly explains Statement - I - tests knowledge
+    - Hard: Both true, but Statement - II is NOT the correct explanation - tests reasoning
 
-AVOID "DEFINITION EXPLAINS DEFINITION" (TOO EASY)
-PREFER: "principle → implication" (Economy) or "mechanism → outcome" (Environment/Science)
+AVOID "DEFINITION EXPLAINS DEFINITION"(TOO EASY)
+PREFER: "principle → implication"(Economy) or "mechanism → outcome"(Environment / Science)
 
 COMMON TRAPS TO CREATE:
-- Statement-II is a true statement but explains something else, not Statement-I
-- Statement-II partially explains Statement-I but misses the main reason
-- Statement-I and Statement-II are both true and seem related but causation is reversed
-- Statement-II is the effect, not the cause of Statement-I
+- Statement - II is a true statement but explains something else, not Statement - I
+  - Statement - II partially explains Statement - I but misses the main reason
+    - Statement - I and Statement - II are both true and seem related but causation is reversed
+      - Statement - II is the effect, not the cause of Statement - I
 
-REAL PYQ EXAMPLE (2024 Economy):
+REAL PYQ EXAMPLE(2024 Economy):
 "Consider the following statements:
-Statement-I: Syndicated lending spreads the risk of borrower default across multiple lenders.
-Statement-II: The syndicated loan can be a fixed amount/lump sum of funds, but cannot be a credit line.
+Statement - I: Syndicated lending spreads the risk of borrower default across multiple lenders.
+  Statement - II: The syndicated loan can be a fixed amount / lump sum of funds, but cannot be a credit line.
 
-Which one of the following is correct in respect of the above statements?"
+Which one of the following is correct in respect of the above statements ? "
 
-Answer: (c) Statement-I is correct but Statement-II is incorrect
-[Statement-I is true; Statement-II is false because syndicated loans CAN be credit lines]`,
+Answer: (c) Statement - I is correct but Statement - II is incorrect
+[Statement - I is true; Statement - II is false because syndicated loans CAN be credit lines]`,
 };
 
 // ============================================================================
@@ -1203,63 +1026,63 @@ Answer: (c) Statement-I is correct but Statement-II is incorrect
 
 const SUBJECT_CONTEXTS: Record<string, string> = {
   polity: `
-INDIAN POLITY & GOVERNANCE (15-20% of UPSC Prelims, ~15-20 questions)
+INDIAN POLITY & GOVERNANCE(15 - 20 % of UPSC Prelims, ~15 - 20 questions)
 
-PRIMARY SOURCES (align questions with these):
-- M. Laxmikanth's "Indian Polity" - THE standard reference
-- NCERT Political Science (Class 11-12)
-- Constitution of India (original text)
-- Recent Supreme Court judgments
+PRIMARY SOURCES(align questions with these):
+- M.Laxmikanth's "Indian Polity" - THE standard reference
+  - NCERT Political Science(Class 11 - 12)
+    - Constitution of India(original text)
+      - Recent Supreme Court judgments
 
-HIGH-WEIGHTAGE TOPICS:
-1. Constitutional Framework: Preamble, Fundamental Rights (Art 12-35), DPSPs (Art 36-51), Fundamental Duties (Art 51A)
-2. Union Executive: President (Art 52-62), Vice President, PM & Council of Ministers, Attorney General
+HIGH - WEIGHTAGE TOPICS:
+1. Constitutional Framework: Preamble, Fundamental Rights(Art 12 - 35), DPSPs(Art 36 - 51), Fundamental Duties(Art 51A)
+2. Union Executive: President(Art 52 - 62), Vice President, PM & Council of Ministers, Attorney General
 3. Parliament: Lok Sabha, Rajya Sabha, Legislative procedures, Money Bill vs Finance Bill, Parliamentary privileges
-4. Judiciary: Supreme Court (Art 124-147), High Courts, Judicial Review, PIL, Basic Structure Doctrine
-5. State Government: Governor (Art 153-167), CM & State Council, State Legislature
-6. Local Government: 73rd Amendment (Panchayats), 74th Amendment (Municipalities), PESA Act
-7. Constitutional Bodies: Election Commission, CAG, UPSC, Finance Commission, NCSC/NCST
-8. Emergency Provisions: National (Art 352), State (Art 356), Financial (Art 360)
+4. Judiciary: Supreme Court(Art 124 - 147), High Courts, Judicial Review, PIL, Basic Structure Doctrine
+5. State Government: Governor(Art 153 - 167), CM & State Council, State Legislature
+6. Local Government: 73rd Amendment(Panchayats), 74th Amendment(Municipalities), PESA Act
+7. Constitutional Bodies: Election Commission, CAG, UPSC, Finance Commission, NCSC / NCST
+8. Emergency Provisions: National(Art 352), State(Art 356), Financial(Art 360)
 9. Amendment Procedure: Art 368, types of amendments, ratification requirements
-10. Recent Amendments: 101st (GST), 102nd (NCBC), 103rd (EWS quota), 104th (SC/ST reservation), 105th (OBC enumeration), 106th (Women's reservation)
+10. Recent Amendments: 101st(GST), 102nd(NCBC), 103rd(EWS quota), 104th(SC / ST reservation), 105th(OBC enumeration), 106th(Women's reservation)
 
 COMMON UPSC TRAPS IN POLITY:
-- Confusing similar articles (Art 14 vs 15 vs 16)
+  - Confusing similar articles(Art 14 vs 15 vs 16)
 - President's discretionary vs constitutional powers
-- Difference between Ordinance-making powers (Art 123 vs 213)
+- Difference between Ordinance - making powers(Art 123 vs 213)
 - Money Bill vs Financial Bill misconceptions
 - Governor's discretionary powers misconceptions
 - Difference between Constitutional and Statutory bodies`,
 
   history: `
-INDIAN HISTORY (10-18% of UPSC Prelims, ~10-18 questions)
+INDIAN HISTORY(10 - 18 % of UPSC Prelims, ~10 - 18 questions)
 
 PRIMARY SOURCES:
-- NCERT History books (Class 6-12) - FOUNDATION
+  - NCERT History books(Class 6 - 12) - FOUNDATION
 - Spectrum's "A Brief History of Modern India" - Modern History
 - RS Sharma - Ancient India
 - Satish Chandra - Medieval India
 - Bipin Chandra - India's Struggle for Independence
 
 ANCIENT HISTORY FOCUS AREAS:
-1. Indus Valley Civilization: Sites, features, decline theories, script
+  1. Indus Valley Civilization: Sites, features, decline theories, script
 2. Vedic Period: Rig Vedic vs Later Vedic, society, economy
 3. Buddhism & Jainism: Teachings, councils, spread, decline
 4. Mauryan Empire: Chandragupta, Ashoka, administration, Dhamma
-5. Post-Mauryan: Kushanas, Satavahanas, Sangam literature
+5. Post - Mauryan: Kushanas, Satavahanas, Sangam literature
 6. Gupta Period: Golden age, art, science, administration
 7. Regional Kingdoms: Cholas, Pallavas, Chalukyas, Rashtrakutas
 
 MEDIEVAL HISTORY FOCUS AREAS:
-1. Delhi Sultanate: Dynasties, administration, architecture
+  1. Delhi Sultanate: Dynasties, administration, architecture
 2. Vijayanagara & Bahmani kingdoms
 3. Mughal Empire: Administration, Mansabdari, art, religious policies
 4. Bhakti & Sufi movements
 5. Regional powers: Marathas, Sikhs, Rajputs
 
-MODERN HISTORY (HIGHEST WEIGHTAGE):
-1. British Expansion: Battles, policies, economic drain
-2. Socio-Religious Reforms: Brahmo Samaj, Arya Samaj, others
+MODERN HISTORY(HIGHEST WEIGHTAGE):
+  1. British Expansion: Battles, policies, economic drain
+2. Socio - Religious Reforms: Brahmo Samaj, Arya Samaj, others
 3. 1857 Revolt: Causes, events, aftermath
 4. Indian National Movement phases
 5. Gandhi Era: Movements, strategies, timeline
@@ -1268,69 +1091,69 @@ MODERN HISTORY (HIGHEST WEIGHTAGE):
 8. Independence & Partition
 
 COMMON TRAPS:
-- Confusing years of events (very specific dates asked)
+  - Confusing years of events(very specific dates asked)
 - Mixing up reform movements and their founders
 - Timeline errors in freedom movement
 - Confusing British Acts and their provisions`,
 
   geography: `
-INDIAN & WORLD GEOGRAPHY (12-18% of UPSC Prelims, ~12-18 questions)
+INDIAN & WORLD GEOGRAPHY(12 - 18 % of UPSC Prelims, ~12 - 18 questions)
 
 PRIMARY SOURCES:
-- NCERT Geography (Class 6-12) - FOUNDATION
-- G.C. Leong's "Certificate Physical and Human Geography"
+  - NCERT Geography(Class 6 - 12) - FOUNDATION
+- G.C.Leong's "Certificate Physical and Human Geography"
 - Oxford School Atlas
 - Khullar's "India: A Comprehensive Geography"
 
 PHYSICAL GEOGRAPHY:
-1. Geomorphology: Landforms, plate tectonics, volcanism, earthquakes
+  1. Geomorphology: Landforms, plate tectonics, volcanism, earthquakes
 2. Climatology: Atmospheric circulation, monsoons, climate types
 3. Oceanography: Currents, tides, marine resources
 4. Biogeography: Biomes, soils, vegetation types
 
-INDIAN GEOGRAPHY (HIGH WEIGHTAGE):
-1. Physical Features: Himalayas, Northern Plains, Peninsular Plateau, Coastal Plains, Islands
-2. Drainage: River systems (Himalayan vs Peninsular), interlinking projects
+INDIAN GEOGRAPHY(HIGH WEIGHTAGE):
+  1. Physical Features: Himalayas, Northern Plains, Peninsular Plateau, Coastal Plains, Islands
+2. Drainage: River systems(Himalayan vs Peninsular), interlinking projects
 3. Climate: Monsoon mechanism, seasons, rainfall distribution
 4. Natural Vegetation: Forest types, biosphere reserves
-5. Agriculture: Cropping patterns, irrigation, Green/White/Blue revolutions
+5. Agriculture: Cropping patterns, irrigation, Green / White / Blue revolutions
 6. Minerals & Energy: Distribution, reserves, policies
 7. Industries: Location factors, industrial regions, policies
 8. Transport: Roadways, railways, waterways, airways
 
 WORLD GEOGRAPHY:
-1. Continents and major features
+  1. Continents and major features
 2. Important straits, channels, passes
 3. Climate regions and their characteristics
 4. Major agricultural regions
 5. Geopolitically significant locations
 
 COMMON TRAPS:
-- Confusing tributaries of rivers (left bank vs right bank)
-- Mixing up national parks and their locations/species
+  - Confusing tributaries of rivers(left bank vs right bank)
+- Mixing up national parks and their locations / species
 - Wrong associations of crops with soil types
-- Confusing similar-sounding geographical features`,
+  - Confusing similar - sounding geographical features`,
 
   economy: `
-INDIAN ECONOMY (10-15% of UPSC Prelims, ~10-15 questions)
+INDIAN ECONOMY(10 - 15 % of UPSC Prelims, ~10 - 15 questions)
 
 PRIMARY SOURCES:
-- NCERT Economics (Class 11-12)
-- Ramesh Singh's "Indian Economy"
-- Economic Survey (latest)
-- Union Budget documents
+- NCERT Economics(Class 11 - 12)
+  - Ramesh Singh's "Indian Economy"
+    - Economic Survey(latest)
+      - Union Budget documents
 
 MACROECONOMICS:
 1. National Income: GDP, GNP, NDP, NNP concepts and calculation
-2. Inflation: Types, measurement (CPI, WPI), causes, control
-3. Monetary Policy: RBI tools (Repo, Reverse Repo, CRR, SLR, OMO)
+2. Inflation: Types, measurement(CPI, WPI), causes, control
+3. Monetary Policy: RBI tools(Repo, Reverse Repo, CRR, SLR, OMO)
 4. Fiscal Policy: Budget components, deficits, FRBM Act
 5. Balance of Payments: Current account, Capital account, forex reserves
 
 BANKING & FINANCE:
 1. Banking Structure: RBI, Commercial Banks, Payment Banks, SFBs
 2. Financial Markets: Money market, capital market instruments
-3. Financial Inclusion: Jan Dhan, MUDRA, Stand-Up India
+3. Financial Inclusion: Jan Dhan, MUDRA, Stand - Up India
 4. Insurance & Pension: IRDAI, PFRDA, schemes
 
 SECTORS:
@@ -1351,18 +1174,18 @@ INTERNATIONAL:
 
 COMMON TRAPS:
 - Confusing monetary policy tools and their effects
-- Mixing up different types of deficits
-- Wrong associations of schemes with ministries
-- Confusing similar-sounding financial instruments`,
+  - Mixing up different types of deficits
+    - Wrong associations of schemes with ministries
+    - Confusing similar - sounding financial instruments`,
 
   environment: `
-ENVIRONMENT & ECOLOGY (15-20% of UPSC Prelims, ~15-20 questions)
+ENVIRONMENT & ECOLOGY(15 - 20 % of UPSC Prelims, ~15 - 20 questions)
 
 PRIMARY SOURCES:
-- NCERT Biology (Ecology chapters)
-- Shankar IAS Environment book
-- ENVIS portals
-- MoEFCC reports
+- NCERT Biology(Ecology chapters)
+  - Shankar IAS Environment book
+    - ENVIS portals
+      - MoEFCC reports
 
 ECOLOGY CONCEPTS:
 1. Ecosystem: Structure, function, energy flow, nutrient cycling
@@ -1372,22 +1195,22 @@ ECOLOGY CONCEPTS:
 5. Food chains, food webs, ecological pyramids
 
 BIODIVERSITY & CONSERVATION:
-1. Protected Areas: Categories (National Parks, Sanctuaries, Biosphere Reserves, Tiger Reserves)
-2. Conservation approaches: In-situ vs Ex-situ
+1. Protected Areas: Categories(National Parks, Sanctuaries, Biosphere Reserves, Tiger Reserves)
+2. Conservation approaches: In - situ vs Ex - situ
 3. IUCN Red List categories
-4. Wildlife Protection Act 1972 (Schedules)
+4. Wildlife Protection Act 1972(Schedules)
 5. Biodiversity Act 2002
 6. Important species: Endemic, endangered, flagship, keystone
 
 ENVIRONMENTAL ISSUES:
-1. Pollution: Air (sources, standards), Water, Soil, Noise
+1. Pollution: Air(sources, standards), Water, Soil, Noise
 2. Climate Change: Greenhouse effect, global warming, impacts
-3. Waste Management: Solid waste, e-waste, plastic waste rules
+3. Waste Management: Solid waste, e - waste, plastic waste rules
 4. Desertification, land degradation
 
 INTERNATIONAL CONVENTIONS:
 1. UNFCCC: COPs, Paris Agreement, NDCs
-2. CBD: Aichi targets, Kunming-Montreal framework
+2. CBD: Aichi targets, Kunming - Montreal framework
 3. CITES: Appendices, wildlife trade
 4. Ramsar: Wetlands, Indian sites
 5. Montreal Protocol: Ozone, Kigali Amendment
@@ -1401,18 +1224,18 @@ INDIAN INITIATIVES:
 
 COMMON TRAPS:
 - Confusing different protected area categories
-- Mixing up international conventions and their focus
-- Wrong locations of national parks/tiger reserves
-- Confusing endemic species locations`,
+  - Mixing up international conventions and their focus
+    - Wrong locations of national parks / tiger reserves
+      - Confusing endemic species locations`,
 
   science: `
-SCIENCE & TECHNOLOGY (5-15% of UPSC Prelims, ~5-15 questions)
+SCIENCE & TECHNOLOGY(5 - 15 % of UPSC Prelims, ~5 - 15 questions)
 
 PRIMARY SOURCES:
-- NCERT Science books (Class 6-10)
-- NCERT Physics, Chemistry, Biology (Class 11-12 basics)
-- Science Reporter magazine
-- PIB releases on S&T
+- NCERT Science books(Class 6 - 10)
+  - NCERT Physics, Chemistry, Biology(Class 11 - 12 basics)
+    - Science Reporter magazine
+      - PIB releases on S & T
 
 PHYSICS & SPACE:
 1. Basic concepts: Motion, energy, waves, optics
@@ -1428,17 +1251,17 @@ CHEMISTRY:
 BIOLOGY & HEALTH:
 1. Cell biology basics
 2. Genetics: DNA, genes, genetic engineering, GMOs
-3. Diseases: Communicable, non-communicable, epidemics
+3. Diseases: Communicable, non - communicable, epidemics
 4. Biotechnology: Applications, ethics, regulations
 5. Human body systems basics
 
-CURRENT S&T DEVELOPMENTS:
+CURRENT S & T DEVELOPMENTS:
 1. AI & Machine Learning
 2. Quantum computing
-3. 5G/6G technology
+3. 5G / 6G technology
 4. Blockchain
 5. Renewable energy tech
-6. Space missions (global)
+6. Space missions(global)
 7. Medical breakthroughs
 
 GOVERNMENT INITIATIVES:
@@ -1449,58 +1272,58 @@ GOVERNMENT INITIATIVES:
 5. Make in India in defense
 
 COMMON TRAPS:
-- Confusing similar-sounding technologies
-- Wrong agency associations (ISRO vs DRDO vs DAE)
-- Outdated information on recent missions
-- Mixing up satellite types and purposes`,
+- Confusing similar - sounding technologies
+  - Wrong agency associations(ISRO vs DRDO vs DAE)
+    - Outdated information on recent missions
+      - Mixing up satellite types and purposes`,
 
   "current affairs": `
-CURRENT AFFAIRS (30-40% of UPSC Prelims directly/indirectly)
+CURRENT AFFAIRS(30 - 40 % of UPSC Prelims directly / indirectly)
 
 INTEGRATION APPROACH:
 - Current affairs are NOT a separate subject
-- UPSC tests static concepts THROUGH current events
-- ~70% of current affairs questions need static knowledge to answer
+  - UPSC tests static concepts THROUGH current events
+    - ~70 % of current affairs questions need static knowledge to answer
 
 KEY DOMAINS:
-1. Government Schemes & Policies (link to Polity/Economy)
+1. Government Schemes & Policies(link to Polity / Economy)
 2. International Relations & Summits
-3. Awards & Recognition (link to relevant fields)
-4. Environmental developments (link to Environment)
+3. Awards & Recognition(link to relevant fields)
+4. Environmental developments(link to Environment)
 5. Science & Technology breakthroughs
 6. Economic data & reports
 7. Constitutional & Legal developments
 
 TIME FRAME:
-- Focus on 18-24 months before exam
-- Some questions test events from 2+ years ago
-- Anniversary years (25th, 50th, 75th, 100th) are important
+- Focus on 18 - 24 months before exam
+  - Some questions test events from 2 + years ago
+    - Anniversary years(25th, 50th, 75th, 100th) are important
 
 SOURCES TO ALIGN WITH:
 - The Hindu / Indian Express editorials
-- PIB (Press Information Bureau)
-- Yojana & Kurukshetra magazines
-- Economic Survey
-- India Year Book
+  - PIB(Press Information Bureau)
+  - Yojana & Kurukshetra magazines
+    - Economic Survey
+      - India Year Book
 
 INTEGRATION EXAMPLES:
 - G20 Summit → Link to economic organizations, India's foreign policy
-- New environmental policy → Link to international conventions, constitutional provisions
-- Supreme Court judgment → Link to relevant constitutional articles
-- New government scheme → Link to ministry, budget allocation, related acts`,
+  - New environmental policy → Link to international conventions, constitutional provisions
+    - Supreme Court judgment → Link to relevant constitutional articles
+      - New government scheme → Link to ministry, budget allocation, related acts`,
 
   "art and culture": `
-ART & CULTURE (5-10% of UPSC Prelims, ~5-10 questions)
+ART & CULTURE(5 - 10 % of UPSC Prelims, ~5 - 10 questions)
 
 PRIMARY SOURCES:
 - NCERT Fine Arts book
-- CCRT (Centre for Cultural Resources and Training) material
-- Nitin Singhania's "Indian Art and Culture"
+  - CCRT(Centre for Cultural Resources and Training) material
+    - Nitin Singhania's "Indian Art and Culture"
 
 ARCHITECTURE:
 1. Temple Architecture: Nagara, Dravida, Vesara styles
 2. Cave Architecture: Ajanta, Ellora, Elephanta
-3. Indo-Islamic: Sultanate and Mughal architecture
+3. Indo - Islamic: Sultanate and Mughal architecture
 4. Colonial and Modern architecture
 5. Buddhist Architecture: Stupas, Chaityas, Viharas
 
@@ -1512,9 +1335,9 @@ SCULPTURE & PAINTING:
 
 PERFORMING ARTS:
 1. Classical Dance: 8 forms recognized by Sangeet Natak Akademi
-2. Folk Dances: State-wise
+2. Folk Dances: State - wise
 3. Classical Music: Hindustani vs Carnatic
-4. Theatre: Traditional forms (Yakshagana, Kathakali, etc.)
+4. Theatre: Traditional forms(Yakshagana, Kathakali, etc.)
 
 LITERATURE:
 1. Ancient: Vedic, Sanskrit literature
@@ -1529,9 +1352,9 @@ HERITAGE:
 
 COMMON TRAPS:
 - Confusing similar dance forms
-- Wrong state associations for folk arts
-- Mixing up architectural styles
-- Incorrect UNESCO site information`,
+  - Wrong state associations for folk arts
+    - Mixing up architectural styles
+      - Incorrect UNESCO site information`,
 };
 
 // Get subject context if available
@@ -1609,25 +1432,37 @@ export function getPrompt(params: PromptParams): string {
     difficulty,
     styles,
     totalCount,
-    era = "current",
-    enableCurrentAffairs = false,
+    enableCurrentAffairs = true, // Current affairs always enabled by default
     currentAffairsTheme,
   } = params;
 
   const themeContext = theme
     ? `SPECIFIC FOCUS: "${theme}" - Prefer this theme but include ~25% adjacent subtopics for breadth within ${subject}.`
-    : `COVERAGE: Generate questions covering diverse important topics within ${subject}.`;
+    : `COVERAGE STRATEGY FOR ${subject}:
+    - 80% from the provided SUBJECT THEMES below (proven high-yield from 2013-2025 PYQs)
+    - 20% from YOUR OWN PREDICTION of emerging topics likely to appear in UPSC 2026
+      (consider: recent legislation, constitutional developments, international events, 
+       government initiatives, scientific breakthroughs not yet tested by UPSC)
+    
+    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would 
+    consider "fresh yet UPSC-worthy" — topics gaining policy traction but not yet examined.
+    Use your web search capability to identify current developments that could become exam topics.`;
 
   const subjectContext = getSubjectContext(subject);
   const subjectTraps = getSubjectTraps(subject);
 
-  // Get era-specific instructions
-  const eraInstruction = ERA_INSTRUCTIONS[era] || ERA_INSTRUCTIONS["current"];
-  const eraLabel = era === "current" ? "2024-2025 (Current)" : era === "all" ? "All Eras (Mixed)" : era;
+  // Get enhanced theme and analysis data from new modules
+  const subjectThemes = getSubjectThemes(subject);
+  const subjectStrategicTraps = getSubjectStrategicTraps(subject);
+  const subjectAnalysis = getSubjectAnalysis(subject);
+  const strategicSynthesis = getStrategicSynthesis();
 
-  // Build current affairs context if enabled
+  // Use current era (2024-2025) instructions by default
+  const eraInstruction = CURRENT_ERA_INSTRUCTION;
+
+  // Current affairs is always included now for better 2026 predictions
   const currentAffairsSection = enableCurrentAffairs
-    ? `${CURRENT_AFFAIRS_CONTEXT}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""}`
+    ? `${CURRENT_AFFAIRS_CONTEXT}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
 
   // Build style distribution instructions
@@ -1637,7 +1472,7 @@ export function getPrompt(params: PromptParams): string {
 ═══════════════════════════════════════════════════════════════════════════════
 GENERATE ${count} QUESTION(S) IN THE FOLLOWING STYLE:
 ═══════════════════════════════════════════════════════════════════════════════
-${STYLE_INSTRUCTIONS[style]}`;
+${STYLE_INSTRUCTIONS[style]} `;
     })
     .join("\n");
 
@@ -1647,17 +1482,25 @@ ${STYLE_INSTRUCTIONS[style]}`;
 ║                         MCQ GENERATION TASK                                   ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
-GENERATE ${totalCount} UPSC-STANDARD MCQ QUESTIONS
+GENERATE ${totalCount} UPSC - STANDARD MCQ QUESTIONS
 
 SUBJECT: ${subject.toUpperCase()}
 ${themeContext}
 
-TARGET ERA: ${eraLabel}
+${PRELIMS_2026_FOCUS}
+
+${CONTENT_BALANCE_RATIO}
+
+${RELEVANCE_FILTER}
+
+${PATTERN_ADHERENCE_2024}
+
+TARGET ERA: 2024 - 2025(Current)
 ${eraInstruction}
 
 ${UPSC_STEM_TEMPLATES}
 
-${era === "current" || era === "2024-2025" || era === "2021-2023" ? YEAR_TRENDS : ""}
+${YEAR_TRENDS}
 
 ${currentAffairsSection}
 
@@ -1668,14 +1511,48 @@ ${subjectContext ? `
 SUBJECT-SPECIFIC CONTEXT & KNOWLEDGE BASE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${subjectContext}
-` : ""}
+` : ""
+    }
 
 ${subjectTraps ? `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUBJECT-SPECIFIC TRAP PATTERNS:
+SUBJECT-SPECIFIC TRAP PATTERNS (Basic):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${subjectTraps}
-` : ""}
+` : ""
+    }
+
+${subjectAnalysis ? `
+═══════════════════════════════════════════════════════════════════════════════
+SUBJECT ANALYSIS (UPSC EVOLUTION) - FROM DETAILED PYQ ANALYSIS:
+═══════════════════════════════════════════════════════════════════════════════
+${subjectAnalysis}
+` : ""
+    }
+
+${subjectThemes ? `
+═══════════════════════════════════════════════════════════════════════════════
+SUBJECT THEMES & PATTERNS (HIGH-PRIORITY TOPICS FOR QUESTION GENERATION):
+═══════════════════════════════════════════════════════════════════════════════
+${subjectThemes}
+` : ""
+    }
+
+${subjectStrategicTraps ? `
+═══════════════════════════════════════════════════════════════════════════════
+STRATEGIC NOTES & TRAP CUES (USE THESE FOR DISTRACTOR DESIGN):
+═══════════════════════════════════════════════════════════════════════════════
+${subjectStrategicTraps}
+` : ""
+    }
+
+${strategicSynthesis ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THEME USAGE GUIDANCE (How to Apply the Above):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${strategicSynthesis}
+` : ""
+    }
 
 ${DISTRACTOR_BLUEPRINT}
 
@@ -1690,60 +1567,60 @@ QUESTION STYLE DISTRIBUTION:
 ${styleInstructions}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CRITICAL QUALITY REQUIREMENTS (NON-NEGOTIABLE):
+CRITICAL QUALITY REQUIREMENTS(NON - NEGOTIABLE):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. FACTUAL ACCURACY (MOST IMPORTANT):
-   - Every fact, date, number, name MUST be 100% accurate
-   - Cross-reference with NCERT textbooks and standard references
-   - Align with PYQ patterns and factual anchors reflected in the repo trends
-   - If uncertain about a fact, DO NOT include it
-   - Constitutional articles, amendment numbers must be exact
-   - Years of events, treaties, acts must be verified
+1. FACTUAL ACCURACY(MOST IMPORTANT):
+- Every fact, date, number, name MUST be 100 % accurate
+  - Cross - reference with NCERT textbooks and standard references
+    - Align with PYQ patterns and factual anchors reflected in the repo trends
+      - If uncertain about a fact, DO NOT include it
+        - Constitutional articles, amendment numbers must be exact
+          - Years of events, treaties, acts must be verified
 
 2. SINGLE CORRECT ANSWER:
-   - There must be exactly ONE correct answer
-   - The correct answer must be DEFINITIVELY correct, not "most correct"
-   - All distractors must be DEFINITIVELY incorrect
-   - No ambiguity - a subject expert should agree on the answer
+- There must be exactly ONE correct answer
+  - The correct answer must be DEFINITIVELY correct, not "most correct"
+    - All distractors must be DEFINITIVELY incorrect
+      - No ambiguity - a subject expert should agree on the answer
 
-3. ELIMINATION-PROOF DISTRACTORS:
-   - DO NOT use absolute words (only, always, never, all, none) in wrong options
-   - UPSC aspirants know these patterns - your questions must be smarter
-   - Distractors should be plausible misconceptions, not obvious wrong answers
-   - Each distractor should trap someone with incomplete knowledge
+3. ELIMINATION - PROOF DISTRACTORS:
+- DO NOT use absolute words(only, always, never, all, none) in wrong options
+  - UPSC aspirants know these patterns - your questions must be smarter
+    - Distractors should be plausible misconceptions, not obvious wrong answers
+      - Each distractor should trap someone with incomplete knowledge
 
 4. UPSC LANGUAGE STANDARDS:
-   - Use formal, precise language
-   - Avoid colloquialisms or informal expressions
-   - Technical terms should be used correctly
-   - Questions should be clear but not simplistic
+- Use formal, precise language
+  - Avoid colloquialisms or informal expressions
+    - Technical terms should be used correctly
+      - Questions should be clear but not simplistic
 
 5. NO CONTROVERSIAL CONTENT:
-   - Avoid politically sensitive topics
-   - No questions on disputed territories without clear UPSC precedent
-   - No questions on ongoing court cases
-   - Avoid religious content unless historically factual
+- Avoid politically sensitive topics
+  - No questions on disputed territories without clear UPSC precedent
+    - No questions on ongoing court cases
+      - Avoid religious content unless historically factual
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MANDATORY SELF-VERIFICATION CHECKLIST:
+MANDATORY SELF - VERIFICATION CHECKLIST:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Before finalizing EACH question, verify:
 
-□ Is every fact in the question 100% accurate?
-□ Is the correct answer definitively correct?
-□ Are ALL distractors definitively incorrect?
-□ Would a UPSC subject expert agree with the answer?
-□ Is the explanation accurate and educational?
-□ Does the explanation cite proper reasoning (not just "this is correct")?
-□ For statement questions: Is each statement independently verifiable?
-□ For match questions: Is only ONE combination correct?
-□ For assertion-reason: Is the relationship between A and R correctly identified?
-□ Are there NO absolute words (only, always, never, all, none) making distractors obvious?
+□ Is every fact in the question 100 % accurate ?
+□ Is the correct answer definitively correct ?
+□ Are ALL distractors definitively incorrect ?
+□ Would a UPSC subject expert agree with the answer ?
+□ Is the explanation accurate and educational ?
+□ Does the explanation cite proper reasoning(not just "this is correct") ?
+□ For statement questions: Is each statement independently verifiable ?
+□ For match questions: Is only ONE combination correct ?
+□ For assertion - reason: Is the relationship between A and R correctly identified ?
+□ Are there NO absolute words(only, always, never, all, none) making distractors obvious ?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT FORMAT (STRICT JSON):
+OUTPUT FORMAT(STRICT JSON):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Return a JSON array with exactly ${totalCount} question objects.
@@ -1751,19 +1628,19 @@ Return a JSON array with exactly ${totalCount} question objects.
 Each object MUST have these exact fields:
 {
   "questionText": "The complete question text with all statements/assertions formatted properly",
-  "questionType": "standard" | "statement" | "match" | "assertion",
-  "options": ["A) Option text", "B) Option text", "C) Option text", "D) Option text"],
-  "correctOption": 0 | 1 | 2 | 3,  // Index of correct answer (0=A, 1=B, 2=C, 3=D)
-  "explanation": "Detailed explanation with: 1) Why correct answer is correct, 2) Why each distractor is wrong, 3) Source reference (NCERT/Laxmikanth/etc.). If current affairs is enabled, append 'Sources: <URL>' with at least one full http(s) URL."
+    "questionType": "standard" | "statement" | "match" | "assertion",
+      "options": ["A) Option text", "B) Option text", "C) Option text", "D) Option text"],
+        "correctOption": 0 | 1 | 2 | 3,  // Index of correct answer (0=A, 1=B, 2=C, 3=D)
+          "explanation": "Detailed explanation with: 1) Why correct answer is correct, 2) Why each distractor is wrong, 3) Source reference (NCERT/Laxmikanth/etc.). If current affairs is enabled, append 'Sources: <URL>' with at least one full http(s) URL."
 }
 
 IMPORTANT:
 - Options array must have EXACTLY 4 options
-- Each option must start with "A) ", "B) ", "C) ", "D) " prefix
-- correctOption is 0-indexed (0=A, 1=B, 2=C, 3=D)
-- Explanation should be educational and cite sources where applicable
+  - Each option must start with "A) ", "B) ", "C) ", "D) " prefix
+    - correctOption is 0 - indexed(0 = A, 1 = B, 2 = C, 3 = D)
+      - Explanation should be educational and cite sources where applicable
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS:`;
+NOW GENERATE ${totalCount} HIGH - QUALITY UPSC MCQ QUESTIONS: `;
 }
