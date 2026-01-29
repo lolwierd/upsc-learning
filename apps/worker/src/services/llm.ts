@@ -668,62 +668,45 @@ export async function generateQuiz(
     console.log(`Loaded ${existingFingerprints.size} existing fingerprints for ${subject}`);
   }
 
-  // Calculate chunks
-  const CHUNK_SIZE = 5;
-  const chunkCount = Math.ceil(count / CHUNK_SIZE);
-  const chunkConfigs: Array<{ count: number; index: number }> = [];
-
-  for (let i = 0; i < chunkCount; i++) {
-    const chunkQuestions = Math.min(CHUNK_SIZE, count - (i * CHUNK_SIZE));
-    if (chunkQuestions > 0) {
-      chunkConfigs.push({ count: chunkQuestions, index: i });
-    }
-  }
-
-  console.log(`Starting generation for ${count} questions in ${chunkConfigs.length} chunks (parallel)`);
+  console.log(`Starting single-call generation for ${count} questions`);
   const overallStart = Date.now();
 
   // Get retry config from env or use defaults
   const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
   const baseDelayMs = parseInt(env.LLM_RETRY_DELAY_MS || String(DEFAULT_RETRY_DELAY_MS), 10);
 
-  // Execute chunks in parallel
-  const chunkPromises = chunkConfigs.map(config =>
-    retryWithBackoff(
-      async () => {
-        const result = await generateQuizCall(
-          env,
-          {
-            ...params,
-            count: config.count,
-            enableCurrentAffairs: groundingEnabled,
-            currentAffairsTheme,
-          },
-          overallCallId,
-          config.index
+  const singleResult = await retryWithBackoff(
+    async () => {
+      const result = await generateQuizCall(
+        env,
+        {
+          ...params,
+          count,
+          enableCurrentAffairs: groundingEnabled,
+          currentAffairsTheme,
+        },
+        overallCallId,
+        0
+      );
+
+      // Treat empty result (parse failure) as retryable error
+      if (result.questions.length === 0) {
+        const parseError = new Error(
+          `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
         );
-
-        // Treat empty result (parse failure) as retryable error
-        if (result.questions.length === 0) {
-          const parseError = new Error(
-            `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
-          );
-          (parseError as any).isParseFailure = true;
-          throw parseError;
-        }
-
-        return result;
-      },
-      {
-        maxRetries,
-        baseDelayMs,
-        rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
-        operationName: `Quiz Generation Chunk ${config.index + 1}/${chunkConfigs.length}`,
+        (parseError as any).isParseFailure = true;
+        throw parseError;
       }
-    )
-  );
 
-  const chunkResults = await Promise.all(chunkPromises);
+      return result;
+    },
+    {
+      maxRetries,
+      baseDelayMs,
+      rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
+      operationName: `Quiz Generation (${subject}/${theme || 'no-theme'})`,
+    }
+  );
 
   // Merge results
   let allQuestions: GeneratedQuestion[] = [];
@@ -734,17 +717,15 @@ export async function generateQuiz(
   let totalTokens = 0;
   let totalGroundingSources = 0;
 
-  for (const result of chunkResults) {
-    allQuestions = allQuestions.concat(result.questions);
-    totalPromptChars += result.metrics.promptChars || 0;
-    totalResponseChars += result.metrics.responseChars || 0;
-    totalPromptTokens += result.metrics.usagePromptTokens || 0;
-    totalCompletionTokens += result.metrics.usageCompletionTokens || 0;
-    totalTokens += result.metrics.usageTotalTokens || 0;
-    totalGroundingSources += result.groundingSourceCount || 0;
-  }
+  allQuestions = allQuestions.concat(singleResult.questions);
+  totalPromptChars += singleResult.metrics.promptChars || 0;
+  totalResponseChars += singleResult.metrics.responseChars || 0;
+  totalPromptTokens += singleResult.metrics.usagePromptTokens || 0;
+  totalCompletionTokens += singleResult.metrics.usageCompletionTokens || 0;
+  totalTokens += singleResult.metrics.usageTotalTokens || 0;
+  totalGroundingSources += singleResult.groundingSourceCount || 0;
 
-  console.log(`Generated ${allQuestions.length}/${count} questions total across ${chunkResults.length} chunks`);
+  console.log(`Generated ${allQuestions.length}/${count} questions total`);
 
   // Normalize questions
   const normalizedQuestions = allQuestions.slice(0, count).map((q, i) => ({
