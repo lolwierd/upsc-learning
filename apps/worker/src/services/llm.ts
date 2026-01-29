@@ -18,7 +18,7 @@ import { generateVertexStructuredContent } from "./vertex-structured.js";
 // ============================================================================
 // RETRY CONFIGURATION
 // ============================================================================
-const DEFAULT_MAX_RETRIES = 5;
+const DEFAULT_MAX_RETRIES = 15;
 const DEFAULT_RETRY_DELAY_MS = 2000; // Base delay for exponential backoff
 const RATE_LIMIT_RETRY_DELAY_MS = 60000; // 60s for 429 errors
 
