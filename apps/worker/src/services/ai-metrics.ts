@@ -49,6 +49,9 @@ export interface AiGenerationMetricInsert {
 
   groundingEnabled?: boolean;
   groundingSourceCount?: number | null;
+
+  requestPrompt?: string | null;
+  rawResponse?: string | null;
 }
 
 function clampErrorMessage(errorMessage: string, maxLen = 400): string {
@@ -73,6 +76,7 @@ export async function insertAiGenerationMetric(
       fact_check_enabled, fact_check_duration_ms, fact_check_checked_count, fact_check_issue_count,
       usage_prompt_tokens, usage_completion_tokens, usage_total_tokens,
       grounding_enabled, grounding_source_count,
+      request_prompt, raw_response,
       created_at
     ) VALUES (
       ?, ?, ?,
@@ -85,6 +89,7 @@ export async function insertAiGenerationMetric(
       ?, ?,
       ?, ?, ?, ?,
       ?, ?, ?,
+      ?, ?,
       ?, ?,
       unixepoch()
     )
@@ -142,7 +147,10 @@ export async function insertAiGenerationMetric(
       metric.usageTotalTokens ?? null,
 
       metric.groundingEnabled ? 1 : 0,
-      metric.groundingSourceCount ?? null
+      metric.groundingSourceCount ?? null,
+
+      metric.requestPrompt ?? null,
+      metric.rawResponse ?? null
     )
     .run();
 }
@@ -184,6 +192,8 @@ export interface AiGenerationMetricRow {
   usageTotalTokens: number | null;
   groundingEnabled: boolean;
   groundingSourceCount: number | null;
+  requestPrompt: string | null;
+  rawResponse: string | null;
   createdAt: number;
 }
 
@@ -238,6 +248,8 @@ export async function listAiGenerationMetrics(
       usage_total_tokens,
       grounding_enabled,
       grounding_source_count,
+      request_prompt,
+      raw_response,
       created_at
     FROM ai_generation_metrics
     WHERE 1 = 1`,
@@ -337,6 +349,8 @@ export async function listAiGenerationMetrics(
       r.grounding_source_count === null || r.grounding_source_count === undefined
         ? null
         : Number(r.grounding_source_count),
+    requestPrompt: (r.request_prompt as string) ?? null,
+    rawResponse: (r.raw_response as string) ?? null,
     createdAt: Number(r.created_at),
   }));
 }

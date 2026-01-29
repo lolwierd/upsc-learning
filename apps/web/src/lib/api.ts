@@ -167,6 +167,8 @@ export interface AiGenerationMetric {
   usageTotalTokens: number | null;
   groundingEnabled: boolean;
   groundingSourceCount: number | null;
+  requestPrompt: string | null;
+  rawResponse: string | null;
   createdAt: number;
 }
 

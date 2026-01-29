@@ -35,6 +35,12 @@ function subjectLabel(subject: string) {
   );
 }
 
+function openContentInNewTab(content: string) {
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+}
+
 function statusBadge(status: AiMetricStatus) {
   return (
     <span
@@ -403,6 +409,31 @@ export default function MetricsPage() {
                         )}
                       </div>
                     </div>
+
+                    {(m.requestPrompt || m.rawResponse) && (
+                      <div className="mt-4 flex gap-2 border-t pt-3">
+                        {m.requestPrompt && (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => openContentInNewTab(m.requestPrompt!)}
+                          >
+                            View Prompt
+                          </Button>
+                        )}
+                        {m.rawResponse && (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => openContentInNewTab(m.rawResponse!)}
+                          >
+                            View Raw Response
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </details>
                 </div>
 

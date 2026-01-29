@@ -12,6 +12,7 @@ import { initDatabase, getDatabase, closeDatabase } from './lib/database.js';
 import app from './index.js';
 import type { Env } from './types.js';
 import { initializeScheduler, stopScheduler } from './services/scheduler.js';
+import { runStaleRecovery } from './services/stale-recovery.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,8 @@ const env: Env = {
     FACT_CHECK_MODEL: process.env.FACT_CHECK_MODEL || 'gemini-3-flash-preview',
     ENABLE_WEB_GROUNDING: process.env.ENABLE_WEB_GROUNDING,
     LLM_DUMP: process.env.LLM_DUMP,
+    LLM_MAX_RETRIES: process.env.LLM_MAX_RETRIES,
+    LLM_RETRY_DELAY_MS: process.env.LLM_RETRY_DELAY_MS,
 };
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -73,6 +76,13 @@ async function main() {
         await initializeScheduler(env);
     } catch (error) {
         console.error('⚠️ Failed to initialize scheduler (non-fatal):', error);
+    }
+
+    // Recover any stale quizzes/runs from previous worker instances
+    try {
+        await runStaleRecovery(env);
+    } catch (error) {
+        console.error('⚠️ Failed to run stale recovery (non-fatal):', error);
     }
 
     // Create a modified Hono app that injects env

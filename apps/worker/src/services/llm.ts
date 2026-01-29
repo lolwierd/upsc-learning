@@ -11,6 +11,13 @@ import {
 } from "./deduplication.js";
 import { dumpLlmCall, serializeError } from "./llm-dump.js";
 
+// ============================================================================
+// RETRY CONFIGURATION
+// ============================================================================
+const DEFAULT_MAX_RETRIES = 3;
+const DEFAULT_RETRY_DELAY_MS = 2000; // Base delay for exponential backoff
+const RATE_LIMIT_RETRY_DELAY_MS = 60000; // 60s for 429 errors
+
 interface GenerateQuizParams {
   subject: string;
   theme?: string;
@@ -58,6 +65,94 @@ export interface GenerateQuizMetrics {
   groundingSourceCount: number | null;
   // Format distribution metrics
   howManyFormatPercentage: number | null;
+
+  // Prompt logging
+  requestPrompt: string | null;
+  rawResponse: string | null;
+}
+
+interface RetryableError extends Error {
+  code?: number | string;
+  status?: string;
+  cause?: { code?: string };
+  isParseFailure?: boolean;
+}
+
+function isRetryableError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const err = error as RetryableError;
+
+  // Parse failures (empty LLM response)
+  if (err.isParseFailure) return true;
+
+  // 429 Rate Limiting
+  if (err.code === 429 || err.status === 'RESOURCE_EXHAUSTED') return true;
+
+  // Network/Timeout errors
+  const cause = err.cause as { code?: string } | undefined;
+  if (cause?.code === 'UND_ERR_HEADERS_TIMEOUT') return true;
+  if (err.message?.includes('fetch failed')) return true;
+  if (err.message?.includes('Headers Timeout')) return true;
+
+  // Transient Vertex AI errors
+  if (err.message?.includes('exception posting request')) return true;
+
+  return false;
+}
+
+function isRateLimitError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const err = error as RetryableError;
+  return err.code === 429 || err.status === 'RESOURCE_EXHAUSTED';
+}
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  options: {
+    maxRetries: number;
+    baseDelayMs: number;
+    rateLimitDelayMs: number;
+    operationName: string;
+  }
+): Promise<T> {
+  const { maxRetries, baseDelayMs, rateLimitDelayMs, operationName } = options;
+  let lastError: Error | undefined;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      if (!isRetryableError(error)) {
+        console.error(`[${operationName}] Non-retryable error on attempt ${attempt + 1}:`, error);
+        throw error;
+      }
+
+      if (attempt === maxRetries - 1) {
+        console.error(`[${operationName}] All ${maxRetries} attempts failed`);
+        throw error;
+      }
+
+      // Determine delay based on error type
+      const delay = isRateLimitError(error)
+        ? rateLimitDelayMs
+        : baseDelayMs * Math.pow(2, attempt); // Exponential backoff
+
+      console.warn(
+        `[${operationName}] Attempt ${attempt + 1}/${maxRetries} failed: ${lastError.message}. ` +
+        `Retrying in ${delay}ms...`
+      );
+
+      await sleep(delay);
+    }
+  }
+
+  throw lastError;
 }
 
 // Load existing fingerprints from database for deduplication
@@ -227,6 +322,7 @@ async function generateQuizCall(
   questions: GeneratedQuestion[];
   metrics: Partial<GenerateQuizMetrics>;
   rawResponse: string;
+  fullPrompt: string; // Combined system + user prompt
   groundingSourceCount?: number;
 }> {
   const {
@@ -315,7 +411,9 @@ QUESTION TYPE FORMATS:
 
 Generate exactly ${count} questions now.`;
 
+  const fullPrompt = `${systemPrompt}\n\n=== USER PROMPT ===\n\n${prompt}`;
   const totalPromptChars = systemPrompt.length + promptChars;
+
   const generationCallId = crypto.randomUUID();
   const maxTokensBase = Math.min(8000 + count * 400, 32000); // Increased token buffer
   const modelMaxOutputTokens: Record<string, number> = {
@@ -498,98 +596,116 @@ Generate exactly ${count} questions now.`;
     },
   });
 
-  // Parse response
-  let rawQuestions: GeneratedQuestion[] = [];
-  try {
-    const cleaned = text
-      .trim()
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```\s*$/i, "");
-
-    try {
-      rawQuestions = JSON.parse(cleaned);
-    } catch {
-      const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
-      if (!jsonMatch) throw new Error("No JSON array found");
-      rawQuestions = JSON.parse(jsonMatch[0]);
-    }
-  } catch (e) {
-    console.warn(`[Call ${callIndex}] Parse failed, returning empty list`);
-    return {
-      questions: [],
-      metrics: { generationDurationMs, responseChars },
-      rawResponse: text,
-      groundingSourceCount,
-    };
-  }
-
   return {
-    questions: rawQuestions,
+    questions: cleanLlmResponse(text),
     metrics: {
-      promptChars: totalPromptChars,
-      responseChars,
       generationDurationMs,
+      responseChars,
       usagePromptTokens: usage?.promptTokens,
       usageCompletionTokens: usage?.completionTokens,
       usageTotalTokens: usage?.totalTokens,
     },
     rawResponse: text,
+    fullPrompt,
     groundingSourceCount,
   };
+}
+
+function cleanLlmResponse(text: string): GeneratedQuestion[] {
+  try {
+    // 1. naive try
+    try {
+      return JSON.parse(text);
+    } catch { }
+
+    // 2. Extract from markdown
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch { }
+    }
+
+    // 3. Try to clean markdown code blocks
+    const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    return JSON.parse(cleaned);
+  } catch (error) {
+    console.warn("Failed to parse LLM response as JSON:", error);
+    return [];
+  }
 }
 
 export async function generateQuiz(
   env: Env,
   params: GenerateQuizParams
 ): Promise<{ questions: GeneratedQuestion[]; metrics: GenerateQuizMetrics }> {
+  // Use passed apiKey or fall back to env var
   const {
     subject,
     theme,
     difficulty,
     styles,
     count,
-    apiKey,
-    enableFactCheck: enableFactCheckParam,
-    enableDeduplication = true,
-    enableCurrentAffairs = false,
+    enableFactCheck,
+    enableDeduplication,
+    enableCurrentAffairs,
     currentAffairsTheme,
   } = params;
 
-  // Determine if grounding should be enabled (via param or env)
-  const groundingEnabled = enableCurrentAffairs || env.ENABLE_WEB_GROUNDING === "1";
-
+  // Use primary generation model
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
-  const factCheckModel = env.FACT_CHECK_MODEL ?? "gemini-3-flash-preview";
-  const enableFactCheck = enableFactCheckParam ?? env.ENABLE_FACT_CHECK === "1";
+  const factCheckModel = env.FACT_CHECK_MODEL || "gemini-3-flash-preview";
   const overallCallId = crypto.randomUUID();
+  const groundingEnabled = enableCurrentAffairs && env.ENABLE_WEB_GROUNDING === "1";
 
-  // Input validation
-  if (!subject?.trim()) throw new Error("Subject is required.");
-  if (!Array.isArray(styles) || styles.length === 0) throw new Error("Styles required.");
-  if (!Number.isInteger(count) || count <= 0) throw new Error("Count must be positive.");
-
-  // Deduplication setup
-  if (enableDeduplication && !env.DB) console.warn("Deduplication disabled: No DB.");
-
+  // Load fingerprints if deduplication is enabled
   let existingFingerprints = new Set<string>();
   if (enableDeduplication && env.DB) {
-    existingFingerprints = await loadExistingFingerprints(env.DB as any, subject);
-    console.log(`Loaded ${existingFingerprints.size} existing fingerprints`);
+    existingFingerprints = await loadExistingFingerprints(
+      env.DB as any,
+      subject
+    );
+    console.log(`Loaded ${existingFingerprints.size} existing fingerprints for ${subject}`);
   }
 
   console.log(`Starting single-call generation for ${count} questions`);
   const overallStart = Date.now();
-  const singleResult = await generateQuizCall(
-    env,
-    {
-      ...params,
-      count,
-      enableCurrentAffairs: groundingEnabled,
-      currentAffairsTheme,
+
+  // Get retry config from env or use defaults
+  const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
+  const baseDelayMs = parseInt(env.LLM_RETRY_DELAY_MS || String(DEFAULT_RETRY_DELAY_MS), 10);
+
+  const singleResult = await retryWithBackoff(
+    async () => {
+      const result = await generateQuizCall(
+        env,
+        {
+          ...params,
+          count,
+          enableCurrentAffairs: groundingEnabled,
+          currentAffairsTheme,
+        },
+        overallCallId,
+        0
+      );
+
+      // Treat empty result (parse failure) as retryable error
+      if (result.questions.length === 0) {
+        const parseError = new Error(
+          `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
+        );
+        (parseError as any).isParseFailure = true;
+        throw parseError;
+      }
+
+      return result;
     },
-    overallCallId,
-    0
+    {
+      maxRetries,
+      baseDelayMs,
+      rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
+      operationName: `Quiz Generation (${subject}/${theme || 'no-theme'})`,
+    }
   );
 
   // Merge results
@@ -692,7 +808,7 @@ export async function generateQuiz(
       styles,
       requestedCount: count,
       returnedCount: finalQuestions.length,
-      dedupEnabled: enableDeduplication,
+      dedupEnabled: enableDeduplication || false,
       dedupFilteredCount,
       validationIsValid: validationResult.isValid,
       validationInvalidCount: validationResult.invalidQuestions,
@@ -703,7 +819,7 @@ export async function generateQuiz(
       promptChars: totalPromptChars,
       responseChars: totalResponseChars,
       generationDurationMs: Date.now() - overallStart,
-      factCheckEnabled: enableFactCheck,
+      factCheckEnabled: enableFactCheck || false,
       factCheckDurationMs,
       factCheckCheckedCount: factCheckResult.checkedCount,
       factCheckIssueCount: factCheckResult.issues.length,
@@ -711,10 +827,14 @@ export async function generateQuiz(
       usageCompletionTokens: totalCompletionTokens,
       usageTotalTokens: totalTokens,
       // Grounding metrics
-      groundingEnabled,
+      groundingEnabled: !!groundingEnabled,
       groundingSourceCount: groundingEnabled ? totalGroundingSources : null,
       // Format distribution metrics (calculated from final questions)
       howManyFormatPercentage: calculateHowManyPercentage(finalQuestions),
+
+      // Prompt logging
+      requestPrompt: singleResult.fullPrompt,
+      rawResponse: singleResult.rawResponse,
     },
   };
 }

@@ -161,6 +161,8 @@ const runQuizGeneration = async ({
         usageTotalTokens: metrics.usageTotalTokens,
         groundingEnabled: metrics.groundingEnabled,
         groundingSourceCount: metrics.groundingSourceCount,
+        requestPrompt: metrics.requestPrompt,
+        rawResponse: metrics.rawResponse,
       });
     } catch (metricsError) {
       console.warn("Failed to store AI metrics:", metricsError);

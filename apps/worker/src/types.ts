@@ -24,6 +24,8 @@ export interface Env {
   FACT_CHECK_MODEL?: string; // e.g. gemini-3-flash-preview (default)
   ENABLE_WEB_GROUNDING?: string; // "1" to enable Google Search grounding for current affairs
   LLM_DUMP?: string; // "1" to enable dumping even in production
+  LLM_MAX_RETRIES?: string; // Max retry attempts for LLM calls (default: 3)
+  LLM_RETRY_DELAY_MS?: string; // Base delay for exponential backoff in ms (default: 2000)
 }
 
 // User context from Cloudflare Access
