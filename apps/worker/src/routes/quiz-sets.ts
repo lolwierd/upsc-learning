@@ -256,7 +256,7 @@ quizSets.post(
             JSON.stringify(item.styles),
             item.questionCount,
             "current", // Always use current era
-            item.enableCurrentAffairs ? 1 : 0,
+            1, // ALWAYS enabled
             item.currentAffairsTheme || null,
             now,
             now
@@ -455,7 +455,7 @@ quizSets.post(
         JSON.stringify(body.styles),
         body.questionCount,
         "current", // Always use current era
-        body.enableCurrentAffairs ? 1 : 0,
+        1, // ALWAYS enabled
         body.currentAffairsTheme || null,
         now,
         now
@@ -529,7 +529,7 @@ quizSets.patch(
     }
     if (body.enableCurrentAffairs !== undefined) {
       updates.push("enable_current_affairs = ?");
-      values.push(body.enableCurrentAffairs ? 1 : 0);
+      values.push(1); // ALWAYS force enabled
     }
     if (body.currentAffairsTheme !== undefined) {
       updates.push("current_affairs_theme = ?");

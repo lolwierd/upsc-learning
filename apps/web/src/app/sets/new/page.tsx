@@ -62,7 +62,10 @@ export default function NewQuizSetPage() {
       const result = await createQuizSet({
         name: name.trim(),
         description: description.trim() || undefined,
-        items: items.map(({ tempId: _tempId, ...config }) => config),
+        items: items.map(({ tempId: _tempId, ...config }) => ({
+          ...config,
+          enableCurrentAffairs: true,
+        })),
       });
       router.push(`/sets/${result.id}`);
     } catch (err) {

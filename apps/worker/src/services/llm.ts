@@ -331,7 +331,7 @@ async function generateQuizCall(
     difficulty,
     styles,
     count,
-    enableCurrentAffairs = false,
+    enableCurrentAffairs = true,
     currentAffairsTheme,
   } = params;
 
