@@ -3,6 +3,7 @@
 // ============================================
 
 export const SUBJECTS = [
+  "random",
   "history",
   "geography",
   "polity",
@@ -13,6 +14,7 @@ export const SUBJECTS = [
 ] as const;
 
 export const SUBJECT_LABELS: Record<(typeof SUBJECTS)[number], string> = {
+  random: "Random Mode (Multi-Subject)",
   history: "History",
   geography: "Geography",
   polity: "Indian Polity",
@@ -23,6 +25,7 @@ export const SUBJECT_LABELS: Record<(typeof SUBJECTS)[number], string> = {
 };
 
 export const SUBJECT_DESCRIPTIONS: Record<(typeof SUBJECTS)[number], string> = {
+  random: "AI-curated questions across multiple subjects focusing on high-yield UPSC 2026 topics and current affairs",
   history: "Ancient, Medieval, and Modern Indian History",
   geography: "Physical, Indian, and World Geography",
   polity: "Constitution, Governance, and Political System",

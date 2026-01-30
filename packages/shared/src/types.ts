@@ -3,6 +3,7 @@
 // ============================================
 
 export type Subject =
+  | "random"
   | "history"
   | "geography"
   | "polity"

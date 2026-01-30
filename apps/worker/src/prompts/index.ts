@@ -56,6 +56,264 @@ function calculateStyleDistribution(totalCount: number): StyleDistribution[] {
 // Export for use in other modules
 export { calculateStyleDistribution };
 
+// ============================================================================
+// RANDOM MODE PROMPT (Multi-Subject Quiz Generation)
+// ============================================================================
+
+function getRandomModePrompt(params: PromptParams): string {
+  const { theme, styles, totalCount, enableCurrentAffairs, currentAffairsTheme } = params;
+  const styleDistribution = styles || calculateStyleDistribution(totalCount);
+
+  // Build style instructions
+  const styleInstructions = styleDistribution
+    .map(({ style, count }) => `- ${style}: ${count} questions`)
+    .join('\n');
+
+  return `
+UPSC PRELIMS 2026 - RANDOM MODE: MULTI-SUBJECT QUIZ GENERATION
+
+MISSION: Generate ${totalCount} high-quality UPSC Prelims questions across
+multiple subjects, prioritizing topics likely to appear in May 2026 exam.
+
+SUBJECT DISTRIBUTION STRATEGY (INTELLIGENT, NOT UNIFORM)
+
+UPSC-WEIGHTED DISTRIBUTION (Target for ${totalCount} questions):
+- Polity & Governance: 15-20% → ${Math.round(totalCount * 0.175)} questions (~3-4 in 20Q)
+- Environment & Ecology: 15-20% → ${Math.round(totalCount * 0.175)} questions (~3-4 in 20Q)
+- Geography: 12-18% → ${Math.round(totalCount * 0.15)} questions (~2-4 in 20Q)
+- History: 10-18% → ${Math.round(totalCount * 0.14)} questions (~2-4 in 20Q)
+- Economy: 10-15% → ${Math.round(totalCount * 0.125)} questions (~2-3 in 20Q)
+- Science & Tech: 5-15% → ${Math.round(totalCount * 0.10)} questions (~1-3 in 20Q)
+- Art & Culture: 5-10% → ${Math.round(totalCount * 0.075)} questions (~1-2 in 20Q)
+
+SMART SELECTION RULES:
+- Prioritize high-weightage subjects (Polity, Environment, Geography)
+- For small quizzes (<20Q): Focus on 4-5 subjects only
+- For larger quizzes (≥20Q): Include all 7 subjects
+- Favor cross-subject questions (Environment + Geography, Polity + Current Affairs)
+- DO NOT force even distribution - follow UPSC exam patterns
+
+TOPIC PRIORITIZATION (CRITICAL)
+
+HIGH-YIELD TOPICS (60-70% of questions MUST be from these):
+
+POLITY HOT TOPICS:
+- Women's Reservation Act (106th Amendment) - implementation & impact
+- Recent Supreme Court judgments (2025-2026)
+- New government schemes launched 2025+
+- Electoral reforms and ECI powers
+- Parliament procedures, Money Bill controversies
+- Fundamental Rights vs Directive Principles conflicts
+
+ENVIRONMENT HOT TOPICS:
+- COP30 outcomes and India's climate commitments
+- India's updated NDC targets for 2030
+- New environmental policies (2025+)
+- Wildlife Protection Act amendments
+- Recently declared protected areas/sanctuaries
+- Renewable energy targets and achievements
+
+GEOGRAPHY HOT TOPICS:
+- Climate change impacts on Indian regions
+- New infrastructure projects (highways, ports, metros)
+- Water resource management and inter-state disputes
+- Monsoon patterns and agricultural impacts
+- Geographical indications (new additions 2025+)
+
+HISTORY HOT TOPICS:
+- Recent archaeological discoveries in India
+- Freedom struggle anniversaries in 2025-2026
+- UNESCO heritage sites (new additions)
+- Historical connections to current geopolitical issues
+
+ECONOMY HOT TOPICS:
+- Economic Survey 2025-26 highlights
+- Union Budget 2025-26 key announcements
+- RBI monetary policy changes (2025+)
+- New taxation reforms and GST updates
+- Digital payment infrastructure evolution
+- India's trade agreements signed in 2025
+
+SCIENCE HOT TOPICS:
+- Gaganyaan mission updates and timeline
+- ISRO satellite launches (2025-2026)
+- New medical breakthroughs and vaccines
+- AI/ML policy frameworks in India
+- Semiconductor manufacturing initiatives
+
+ART & CULTURE HOT TOPICS:
+- New cultural festivals launched
+- Intangible Cultural Heritage additions
+- Major temple/monument restorations
+- Traditional knowledge preservation efforts
+
+${theme ? `
+THEMATIC FOCUS: "${theme}"
+
+THEME APPLICATION STRATEGY:
+- 60% of questions should relate to this theme across relevant subjects
+- 40% general high-yield topics for comprehensive coverage
+- Connect theme across multiple disciplines
+
+Example - Theme "Climate Change":
+  → Environment: Climate science, Paris Agreement, India's NDCs
+  → Geography: Climate patterns, regional impacts, monsoons
+  → Polity: Climate legislation, institutional mechanisms
+  → Economy: Green finance, carbon markets, renewable subsidies
+  → Science: Climate modeling, renewable tech, carbon capture
+
+Example - Theme "Current Affairs 2025":
+  → Polity: Recent amendments, new schemes, SC judgments
+  → Environment: COP30, policy updates, conservation efforts
+  → Economy: Budget highlights, RBI policies, trade deals
+  → Science: Space missions, tech breakthroughs
+  → History: Recent discoveries, anniversaries
+` : `
+
+UPSC 2026 PREDICTION MODE (No specific theme)
+
+PREDICTION STRATEGY:
+- Focus on developments from JANUARY 2025 to PRESENT (Jan 2026)
+- Prioritize topics with high exam probability:
+  - Legislation passed in 2025-2026
+  - International summits involving India
+  - Major policy launches and reforms
+  - Significant Supreme Court judgments
+  - Scientific missions and achievements
+  - Environmental milestones and conventions
+
+TOPIC FRESHNESS DISTRIBUTION:
+- 50% questions on 2025-2026 events (very recent)
+- 30% questions on 2024 events still relevant
+- 20% timeless concepts framed with 2025-2026 hooks
+
+USE GOOGLE SEARCH to identify:
+- Trending UPSC-relevant topics
+- Recent government announcements (PIB.gov.in)
+- Current international affairs
+- Latest scientific developments
+`}
+
+CURRENT AFFAIRS INTEGRATION (MANDATORY 50-60% of questions)
+
+${CURRENT_AFFAIRS_CONTEXT}
+
+${currentAffairsTheme ? `
+CURRENT AFFAIRS FOCUS: "${currentAffairsTheme}"
+
+Prioritize this theme when selecting current affairs topics. Use web search
+to find recent developments (2025+) related to this theme.
+` : ''}
+
+CRITICAL: For random mode, spread current affairs across subjects
+- Polity: Recent amendments, schemes, judgments
+- Environment: Climate summits, conservation policies
+- Economy: Budget, RBI policies, trade deals
+- Science: Missions, breakthroughs, policy updates
+- Geography: New infrastructure, resource discoveries
+- History: Archaeological finds, heritage additions
+- Culture: UNESCO recognitions, cultural initiatives
+
+COMBINED KNOWLEDGE BASE (All Subjects)
+
+You have access to specialized knowledge for all UPSC subjects:
+
+${getSubjectAnalysis('polity')}
+
+${getSubjectAnalysis('environment')}
+
+${getSubjectAnalysis('geography')}
+
+${getSubjectAnalysis('history')}
+
+${getSubjectAnalysis('economy')}
+
+${getSubjectAnalysis('science')}
+
+${getSubjectAnalysis('art_culture')}
+
+CROSS-SUBJECT TRAP PATTERNS (Elimination-Proof Distractors)
+
+Apply subject-specific trap patterns based on question topic:
+
+POLITY TRAPS:
+${getSubjectStrategicTraps('polity')}
+
+ENVIRONMENT TRAPS:
+${getSubjectStrategicTraps('environment')}
+
+GEOGRAPHY TRAPS:
+${getSubjectStrategicTraps('geography')}
+
+HISTORY TRAPS:
+${getSubjectStrategicTraps('history')}
+
+ECONOMY TRAPS:
+${getSubjectStrategicTraps('economy')}
+
+SCIENCE TRAPS:
+${getSubjectStrategicTraps('science')}
+
+CULTURE TRAPS:
+${getSubjectStrategicTraps('art_culture')}
+
+QUESTION QUALITY STANDARDS (NON-NEGOTIABLE)
+
+1. UPSC 2024-2025 PATTERN ADHERENCE:
+   ${UPSC_STEM_TEMPLATES}
+
+2. QUESTION STYLE DISTRIBUTION:
+${styleInstructions}
+
+3. DISTRACTOR DESIGN (Apply trap patterns from above):
+   ${DISTRACTOR_BLUEPRINT}
+   - Each distractor must be plausible and elimination-proof
+   - Use subject-specific confusions (similar years, adjacent articles, etc.)
+   - Mix factually correct but irrelevant options
+   - Apply cross-subject traps where relevant
+
+4. FACTUAL ACCURACY:
+   - Every fact must be 100% accurate regardless of subject
+   - Constitutional articles, amendment numbers, years must be exact
+   - Verify scientific facts, geographical data, historical dates
+   - Cross-reference government sources for current affairs
+
+5. EXPLANATION REQUIREMENTS:
+   - Start by identifying the subject area (e.g., "This Polity question...")
+   - Link current affairs to underlying static concepts
+   - For current affairs questions, include:
+     [Relevance: <event + date + source>]
+     Sources: <URL from 2025+>
+
+OUTPUT FORMAT
+
+Generate EXACTLY ${totalCount} questions in valid JSON array format:
+
+[
+  {
+    "questionText": "Question with proper UPSC phrasing...",
+    "questionType": "standard|statement|match|assertion",
+    "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+    "correctOption": 0,
+    "explanation": "Clear explanation mentioning subject area, static concept, and sources if current affairs..."
+  },
+  ...
+]
+
+FINAL CHECKLIST BEFORE GENERATION:
+☑ Subject distribution follows UPSC pattern (not uniform)
+☑ 50-60% questions integrate current affairs (2025+ events)
+☑ High-yield topics prioritized
+☑ Cross-subject linkages included where relevant
+☑ All questions maintain UPSC 2024-2025 standards
+☑ Distractors use subject-specific trap patterns
+☑ ${theme ? 'Theme applied across 60% of questions' : 'Prediction mode focuses on likely 2026 topics'}
+☑ Factual accuracy verified across all subjects
+
+NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
+`;
+}
+
 
 // ============================================================================
 // CURRENT AFFAIRS INTEGRATION CONTEXT
@@ -544,16 +802,16 @@ CRITICAL: 2026 PRELIMS FOCUS
 
 YOUR GOAL: Generate questions that would likely appear in UPSC PRELIMS 2026.
 
-⚠️ IMPORTANT DISTINCTION:
+IMPORTANT DISTINCTION:
 - The theme data provided comes from analyzing 2013-2025 PYQs
 - BUT you are NOT trying to recreate old PYQ patterns
 - Use theme data for TOPIC COVERAGE, apply ONLY 2024-2025 FRAMING
 
 WHAT THIS MEANS:
 ✗ DO NOT: Generate deep/specific questions in the style of 2013-2017
-✓ DO: Take topics from themes but frame them with 2024-2025 sophistication
+- DO: Take topics from themes but frame them with 2024-2025 sophistication
 ✗ DO NOT: Focus on outdated schemes, ended programs, or historical minutiae
-✓ DO: Focus on currently relevant provisions, active policies, recent developments
+- DO: Focus on currently relevant provisions, active policies, recent developments
 
 UPSC EVOLUTION INSIGHT:
 - Static content has REDUCED by ~50% compared to 2013-2017 era
@@ -580,13 +838,13 @@ FRAMING EXAMPLES:
 OUTDATED (2015-style pure static):
 "What are the features of Panchayati Raj?"
 
-✓ MODERN (2024-style dynamic trigger):
+- MODERN (2024-style dynamic trigger):
 "In the context of the 30th anniversary of the 73rd Constitutional Amendment (2023)..."
 
 OUTDATED (2013-style deep static):
 "Which of the following rivers originates from the Amarkantak plateau?"
 
-✓ MODERN (2024-style application):
+- MODERN (2024-style application):
 "Consider the following rivers and their characteristics in context of 
 recent inter-state water disputes..."
 `;
@@ -875,16 +1133,16 @@ DESIGN RULES(CRITICAL FOR UPSC - QUALITY):
 
 COMMON UPSC MATCH THEMES:
 - Parties ↔ Founders / Leaders(very common in 2024)
-  - Country ↔ Endemic / Native species(very common in Environment)
-    - Treaties / Agreements ↔ Years / Countries
-      - Constitutional Articles ↔ Provisions / Subjects
-        - Rivers ↔ Origins / Tributaries / States
-          - National Parks / Reserves ↔ States / Flagship Species
-            - Government Schemes ↔ Objectives / Ministries
-              - International Organizations ↔ Headquarters / Functions
-                - Historical Events ↔ Years / Leaders
-                  - Folk Arts / Dances ↔ States / Regions
-                    - Minerals ↔ States(leading producers)`,
+- Country ↔ Endemic / Native species(very common in Environment)
+- Treaties / Agreements ↔ Years / Countries
+- Constitutional Articles ↔ Provisions / Subjects
+- Rivers ↔ Origins / Tributaries / States
+- National Parks / Reserves ↔ States / Flagship Species
+- Government Schemes ↔ Objectives / Ministries
+- International Organizations ↔ Headquarters / Functions
+- Historical Events ↔ Years / Leaders
+- Folk Arts / Dances ↔ States / Regions
+- Minerals ↔ States(leading producers)`,
 
   assertion: `
 QUESTION STYLE: STATEMENT - I / STATEMENT - II(and STATEMENT - I / II / III) - UPSC CURRENT FORMAT
@@ -940,14 +1198,14 @@ PREFER: "principle → implication"(Economy) or "mechanism → outcome"(Environm
 
 COMMON TRAPS TO CREATE:
 - Statement - II is a true statement but explains something else, not Statement - I
-  - Statement - II partially explains Statement - I but misses the main reason
-    - Statement - I and Statement - II are both true and seem related but causation is reversed
-      - Statement - II is the effect, not the cause of Statement - I
+- Statement - II partially explains Statement - I but misses the main reason
+- Statement - I and Statement - II are both true and seem related but causation is reversed
+- Statement - II is the effect, not the cause of Statement - I
 
 REAL PYQ EXAMPLE(2024 Economy):
 "Consider the following statements:
 Statement - I: Syndicated lending spreads the risk of borrower default across multiple lenders.
-  Statement - II: The syndicated loan can be a fixed amount / lump sum of funds, but cannot be a credit line.
+Statement - II: The syndicated loan can be a fixed amount / lump sum of funds, but cannot be a credit line.
 
 Which one of the following is correct in respect of the above statements ? "
 
@@ -965,9 +1223,9 @@ INDIAN POLITY & GOVERNANCE(15 - 20 % of UPSC Prelims, ~15 - 20 questions)
 
 PRIMARY SOURCES(align questions with these):
 - M.Laxmikanth's "Indian Polity" - THE standard reference
-  - NCERT Political Science(Class 11 - 12)
-    - Constitution of India(original text)
-      - Recent Supreme Court judgments
+- NCERT Political Science(Class 11 - 12)
+- Constitution of India(original text)
+- Recent Supreme Court judgments
 
 HIGH - WEIGHTAGE TOPICS:
 1. Constitutional Framework: Preamble, Fundamental Rights(Art 12 - 35), DPSPs(Art 36 - 51), Fundamental Duties(Art 51A)
@@ -982,7 +1240,7 @@ HIGH - WEIGHTAGE TOPICS:
 10. Recent Amendments: 101st(GST), 102nd(NCBC), 103rd(EWS quota), 104th(SC / ST reservation), 105th(OBC enumeration), 106th(Women's reservation)
 
 COMMON UPSC TRAPS IN POLITY:
-  - Confusing similar articles(Art 14 vs 15 vs 16)
+- Confusing similar articles(Art 14 vs 15 vs 16)
 - President's discretionary vs constitutional powers
 - Difference between Ordinance - making powers(Art 123 vs 213)
 - Money Bill vs Financial Bill misconceptions
@@ -993,14 +1251,14 @@ COMMON UPSC TRAPS IN POLITY:
 INDIAN HISTORY(10 - 18 % of UPSC Prelims, ~10 - 18 questions)
 
 PRIMARY SOURCES:
-  - NCERT History books(Class 6 - 12) - FOUNDATION
+- NCERT History books(Class 6 - 12) - FOUNDATION
 - Spectrum's "A Brief History of Modern India" - Modern History
 - RS Sharma - Ancient India
 - Satish Chandra - Medieval India
 - Bipin Chandra - India's Struggle for Independence
 
 ANCIENT HISTORY FOCUS AREAS:
-  1. Indus Valley Civilization: Sites, features, decline theories, script
+1. Indus Valley Civilization: Sites, features, decline theories, script
 2. Vedic Period: Rig Vedic vs Later Vedic, society, economy
 3. Buddhism & Jainism: Teachings, councils, spread, decline
 4. Mauryan Empire: Chandragupta, Ashoka, administration, Dhamma
@@ -1009,14 +1267,14 @@ ANCIENT HISTORY FOCUS AREAS:
 7. Regional Kingdoms: Cholas, Pallavas, Chalukyas, Rashtrakutas
 
 MEDIEVAL HISTORY FOCUS AREAS:
-  1. Delhi Sultanate: Dynasties, administration, architecture
+1. Delhi Sultanate: Dynasties, administration, architecture
 2. Vijayanagara & Bahmani kingdoms
 3. Mughal Empire: Administration, Mansabdari, art, religious policies
 4. Bhakti & Sufi movements
 5. Regional powers: Marathas, Sikhs, Rajputs
 
 MODERN HISTORY(HIGHEST WEIGHTAGE):
-  1. British Expansion: Battles, policies, economic drain
+1. British Expansion: Battles, policies, economic drain
 2. Socio - Religious Reforms: Brahmo Samaj, Arya Samaj, others
 3. 1857 Revolt: Causes, events, aftermath
 4. Indian National Movement phases
@@ -1026,7 +1284,7 @@ MODERN HISTORY(HIGHEST WEIGHTAGE):
 8. Independence & Partition
 
 COMMON TRAPS:
-  - Confusing years of events(very specific dates asked)
+- Confusing years of events(very specific dates asked)
 - Mixing up reform movements and their founders
 - Timeline errors in freedom movement
 - Confusing British Acts and their provisions`,
@@ -1035,19 +1293,19 @@ COMMON TRAPS:
 INDIAN & WORLD GEOGRAPHY(12 - 18 % of UPSC Prelims, ~12 - 18 questions)
 
 PRIMARY SOURCES:
-  - NCERT Geography(Class 6 - 12) - FOUNDATION
+- NCERT Geography(Class 6 - 12) - FOUNDATION
 - G.C.Leong's "Certificate Physical and Human Geography"
 - Oxford School Atlas
 - Khullar's "India: A Comprehensive Geography"
 
 PHYSICAL GEOGRAPHY:
-  1. Geomorphology: Landforms, plate tectonics, volcanism, earthquakes
+1. Geomorphology: Landforms, plate tectonics, volcanism, earthquakes
 2. Climatology: Atmospheric circulation, monsoons, climate types
 3. Oceanography: Currents, tides, marine resources
 4. Biogeography: Biomes, soils, vegetation types
 
 INDIAN GEOGRAPHY(HIGH WEIGHTAGE):
-  1. Physical Features: Himalayas, Northern Plains, Peninsular Plateau, Coastal Plains, Islands
+1. Physical Features: Himalayas, Northern Plains, Peninsular Plateau, Coastal Plains, Islands
 2. Drainage: River systems(Himalayan vs Peninsular), interlinking projects
 3. Climate: Monsoon mechanism, seasons, rainfall distribution
 4. Natural Vegetation: Forest types, biosphere reserves
@@ -1057,26 +1315,26 @@ INDIAN GEOGRAPHY(HIGH WEIGHTAGE):
 8. Transport: Roadways, railways, waterways, airways
 
 WORLD GEOGRAPHY:
-  1. Continents and major features
+1. Continents and major features
 2. Important straits, channels, passes
 3. Climate regions and their characteristics
 4. Major agricultural regions
 5. Geopolitically significant locations
 
 COMMON TRAPS:
-  - Confusing tributaries of rivers(left bank vs right bank)
+- Confusing tributaries of rivers(left bank vs right bank)
 - Mixing up national parks and their locations / species
 - Wrong associations of crops with soil types
-  - Confusing similar - sounding geographical features`,
+- Confusing similar - sounding geographical features`,
 
   economy: `
 INDIAN ECONOMY(10 - 15 % of UPSC Prelims, ~10 - 15 questions)
 
 PRIMARY SOURCES:
 - NCERT Economics(Class 11 - 12)
-  - Ramesh Singh's "Indian Economy"
-    - Economic Survey(latest)
-      - Union Budget documents
+- Ramesh Singh's "Indian Economy"
+- Economic Survey(latest)
+- Union Budget documents
 
 MACROECONOMICS:
 1. National Income: GDP, GNP, NDP, NNP concepts and calculation
@@ -1109,18 +1367,18 @@ INTERNATIONAL:
 
 COMMON TRAPS:
 - Confusing monetary policy tools and their effects
-  - Mixing up different types of deficits
-    - Wrong associations of schemes with ministries
-    - Confusing similar - sounding financial instruments`,
+- Mixing up different types of deficits
+- Wrong associations of schemes with ministries
+- Confusing similar - sounding financial instruments`,
 
   environment: `
 ENVIRONMENT & ECOLOGY(15 - 20 % of UPSC Prelims, ~15 - 20 questions)
 
 PRIMARY SOURCES:
 - NCERT Biology(Ecology chapters)
-  - Shankar IAS Environment book
-    - ENVIS portals
-      - MoEFCC reports
+- Shankar IAS Environment book
+- ENVIS portals
+- MoEFCC reports
 
 ECOLOGY CONCEPTS:
 1. Ecosystem: Structure, function, energy flow, nutrient cycling
@@ -1159,18 +1417,18 @@ INDIAN INITIATIVES:
 
 COMMON TRAPS:
 - Confusing different protected area categories
-  - Mixing up international conventions and their focus
-    - Wrong locations of national parks / tiger reserves
-      - Confusing endemic species locations`,
+- Mixing up international conventions and their focus
+- Wrong locations of national parks / tiger reserves
+- Confusing endemic species locations`,
 
   science: `
 SCIENCE & TECHNOLOGY(5 - 15 % of UPSC Prelims, ~5 - 15 questions)
 
 PRIMARY SOURCES:
 - NCERT Science books(Class 6 - 10)
-  - NCERT Physics, Chemistry, Biology(Class 11 - 12 basics)
-    - Science Reporter magazine
-      - PIB releases on S & T
+- NCERT Physics, Chemistry, Biology(Class 11 - 12 basics)
+- Science Reporter magazine
+- PIB releases on S & T
 
 PHYSICS & SPACE:
 1. Basic concepts: Motion, energy, waves, optics
@@ -1208,17 +1466,17 @@ GOVERNMENT INITIATIVES:
 
 COMMON TRAPS:
 - Confusing similar - sounding technologies
-  - Wrong agency associations(ISRO vs DRDO vs DAE)
-    - Outdated information on recent missions
-      - Mixing up satellite types and purposes`,
+- Wrong agency associations(ISRO vs DRDO vs DAE)
+- Outdated information on recent missions
+- Mixing up satellite types and purposes`,
 
   "current affairs": `
 CURRENT AFFAIRS(30 - 40 % of UPSC Prelims directly / indirectly)
 
 INTEGRATION APPROACH:
 - Current affairs are NOT a separate subject
-  - UPSC tests static concepts THROUGH current events
-    - ~70 % of current affairs questions need static knowledge to answer
+- UPSC tests static concepts THROUGH current events
+- ~70 % of current affairs questions need static knowledge to answer
 
 KEY DOMAINS:
 1. Government Schemes & Policies(link to Polity / Economy)
@@ -1231,29 +1489,29 @@ KEY DOMAINS:
 
 TIME FRAME:
 - Focus on 18 - 24 months before exam
-  - Some questions test events from 2 + years ago
-    - Anniversary years(25th, 50th, 75th, 100th) are important
+- Some questions test events from 2 + years ago
+- Anniversary years(25th, 50th, 75th, 100th) are important
 
 SOURCES TO ALIGN WITH:
 - The Hindu / Indian Express editorials
-  - PIB(Press Information Bureau)
-  - Yojana & Kurukshetra magazines
-    - Economic Survey
-      - India Year Book
+- PIB(Press Information Bureau)
+- Yojana & Kurukshetra magazines
+- Economic Survey
+- India Year Book
 
 INTEGRATION EXAMPLES:
 - G20 Summit → Link to economic organizations, India's foreign policy
-  - New environmental policy → Link to international conventions, constitutional provisions
-    - Supreme Court judgment → Link to relevant constitutional articles
-      - New government scheme → Link to ministry, budget allocation, related acts`,
+- New environmental policy → Link to international conventions, constitutional provisions
+- Supreme Court judgment → Link to relevant constitutional articles
+- New government scheme → Link to ministry, budget allocation, related acts`,
 
   "art and culture": `
 ART & CULTURE(5 - 10 % of UPSC Prelims, ~5 - 10 questions)
 
 PRIMARY SOURCES:
 - NCERT Fine Arts book
-  - CCRT(Centre for Cultural Resources and Training) material
-    - Nitin Singhania's "Indian Art and Culture"
+- CCRT(Centre for Cultural Resources and Training) material
+- Nitin Singhania's "Indian Art and Culture"
 
 ARCHITECTURE:
 1. Temple Architecture: Nagara, Dravida, Vesara styles
@@ -1287,9 +1545,9 @@ HERITAGE:
 
 COMMON TRAPS:
 - Confusing similar dance forms
-  - Wrong state associations for folk arts
-    - Mixing up architectural styles
-      - Incorrect UNESCO site information`,
+- Wrong state associations for folk arts
+- Mixing up architectural styles
+- Incorrect UNESCO site information`,
 };
 
 // Get subject context if available
@@ -1369,6 +1627,11 @@ export function getPrompt(params: PromptParams): string {
     enableCurrentAffairs = true, // Current affairs always enabled by default
     currentAffairsTheme,
   } = params;
+
+  // Special handling for random mode - multi-subject quiz generation
+  if (subject === 'random') {
+    return getRandomModePrompt(params);
+  }
 
   // Auto-calculate style distribution if not provided (UPSC 2024-2025 realistic pattern)
   const styles = providedStyles && providedStyles.length > 0
@@ -1486,34 +1749,34 @@ CRITICAL QUALITY REQUIREMENTS(NON - NEGOTIABLE):
 1. FACTUAL ACCURACY(MOST IMPORTANT):
 - Every fact, date, number, name MUST be 100 % accurate
   - Cross - reference with NCERT textbooks and standard references
-    - Align with PYQ patterns and factual anchors reflected in the repo trends
-      - If uncertain about a fact, DO NOT include it
-        - Constitutional articles, amendment numbers must be exact
-          - Years of events, treaties, acts must be verified
+- Align with PYQ patterns and factual anchors reflected in the repo trends
+- If uncertain about a fact, DO NOT include it
+- Constitutional articles, amendment numbers must be exact
+- Years of events, treaties, acts must be verified
 
 2. SINGLE CORRECT ANSWER:
 - There must be exactly ONE correct answer
-  - The correct answer must be DEFINITIVELY correct, not "most correct"
-    - All distractors must be DEFINITIVELY incorrect
-      - No ambiguity - a subject expert should agree on the answer
+- The correct answer must be DEFINITIVELY correct, not "most correct"
+- All distractors must be DEFINITIVELY incorrect
+- No ambiguity - a subject expert should agree on the answer
 
 3. ELIMINATION - PROOF DISTRACTORS:
 - DO NOT use absolute words(only, always, never, all, none) in wrong options
-  - UPSC aspirants know these patterns - your questions must be smarter
-    - Distractors should be plausible misconceptions, not obvious wrong answers
-      - Each distractor should trap someone with incomplete knowledge
+- UPSC aspirants know these patterns - your questions must be smarter
+- Distractors should be plausible misconceptions, not obvious wrong answers
+- Each distractor should trap someone with incomplete knowledge
 
 4. UPSC LANGUAGE STANDARDS:
 - Use formal, precise language
-  - Avoid colloquialisms or informal expressions
-    - Technical terms should be used correctly
-      - Questions should be clear but not simplistic
+- Avoid colloquialisms or informal expressions
+- Technical terms should be used correctly
+- Questions should be clear but not simplistic
 
 5. NO CONTROVERSIAL CONTENT:
 - Avoid politically sensitive topics
-  - No questions on disputed territories without clear UPSC precedent
-    - No questions on ongoing court cases
-      - Avoid religious content unless historically factual
+- No questions on disputed territories without clear UPSC precedent
+- No questions on ongoing court cases
+- Avoid religious content unless historically factual
 
 MANDATORY SELF - VERIFICATION CHECKLIST:
 

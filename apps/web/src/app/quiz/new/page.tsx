@@ -143,7 +143,7 @@ export default function NewQuizPage() {
 
   const subjectOptions = SUBJECTS.map((s) => ({
     value: s,
-    label: SUBJECT_LABELS[s],
+    label: s === 'random' ? `🎲 ${SUBJECT_LABELS[s]}` : SUBJECT_LABELS[s],
   }));
 
   return (
@@ -165,14 +165,22 @@ export default function NewQuizPage() {
           />
 
           {/* Theme */}
-          <Input
-            id="theme"
-            label="Theme (Optional)"
-            placeholder="e.g., Mughal Empire, Climate Change, Constitutional Amendments"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            helperText="Preferred focus only; questions also cover adjacent subtopics"
-          />
+          <div className="space-y-1">
+            <Input
+              id="theme"
+              label="Theme (Optional)"
+              placeholder="e.g., Mughal Empire, Climate Change, Constitutional Amendments"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              helperText={subject === 'random' ? undefined : "Preferred focus only; questions also cover adjacent subtopics"}
+            />
+            {subject === 'random' && (
+              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                💡 In Random Mode, theme acts as a focus across multiple subjects
+                (e.g., "Climate Change 2025" covers environment, geography, polity, economy aspects)
+              </p>
+            )}
+          </div>
 
           {/* Question Style Distribution (Auto) */}
           <div className="space-y-2">
@@ -219,6 +227,12 @@ export default function NewQuizPage() {
               onChange={(e) => setCurrentAffairsTheme(e.target.value)}
               helperText="Optionally specify a current affairs topic to prioritize"
             />
+            {subject === 'random' && (
+              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                💡 Random Mode emphasizes recent developments (2025-2026).
+                This helps AI prioritize specific current affairs topics.
+              </p>
+            )}
           </div>
 
           {/* Question Count */}
