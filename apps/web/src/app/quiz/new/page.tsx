@@ -177,7 +177,7 @@ export default function NewQuizPage() {
             {subject === 'random' && (
               <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
                 💡 In Random Mode, theme acts as a focus across multiple subjects
-                (e.g., "Climate Change 2025" covers environment, geography, polity, economy aspects)
+                (e.g., Climate Change 2025 covers environment, geography, polity, economy aspects)
               </p>
             )}
           </div>
