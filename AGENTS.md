@@ -3,9 +3,9 @@
 ## Project Structure
 
 - `apps/web/`: Next.js (App Router) frontend with Tailwind (`apps/web/src/`).
-- `apps/worker/`: Cloudflare Worker API (Hono) (`apps/worker/src/`).
+- `apps/worker/`: Hono API backend that can run as a Node server (Docker/VM) via `src/server.ts` (primary) and also has Wrangler config for Worker-style dev (`apps/worker/src/`).
 - `packages/shared/`: shared TypeScript types/Zod schemas/constants (`packages/shared/src/`).
-- `packages/db/`: Cloudflare D1 migrations (`packages/db/migrations/`).
+- `packages/db/`: SQL migrations used by the backend (`packages/db/migrations/`).
 - Monorepo tooling: `pnpm-workspace.yaml` (workspaces) + `turbo.json` (task runner).
 
 ## Build, Test, and Development Commands
@@ -18,7 +18,9 @@
 - `pnpm db:migrate`: apply D1 migrations (wraps `@mcqs/db`).
 - App-specific examples:
   - `pnpm --filter @mcqs/web dev` (Next.js on `:3000`)
-  - `pnpm --filter @mcqs/worker dev` (Wrangler dev server)
+  - `pnpm --filter @mcqs/worker dev:node` (Node API dev server on `:3001`)
+  - `docker compose -f apps/worker/docker-compose-dev.yml up --build` (backend in Docker for local dev)
+  - `docker compose -f apps/worker/docker-compose.yml up --build` (prod-like Docker stack, includes optional `cloudflared`)
 
 ## Coding Style & Naming Conventions
 
@@ -41,5 +43,6 @@
 ## Configuration & Secrets
 
 - Frontend env: copy `apps/web/.env.local.example` to `apps/web/.env.local`.
-- Worker env: start from `apps/worker/wrangler.toml.example`.
+- Backend env (Docker/Node): copy `apps/worker/.env.example` to `apps/worker/.env` and set required secrets (not committed; `.env` is gitignored).
+- Worker env (Wrangler, optional): start from `apps/worker/wrangler.toml.example`.
 - Never commit real API keys, tokens, or Cloudflare IDs.
