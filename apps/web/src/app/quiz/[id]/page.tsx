@@ -708,9 +708,13 @@ export default function QuizPage() {
                   >
                     {/* Answer Below Indicator */}
                     {!isRevealed && (
-                      <div className="text-xs font-semibold text-amber-600 uppercase tracking-wide">
-                        ↓ Answer below
-                      </div>
+                      <>
+                        <div className="h-px bg-gray-200" />
+                        <div className="text-sm font-bold text-amber-600 uppercase tracking-widest py-2">
+                          ↓ Answer below
+                        </div>
+                        <div className="h-px bg-gray-200" />
+                      </>
                     )}
 
                     {/* Feedback after clicking */}
