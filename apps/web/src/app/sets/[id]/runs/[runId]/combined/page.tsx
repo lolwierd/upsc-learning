@@ -469,7 +469,7 @@ export default function CombinedQuizPage() {
 
           {/* Question Distribution Stats (Learn Mode Only) */}
           {learnMode && questions.some(q => getMetadata(q)?.category) && (
-            <div className="max-h-[25vh] overflow-y-auto">
+            <div>
               <QuizStats questions={questions.map(q => ({ metadata: getMetadata(q) }))} />
             </div>
           )}

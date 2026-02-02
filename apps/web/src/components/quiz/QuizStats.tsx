@@ -28,8 +28,8 @@ export function QuizStats({ questions }: QuizStatsProps) {
 
   const total = questions.length || 1;
   const percentages = {
-    directCA: Math.round((stats.directCA / total) * 100),
-    derivedStatic: Math.round((stats.derivedStatic / total) * 100),
+    directCA: Math.floor((stats.directCA / total) * 100),
+    derivedStatic: Math.floor((stats.derivedStatic / total) * 100),
     pureStatic: Math.round((stats.pureStatic / total) * 100),
   };
 
