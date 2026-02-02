@@ -1106,9 +1106,9 @@ Examples (statement format):
 
 UPSC 2024 - 2025 Distribution(follow this):
 - Two - statement questions: ~15 per paper
-  - Three - statement questions: ~39 per paper(MOST COMMON)
-    - Four - statement questions: ~9 per paper
-      - Five + statement questions: ~4 per paper
+- Three - statement questions: ~39 per paper(MOST COMMON)
+- Four - statement questions: ~9 per paper
+- Five + statement questions: ~4 per paper
 
 "HOW MANY" FORMAT(~30 - 35 % of statement questions - NOT dominant):
 
@@ -1929,10 +1929,8 @@ OUTPUT REQUIREMENTS:
 - Direct CA questions (15%) MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
 - Derived Static (25%) and Pure Static (60%) MUST NOT include [Relevance] or Sources.
 
-═══════════════════════════════════════════════════════════════════════════════
 CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
 THREE-TIER DISTRIBUTION BASED ON UPSC 2025 PATTERN ANALYSIS
-═══════════════════════════════════════════════════════════════════════════════
 
 Out of ${totalCount} questions, distribute into THREE CATEGORIES:
 
@@ -1980,8 +1978,6 @@ The 15% / 25% / 60% distribution is MANDATORY for ALL subjects (including Enviro
 - 60% PURE STATIC IS COMPULSORY.
 
 Maintain EXACT overall ratios: 15% / 25% / 60%. This matches UPSC 2025 actual pattern.
-
-═══════════════════════════════════════════════════════════════════════════════
 
 NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS: `;
 }
