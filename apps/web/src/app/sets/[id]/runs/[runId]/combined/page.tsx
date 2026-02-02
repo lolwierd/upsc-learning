@@ -15,7 +15,22 @@ import {
   submitRunAttempt,
 } from "@/lib/api";
 import { SUBJECT_LABELS } from "@mcqs/shared";
-import type { CombinedQuestion } from "@mcqs/shared";
+import type { CombinedQuestion, QuestionMetadata, QuestionCategory } from "@mcqs/shared";
+import { QuizStats } from "@/components/quiz/QuizStats";
+import { CategoryBadge } from "@/components/quiz/CategoryBadge";
+import { SubjectBadge } from "@/components/quiz/SubjectBadge";
+import { GroundingSourcesList } from "@/components/quiz/GroundingSourcesList";
+
+// Helper to safely get typed metadata from CombinedQuestion
+function getMetadata(question: CombinedQuestion): QuestionMetadata | undefined {
+  const meta = question.metadata;
+  if (!meta) return undefined;
+  // Check if it has the required category field to be considered valid metadata
+  if (typeof meta.category === "string" && typeof meta.subject === "string") {
+    return meta as unknown as QuestionMetadata;
+  }
+  return undefined;
+}
 
 interface Answer {
   questionId: string;
@@ -401,6 +416,13 @@ export default function CombinedQuizPage() {
               )}
             </div>
           </Card>
+
+          {/* Question Distribution Stats (Learn Mode Only) */}
+          {learnMode && questions.some(q => getMetadata(q)?.category) && (
+            <div className="sticky top-96 mt-4">
+              <QuizStats questions={questions.map(q => ({ metadata: getMetadata(q) }))} />
+            </div>
+          )}
         </div>
 
         {/* Questions */}
@@ -421,17 +443,30 @@ export default function CombinedQuizPage() {
                   !learnMode && isMarked && "ring-2 ring-amber-400"
                 )}
               >
-                {/* Subject/Theme Badge */}
-                <div className="mb-3 flex items-center gap-2 flex-wrap">
-                  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
-                    {SUBJECT_LABELS[question.subject as keyof typeof SUBJECT_LABELS]}
-                  </span>
-                  {question.theme && (
-                    <span className="text-xs px-2 py-1 bg-primary-50 text-primary-700 rounded-full">
-                      {question.theme}
-                    </span>
-                  )}
-                </div>
+                {/* Subject/Theme Badge + Category Badges (Learn Mode) */}
+                {(() => {
+                  const meta = getMetadata(question);
+                  return (
+                    <div className="mb-3 flex items-center gap-2 flex-wrap">
+                      {/* Show category badges in learn mode when metadata is available */}
+                      {learnMode && meta?.category ? (
+                        <>
+                          <CategoryBadge category={meta.category} />
+                          {meta.subject && <SubjectBadge subject={meta.subject} />}
+                        </>
+                      ) : (
+                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
+                          {SUBJECT_LABELS[question.subject as keyof typeof SUBJECT_LABELS]}
+                        </span>
+                      )}
+                      {question.theme && (
+                        <span className="text-xs px-2 py-1 bg-primary-50 text-primary-700 rounded-full">
+                          {question.theme}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-start gap-3">
@@ -603,6 +638,29 @@ export default function CombinedQuizPage() {
                         <p className="text-sm text-blue-800 whitespace-pre-wrap">{question.explanation}</p>
                       </div>
                     )}
+
+                    {/* Verified Sources & Derived Topic Info */}
+                    {(() => {
+                      const meta = getMetadata(question);
+                      return (
+                        <>
+                          {/* Verified Sources (parsed from explanation for direct-ca questions) */}
+                          {meta?.category === "direct-ca" && question.explanation && (
+                            <GroundingSourcesList explanation={question.explanation} />
+                          )}
+
+                          {/* Derived From Topic (Derived Static questions only) */}
+                          {meta?.category === "derived-static" && meta.derivedFromTopic && (
+                            <div className="p-2 bg-purple-50 rounded border border-purple-200">
+                              <p className="text-xs text-purple-800">
+                                <span className="font-semibold">📊 Trending Topic:</span>{" "}
+                                {meta.derivedFromTopic}
+                              </p>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 )}
               </Card>

@@ -8,7 +8,11 @@ import { Card, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
 import { SUBJECT_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
-import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
+import type { QuizSetRunWithItems, QuizSetWithSchedule, QuestionMetadata, QuestionCategory } from "@mcqs/shared";
+import { QuizStats } from "@/components/quiz/QuizStats";
+import { CategoryBadge } from "@/components/quiz/CategoryBadge";
+import { SubjectBadge } from "@/components/quiz/SubjectBadge";
+import { GroundingSourcesList } from "@/components/quiz/GroundingSourcesList";
 
 interface LearnModeQuestion {
   id: string;
@@ -17,7 +21,7 @@ interface LearnModeQuestion {
   questionType: string;
   options: string[];
   explanation?: string;
-  metadata?: Record<string, unknown> | null;
+  metadata?: QuestionMetadata | null;
   correctOption?: number;
 }
 
@@ -481,6 +485,13 @@ export default function QuizPage() {
               )}
             </div>
           </Card>
+
+          {/* Question Distribution Stats (Learn Mode Only) */}
+          {quiz.learnMode && quiz.questions.some(q => q.metadata?.category) && (
+            <div className="sticky top-96 mt-4">
+              <QuizStats questions={quiz.questions.map(q => ({ metadata: q.metadata ?? undefined }))} />
+            </div>
+          )}
         </div>
 
         {/* Questions */}
@@ -501,6 +512,16 @@ export default function QuizPage() {
                   !quiz.learnMode && isMarked && "ring-2 ring-amber-400"
                 )}
               >
+                {/* Category and Subject Badges (Learn Mode Only) */}
+                {quiz.learnMode && question.metadata?.category && (
+                  <div className="mb-3 flex items-center gap-2 flex-wrap">
+                    <CategoryBadge category={question.metadata.category as QuestionCategory} />
+                    {question.metadata.subject && (
+                      <SubjectBadge subject={question.metadata.subject} />
+                    )}
+                  </div>
+                )}
+
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center font-medium text-sm">
@@ -681,6 +702,21 @@ export default function QuizPage() {
                       <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm font-medium text-blue-900 mb-1">Explanation</p>
                         <p className="text-sm text-blue-800 whitespace-pre-wrap">{question.explanation}</p>
+                      </div>
+                    )}
+
+                    {/* Verified Sources (parsed from explanation text for direct-ca questions) */}
+                    {question.metadata?.category === "direct-ca" && question.explanation && (
+                      <GroundingSourcesList explanation={question.explanation} />
+                    )}
+
+                    {/* Derived From Topic (Derived Static questions only) */}
+                    {question.metadata?.category === "derived-static" && question.metadata.derivedFromTopic && (
+                      <div className="p-2 bg-purple-50 rounded border border-purple-200">
+                        <p className="text-xs text-purple-800">
+                          <span className="font-semibold">📊 Trending Topic:</span>{" "}
+                          {question.metadata.derivedFromTopic}
+                        </p>
                       </div>
                     )}
                   </div>

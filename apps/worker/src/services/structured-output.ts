@@ -1,6 +1,34 @@
 export const JSON_RESPONSE_MIME_TYPE = "application/json";
 
 const QUESTION_TYPE_ENUM = ["standard", "statement", "match", "assertion"] as const;
+const QUESTION_CATEGORY_ENUM = ["direct-ca", "derived-static", "pure-static"] as const;
+const QUESTION_SUBJECT_ENUM = ["polity", "economy", "environment", "geography", "history", "science", "culture"] as const;
+
+const QUESTION_METADATA_SCHEMA = {
+  type: "OBJECT",
+  description: "Metadata about the question category and subject.",
+  propertyOrdering: ["category", "subject", "derivedFromTopic"],
+  properties: {
+    category: {
+      type: "STRING",
+      format: "enum",
+      enum: QUESTION_CATEGORY_ENUM,
+      description: "Question category: direct-ca (explicit current affairs), derived-static (trending topic, static framing), or pure-static (traditional textbook).",
+    },
+    subject: {
+      type: "STRING",
+      format: "enum",
+      enum: QUESTION_SUBJECT_ENUM,
+      description: "Primary subject being tested.",
+    },
+    derivedFromTopic: {
+      type: "STRING",
+      nullable: true,
+      description: "For derived-static questions only: briefly note the news event that triggered this topic selection.",
+    },
+  },
+  required: ["category", "subject"],
+} as const;
 
 export const GENERATED_QUESTION_SCHEMA = {
   type: "OBJECT",
@@ -11,6 +39,7 @@ export const GENERATED_QUESTION_SCHEMA = {
     "options",
     "correctOption",
     "explanation",
+    "metadata",
   ],
   properties: {
     questionText: {
@@ -38,8 +67,9 @@ export const GENERATED_QUESTION_SCHEMA = {
       type: "STRING",
       description: "Why the correct answer is correct and why the others are wrong.",
     },
+    metadata: QUESTION_METADATA_SCHEMA,
   },
-  required: ["questionText", "questionType", "options", "correctOption", "explanation"],
+  required: ["questionText", "questionType", "options", "correctOption", "explanation", "metadata"],
   additionalProperties: false,
 } as const;
 

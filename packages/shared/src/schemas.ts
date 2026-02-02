@@ -13,6 +13,38 @@ export const attemptStatusSchema = z.enum(["in_progress", "completed"]);
 export const modelProviderSchema = z.enum(["gemini", "openai"]);
 
 // ============================================
+// Question Metadata Schemas
+// ============================================
+
+export const questionCategorySchema = z.enum(['direct-ca', 'derived-static', 'pure-static']);
+export const questionSubjectSchema = z.enum([
+  'polity', 
+  'economy', 
+  'environment', 
+  'geography', 
+  'history', 
+  'science', 
+  'culture'
+]);
+
+export const groundingSourceSchema = z.object({
+  uri: z.string().url(),
+  title: z.string().optional(),
+  domain: z.string().optional(),
+});
+
+export const questionMetadataSchema = z.object({
+  category: questionCategorySchema,
+  subject: questionSubjectSchema,
+  groundingSources: z.array(groundingSourceSchema).optional(),
+  hasGrounding: z.boolean(),
+  hasRelevanceTag: z.boolean(),
+  hasSources: z.boolean(),
+  theme: z.string().optional(),
+  derivedFromTopic: z.string().optional(),
+});
+
+// ============================================
 // Request Schemas
 // ============================================
 
@@ -76,7 +108,7 @@ export const generatedQuestionSchema = z.object({
   options: z.array(z.string()).length(4),
   correctOption: z.number().min(0).max(3),
   explanation: z.string(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: questionMetadataSchema.optional(),
 });
 
 export const quizResponseSchema = z.object({
@@ -100,6 +132,7 @@ export const attemptAnswerWithQuestionSchema = z.object({
   isCorrect: z.boolean().nullable(),
   explanation: z.string().nullable(),
   markedForReview: z.boolean(),
+  metadata: questionMetadataSchema.optional(),
 });
 
 export const attemptResponseSchema = z.object({

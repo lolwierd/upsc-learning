@@ -61,7 +61,7 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, enableCurrentAffairs, currentAffairsTheme } = params;
+  const { theme, styles, totalCount, enableCurrentAffairs: _enableCurrentAffairs, currentAffairsTheme } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
 
   // Build style instructions
@@ -182,19 +182,54 @@ PREDICTION STRATEGY:
   - Scientific missions and achievements
   - Environmental milestones and conventions
 
-TOPIC FRESHNESS DISTRIBUTION:
-- 50% questions on 2025-2026 events (very recent)
-- 30% questions on 2024 events still relevant
-- 20% timeless concepts framed with 2025-2026 hooks
+CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
+- Use 2025-2026 events as the primary source (most recent)
+- Can include significant 2024 events if still relevant
+- MUST use Google Search to verify facts and get sources
 
 USE GOOGLE SEARCH to identify:
-- Trending UPSC-relevant topics
+- Trending UPSC-relevant topics (2025-2026)
 - Recent government announcements (PIB.gov.in)
 - Current international affairs
 - Latest scientific developments
+
+IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
 `}
 
-CURRENT AFFAIRS INTEGRATION (MANDATORY 50-60% of questions)
+CRITICAL CONTENT DISTRIBUTION (MANDATORY - THREE-TIER SYSTEM):
+
+UPSC 2025 Pattern Analysis shows three distinct question types:
+- 15% Direct CA (explicit current events)
+- 25% Derived Static (CA-triggered topics, static framing)
+- 60% Pure Static (traditional textbook)
+
+GENERATE EXACTLY (THREE CATEGORIES):
+
+1. DIRECT CURRENT AFFAIRS (15% - 3 out of 20, 7-8 out of 50):
+   - Question explicitly mentions recent events from 2025-2026
+   - Examples: "In context of Union Budget 2025-26...", "With reference to COP30..."
+   - MUST include [Relevance: ...] tag in explanation
+   - MUST include "Sources: <URL>" with verified links
+   - Test static concepts THROUGH current events
+
+2. DERIVED STATIC (25% - 5 out of 20, 12-13 out of 50):
+   - Topic selected BECAUSE it's in news, but question framed purely from textbooks
+   - NO mention of recent events in question text
+   - NO [Relevance] tag, NO Sources needed
+   - Examples:
+     * News: "Governor delays bill" → Question: "Consider the following about Article 200..."
+     * News: "SEBI warnings on F&O" → Question: "Which of the following about derivatives is correct?"
+     * News: "Heatwave alerts" → Question: "Wet-bulb temperature is associated with..."
+   - The CA connection is invisible to the student - they see a pure static question
+
+3. PURE STATIC (60% - 12 out of 20, 30 out of 50):
+   - Traditional textbook questions with NO current affairs influence
+   - Topics selected from standard UPSC syllabus regardless of news
+   - Geography (rivers, climate), History (dynasties, movements), Core Polity (articles)
+   - Examples: "The Gupta period is known for...", "Western Ghats are characterized by..."
+   - NO phrases like "In context of recent..." or "With reference to 2025..."
+
+DIRECT CA QUESTIONS (15% ONLY):
 
 ${CURRENT_AFFAIRS_CONTEXT}
 
@@ -205,14 +240,23 @@ Prioritize this theme when selecting current affairs topics. Use web search
 to find recent developments (2025+) related to this theme.
 ` : ''}
 
-CRITICAL: For random mode, spread current affairs across subjects
-- Polity: Recent amendments, schemes, judgments
-- Environment: Climate summits, conservation policies
-- Economy: Budget, RBI policies, trade deals
-- Science: Missions, breakthroughs, policy updates
-- Geography: New infrastructure, resource discoveries
-- History: Archaeological finds, heritage additions
-- Culture: UNESCO recognitions, cultural initiatives
+DERIVED STATIC QUESTIONS (25%):
+- Topics trending in news (last 12 months) but framed as pure static questions
+- Use CA to SELECT topic, use NCERT/textbooks to FRAME question
+- NO explicit mention of dates, events, or recent developments
+- Subject-wise examples:
+  * Polity: Governor powers, Anti-Defection Law, Money Bills (when in news)
+  * Economy: MSP, RBI tools, SEBI regulations (when being debated)
+  * Environment: Specific pollutants, Conservation Acts (when in headlines)
+  * Science: Technologies under government missions (Quantum, AI, Space)
+  * Geography: Regions in geopolitical news, Critical minerals
+  * History/Culture: NO derived static (these are always pure static)
+
+For random mode, spread the 15% direct CA across subjects:
+- Polity: Recent amendments, schemes, judgments (explicit reference)
+- Environment: Climate summits, conservation policies (explicit reference)
+- Economy: Budget, RBI policies, trade deals (explicit reference)
+- Science: Missions, breakthroughs, policy updates (explicit reference)
 
 COMBINED KNOWLEDGE BASE (All Subjects)
 
@@ -295,20 +339,67 @@ Generate EXACTLY ${totalCount} questions in valid JSON array format:
     "questionType": "standard|statement|match|assertion",
     "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
     "correctOption": 0,
-    "explanation": "Clear explanation mentioning subject area, static concept, and sources if current affairs..."
+    "explanation": "Clear explanation mentioning subject area, static concept, and sources if current affairs...",
+    "metadata": {
+      "category": "direct-ca|derived-static|pure-static",
+      "subject": "polity|economy|environment|geography|history|science|culture",
+      "derivedFromTopic": "Optional: For derived-static, briefly note the news event that made this topic relevant"
+    }
   },
   ...
 ]
 
+METADATA REQUIREMENTS:
+- category: MUST match the question type (direct-ca has [Relevance], derived-static does not)
+- subject: Primary subject being tested (polity, economy, environment, geography, history, science, culture)
+- derivedFromTopic: ONLY for derived-static questions - briefly note the news event that triggered this topic selection
+
 FINAL CHECKLIST BEFORE GENERATION:
-☑ Subject distribution follows UPSC pattern (not uniform)
-☑ 50-60% questions integrate current affairs (2025+ events)
-☑ High-yield topics prioritized
-☑ Cross-subject linkages included where relevant
-☑ All questions maintain UPSC 2024-2025 standards
-☑ Distractors use subject-specific trap patterns
-☑ ${theme ? 'Theme applied across 60% of questions' : 'Prediction mode focuses on likely 2026 topics'}
-☑ Factual accuracy verified across all subjects
+- Subject distribution follows UPSC pattern (not uniform)
+- EXACTLY 15% Direct CA (with [Relevance] and Sources)
+- EXACTLY 25% Derived Static (CA topics, static framing, NO [Relevance])
+- EXACTLY 60% Pure Static (NO CA influence at all)
+- High-yield topics prioritized
+- Cross-subject linkages included where relevant
+- All questions maintain UPSC 2024-2025 standards
+- Distractors use subject-specific trap patterns
+- ${theme ? 'Theme applied across questions' : 'Prediction mode focuses on likely 2026 topics'}
+- Factual accuracy verified across all subjects
+
+═══════════════════════════════════════════════════════════════════════════════
+CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
+═══════════════════════════════════════════════════════════════════════════════
+
+Out of ${totalCount} questions, distribute into THREE CATEGORIES:
+
+CATEGORY 1: DIRECT CA (15% = ${Math.round(totalCount * 0.15)} questions)
+  - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
+  - MUST include [Relevance: ...] in explanation
+  - MUST include "Sources: <URL>" with verified links from 2025+
+  - Example: "With reference to the Gaganyaan mission's recent progress in 2025, consider the following..."
+
+CATEGORY 2: DERIVED STATIC (25% = ${Math.round(totalCount * 0.25)} questions)
+  - Topic selected because it's trending in news (last 12 months)
+  - Question framed purely from textbook - NO mention of recent events
+  - NO [Relevance] tag, NO Sources needed
+  - Looks identical to pure static question to the student
+  - Example: News triggers "Governor powers" → Question: "Consider the following statements about Article 200:
+    1. The Governor can withhold assent to a bill..."
+    (No mention of recent Governor-state conflicts)
+
+CATEGORY 3: PURE STATIC (60% = ${Math.round(totalCount * 0.6)} questions)
+  - Traditional UPSC syllabus topics regardless of news cycle
+  - NO current affairs influence in topic selection
+  - Geography (physical), History (dynasties, movements), Core Polity
+  - NO [Relevance] tag, NO Sources
+  - Example: "Consider the following rivers: 1. Chambal is a tributary of..."
+
+DO NOT confuse categories. The key distinction:
+- Direct CA: Event VISIBLE in question text
+- Derived Static: Event influenced topic choice, but INVISIBLE in question
+- Pure Static: Topic chosen from syllabus, NO event influence
+
+Maintain EXACT ratios: 15% / 25% / 60%. This is non-negotiable.
 
 NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
 `;
@@ -319,9 +410,15 @@ NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
 // CURRENT AFFAIRS INTEGRATION CONTEXT
 // ============================================================================
 const CURRENT_AFFAIRS_CONTEXT = `
-CURRENT AFFAIRS INTEGRATION (ENABLED):
+CURRENT AFFAIRS GUIDELINES (TWO USAGE MODES):
 
-You have access to Google Search for retrieving recent information. Use this to:
+IMPORTANT: Current affairs influence questions in TWO ways:
+1. DIRECT CA (15%): Explicit mention of recent events with [Relevance] + Sources
+2. DERIVED STATIC (25%): Use CA to pick topic, but frame purely from textbooks (NO [Relevance])
+
+You have access to Google Search for retrieving recent information.
+
+FOR DIRECT CA QUESTIONS (15% only):
 
 1. INTEGRATE RECENT EVENTS as TRIGGERS for static concepts:
    - "In context of India's recent diplomatic engagements in 2025..." → Test foreign policy concepts
@@ -329,18 +426,18 @@ You have access to Google Search for retrieving recent information. Use this to:
    - "Considering the Union Budget 2025-26..." → Test fiscal policy concepts
 
 2. TIME FRAME for current affairs (STRICT):
-   - STRICTLY PRIORITY events from JANUARY 2025 TO PRESENT (2026).
-   - DO NOT USE 2023 or 2024 news sources. They are considered stale for UPSC 2026.
-   - Focus on the 18 months leading up to the May 2026 exam.
-   - Reference official sources (PIB, government websites, official reports) dated 2025+.
+   - Events from JANUARY 2025 TO PRESENT (Feb 2026)
+   - Prefer 2025-2026 sources over older sources
+   - Focus on the 18 months leading up to the May 2026 exam
+   - Reference official sources (PIB, government websites, official reports) dated 2025+
 
 3. QUESTION DESIGN with current affairs:
    - Current event as TRIGGER, static syllabus as ANSWER
    - Don't test obscure news details - test concepts triggered by news
-   - Aim for ~40% of questions anchored to a verifiable recent event, for such questions add a "Relevance" note in explanation.
+   - These questions must add a [Relevance] note in explanation
 
 4. HIGH-VALUE CURRENT AFFAIRS TOPICS (2025-2026 Focus):
-   - International summits and India's evolving role
+   - International summits and India's role
    - New government schemes launched in 2025/2026
    - Recent Constitutional amendments and bills
    - Supreme Court judgments from 2025 onwards
@@ -348,22 +445,29 @@ You have access to Google Search for retrieving recent information. Use this to:
    - Recent environmental conventions (COP30 etc.)
    - Economic surveys and budget analyses of 2025-26
 
-5. EXPLANATION ENHANCEMENT (for current-affairs questions only):
-   For each current-affairs question, in the explanation add:
-   - RELEVANCE: How this relates to recent events/developments (MUST BE 2025+)
-   - STATIC LINK: The underlying concept from the UPSC syllabus
-   - Append a final bracketed line exactly like:
-     [Relevance: <event + month/year + source type>]
-   - Include a SOURCES line with at least one full URL from web search, e.g.:
-     Sources: https://pib.gov.in/... ; https://example.gov.in/...
+5. EXPLANATION FORMAT (for current-affairs questions ONLY):
+   - RELEVANCE: How this relates to recent events (MUST BE 2025+)
+   - STATIC LINK: The underlying concept from UPSC syllabus
+   - Append: [Relevance: <event + month/year + source type>]
+   - Include: Sources: https://pib.gov.in/... ; https://example.gov.in/...
 
-MANDATORY WEB SEARCH USAGE (for current-affairs questions only):
-- You MUST use Google Search for current affairs questions.
-- You MUST filter search results to prioritize 2025 and 2026 dates.
-- Do NOT answer from memory when using current affairs.
-- Each current-affairs question must cite at least one URL in the explanation.
+MANDATORY WEB SEARCH (for Direct CA only):
+- MUST use Google Search for the 15% Direct CA questions
+- Filter search results to prioritize 2025 and 2026 dates
+- Each Direct CA question must cite at least one URL
 
-REMEMBER: Current affairs provide CONTEXT, but the core test should be of static concepts.
+FOR DERIVED STATIC QUESTIONS (25%):
+- Use web search or memory to identify trending topics from past 12 months
+- Examples: Governor-state conflicts, SEBI regulatory debates, Heatwave discussions
+- Frame question purely from textbook/NCERT as if the topic is timeless
+- NO mention of the triggering event in question text
+- NO [Relevance] tag, NO Sources
+- Student should NOT know this was CA-influenced
+
+CRITICAL REMINDER:
+- 15% Direct CA (event visible, [Relevance] + Sources)
+- 25% Derived Static (event invisible, pure textbook framing)
+- 60% Pure Static (no CA influence)
 `;
 
 const CURRENT_AFFAIRS_THEME_CONTEXT = (theme: string) => `
@@ -821,32 +925,53 @@ UPSC EVOLUTION INSIGHT:
 `;
 
 const CONTENT_BALANCE_RATIO = `
-CONTENT BALANCE: 60% STATIC + 40% DYNAMIC (Aspirational Target)
+CONTENT BALANCE: THREE-TIER SYSTEM (MATCHES UPSC 2025 PATTERN)
 
-~60% STATIC CONCEPTS (with modern framing):
-- Constitutional provisions, fundamental geography, ecological principles
-- Historical facts, scientific concepts, cultural heritage
-- BUT: Frame with sophisticated 2024-style question structures
-- NOT: Pure recall like "In which year was X established?"
+15% DIRECT CA + 25% DERIVED STATIC + 60% PURE STATIC
 
-~40% DYNAMIC LINKAGE (current affairs triggered):
-- Static concepts triggered by recent developments (last 18 months)
-- Policy changes, recent amendments, new schemes, international developments
+1. DIRECT CA (15%):
+   - Explicit mention of recent events (2025-2026)
+   - MUST include [Relevance: ...] and Sources in explanation
+   - Example: "With reference to India's inclusion in the JP Morgan Bond Index in 2025..."
 
-FRAMING EXAMPLES:
+2. DERIVED STATIC (25%):
+   - Topic selected because it's trending in news, but question is pure textbook
+   - NO mention of recent events, NO [Relevance], NO Sources
+   - The CA influence is invisible to the student
+   - Example: News about SEBI F&O warnings → Question: "Which of the following statements
+     about derivatives is correct? 1. Options give the right but not obligation..."
+     (No mention of SEBI or recent warnings)
 
-OUTDATED (2015-style pure static):
-"What are the features of Panchayati Raj?"
+3. PURE STATIC (60%):
+   - Traditional syllabus topics regardless of news cycle
+   - Core Geography, History, foundational Polity/Economy concepts
+   - Example: "Consider the following rivers: 1. Chambal is a tributary of Yamuna..."
 
-- MODERN (2024-style dynamic trigger):
-"In the context of the 30th anniversary of the 73rd Constitutional Amendment (2023)..."
+CRITICAL EXAMPLES SHOWING THE DIFFERENCE:
 
-OUTDATED (2013-style deep static):
-"Which of the following rivers originates from the Amarkantak plateau?"
+PURE STATIC (60% category):
+"Consider the following statements regarding Article 356:
+1. It can be imposed only on the recommendation of the Governor.
+2. A proclamation must be approved by both Houses of Parliament.
+Which of the statements given above is/are correct?"
+[No CA influence - core constitutional topic]
 
-- MODERN (2024-style application):
-"Consider the following rivers and their characteristics in context of 
-recent inter-state water disputes..."
+DERIVED STATIC (25% category):
+"Consider the following statements regarding the Governor's powers:
+1. The Governor can reserve a bill for the President's consideration.
+2. There is a time limit within which the Governor must give assent to a bill.
+Which of the statements given above is/are correct?"
+[Same topic as above, but selected BECAUSE of recent Governor-state conflicts in news.
+Question itself has NO mention of these conflicts - appears identical to pure static]
+
+DIRECT CA (15% category):
+"In the context of recent debates on the role of Governors in state legislation in 2025,
+consider the following statements regarding Article 200:
+1. The Governor can withhold assent to a bill indefinitely.
+2. If the Governor reserves a bill for the President, the state legislature cannot override it.
+Which of the statements given above is/are correct?"
+[Explicitly mentions recent events, explanation will have [Relevance: Governor-state conflicts in
+Tamil Nadu/Kerala, 2025] and Sources: https://thehindu.com/...]
 `;
 
 const RELEVANCE_FILTER = `
@@ -1801,8 +1926,64 @@ OUTPUT REQUIREMENTS:
 - options must have exactly four items labeled "A) ", "B) ", "C) ", "D) ".
 - correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
 - Explanation must be educational and cite sources where applicable.
-- If current affairs is enabled, append "Sources: <URL>" with at least one full http(s) URL.
+- Direct CA questions (15%) MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
+- Derived Static (25%) and Pure Static (60%) MUST NOT include [Relevance] or Sources.
 
+═══════════════════════════════════════════════════════════════════════════════
+CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
+THREE-TIER DISTRIBUTION BASED ON UPSC 2025 PATTERN ANALYSIS
+═══════════════════════════════════════════════════════════════════════════════
 
-NOW GENERATE ${totalCount} HIGH - QUALITY UPSC MCQ QUESTIONS: `;
+Out of ${totalCount} questions, distribute into THREE CATEGORIES:
+
+CATEGORY 1: DIRECT CA (15% = ${Math.round(totalCount * 0.15)} questions)
+  - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
+  - MUST include [Relevance: ...] in explanation
+  - MUST include "Sources: <URL>" with verified links from 2025+
+  - Test static concepts THROUGH current events
+  - Example: "With reference to the Union Budget 2025-26's focus on green energy, consider the
+    following statements about Green Hydrogen..."
+
+CATEGORY 2: DERIVED STATIC (25% = ${Math.round(totalCount * 0.25)} questions)
+  - Topic selected because it's trending in news (last 12 months)
+  - Question framed purely from textbook - NO mention of recent events in question text
+  - NO [Relevance] tag, NO Sources needed in explanation
+  - Looks identical to pure static question to the student
+  - Examples by subject:
+    * Polity: Article 200, Anti-Defection, Money Bills (if in news)
+    * Economy: MSP, RBI tools, SEBI regulations (if being debated)
+    * Environment: Specific pollutants, Acts (if in headlines)
+    * Science: Technologies under govt missions (Quantum, AI, EVs)
+  - Example: "Consider the following statements regarding the Governor's powers under Article 200:
+    1. The Governor can withhold assent to a bill..."
+    (Selected because Governor-state conflicts were in news, but question is pure constitutional theory)
+
+CATEGORY 3: PURE STATIC (60% = ${Math.round(totalCount * 0.6)} questions)
+  - Traditional UPSC syllabus topics regardless of news cycle
+  - NO current affairs influence in topic selection
+  - Core subjects: Geography (rivers, climate), History (dynasties, movements, culture)
+  - Foundational Polity/Economy concepts that are always relevant
+  - NO [Relevance] tag, NO Sources needed
+  - Example: "Consider the following pairs of rivers and their tributaries:
+    1. Yamuna - Chambal
+    2. Ganga - Ghaghra..."
+
+KEY DISTINCTION (CRITICAL TO UNDERSTAND):
+- Direct CA: Recent event is VISIBLE in question text ("In context of...", "With reference to...")
+- Derived Static: Recent event influenced topic selection but is INVISIBLE in question
+- Pure Static: No current affairs influence at all
+
+SUBJECT-WISE GUIDANCE:
+- History/Culture: 0% Direct CA, 0% Derived Static, 100% Pure Static
+- Geography: 0% Direct CA, ~10% Derived Static (resources/conflicts), 90% Pure Static
+- Polity: ~20% Direct CA, ~35% Derived Static, ~45% Pure Static
+- Economy: ~20% Direct CA, ~30% Derived Static, ~50% Pure Static
+- Environment: ~20% Direct CA, ~40% Derived Static, ~40% Pure Static
+- Science: ~15% Direct CA, ~35% Derived Static, ~50% Pure Static
+
+Maintain EXACT overall ratios: 15% / 25% / 60%. This matches UPSC 2025 actual pattern.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS: `;
 }

@@ -79,9 +79,12 @@ export default function Home() {
     loadData();
   }, [router]);
 
-  // Show only first 4 quizzes in grid
-  const displayedQuizzes = recentQuizzes.slice(0, 4);
-  const hasMoreQuizzes = recentQuizzes.length > 4;
+  // Show only first 4 quizzes in grid (dedupe by ID to avoid key collisions)
+  const uniqueQuizzes = recentQuizzes.filter(
+    (quiz, index, self) => index === self.findIndex(q => q.id === quiz.id)
+  );
+  const displayedQuizzes = uniqueQuizzes.slice(0, 4);
+  const hasMoreQuizzes = uniqueQuizzes.length > 4;
 
   // Show only first 3 quiz sets
   const displayedSets = quizSets.slice(0, 3);

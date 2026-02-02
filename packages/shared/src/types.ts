@@ -53,7 +53,39 @@ export interface GeneratedQuestion {
   options: string[];
   correctOption: number;
   explanation: string;
-  metadata?: Record<string, unknown>;
+  metadata?: QuestionMetadata;
+}
+
+// ============================================
+// Question Metadata Types
+// ============================================
+
+export type QuestionCategory = 'direct-ca' | 'derived-static' | 'pure-static';
+
+export type QuestionSubject = 
+  | 'polity' 
+  | 'economy' 
+  | 'environment' 
+  | 'geography' 
+  | 'history' 
+  | 'science' 
+  | 'culture';
+
+export interface GroundingSource {
+  uri: string;
+  title?: string;
+  domain?: string;
+}
+
+export interface QuestionMetadata {
+  category: QuestionCategory;
+  subject: QuestionSubject;
+  groundingSources?: GroundingSource[];
+  hasGrounding: boolean;
+  hasRelevanceTag: boolean;
+  hasSources: boolean;
+  theme?: string;
+  derivedFromTopic?: string;
 }
 
 // ============================================
@@ -112,6 +144,7 @@ export interface AttemptAnswerWithQuestion extends AttemptAnswer {
   correctOption: number | null; // null until submitted
   explanation: string | null; // null until submitted
   sequenceNumber: number;
+  metadata?: QuestionMetadata;
 }
 
 export interface AttemptWithAnswers extends Attempt {

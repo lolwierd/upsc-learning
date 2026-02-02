@@ -14,6 +14,10 @@ import {
 import { dumpLlmCall, serializeError } from "./llm-dump.js";
 import { GENERATED_QUESTION_ARRAY_SCHEMA } from "./structured-output.js";
 import { generateVertexStructuredContent } from "./vertex-structured.js";
+import {
+  enrichQuestionsWithGrounding,
+  type GeminiGroundingMetadata,
+} from "./grounding.js";
 
 // ============================================================================
 // RETRY CONFIGURATION
@@ -247,6 +251,7 @@ async function generateQuizCall(
   rawResponse: string;
   fullPrompt: string; // Combined system + user prompt
   groundingSourceCount?: number;
+  groundingMetadata?: GeminiGroundingMetadata;
 }> {
   const {
     subject,
@@ -365,6 +370,7 @@ Generate exactly ${count} questions now.`;
   let responseChars = 0;
   let groundingSourceCount = 0;
   let groundingSources: Array<{ uri?: string; title?: string }> = [];
+  let groundingMetadata: GeminiGroundingMetadata | undefined;
 
   try {
     console.log(`[Call ${callIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with NATIVE grounding)" : ""}...`);
@@ -394,7 +400,8 @@ Generate exactly ${count} questions now.`;
 
     if (enableCurrentAffairs) {
       console.log(`[Call ${callIndex}] Using Vertex AI with Google Search grounding...`);
-      const groundingChunks = vertexResult.groundingMetadata?.groundingChunks;
+      groundingMetadata = vertexResult.groundingMetadata as GeminiGroundingMetadata | undefined;
+      const groundingChunks = groundingMetadata?.groundingChunks;
       if (Array.isArray(groundingChunks)) {
         groundingSources = groundingChunks
           .map((chunk) => ({
@@ -405,7 +412,7 @@ Generate exactly ${count} questions now.`;
         groundingSourceCount = groundingChunks.length;
         console.log(`[Call ${callIndex}] Grounding used ${groundingSourceCount} sources`);
 
-        const searchQueries = vertexResult.groundingMetadata?.webSearchQueries;
+        const searchQueries = groundingMetadata?.webSearchQueries;
         if (searchQueries?.length) {
           console.log(`[Call ${callIndex}] Search queries: ${searchQueries.join(", ")}`);
         }
@@ -488,6 +495,7 @@ Generate exactly ${count} questions now.`;
     rawResponse: text,
     fullPrompt,
     groundingSourceCount,
+    groundingMetadata,
   };
 }
 
@@ -849,6 +857,15 @@ export async function generateQuiz(
         console.error("Fact check retry failed:", error);
       }
     }
+  }
+
+  // Enrich questions with grounding metadata
+  if (groundingEnabled && finalQuestions.length > 0) {
+    finalQuestions = enrichQuestionsWithGrounding(
+      finalQuestions,
+      singleResult.groundingMetadata
+    );
+    console.log(`Enriched ${finalQuestions.length} questions with grounding metadata`);
   }
 
   // Save fingerprints

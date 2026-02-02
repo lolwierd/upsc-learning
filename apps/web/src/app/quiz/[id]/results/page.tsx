@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { getAttempt, getQuizSet, getQuizSetRun } from "@/lib/api";
 import type { AttemptWithAnswers, QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
 import { SUBJECT_LABELS } from "@mcqs/shared";
+import { CategoryBadge, QuizStats, GroundingSourcesList } from "@/components/quiz";
 
 type FilterType = "all" | "wrong" | "marked";
 
@@ -172,8 +173,11 @@ export default function ResultsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Quiz Stats */}
+      <QuizStats questions={attempt.answers} />
+
       {/* Score Summary */}
-      <Card className="mb-6">
+      <Card className="mb-6 mt-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Quiz Complete!</h1>
           <p className="text-gray-500 mb-6">
@@ -293,6 +297,11 @@ export default function ResultsPage() {
                   {answer.sequenceNumber}
                 </span>
                 <div className="flex-1">
+                  {answer.metadata?.category && (
+                    <div className="mb-2">
+                      <CategoryBadge category={answer.metadata.category} />
+                    </div>
+                  )}
                   <p className="text-gray-900 whitespace-pre-wrap">
                     {answer.questionText}
                   </p>
@@ -379,9 +388,23 @@ export default function ResultsPage() {
                   <p className="text-sm font-medium text-blue-800 mb-1">
                     Explanation
                   </p>
-                    <p className="text-sm text-blue-700 whitespace-pre-wrap">
-                      {answer.explanation}
-                    </p>
+                  <p className="text-sm text-blue-700 whitespace-pre-wrap">
+                    {answer.explanation}
+                  </p>
+                  
+                  {/* Grounding Sources for Current Affairs questions */}
+                  {answer.metadata?.groundingSources && answer.metadata.groundingSources.length > 0 && (
+                    <GroundingSourcesList sources={answer.metadata.groundingSources} />
+                  )}
+                  
+                  {/* Derived From Topic for trending topics */}
+                  {answer.metadata?.derivedFromTopic && (
+                    <div className="mt-2 p-2 bg-purple-50 rounded border border-purple-200">
+                      <p className="text-xs text-purple-800">
+                        📊 <span className="font-medium">Trending Topic:</span> {answer.metadata.derivedFromTopic}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </Card>

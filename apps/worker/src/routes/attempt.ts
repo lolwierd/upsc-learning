@@ -43,6 +43,7 @@ type AnswerRow = {
   question_type: string;
   options: string;
   sequence_number: number;
+  metadata: string | null;
 };
 
 const startAttemptSchema = z.object({
@@ -296,7 +297,7 @@ attempt.get("/:id", async (c) => {
 
   // Get answers with question details
   const answers = await c.env.DB.prepare(
-    `SELECT aa.*, q.question_text, q.question_type, q.options, q.correct_option, q.explanation, q.sequence_number
+    `SELECT aa.*, q.question_text, q.question_type, q.options, q.correct_option, q.explanation, q.sequence_number, q.metadata
      FROM attempt_answers aa
      JOIN questions q ON aa.question_id = q.id
      WHERE aa.attempt_id = ?
@@ -316,6 +317,7 @@ attempt.get("/:id", async (c) => {
     isCorrect: a.is_correct === 1 ? true : a.is_correct === 0 ? false : null,
     explanation: attemptRecord.status === "completed" ? a.explanation : null,
     markedForReview: a.marked_for_review === 1,
+    metadata: a.metadata ? JSON.parse(a.metadata) : undefined,
   }));
 
   return c.json({
