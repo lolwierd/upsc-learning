@@ -27,10 +27,17 @@ export function QuizStats({ questions }: QuizStatsProps) {
   }
 
   const total = questions.length || 1;
+  const directCAPercent = Math.floor((stats.directCA / total) * 100);
+  const derivedStaticPercent = Math.floor((stats.derivedStatic / total) * 100);
+
+  // Assign remainder to pureStatic to ensure 100% total (unless there are no static questions)
+  const pureStaticPercent =
+    stats.pureStatic > 0 ? 100 - directCAPercent - derivedStaticPercent : 0;
+
   const percentages = {
-    directCA: Math.floor((stats.directCA / total) * 100),
-    derivedStatic: Math.floor((stats.derivedStatic / total) * 100),
-    pureStatic: Math.round((stats.pureStatic / total) * 100),
+    directCA: directCAPercent,
+    derivedStatic: derivedStaticPercent,
+    pureStatic: pureStaticPercent,
   };
 
   return (

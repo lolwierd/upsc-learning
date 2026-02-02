@@ -1973,13 +1973,11 @@ KEY DISTINCTION (CRITICAL TO UNDERSTAND):
 - Derived Static: Recent event influenced topic selection but is INVISIBLE in question
 - Pure Static: No current affairs influence at all
 
-SUBJECT-WISE GUIDANCE:
-- History/Culture: 0% Direct CA, 0% Derived Static, 100% Pure Static
-- Geography: 0% Direct CA, ~10% Derived Static (resources/conflicts), 90% Pure Static
-- Polity: ~20% Direct CA, ~35% Derived Static, ~45% Pure Static
-- Economy: ~20% Direct CA, ~30% Derived Static, ~50% Pure Static
-- Environment: ~20% Direct CA, ~40% Derived Static, ~40% Pure Static
-- Science: ~15% Direct CA, ~35% Derived Static, ~50% Pure Static
+CRITICAL OVERRIDE FOR ALL SUBJECTS:
+The 15% / 25% / 60% distribution is MANDATORY for ALL subjects (including Environment, Science, Economy, etc.).
+- Even for dynamic subjects like Environment or Science, you MUST ensure 60% of questions are PURE STATIC (textbook/theory based).
+- Do NOT increase the CA or Derived portions beyond the specified limits.
+- 60% PURE STATIC IS COMPULSORY.
 
 Maintain EXACT overall ratios: 15% / 25% / 60%. This matches UPSC 2025 actual pattern.
 
@@ -1987,3 +1985,10 @@ Maintain EXACT overall ratios: 15% / 25% / 60%. This matches UPSC 2025 actual pa
 
 NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS: `;
 }
+// SUBJECT-WISE GUIDANCE:
+// - History/Culture: 0% Direct CA, 0% Derived Static, 100% Pure Static
+// - Geography: 0% Direct CA, ~10% Derived Static (resources/conflicts), 90% Pure Static
+// - Polity: ~20% Direct CA, ~35% Derived Static, ~45% Pure Static
+// - Economy: ~20% Direct CA, ~30% Derived Static, ~50% Pure Static
+// - Environment: ~20% Direct CA, ~40% Derived Static, ~40% Pure Static
+// - Science: ~15% Direct CA, ~35% Derived Static, ~50% Pure Static
