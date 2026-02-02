@@ -416,8 +416,8 @@ export default function QuizPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Question Navigation (Desktop) */}
-        <div className="hidden lg:block">
-          <Card className="sticky top-24">
+        <div className="hidden lg:block sticky top-24 h-fit space-y-4">
+          <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2">
               {quiz.questions.map((q, i) => {
@@ -488,9 +488,7 @@ export default function QuizPage() {
 
           {/* Question Distribution Stats (Learn Mode Only) */}
           {quiz.learnMode && quiz.questions.some(q => q.metadata?.category) && (
-            <div className="sticky top-96 mt-4">
-              <QuizStats questions={quiz.questions.map(q => ({ metadata: q.metadata ?? undefined }))} />
-            </div>
+            <QuizStats questions={quiz.questions.map(q => ({ metadata: q.metadata ?? undefined }))} />
           )}
         </div>
 

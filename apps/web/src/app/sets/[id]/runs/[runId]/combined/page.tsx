@@ -349,8 +349,8 @@ export default function CombinedQuizPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Question Navigation (Desktop) */}
-        <div className="hidden lg:block">
-          <Card className="sticky top-36">
+        <div className="hidden lg:block sticky top-36 h-fit space-y-4">
+          <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2 max-h-[60vh] overflow-y-auto">
               {questions.map((q, i) => {
@@ -419,9 +419,7 @@ export default function CombinedQuizPage() {
 
           {/* Question Distribution Stats (Learn Mode Only) */}
           {learnMode && questions.some(q => getMetadata(q)?.category) && (
-            <div className="sticky top-96 mt-4">
-              <QuizStats questions={questions.map(q => ({ metadata: getMetadata(q) }))} />
-            </div>
+            <QuizStats questions={questions.map(q => ({ metadata: getMetadata(q) }))} />
           )}
         </div>
 
