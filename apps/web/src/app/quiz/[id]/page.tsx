@@ -460,7 +460,7 @@ export default function QuizPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Question Navigation (Desktop) */}
-        <div className="hidden lg:block sticky top-24 h-fit space-y-4">
+        <div className="hidden lg:block sticky top-40 h-fit space-y-4">
           <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2">
@@ -551,7 +551,7 @@ export default function QuizPage() {
                 id={`question-${i}`}
                 data-question-id={question.id}
                 className={cn(
-                  "scroll-mt-24",
+                  "scroll-mt-40",
                   !quiz.learnMode && isMarked && "ring-2 ring-amber-400"
                 )}
               >

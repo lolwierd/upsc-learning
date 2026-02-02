@@ -338,8 +338,8 @@ export default function CombinedQuizPage() {
 
   return (
     <>
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+      {/* Sticky Header - positioned below the global header */}
+      <div className="sticky top-16 z-10 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
@@ -399,7 +399,7 @@ export default function CombinedQuizPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Question Navigation (Desktop) */}
-        <div className="hidden lg:block sticky top-36 h-fit space-y-4">
+        <div className="hidden lg:block sticky top-52 h-fit space-y-4">
           <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2 max-h-[60vh] overflow-y-auto">
@@ -488,7 +488,7 @@ export default function CombinedQuizPage() {
                 id={`question-${i}`}
                 data-question-id={question.id}
                 className={cn(
-                  "scroll-mt-36",
+                  "scroll-mt-52",
                   !learnMode && isMarked && "ring-2 ring-amber-400"
                 )}
               >
