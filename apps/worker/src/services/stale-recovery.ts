@@ -6,6 +6,7 @@
  */
 
 import type { Env } from "../types.js";
+import { resumeQuizSetRun } from "./quiz-set-generator.js";
 
 const STALE_THRESHOLD_MINUTES = 10; // Consider "generating" status stale after 10 minutes
 
@@ -63,54 +64,45 @@ export async function recoverStaleQuizzes(env: Env): Promise<{ recovered: number
 }
 
 /**
- * Recover stale quiz set runs that were left in "running" status
+ * Resume quiz set runs that were interrupted by a restart/crash.
+ *
+ * The Node server uses in-process background tasks (setImmediate). If the process
+ * restarts mid-run, the DB status can remain `running` forever unless we resume.
  */
-export async function recoverStaleRuns(env: Env): Promise<{ recovered: number }> {
-    const threshold = Math.floor(Date.now() / 1000) - (STALE_THRESHOLD_MINUTES * 60);
-
+export async function resumeInterruptedRuns(env: Env): Promise<{ resumed: number }> {
     try {
-        // Find stale runs
-        const result = await env.DB.prepare(
-            `SELECT id, quiz_set_id, started_at FROM quiz_set_runs 
-       WHERE status = 'running' AND started_at < ?`
+        const runsResult = await env.DB.prepare(
+            `SELECT id, quiz_set_id, started_at FROM quiz_set_runs WHERE status = 'running'`
         )
-            .bind(threshold)
+            .bind()
             .all<StaleRun>();
 
-        const staleRuns = result.results || [];
+        const runningRuns = runsResult.results || [];
 
-        if (staleRuns.length === 0) {
-            return { recovered: 0 };
+        if (runningRuns.length === 0) {
+            return { resumed: 0 };
         }
 
-        console.log(`[Stale Recovery] Found ${staleRuns.length} stale quiz set runs`);
+        console.log(`[Stale Recovery] Found ${runningRuns.length} running quiz set run(s) to resume`);
 
-        const now = Math.floor(Date.now() / 1000);
-
-        // Mark them as failed
-        for (const run of staleRuns) {
+        for (const run of runningRuns) {
+            // Reset any in-flight items so the resumed worker can pick them up immediately.
+            // This is safe for our production deployment model (single Node worker process).
             await env.DB.prepare(
-                `UPDATE quiz_set_runs SET status = 'failed', completed_at = ? WHERE id = ?`
+                `UPDATE quiz_set_run_items
+         SET status = 'pending', started_at = NULL
+         WHERE run_id = ? AND status = 'generating'`
             )
-                .bind(now, run.id)
+                .bind(run.id)
                 .run();
 
-            // Also mark pending/generating run items as failed
-            await env.DB.prepare(
-                `UPDATE quiz_set_run_items 
-         SET status = 'failed', error = 'Worker restarted during generation', completed_at = ?
-         WHERE run_id = ? AND status IN ('pending', 'generating')`
-            )
-                .bind(now, run.id)
-                .run();
-
-            console.log(`[Stale Recovery] Marked run ${run.id} as failed`);
+            await resumeQuizSetRun(env, run.id);
         }
 
-        return { recovered: staleRuns.length };
+        return { resumed: runningRuns.length };
     } catch (error) {
-        console.error('[Stale Recovery] Failed to recover stale runs:', error);
-        return { recovered: 0 };
+        console.error('[Stale Recovery] Failed to resume interrupted runs:', error);
+        return { resumed: 0 };
     }
 }
 
@@ -123,12 +115,12 @@ export async function runStaleRecovery(env: Env): Promise<void> {
 
     const [quizResult, runResult] = await Promise.all([
         recoverStaleQuizzes(env),
-        recoverStaleRuns(env),
+        resumeInterruptedRuns(env),
     ]);
 
-    if (quizResult.recovered > 0 || runResult.recovered > 0) {
+    if (quizResult.recovered > 0 || runResult.resumed > 0) {
         console.log(
-            `[Stale Recovery] Recovered ${quizResult.recovered} quizzes and ${runResult.recovered} runs`
+            `[Stale Recovery] Recovered ${quizResult.recovered} quizzes and resumed ${runResult.resumed} run(s)`
         );
     } else {
         console.log('[Stale Recovery] No stale items found');
