@@ -65,6 +65,33 @@ export default function QuizPage() {
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
   const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
+  const [studiedQuestions, setStudiedQuestions] = useState<Set<string>>(new Set());
+
+  // Track when questions are 50% out of view
+  useEffect(() => {
+    if (!quiz?.learnMode) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const questionId = entry.target.getAttribute("data-question-id");
+          if (!questionId) continue;
+
+          // Mark as studied when less than 50% visible (scrolled out)
+          if (entry.intersectionRatio < 0.5 && entry.isIntersecting === false) {
+            setStudiedQuestions((prev) => new Set(prev).add(questionId));
+          }
+        }
+      },
+      { threshold: [0.5] }
+    );
+
+    // Observe all question cards
+    const questionCards = document.querySelectorAll("[data-question-id]");
+    questionCards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [quiz?.questions.length, quiz?.learnMode]);
 
   const formatCopyText = (question: LearnModeQuestion, index: number) => {
     const optionLines = question.options.map((option, optIndex) => {
@@ -192,6 +219,8 @@ export default function QuizPage() {
         };
         setAnswers((prev) => new Map(prev).set(questionId, newAnswer));
         setRevealedQuestions((prev) => new Set(prev).add(questionId));
+        // Mark as studied when option is clicked
+        setStudiedQuestions((prev) => new Set(prev).add(questionId));
         return;
       }
 
@@ -505,6 +534,7 @@ export default function QuizPage() {
               <Card
                 key={question.id}
                 id={`question-${i}`}
+                data-question-id={question.id}
                 className={cn(
                   "scroll-mt-24",
                   !quiz.learnMode && isMarked && "ring-2 ring-amber-400"

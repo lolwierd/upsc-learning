@@ -56,6 +56,33 @@ export default function CombinedQuizPage() {
   const [showAnswers, setShowAnswers] = useState(true);
   const [copiedQuestionId, setCopiedQuestionId] = useState<string | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [studiedQuestions, setStudiedQuestions] = useState<Set<string>>(new Set());
+
+  // Track when questions are 50% out of view
+  useEffect(() => {
+    if (!learnMode) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const questionId = entry.target.getAttribute("data-question-id");
+          if (!questionId) continue;
+
+          // Mark as studied when less than 50% visible (scrolled out)
+          if (entry.intersectionRatio < 0.5 && entry.isIntersecting === false) {
+            setStudiedQuestions((prev) => new Set(prev).add(questionId));
+          }
+        }
+      },
+      { threshold: [0.5] }
+    );
+
+    // Observe all question cards
+    const questionCards = document.querySelectorAll("[data-question-id]");
+    questionCards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [questions.length, learnMode]);
 
   // Load attempt on mount
   useEffect(() => {
@@ -147,6 +174,8 @@ export default function CombinedQuizPage() {
         };
         setAnswers((prev) => new Map(prev).set(questionId, newAnswer));
         setRevealedQuestions((prev) => new Set(prev).add(questionId));
+        // Mark as studied when option is clicked
+        setStudiedQuestions((prev) => new Set(prev).add(questionId));
         return;
       }
 
@@ -287,6 +316,8 @@ export default function CombinedQuizPage() {
   const markedCount = Array.from(answers.values()).filter(
     (a) => a.markedForReview
   ).length;
+  // In learn mode, show studied count; otherwise show answered count
+  const progressCount = learnMode ? studiedQuestions.size : answeredCount;
   const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
@@ -325,7 +356,7 @@ export default function CombinedQuizPage() {
               </span>
             )}
             <span className="text-gray-600">
-              {answeredCount}/{questions.length} {learnMode ? "studied" : "answered"}
+              {progressCount}/{questions.length} {learnMode ? "studied" : "answered"}
             </span>
             {!learnMode && markedCount > 0 && (
               <span className="text-amber-600">{markedCount} marked</span>
@@ -342,7 +373,7 @@ export default function CombinedQuizPage() {
         <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary-500 transition-all duration-300"
-            style={{ width: `${(answeredCount / questions.length) * 100}%` }}
+            style={{ width: `${(progressCount / questions.length) * 100}%` }}
           />
         </div>
       </div>
@@ -436,6 +467,7 @@ export default function CombinedQuizPage() {
               <Card
                 key={question.id}
                 id={`question-${i}`}
+                data-question-id={question.id}
                 className={cn(
                   "scroll-mt-36",
                   !learnMode && isMarked && "ring-2 ring-amber-400"
@@ -668,7 +700,7 @@ export default function CombinedQuizPage() {
           {/* Submit Button / Learn Mode Actions */}
           <Card className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {answeredCount}/{questions.length} questions {learnMode ? "studied" : "answered"}
+              {progressCount}/{questions.length} questions {learnMode ? "studied" : "answered"}
             </p>
             {learnMode ? (
               <Link href={`/sets/${setId}/runs/${runId}`}>
