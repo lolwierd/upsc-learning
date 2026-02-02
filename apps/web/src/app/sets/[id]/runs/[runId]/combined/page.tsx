@@ -62,15 +62,29 @@ export default function CombinedQuizPage() {
   useEffect(() => {
     if (!learnMode) return;
 
+    // Tracks which questions have ever been >=50% visible
+    const hasBeenHalfVisible = new Set<string>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           const questionId = entry.target.getAttribute("data-question-id");
           if (!questionId) continue;
 
-          // Mark as studied when less than 50% visible (scrolled out)
-          if (entry.intersectionRatio < 0.5 && entry.isIntersecting === false) {
-            setStudiedQuestions((prev) => new Set(prev).add(questionId));
+          // First, record that the user actually saw it (>= 50% visible)
+          if (entry.intersectionRatio >= 0.5) {
+            hasBeenHalfVisible.add(questionId);
+            continue;
+          }
+
+          // Only mark studied if it DROPS below 50% AFTER being seen
+          if (hasBeenHalfVisible.has(questionId)) {
+            setStudiedQuestions((prev) => {
+              if (prev.has(questionId)) return prev;
+              const next = new Set(prev);
+              next.add(questionId);
+              return next;
+            });
           }
         }
       },
@@ -108,6 +122,7 @@ export default function CombinedQuizPage() {
             });
           }
           setAnswers(initialAnswers);
+          setStudiedQuestions(new Set());
           setStartTime(Date.now());
           setLoading(false);
           return;
