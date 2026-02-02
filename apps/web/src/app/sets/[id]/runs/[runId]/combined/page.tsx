@@ -15,7 +15,7 @@ import {
   submitRunAttempt,
 } from "@/lib/api";
 import { SUBJECT_LABELS } from "@mcqs/shared";
-import type { CombinedQuestion, QuestionMetadata, QuestionCategory } from "@mcqs/shared";
+import type { CombinedQuestion, QuestionMetadata } from "@mcqs/shared";
 import { QuizStats } from "@/components/quiz/QuizStats";
 import { CategoryBadge } from "@/components/quiz/CategoryBadge";
 import { SubjectBadge } from "@/components/quiz/SubjectBadge";

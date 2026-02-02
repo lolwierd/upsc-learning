@@ -393,6 +393,7 @@ export default function QuizPage() {
   const answeredCount = Array.from(answers.values()).filter(
     (a) => a.selectedOption !== null
   ).length;
+  const progressCount = quiz?.learnMode ? studiedQuestions.size : answeredCount;
   const markedCount = Array.from(answers.values()).filter(
     (a) => a.markedForReview
   ).length;
@@ -450,7 +451,7 @@ export default function QuizPage() {
             </span>
           )}
           <span className="text-gray-600">
-            {answeredCount}/{quiz.questionCount} {quiz.learnMode ? "studied" : "answered"}
+            {progressCount}/{quiz.questionCount} {quiz.learnMode ? "studied" : "answered"}
           </span>
           {!quiz.learnMode && markedCount > 0 && (
             <span className="text-amber-600">{markedCount} marked</span>
@@ -782,7 +783,7 @@ export default function QuizPage() {
           {/* Submit Button / Learn Mode Actions */}
           <Card className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {answeredCount}/{quiz.questionCount} questions {quiz.learnMode ? "studied" : "answered"}
+              {progressCount}/{quiz.questionCount} questions {quiz.learnMode ? "studied" : "answered"}
             </p>
             {quiz.learnMode ? (
               setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 ? (
@@ -832,7 +833,7 @@ export default function QuizPage() {
             </span>
             {quiz.learnMode && (
               <span className="block text-xs text-blue-600">
-                {answeredCount} studied
+                {progressCount} studied
               </span>
             )}
           </div>
