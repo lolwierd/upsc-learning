@@ -337,61 +337,65 @@ export default function CombinedQuizPage() {
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-6">
+    <>
       {/* Sticky Header */}
-      <div className="sticky top-0 z-20 bg-white -mx-4 px-4 py-4 mb-6 border-b border-gray-200 shadow-sm">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold text-gray-900">
-                Combined Quiz
-              </h1>
-              {learnMode && (
-                <button
-                  onClick={() => setShowAnswers(!showAnswers)}
-                  className={cn(
-                    "text-xs px-2 py-0.5 rounded-full font-medium transition-colors",
-                    showAnswers
-                      ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  )}
-                >
-                  {showAnswers ? "Hide Answers" : "Show Answers"}
-                </button>
+      <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-semibold text-gray-900">
+                  Combined Quiz
+                </h1>
+                {learnMode && (
+                  <button
+                    onClick={() => setShowAnswers(!showAnswers)}
+                    className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-medium transition-colors",
+                      showAnswers
+                        ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    )}
+                  >
+                    {showAnswers ? "Hide Answers" : "Show Answers"}
+                  </button>
+                )}
+              </div>
+              <p className="text-sm text-gray-500">
+                {questions.length} questions from all quizzes in this run (shuffled)
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-sm">
+              {!learnMode && (
+                <span className="text-gray-600">
+                  {elapsedMinutes}:{String(elapsedSeconds % 60).padStart(2, "0")}
+                </span>
+              )}
+              <span className="text-gray-600">
+                {progressCount}/{questions.length} {learnMode ? "studied" : "answered"}
+              </span>
+              {!learnMode && markedCount > 0 && (
+                <span className="text-amber-600">{markedCount} marked</span>
+              )}
+              {!learnMode && (
+                <Button onClick={handleSubmit} loading={submitting} size="sm">
+                  Submit
+                </Button>
               )}
             </div>
-            <p className="text-sm text-gray-500">
-              {questions.length} questions from all quizzes in this run (shuffled)
-            </p>
           </div>
-          <div className="flex items-center gap-4 text-sm">
-            {!learnMode && (
-              <span className="text-gray-600">
-                {elapsedMinutes}:{String(elapsedSeconds % 60).padStart(2, "0")}
-              </span>
-            )}
-            <span className="text-gray-600">
-              {progressCount}/{questions.length} {learnMode ? "studied" : "answered"}
-            </span>
-            {!learnMode && markedCount > 0 && (
-              <span className="text-amber-600">{markedCount} marked</span>
-            )}
-            {!learnMode && (
-              <Button onClick={handleSubmit} loading={submitting} size="sm">
-                Submit
-              </Button>
-            )}
-          </div>
-        </div>
 
-        {/* Progress Bar */}
-        <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-primary-500 transition-all duration-300"
-            style={{ width: `${(progressCount / questions.length) * 100}%` }}
-          />
+          {/* Progress Bar */}
+          <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary-500 transition-all duration-300"
+              style={{ width: `${(progressCount / questions.length) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-6">
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Question Navigation (Desktop) */}
@@ -749,6 +753,7 @@ export default function CombinedQuizPage() {
           />
         </div>
       </div>
-    </div>
-  );
-}
+      </div>
+      </>
+      );
+      }
