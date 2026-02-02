@@ -706,6 +706,13 @@ export default function QuizPage() {
                       i < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
                     )}
                   >
+                    {/* Answer Below Indicator */}
+                    {!isRevealed && (
+                      <div className="text-xs font-semibold text-amber-600 uppercase tracking-wide">
+                        ↓ Answer below
+                      </div>
+                    )}
+
                     {/* Feedback after clicking */}
                     {isRevealed && (
                       <div
