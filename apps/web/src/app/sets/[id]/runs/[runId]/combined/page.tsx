@@ -339,7 +339,7 @@ export default function CombinedQuizPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-6">
       {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-gray-50 -mx-4 px-4 py-3 mb-6 border-b border-gray-200">
+      <div className="sticky top-0 z-20 bg-white -mx-4 px-4 py-4 mb-6 border-b border-gray-200 shadow-sm">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <div className="flex items-center gap-2">
