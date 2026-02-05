@@ -520,6 +520,7 @@ ingress:
 ### Phase 1: Foundation
 - [ ] Rename repository from `upsc-learning` to `proctora`
 - [ ] Update all package names from `@mcqs/*` to `@proctora/*`
+- [ ] Update CLAUDE.md and AGENTS.md with new architecture
 - [ ] Set up new monorepo structure
 - [ ] Migrate from SQLite to PostgreSQL
 - [ ] Set up Drizzle ORM with PostgreSQL
