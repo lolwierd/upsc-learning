@@ -16,12 +16,13 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js 16 (Static Export), React 19, Tailwind CSS |
+| Frontend Hosting | Cloudflare Pages |
 | Backend | Hono (Node.js), TypeScript |
-| Database | PostgreSQL |
+| Backend Hosting | Docker, Docker Compose |
+| Database | PostgreSQL (Docker) |
 | ORM | Drizzle ORM (or Prisma) |
 | Auth | Google OAuth 2.0, JWT |
-| Deployment | Docker, Docker Compose |
-| Routing | Cloudflare Tunnels |
+| API Routing | Cloudflare Tunnels |
 
 ---
 
@@ -29,7 +30,7 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        Proctora Deployment (Docker)                      │
+│                          Cloudflare Pages                                │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │   ┌──────────────────┐              ┌──────────────────┐                │
@@ -41,14 +42,14 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 │   │  • Analytics     │              │  • History       │                │
 │   │  • Class Mgmt    │              │                  │                │
 │   │                  │              │                  │                │
-│   │  Served by Caddy │              │  Served by Caddy │                │
-│   │  Port: 3000      │              │  Port: 3001      │                │
+│   │ dashboard.proctora.io           │ exam.proctora.io │                │
 │   └────────┬─────────┘              └────────┬─────────┘                │
 │            │                                  │                          │
-│            │        Cloudflare Tunnels        │                          │
-│            │    (dashboard.proctora.io)       │                          │
-│            │       (exam.proctora.io)         │                          │
-│            │                                  │                          │
+└────────────┼──────────────────────────────────┼──────────────────────────┘
+             │                                  │
+             │         API Calls (HTTPS)        │
+             │                                  │
+┌────────────┼──────────────────────────────────┼──────────────────────────┐
 │            ▼                                  ▼                          │
 │   ┌──────────────────┐              ┌──────────────────┐                │
 │   │  Dashboard API   │              │     Exam API     │                │
@@ -66,30 +67,28 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 │                           ▼                                              │
 │                  ┌──────────────────┐                                    │
 │                  │    PostgreSQL    │                                    │
-│                  │                  │                                    │
-│                  │  Port: 5432      │                                    │
+│                  │    Port: 5432    │                                    │
 │                  └──────────────────┘                                    │
 │                                                                          │
+│                    Docker Host (Your Server)                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│  Cloudflare Tunnels expose APIs:                                         │
+│    • api-dashboard.proctora.io → localhost:4000                          │
+│    • api-exam.proctora.io      → localhost:4001                          │
 └─────────────────────────────────────────────────────────────────────────┘
-
-Cloudflare Tunnels expose:
-  • dashboard.proctora.io    → localhost:3000
-  • exam.proctora.io         → localhost:3001
-  • api-dashboard.proctora.io → localhost:4000
-  • api-exam.proctora.io     → localhost:4001
 ```
 
 ---
 
-## Frontend Architecture (Static Export)
+## Frontend Architecture (Cloudflare Pages)
 
-Both frontend apps are **fully static** with no server-side rendering:
+Both frontend apps are **fully static** and hosted on **Cloudflare Pages**:
 
 - **No API routes** in Next.js - all API calls go to separate backend services
 - **No SSR** - pages are pre-rendered at build time
 - **Client-side data fetching** - use React Query/SWR for API calls
-- **Static export** via `next build && next export` (or `output: 'export'` in next.config.js)
-- **Served by lightweight static server** (Caddy/serve) - no Node.js runtime needed
+- **Static export** via `output: 'export'` in next.config.js
+- **Hosted on Cloudflare Pages** - free, global CDN, automatic deployments
 
 ### next.config.js (for both apps)
 
@@ -106,12 +105,27 @@ const nextConfig = {
 module.exports = nextConfig
 ```
 
+### Cloudflare Pages Setup
+
+Each frontend is a separate CF Pages project:
+
+| App | CF Pages Project | Custom Domain |
+|-----|------------------|---------------|
+| Dashboard | `proctora-dashboard` | `dashboard.proctora.io` |
+| Exam | `proctora-exam` | `exam.proctora.io` |
+
+**Build settings:**
+- Build command: `pnpm --filter @proctora/dashboard build`
+- Output directory: `apps/dashboard/out`
+- Node version: 20
+
 ### Benefits
 
-- Zero server costs for frontend (just static file serving)
-- Can optionally host on Cloudflare Pages for free (if preferred over Docker)
-- No cold starts, instant page loads
-- Easy CDN caching
+- **Free hosting** - Cloudflare Pages free tier is generous
+- **Global CDN** - static assets served from edge locations worldwide
+- **Automatic deployments** - push to main = deploy
+- **No cold starts** - instant page loads
+- **Zero server management** - no Docker needed for frontend
 
 ---
 
@@ -120,16 +134,14 @@ module.exports = nextConfig
 ```
 proctora/
 ├── apps/
-│   ├── dashboard/              # Teacher/Admin frontend (static)
-│   │   ├── Dockerfile          # Multi-stage: build + Caddy
+│   ├── dashboard/              # Teacher/Admin frontend (CF Pages)
 │   │   └── @proctora/dashboard
-│   ├── exam/                   # Student frontend (static)
-│   │   ├── Dockerfile          # Multi-stage: build + Caddy
+│   ├── exam/                   # Student frontend (CF Pages)
 │   │   └── @proctora/exam
-│   ├── api-dashboard/          # Teacher API
+│   ├── api-dashboard/          # Teacher API (Docker)
 │   │   ├── Dockerfile
 │   │   └── @proctora/api-dashboard
-│   └── api-exam/               # Student API
+│   └── api-exam/               # Student API (Docker)
 │       ├── Dockerfile
 │       └── @proctora/api-exam
 ├── packages/
@@ -141,7 +153,7 @@ proctora/
 │   │   └── @proctora/ui
 │   └── auth/                   # Shared auth utilities (client-side)
 │       └── @proctora/auth
-├── docker-compose.yml          # Full stack compose
+├── docker-compose.yml          # APIs + PostgreSQL
 └── docker-compose.dev.yml      # Development overrides
 ```
 
@@ -396,7 +408,9 @@ Profile:
 
 ---
 
-## Docker Configuration
+## Docker Configuration (APIs + Database Only)
+
+Frontends are hosted on Cloudflare Pages. Docker only runs the APIs and PostgreSQL.
 
 ### docker-compose.yml
 
@@ -451,64 +465,40 @@ services:
       postgres:
         condition: service_healthy
 
-  # Static frontend served by Caddy (lightweight)
-  dashboard:
-    build:
-      context: .
-      dockerfile: apps/dashboard/Dockerfile
-    ports:
-      - "3000:80"
-
-  exam:
-    build:
-      context: .
-      dockerfile: apps/exam/Dockerfile
-    ports:
-      - "3001:80"
-
 volumes:
   postgres_data:
 ```
 
-### Example Frontend Dockerfile (Static)
+### Example API Dockerfile
 
 ```dockerfile
-# apps/dashboard/Dockerfile
+# apps/api-dashboard/Dockerfile
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-COPY apps/dashboard ./apps/dashboard
+COPY apps/api-dashboard ./apps/api-dashboard
 COPY packages ./packages
 
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @proctora/dashboard build
+RUN pnpm --filter @proctora/api-dashboard build
 
-# Serve static files with Caddy (tiny image, ~40MB)
-FROM caddy:2-alpine
+FROM node:20-alpine
 
-COPY --from=builder /app/apps/dashboard/out /srv
-COPY apps/dashboard/Caddyfile /etc/caddy/Caddyfile
+WORKDIR /app
+COPY --from=builder /app/apps/api-dashboard/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
 
-EXPOSE 80
-```
-
-### Example Caddyfile (SPA routing)
-
-```
-:80 {
-    root * /srv
-    file_server
-    try_files {path} /index.html
-}
+EXPOSE 4000
+CMD ["node", "dist/index.js"]
 ```
 
 ---
 
-## Cloudflare Tunnel Configuration
+## Cloudflare Tunnel Configuration (APIs Only)
 
-Create tunnels for each service:
+Frontends are on CF Pages. Tunnels only expose the APIs:
 
 ```yaml
 # ~/.cloudflared/config.yml
@@ -516,10 +506,6 @@ tunnel: proctora-tunnel
 credentials-file: /root/.cloudflared/credentials.json
 
 ingress:
-  - hostname: dashboard.proctora.io
-    service: http://localhost:3000
-  - hostname: exam.proctora.io
-    service: http://localhost:3001
   - hostname: api-dashboard.proctora.io
     service: http://localhost:4000
   - hostname: api-exam.proctora.io
@@ -547,6 +533,7 @@ ingress:
 ### Phase 2: Dashboard App
 - [ ] Create `@proctora/dashboard` app (migrate from `@proctora/web`)
 - [ ] Configure as static export (no SSR, no API routes)
+- [ ] Set up Cloudflare Pages project for dashboard
 - [ ] Create `@proctora/api-dashboard` (migrate from Hono worker to Node.js)
 - [ ] Implement teacher auth flow
 - [ ] Migrate quiz creation functionality
@@ -556,6 +543,7 @@ ingress:
 
 ### Phase 3: Exam App
 - [ ] Create `@proctora/exam` app (static export)
+- [ ] Set up Cloudflare Pages project for exam
 - [ ] Create `@proctora/api-exam`
 - [ ] Implement student auth flow (with allowlist check)
 - [ ] Build test listing page
@@ -610,20 +598,19 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 6. **Multi-exam support** - Configurable exam types beyond UPSC (JEE, NEET, GATE, etc.)
 7. **Redis** - Add Redis for caching/sessions if needed at scale
 8. **Horizontal scaling** - Multiple API instances behind load balancer
-9. **Cloudflare Pages** - Option to host static frontends on CF Pages instead of Docker
 
 ---
 
 ## Summary
 
-| Component | Package Name | Domain Example | Port | Purpose |
-|-----------|--------------|----------------|------|---------|
-| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | 3000 | Teacher quiz management (static) |
-| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | 3001 | Student test-taking (static) |
-| Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | 4000 | Teacher API |
-| Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | 4001 | Student API |
-| Database | PostgreSQL | - | 5432 | Data storage |
+| Component | Package Name | Domain | Hosting | Purpose |
+|-----------|--------------|--------|---------|---------|
+| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | CF Pages | Teacher quiz management |
+| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | CF Pages | Student test-taking |
+| Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | Docker | Teacher API |
+| Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | Docker | Student API |
+| Database | PostgreSQL | - | Docker | Data storage |
 | Shared UI | `@proctora/ui` | - | - | Reusable components |
 | Shared Auth | `@proctora/auth` | - | - | Client-side auth utilities |
 | Shared Types | `@proctora/shared` | - | - | Types, schemas |
-| Database | `@proctora/db` | - | - | Drizzle schema & migrations |
+| DB Package | `@proctora/db` | - | - | Drizzle schema & migrations |
