@@ -1,13 +1,13 @@
-# PRD: UPSC Exam Platform - Multi-App Architecture
+# PRD: Proctora - Multi-App Exam Platform
 
 ## Executive Summary
 
-Transform the current single-app UPSC MCQ Generator into a three-part B2B SaaS platform:
-1. **Dashboard App** (`dashboard.example.com`) - For teachers/examiners to create quizzes and manage students
-2. **Exam App** (`exam.example.com`) - For students to take assigned tests
+Transform the current single-app MCQ Generator into **Proctora**, a three-part B2B SaaS exam platform:
+1. **Dashboard App** (`dashboard.proctora.io`) - For teachers/examiners to create quizzes and manage students
+2. **Exam App** (`exam.proctora.io`) - For students to take assigned tests
 3. **Separate Backend APIs** - Independent API workers for each frontend
 
-Each customer deployment is isolated (single-tenant).
+Each customer deployment is isolated (single-tenant). While initially built for UPSC preparation, the platform is designed to support any exam type.
 
 ---
 
@@ -15,7 +15,7 @@ Each customer deployment is isolated (single-tenant).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Customer Deployment                       │
+│                     Proctora Deployment                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │   ┌──────────────────┐         ┌──────────────────┐             │
@@ -54,23 +54,25 @@ Each customer deployment is isolated (single-tenant).
 ## Monorepo Structure (New)
 
 ```
-upsc-learning/
+proctora/
 ├── apps/
 │   ├── dashboard/          # Teacher/Admin frontend (NEW - migrate from web)
-│   │   └── @mcqs/dashboard
+│   │   └── @proctora/dashboard
 │   ├── exam/               # Student frontend (NEW)
-│   │   └── @mcqs/exam
+│   │   └── @proctora/exam
 │   ├── api-dashboard/      # Teacher API (NEW - split from worker)
-│   │   └── @mcqs/api-dashboard
+│   │   └── @proctora/api-dashboard
 │   └── api-exam/           # Student API (NEW - split from worker)
-│       └── @mcqs/api-exam
+│       └── @proctora/api-exam
 ├── packages/
 │   ├── shared/             # Shared types, schemas, constants (EXISTING)
+│   │   └── @proctora/shared
 │   ├── db/                 # D1 migrations (EXISTING - expanded)
+│   │   └── @proctora/db
 │   ├── ui/                 # Shared UI components (NEW)
-│   │   └── @mcqs/ui
+│   │   └── @proctora/ui
 │   └── auth/               # Shared Google OAuth logic (NEW)
-│       └── @mcqs/auth
+│       └── @proctora/auth
 └── tooling/                # Shared configs (optional)
 ```
 
@@ -151,7 +153,7 @@ ALTER TABLE user_settings ADD COLUMN user_id TEXT REFERENCES users(id);
 
 ## App Specifications
 
-### 1. Dashboard App (`@mcqs/dashboard`)
+### 1. Dashboard App (`@proctora/dashboard`)
 
 **Purpose**: Teacher/examiner interface for quiz management
 
@@ -183,7 +185,7 @@ ALTER TABLE user_settings ADD COLUMN user_id TEXT REFERENCES users(id);
 
 ---
 
-### 2. Exam App (`@mcqs/exam`)
+### 2. Exam App (`@proctora/exam`)
 
 **Purpose**: Student interface for taking tests
 
@@ -208,7 +210,7 @@ ALTER TABLE user_settings ADD COLUMN user_id TEXT REFERENCES users(id);
 
 ---
 
-### 3. Dashboard API (`@mcqs/api-dashboard`)
+### 3. Dashboard API (`@proctora/api-dashboard`)
 
 **Endpoints**:
 
@@ -256,7 +258,7 @@ Settings:
 
 ---
 
-### 4. Exam API (`@mcqs/api-exam`)
+### 4. Exam API (`@proctora/api-exam`)
 
 **Endpoints**:
 
@@ -315,15 +317,17 @@ Profile:
 ## Migration Plan
 
 ### Phase 1: Foundation
+- [ ] Rename repository from `upsc-learning` to `proctora`
+- [ ] Update all package names from `@mcqs/*` to `@proctora/*`
 - [ ] Set up new monorepo structure
-- [ ] Create `@mcqs/ui` shared component library
-- [ ] Create `@mcqs/auth` shared auth package
+- [ ] Create `@proctora/ui` shared component library
+- [ ] Create `@proctora/auth` shared auth package
 - [ ] Write new database migrations
 - [ ] Set up Google OAuth credentials
 
 ### Phase 2: Dashboard App
-- [ ] Create `@mcqs/dashboard` app (migrate from `@mcqs/web`)
-- [ ] Create `@mcqs/api-dashboard` worker
+- [ ] Create `@proctora/dashboard` app (migrate from `@proctora/web`)
+- [ ] Create `@proctora/api-dashboard` worker
 - [ ] Implement teacher auth flow
 - [ ] Migrate quiz creation functionality
 - [ ] Add student allowlist management
@@ -331,8 +335,8 @@ Profile:
 - [ ] Add quiz assignment feature
 
 ### Phase 3: Exam App
-- [ ] Create `@mcqs/exam` app
-- [ ] Create `@mcqs/api-exam` worker
+- [ ] Create `@proctora/exam` app
+- [ ] Create `@proctora/api-exam` worker
 - [ ] Implement student auth flow (with allowlist check)
 - [ ] Build test listing page
 - [ ] Build test-taking interface
@@ -354,19 +358,19 @@ Each app gets its own deployment config:
 
 **Dashboard** (`apps/dashboard/`):
 ```env
-NEXT_PUBLIC_API_URL=https://api-dashboard.example.com
+NEXT_PUBLIC_API_URL=https://api-dashboard.proctora.io
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx
 ```
 
 **Exam** (`apps/exam/`):
 ```env
-NEXT_PUBLIC_API_URL=https://api-exam.example.com
+NEXT_PUBLIC_API_URL=https://api-exam.proctora.io
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx
 ```
 
 **API Dashboard** (`apps/api-dashboard/wrangler.toml`):
 ```toml
-name = "api-dashboard"
+name = "proctora-api-dashboard"
 [[d1_databases]]
 binding = "DB"
 database_id = "shared-db-id"
@@ -374,7 +378,7 @@ database_id = "shared-db-id"
 
 **API Exam** (`apps/api-exam/wrangler.toml`):
 ```toml
-name = "api-exam"
+name = "proctora-api-exam"
 [[d1_databases]]
 binding = "DB"
 database_id = "shared-db-id"  # Same DB!
@@ -384,11 +388,12 @@ database_id = "shared-db-id"  # Same DB!
 
 ## Open Questions / Future Considerations
 
-1. **Test timing/proctoring** - Deferred, add later
+1. **Test timing/proctoring** - Deferred, add later (fits the Proctora brand!)
 2. **Custom branding per deployment** - Deferred, add later
 3. **Email notifications** - Should teachers get notified when students complete tests?
 4. **Bulk import** - CSV upload for student allowlist?
 5. **Quiz templates** - Should teachers be able to save/reuse quiz configurations?
+6. **Multi-exam support** - Configurable exam types beyond UPSC (JEE, NEET, GATE, etc.)
 
 ---
 
@@ -396,11 +401,11 @@ database_id = "shared-db-id"  # Same DB!
 
 | Component | Package Name | Domain Example | Purpose |
 |-----------|--------------|----------------|---------|
-| Dashboard Frontend | `@mcqs/dashboard` | `dashboard.acme.com` | Teacher quiz management |
-| Exam Frontend | `@mcqs/exam` | `exam.acme.com` | Student test-taking |
-| Dashboard API | `@mcqs/api-dashboard` | `api-dashboard.acme.com` | Teacher API |
-| Exam API | `@mcqs/api-exam` | `api-exam.acme.com` | Student API |
-| Shared UI | `@mcqs/ui` | - | Reusable components |
-| Shared Auth | `@mcqs/auth` | - | Google OAuth logic |
-| Shared Types | `@mcqs/shared` | - | Types, schemas |
-| Database | `@mcqs/db` | - | Migrations |
+| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | Teacher quiz management |
+| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | Student test-taking |
+| Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | Teacher API |
+| Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | Student API |
+| Shared UI | `@proctora/ui` | - | Reusable components |
+| Shared Auth | `@proctora/auth` | - | Google OAuth logic |
+| Shared Types | `@proctora/shared` | - | Types, schemas |
+| Database | `@proctora/db` | - | Migrations |
