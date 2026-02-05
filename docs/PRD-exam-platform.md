@@ -5,48 +5,67 @@
 Transform the current single-app MCQ Generator into **Proctora**, a three-part B2B SaaS exam platform:
 1. **Dashboard App** (`dashboard.proctora.io`) - For teachers/examiners to create quizzes and manage students
 2. **Exam App** (`exam.proctora.io`) - For students to take assigned tests
-3. **Separate Backend APIs** - Independent API workers for each frontend
+3. **Separate Backend APIs** - Independent API services for each frontend
 
 Each customer deployment is isolated (single-tenant). While initially built for UPSC preparation, the platform is designed to support any exam type.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16, React 19, Tailwind CSS |
+| Backend | Hono (Node.js), TypeScript |
+| Database | PostgreSQL |
+| ORM | Drizzle ORM (or Prisma) |
+| Auth | Google OAuth 2.0, JWT |
+| Deployment | Docker, Docker Compose |
+| Reverse Proxy | Nginx / Traefik |
 
 ---
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Proctora Deployment                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   ┌──────────────────┐         ┌──────────────────┐             │
-│   │   Dashboard App  │         │     Exam App     │             │
-│   │   (Next.js 15)   │         │   (Next.js 15)   │             │
-│   │                  │         │                  │             │
-│   │  • Quiz Creation │         │  • Take Tests    │             │
-│   │  • Student Mgmt  │         │  • View Results  │             │
-│   │  • Analytics     │         │  • History       │             │
-│   │  • Class Mgmt    │         │                  │             │
-│   └────────┬─────────┘         └────────┬─────────┘             │
-│            │                            │                        │
-│            ▼                            ▼                        │
-│   ┌──────────────────┐         ┌──────────────────┐             │
-│   │  Dashboard API   │         │     Exam API     │             │
-│   │ (Cloudflare W.)  │         │ (Cloudflare W.)  │             │
-│   │                  │         │                  │             │
-│   │  • Teacher Auth  │         │  • Student Auth  │             │
-│   │  • Quiz CRUD     │         │  • Take Quiz     │             │
-│   │  • Student Mgmt  │         │  • Submit Answer │             │
-│   │  • Assignments   │         │  • View Results  │             │
-│   └────────┬─────────┘         └────────┬─────────┘             │
-│            │                            │                        │
-│            └──────────┬─────────────────┘                        │
-│                       ▼                                          │
-│              ┌──────────────────┐                                │
-│              │   Cloudflare D1  │                                │
-│              │    (SQLite DB)   │                                │
-│              └──────────────────┘                                │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        Proctora Deployment (Docker)                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ┌──────────────────┐              ┌──────────────────┐                │
+│   │   Dashboard App  │              │     Exam App     │                │
+│   │   (Next.js 16)   │              │   (Next.js 16)   │                │
+│   │                  │              │                  │                │
+│   │  • Quiz Creation │              │  • Take Tests    │                │
+│   │  • Student Mgmt  │              │  • View Results  │                │
+│   │  • Analytics     │              │  • History       │                │
+│   │  • Class Mgmt    │              │                  │                │
+│   │                  │              │                  │                │
+│   │  Port: 3000      │              │  Port: 3001      │                │
+│   └────────┬─────────┘              └────────┬─────────┘                │
+│            │                                  │                          │
+│            ▼                                  ▼                          │
+│   ┌──────────────────┐              ┌──────────────────┐                │
+│   │  Dashboard API   │              │     Exam API     │                │
+│   │  (Hono/Node.js)  │              │  (Hono/Node.js)  │                │
+│   │                  │              │                  │                │
+│   │  • Teacher Auth  │              │  • Student Auth  │                │
+│   │  • Quiz CRUD     │              │  • Take Quiz     │                │
+│   │  • Student Mgmt  │              │  • Submit Answer │                │
+│   │  • Assignments   │              │  • View Results  │                │
+│   │                  │              │                  │                │
+│   │  Port: 4000      │              │  Port: 4001      │                │
+│   └────────┬─────────┘              └────────┬─────────┘                │
+│            │                                  │                          │
+│            └──────────────┬───────────────────┘                          │
+│                           ▼                                              │
+│                  ┌──────────────────┐                                    │
+│                  │    PostgreSQL    │                                    │
+│                  │                  │                                    │
+│                  │  Port: 5432      │                                    │
+│                  └──────────────────┘                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -56,97 +75,111 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 ```
 proctora/
 ├── apps/
-│   ├── dashboard/          # Teacher/Admin frontend (NEW - migrate from web)
+│   ├── dashboard/              # Teacher/Admin frontend (migrate from web)
+│   │   ├── Dockerfile
 │   │   └── @proctora/dashboard
-│   ├── exam/               # Student frontend (NEW)
+│   ├── exam/                   # Student frontend (NEW)
+│   │   ├── Dockerfile
 │   │   └── @proctora/exam
-│   ├── api-dashboard/      # Teacher API (NEW - split from worker)
+│   ├── api-dashboard/          # Teacher API (split from worker)
+│   │   ├── Dockerfile
 │   │   └── @proctora/api-dashboard
-│   └── api-exam/           # Student API (NEW - split from worker)
+│   └── api-exam/               # Student API (NEW)
+│       ├── Dockerfile
 │       └── @proctora/api-exam
 ├── packages/
-│   ├── shared/             # Shared types, schemas, constants (EXISTING)
+│   ├── shared/                 # Shared types, schemas, constants
 │   │   └── @proctora/shared
-│   ├── db/                 # D1 migrations (EXISTING - expanded)
+│   ├── db/                     # Drizzle schema & migrations
 │   │   └── @proctora/db
-│   ├── ui/                 # Shared UI components (NEW)
+│   ├── ui/                     # Shared UI components (NEW)
 │   │   └── @proctora/ui
-│   └── auth/               # Shared Google OAuth logic (NEW)
+│   └── auth/                   # Shared Google OAuth logic (NEW)
 │       └── @proctora/auth
-└── tooling/                # Shared configs (optional)
+├── docker-compose.yml          # Full stack compose
+├── docker-compose.dev.yml      # Development overrides
+└── nginx/                      # Reverse proxy config
+    └── nginx.conf
 ```
 
 ---
 
-## Database Schema Changes
+## Database Schema (PostgreSQL)
 
 ### New Tables
 
 ```sql
 -- Users (both teachers and students)
 CREATE TABLE users (
-  id TEXT PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  name TEXT,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255),
   avatar_url TEXT,
-  role TEXT NOT NULL CHECK (role IN ('teacher', 'student')),
-  google_id TEXT UNIQUE NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  role VARCHAR(20) NOT NULL CHECK (role IN ('teacher', 'student')),
+  google_id VARCHAR(255) UNIQUE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Student allowlist (teachers pre-register student emails)
 CREATE TABLE student_allowlist (
-  id TEXT PRIMARY KEY,
-  email TEXT NOT NULL,
-  teacher_id TEXT NOT NULL REFERENCES users(id),
-  class_id TEXT REFERENCES classes(id),  -- optional: auto-assign to class
-  invited_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  registered_at DATETIME,  -- set when student signs up
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) NOT NULL,
+  teacher_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  class_id UUID REFERENCES classes(id) ON DELETE SET NULL,
+  invited_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  registered_at TIMESTAMP WITH TIME ZONE,
   UNIQUE(email, teacher_id)
 );
 
 -- Classes/Groups
 CREATE TABLE classes (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
   description TEXT,
-  teacher_id TEXT NOT NULL REFERENCES users(id),
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  teacher_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Class membership
 CREATE TABLE class_students (
-  class_id TEXT NOT NULL REFERENCES classes(id),
-  student_id TEXT NOT NULL REFERENCES users(id),
-  joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  joined_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   PRIMARY KEY (class_id, student_id)
 );
 
 -- Quiz assignments
 CREATE TABLE quiz_assignments (
-  id TEXT PRIMARY KEY,
-  quiz_id TEXT NOT NULL REFERENCES quizzes(id),
-  assignment_type TEXT NOT NULL CHECK (assignment_type IN ('student', 'class', 'all')),
-  assigned_to_id TEXT,  -- NULL if type='all', student_id or class_id otherwise
-  assigned_by TEXT NOT NULL REFERENCES users(id),
-  assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  due_date DATETIME,  -- optional deadline
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  quiz_id UUID NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
+  assignment_type VARCHAR(20) NOT NULL CHECK (assignment_type IN ('student', 'class', 'all')),
+  assigned_to_id UUID,  -- NULL if type='all', student_id or class_id otherwise
+  assigned_by UUID NOT NULL REFERENCES users(id),
+  assigned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  due_date TIMESTAMP WITH TIME ZONE,
   UNIQUE(quiz_id, assignment_type, assigned_to_id)
 );
+
+-- Indexes for performance
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_google_id ON users(google_id);
+CREATE INDEX idx_student_allowlist_email ON student_allowlist(email);
+CREATE INDEX idx_quiz_assignments_quiz_id ON quiz_assignments(quiz_id);
+CREATE INDEX idx_class_students_student_id ON class_students(student_id);
 ```
 
 ### Modified Tables
 
 ```sql
 -- Add teacher reference to quizzes
-ALTER TABLE quizzes ADD COLUMN created_by TEXT REFERENCES users(id);
+ALTER TABLE quizzes ADD COLUMN created_by UUID REFERENCES users(id);
 
 -- Add user reference to attempts (replace anonymous cookie-based)
-ALTER TABLE attempts ADD COLUMN user_id TEXT REFERENCES users(id);
+ALTER TABLE attempts ADD COLUMN user_id UUID REFERENCES users(id);
 
 -- Migrate user_settings to link with users table
-ALTER TABLE user_settings ADD COLUMN user_id TEXT REFERENCES users(id);
+ALTER TABLE user_settings ADD COLUMN user_id UUID REFERENCES users(id);
 ```
 
 ---
@@ -295,7 +328,7 @@ Profile:
 3. Google redirects back with code
 4. API exchanges code for tokens
 5. API creates/updates user with role='teacher'
-6. Returns JWT/session token
+6. Returns JWT token
 7. Dashboard stores token, redirects to home
 ```
 
@@ -308,8 +341,165 @@ Profile:
 5. API checks if email is in student_allowlist
    - If NOT: Return error "Not authorized. Contact your teacher."
    - If YES: Create/update user with role='student'
-6. Returns JWT/session token
+6. Returns JWT token
 7. Exam app stores token, redirects to tests
+```
+
+---
+
+## Docker Configuration
+
+### docker-compose.yml
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: proctora
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: proctora
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U proctora"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api-dashboard:
+    build:
+      context: .
+      dockerfile: apps/api-dashboard/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://proctora:${DB_PASSWORD}@postgres:5432/proctora
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api-exam:
+    build:
+      context: .
+      dockerfile: apps/api-exam/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://proctora:${DB_PASSWORD}@postgres:5432/proctora
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "4001:4001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://api-dashboard:4000
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-dashboard
+
+  exam:
+    build:
+      context: .
+      dockerfile: apps/exam/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://api-exam:4001
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api-exam
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - dashboard
+      - exam
+      - api-dashboard
+      - api-exam
+
+volumes:
+  postgres_data:
+```
+
+### Example Nginx Config
+
+```nginx
+upstream dashboard {
+    server dashboard:3000;
+}
+
+upstream exam {
+    server exam:3001;
+}
+
+upstream api-dashboard {
+    server api-dashboard:4000;
+}
+
+upstream api-exam {
+    server api-exam:4001;
+}
+
+server {
+    listen 80;
+    server_name dashboard.proctora.io;
+    location / {
+        proxy_pass http://dashboard;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+server {
+    listen 80;
+    server_name exam.proctora.io;
+    location / {
+        proxy_pass http://exam;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+server {
+    listen 80;
+    server_name api-dashboard.proctora.io;
+    location / {
+        proxy_pass http://api-dashboard;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+server {
+    listen 80;
+    server_name api-exam.proctora.io;
+    location / {
+        proxy_pass http://api-exam;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
 ```
 
 ---
@@ -320,6 +510,9 @@ Profile:
 - [ ] Rename repository from `upsc-learning` to `proctora`
 - [ ] Update all package names from `@mcqs/*` to `@proctora/*`
 - [ ] Set up new monorepo structure
+- [ ] Migrate from SQLite to PostgreSQL
+- [ ] Set up Drizzle ORM with PostgreSQL
+- [ ] Create Docker configuration
 - [ ] Create `@proctora/ui` shared component library
 - [ ] Create `@proctora/auth` shared auth package
 - [ ] Write new database migrations
@@ -327,7 +520,7 @@ Profile:
 
 ### Phase 2: Dashboard App
 - [ ] Create `@proctora/dashboard` app (migrate from `@proctora/web`)
-- [ ] Create `@proctora/api-dashboard` worker
+- [ ] Create `@proctora/api-dashboard` (migrate from Hono worker to Node.js)
 - [ ] Implement teacher auth flow
 - [ ] Migrate quiz creation functionality
 - [ ] Add student allowlist management
@@ -336,7 +529,7 @@ Profile:
 
 ### Phase 3: Exam App
 - [ ] Create `@proctora/exam` app
-- [ ] Create `@proctora/api-exam` worker
+- [ ] Create `@proctora/api-exam`
 - [ ] Implement student auth flow (with allowlist check)
 - [ ] Build test listing page
 - [ ] Build test-taking interface
@@ -348,40 +541,30 @@ Profile:
 - [ ] Error handling improvements
 - [ ] Loading states and UX polish
 - [ ] Documentation
-- [ ] Deployment setup (separate wrangler configs)
+- [ ] Production Docker optimization (multi-stage builds)
+- [ ] Health checks and logging
 
 ---
 
-## Deployment Configuration
+## Environment Variables
 
-Each app gets its own deployment config:
-
-**Dashboard** (`apps/dashboard/`):
 ```env
+# Database
+DATABASE_URL=postgresql://proctora:password@localhost:5432/proctora
+
+# Google OAuth
+GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=xxx
+
+# JWT
+JWT_SECRET=your-secret-key
+
+# API URLs (for frontends)
 NEXT_PUBLIC_API_URL=https://api-dashboard.proctora.io
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx
-```
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 
-**Exam** (`apps/exam/`):
-```env
-NEXT_PUBLIC_API_URL=https://api-exam.proctora.io
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx
-```
-
-**API Dashboard** (`apps/api-dashboard/wrangler.toml`):
-```toml
-name = "proctora-api-dashboard"
-[[d1_databases]]
-binding = "DB"
-database_id = "shared-db-id"
-```
-
-**API Exam** (`apps/api-exam/wrangler.toml`):
-```toml
-name = "proctora-api-exam"
-[[d1_databases]]
-binding = "DB"
-database_id = "shared-db-id"  # Same DB!
+# LLM (for quiz generation)
+GOOGLE_API_KEY=xxx  # Gemini API key
 ```
 
 ---
@@ -394,18 +577,21 @@ database_id = "shared-db-id"  # Same DB!
 4. **Bulk import** - CSV upload for student allowlist?
 5. **Quiz templates** - Should teachers be able to save/reuse quiz configurations?
 6. **Multi-exam support** - Configurable exam types beyond UPSC (JEE, NEET, GATE, etc.)
+7. **Redis** - Add Redis for caching/sessions if needed at scale
+8. **Horizontal scaling** - Multiple API instances behind load balancer
 
 ---
 
 ## Summary
 
-| Component | Package Name | Domain Example | Purpose |
-|-----------|--------------|----------------|---------|
-| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | Teacher quiz management |
-| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | Student test-taking |
-| Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | Teacher API |
-| Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | Student API |
-| Shared UI | `@proctora/ui` | - | Reusable components |
-| Shared Auth | `@proctora/auth` | - | Google OAuth logic |
-| Shared Types | `@proctora/shared` | - | Types, schemas |
-| Database | `@proctora/db` | - | Migrations |
+| Component | Package Name | Domain Example | Port | Purpose |
+|-----------|--------------|----------------|------|---------|
+| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | 3000 | Teacher quiz management |
+| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | 3001 | Student test-taking |
+| Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | 4000 | Teacher API |
+| Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | 4001 | Student API |
+| Database | PostgreSQL | - | 5432 | Data storage |
+| Shared UI | `@proctora/ui` | - | - | Reusable components |
+| Shared Auth | `@proctora/auth` | - | - | Google OAuth logic |
+| Shared Types | `@proctora/shared` | - | - | Types, schemas |
+| Database | `@proctora/db` | - | - | Drizzle schema & migrations |
