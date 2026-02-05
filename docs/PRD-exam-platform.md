@@ -15,13 +15,13 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 16, React 19, Tailwind CSS |
+| Frontend | Next.js 16 (Static Export), React 19, Tailwind CSS |
 | Backend | Hono (Node.js), TypeScript |
 | Database | PostgreSQL |
 | ORM | Drizzle ORM (or Prisma) |
 | Auth | Google OAuth 2.0, JWT |
 | Deployment | Docker, Docker Compose |
-| Reverse Proxy | Nginx / Traefik |
+| Routing | Cloudflare Tunnels |
 
 ---
 
@@ -34,15 +34,20 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 │                                                                          │
 │   ┌──────────────────┐              ┌──────────────────┐                │
 │   │   Dashboard App  │              │     Exam App     │                │
-│   │   (Next.js 16)   │              │   (Next.js 16)   │                │
+│   │  (Static Files)  │              │  (Static Files)  │                │
 │   │                  │              │                  │                │
 │   │  • Quiz Creation │              │  • Take Tests    │                │
 │   │  • Student Mgmt  │              │  • View Results  │                │
 │   │  • Analytics     │              │  • History       │                │
 │   │  • Class Mgmt    │              │                  │                │
 │   │                  │              │                  │                │
+│   │  Served by Caddy │              │  Served by Caddy │                │
 │   │  Port: 3000      │              │  Port: 3001      │                │
 │   └────────┬─────────┘              └────────┬─────────┘                │
+│            │                                  │                          │
+│            │        Cloudflare Tunnels        │                          │
+│            │    (dashboard.proctora.io)       │                          │
+│            │       (exam.proctora.io)         │                          │
 │            │                                  │                          │
 │            ▼                                  ▼                          │
 │   ┌──────────────────┐              ┌──────────────────┐                │
@@ -66,7 +71,47 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 │                  └──────────────────┘                                    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
+
+Cloudflare Tunnels expose:
+  • dashboard.proctora.io    → localhost:3000
+  • exam.proctora.io         → localhost:3001
+  • api-dashboard.proctora.io → localhost:4000
+  • api-exam.proctora.io     → localhost:4001
 ```
+
+---
+
+## Frontend Architecture (Static Export)
+
+Both frontend apps are **fully static** with no server-side rendering:
+
+- **No API routes** in Next.js - all API calls go to separate backend services
+- **No SSR** - pages are pre-rendered at build time
+- **Client-side data fetching** - use React Query/SWR for API calls
+- **Static export** via `next build && next export` (or `output: 'export'` in next.config.js)
+- **Served by lightweight static server** (Caddy/serve) - no Node.js runtime needed
+
+### next.config.js (for both apps)
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true,  // Required for static export
+  },
+}
+
+module.exports = nextConfig
+```
+
+### Benefits
+
+- Zero server costs for frontend (just static file serving)
+- Can optionally host on Cloudflare Pages for free (if preferred over Docker)
+- No cold starts, instant page loads
+- Easy CDN caching
 
 ---
 
@@ -75,16 +120,16 @@ Each customer deployment is isolated (single-tenant). While initially built for 
 ```
 proctora/
 ├── apps/
-│   ├── dashboard/              # Teacher/Admin frontend (migrate from web)
-│   │   ├── Dockerfile
+│   ├── dashboard/              # Teacher/Admin frontend (static)
+│   │   ├── Dockerfile          # Multi-stage: build + Caddy
 │   │   └── @proctora/dashboard
-│   ├── exam/                   # Student frontend (NEW)
-│   │   ├── Dockerfile
+│   ├── exam/                   # Student frontend (static)
+│   │   ├── Dockerfile          # Multi-stage: build + Caddy
 │   │   └── @proctora/exam
-│   ├── api-dashboard/          # Teacher API (split from worker)
+│   ├── api-dashboard/          # Teacher API
 │   │   ├── Dockerfile
 │   │   └── @proctora/api-dashboard
-│   └── api-exam/               # Student API (NEW)
+│   └── api-exam/               # Student API
 │       ├── Dockerfile
 │       └── @proctora/api-exam
 ├── packages/
@@ -92,14 +137,12 @@ proctora/
 │   │   └── @proctora/shared
 │   ├── db/                     # Drizzle schema & migrations
 │   │   └── @proctora/db
-│   ├── ui/                     # Shared UI components (NEW)
+│   ├── ui/                     # Shared UI components
 │   │   └── @proctora/ui
-│   └── auth/                   # Shared Google OAuth logic (NEW)
+│   └── auth/                   # Shared auth utilities (client-side)
 │       └── @proctora/auth
 ├── docker-compose.yml          # Full stack compose
-├── docker-compose.dev.yml      # Development overrides
-└── nginx/                      # Reverse proxy config
-    └── nginx.conf
+└── docker-compose.dev.yml      # Development overrides
 ```
 
 ---
@@ -190,6 +233,8 @@ ALTER TABLE user_settings ADD COLUMN user_id UUID REFERENCES users(id);
 
 **Purpose**: Teacher/examiner interface for quiz management
 
+**Type**: Static SPA (Single Page Application)
+
 **Pages**:
 | Route | Description |
 |-------|-------------|
@@ -221,6 +266,8 @@ ALTER TABLE user_settings ADD COLUMN user_id UUID REFERENCES users(id);
 ### 2. Exam App (`@proctora/exam`)
 
 **Purpose**: Student interface for taking tests
+
+**Type**: Static SPA (Single Page Application)
 
 **Pages**:
 | Route | Description |
@@ -324,25 +371,27 @@ Profile:
 ### Teacher Login (Dashboard)
 ```
 1. Teacher clicks "Login with Google"
-2. Redirects to Google OAuth
-3. Google redirects back with code
-4. API exchanges code for tokens
-5. API creates/updates user with role='teacher'
-6. Returns JWT token
-7. Dashboard stores token, redirects to home
+2. Frontend redirects to Google OAuth
+3. Google redirects back to frontend with code
+4. Frontend sends code to API
+5. API exchanges code for tokens
+6. API creates/updates user with role='teacher'
+7. API returns JWT token
+8. Frontend stores token in localStorage, redirects to home
 ```
 
 ### Student Login (Exam App)
 ```
 1. Student clicks "Login with Google"
-2. Redirects to Google OAuth
-3. Google redirects back with code
-4. API exchanges code for tokens
-5. API checks if email is in student_allowlist
+2. Frontend redirects to Google OAuth
+3. Google redirects back to frontend with code
+4. Frontend sends code to API
+5. API exchanges code for tokens
+6. API checks if email is in student_allowlist
    - If NOT: Return error "Not authorized. Contact your teacher."
    - If YES: Create/update user with role='student'
-6. Returns JWT token
-7. Exam app stores token, redirects to tests
+7. API returns JWT token
+8. Frontend stores token in localStorage, redirects to tests
 ```
 
 ---
@@ -380,6 +429,7 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     ports:
       - "4000:4000"
     depends_on:
@@ -401,105 +451,80 @@ services:
       postgres:
         condition: service_healthy
 
+  # Static frontend served by Caddy (lightweight)
   dashboard:
     build:
       context: .
       dockerfile: apps/dashboard/Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: http://api-dashboard:4000
-      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
-      - "3000:3000"
-    depends_on:
-      - api-dashboard
+      - "3000:80"
 
   exam:
     build:
       context: .
       dockerfile: apps/exam/Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: http://api-exam:4001
-      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
-      - "3001:3001"
-    depends_on:
-      - api-exam
-
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - dashboard
-      - exam
-      - api-dashboard
-      - api-exam
+      - "3001:80"
 
 volumes:
   postgres_data:
 ```
 
-### Example Nginx Config
+### Example Frontend Dockerfile (Static)
 
-```nginx
-upstream dashboard {
-    server dashboard:3000;
-}
+```dockerfile
+# apps/dashboard/Dockerfile
+FROM node:20-alpine AS builder
 
-upstream exam {
-    server exam:3001;
-}
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+COPY apps/dashboard ./apps/dashboard
+COPY packages ./packages
 
-upstream api-dashboard {
-    server api-dashboard:4000;
-}
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @proctora/dashboard build
 
-upstream api-exam {
-    server api-exam:4001;
-}
+# Serve static files with Caddy (tiny image, ~40MB)
+FROM caddy:2-alpine
 
-server {
-    listen 80;
-    server_name dashboard.proctora.io;
-    location / {
-        proxy_pass http://dashboard;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+COPY --from=builder /app/apps/dashboard/out /srv
+COPY apps/dashboard/Caddyfile /etc/caddy/Caddyfile
 
-server {
-    listen 80;
-    server_name exam.proctora.io;
-    location / {
-        proxy_pass http://exam;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+EXPOSE 80
+```
 
-server {
-    listen 80;
-    server_name api-dashboard.proctora.io;
-    location / {
-        proxy_pass http://api-dashboard;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+### Example Caddyfile (SPA routing)
 
-server {
-    listen 80;
-    server_name api-exam.proctora.io;
-    location / {
-        proxy_pass http://api-exam;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
+```
+:80 {
+    root * /srv
+    file_server
+    try_files {path} /index.html
 }
+```
+
+---
+
+## Cloudflare Tunnel Configuration
+
+Create tunnels for each service:
+
+```yaml
+# ~/.cloudflared/config.yml
+tunnel: proctora-tunnel
+credentials-file: /root/.cloudflared/credentials.json
+
+ingress:
+  - hostname: dashboard.proctora.io
+    service: http://localhost:3000
+  - hostname: exam.proctora.io
+    service: http://localhost:3001
+  - hostname: api-dashboard.proctora.io
+    service: http://localhost:4000
+  - hostname: api-exam.proctora.io
+    service: http://localhost:4001
+  - service: http_status:404
 ```
 
 ---
@@ -514,12 +539,14 @@ server {
 - [ ] Set up Drizzle ORM with PostgreSQL
 - [ ] Create Docker configuration
 - [ ] Create `@proctora/ui` shared component library
-- [ ] Create `@proctora/auth` shared auth package
+- [ ] Create `@proctora/auth` shared auth utilities
 - [ ] Write new database migrations
 - [ ] Set up Google OAuth credentials
+- [ ] Configure Cloudflare Tunnels
 
 ### Phase 2: Dashboard App
 - [ ] Create `@proctora/dashboard` app (migrate from `@proctora/web`)
+- [ ] Configure as static export (no SSR, no API routes)
 - [ ] Create `@proctora/api-dashboard` (migrate from Hono worker to Node.js)
 - [ ] Implement teacher auth flow
 - [ ] Migrate quiz creation functionality
@@ -528,7 +555,7 @@ server {
 - [ ] Add quiz assignment feature
 
 ### Phase 3: Exam App
-- [ ] Create `@proctora/exam` app
+- [ ] Create `@proctora/exam` app (static export)
 - [ ] Create `@proctora/api-exam`
 - [ ] Implement student auth flow (with allowlist check)
 - [ ] Build test listing page
@@ -559,12 +586,16 @@ GOOGLE_CLIENT_SECRET=xxx
 # JWT
 JWT_SECRET=your-secret-key
 
-# API URLs (for frontends)
-NEXT_PUBLIC_API_URL=https://api-dashboard.proctora.io
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
-
 # LLM (for quiz generation)
 GOOGLE_API_KEY=xxx  # Gemini API key
+```
+
+### Frontend Build-time Variables
+
+```env
+# Set at build time for static export
+NEXT_PUBLIC_API_URL=https://api-dashboard.proctora.io
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 ```
 
 ---
@@ -579,6 +610,7 @@ GOOGLE_API_KEY=xxx  # Gemini API key
 6. **Multi-exam support** - Configurable exam types beyond UPSC (JEE, NEET, GATE, etc.)
 7. **Redis** - Add Redis for caching/sessions if needed at scale
 8. **Horizontal scaling** - Multiple API instances behind load balancer
+9. **Cloudflare Pages** - Option to host static frontends on CF Pages instead of Docker
 
 ---
 
@@ -586,12 +618,12 @@ GOOGLE_API_KEY=xxx  # Gemini API key
 
 | Component | Package Name | Domain Example | Port | Purpose |
 |-----------|--------------|----------------|------|---------|
-| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | 3000 | Teacher quiz management |
-| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | 3001 | Student test-taking |
+| Dashboard Frontend | `@proctora/dashboard` | `dashboard.proctora.io` | 3000 | Teacher quiz management (static) |
+| Exam Frontend | `@proctora/exam` | `exam.proctora.io` | 3001 | Student test-taking (static) |
 | Dashboard API | `@proctora/api-dashboard` | `api-dashboard.proctora.io` | 4000 | Teacher API |
 | Exam API | `@proctora/api-exam` | `api-exam.proctora.io` | 4001 | Student API |
 | Database | PostgreSQL | - | 5432 | Data storage |
 | Shared UI | `@proctora/ui` | - | - | Reusable components |
-| Shared Auth | `@proctora/auth` | - | - | Google OAuth logic |
+| Shared Auth | `@proctora/auth` | - | - | Client-side auth utilities |
 | Shared Types | `@proctora/shared` | - | - | Types, schemas |
 | Database | `@proctora/db` | - | - | Drizzle schema & migrations |
