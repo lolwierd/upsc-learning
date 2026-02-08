@@ -648,8 +648,23 @@ export async function generateQuiz(
   // Auto-fix
   const fixedQuestions = normalizedQuestions.map(autoFixQuestion);
 
+  const hasStatementList = (text: string): boolean => {
+    const firstStatement = /(?:^|\s)(?:1\.|1\)|statement\s*-?\s*i\b)/i.test(text);
+    const secondStatement = /(?:^|\s)(?:2\.|2\)|statement\s*-?\s*ii\b)/i.test(text);
+    return firstStatement && secondStatement;
+  };
+
+  const isInvalidStatementQuestion = (question: GeneratedQuestion): boolean =>
+    question.questionType === "statement" && !hasStatementList(question.questionText);
+
+  let invalidStatementCount = 0;
+
   // Deduplication
-  let finalQuestions = fixedQuestions;
+  let finalQuestions = fixedQuestions.filter((question) => {
+    if (!isInvalidStatementQuestion(question)) return true;
+    invalidStatementCount++;
+    return false;
+  });
   let dedupFilteredCount = 0;
   let standardReclassifiedCount = 0;
 
@@ -680,8 +695,12 @@ export async function generateQuiz(
         text.includes("how many of the above") ||
         text.includes("which of the statements")
       ) {
-        question.questionType = "statement";
-        standardReclassifiedCount++;
+        if (hasStatementList(question.questionText)) {
+          question.questionType = "statement";
+          standardReclassifiedCount++;
+        } else {
+          invalidStatementCount++;
+        }
       }
     }
     if (standardReclassifiedCount > 0) {
@@ -689,12 +708,16 @@ export async function generateQuiz(
     }
   }
 
+  if (invalidStatementCount > 0) {
+    finalQuestions = finalQuestions.filter((question) => !isInvalidStatementQuestion(question));
+    console.warn(`Filtered ${invalidStatementCount} statement questions missing statements`);
+  }
+
   const factualMinimum = Math.round(count * 0.40);
   const getFactualCount = () =>
     finalQuestions.filter(q => q.questionType === "standard").length;
   const hasFactualMinimum = () => getFactualCount() >= factualMinimum;
-  const shouldRegenerate = () =>
-    (enableDeduplication && finalQuestions.length < count) || !hasFactualMinimum();
+  const shouldRegenerate = () => finalQuestions.length < count || !hasFactualMinimum();
 
   if (shouldRegenerate()) {
     let remaining = enableDeduplication
@@ -759,6 +782,10 @@ export async function generateQuiz(
       const fixedRegenerated = normalizedRegenerated.map(autoFixQuestion);
 
       for (const question of fixedRegenerated) {
+        if (isInvalidStatementQuestion(question)) {
+          invalidStatementCount++;
+          continue;
+        }
         if (enableDeduplication) {
           const fingerprint = generateFingerprint(question);
           if (existingFingerprints.has(fingerprint)) {
@@ -777,8 +804,13 @@ export async function generateQuiz(
             text.includes("which of the statements")
           )
         ) {
-          question.questionType = "statement";
-          standardReclassifiedCount++;
+          if (hasStatementList(question.questionText)) {
+            question.questionType = "statement";
+            standardReclassifiedCount++;
+          } else {
+            invalidStatementCount++;
+            continue;
+          }
         }
 
         if (factualOnly && question.questionType !== "standard") {
