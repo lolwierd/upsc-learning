@@ -1,3 +1,4 @@
+/* global Response */
 import { serve } from '@hono/node-server';
 import { config as dotenvConfig } from 'dotenv';
 import fs from 'fs';
@@ -35,6 +36,13 @@ const env: Env = {
     LLM_DUMP: process.env.LLM_DUMP,
     LLM_MAX_RETRIES: process.env.LLM_MAX_RETRIES,
     LLM_RETRY_DELAY_MS: process.env.LLM_RETRY_DELAY_MS,
+
+    // Dedupe tuning knobs (optional)
+    DEDUP_HISTORY_LIMIT: process.env.DEDUP_HISTORY_LIMIT,
+    DEDUP_CLUSTER_LIMIT: process.env.DEDUP_CLUSTER_LIMIT,
+    DEDUP_HISTORY_SIM_THRESHOLD: process.env.DEDUP_HISTORY_SIM_THRESHOLD,
+    DEDUP_INTRA_CONFIRM_THRESHOLD: process.env.DEDUP_INTRA_CONFIRM_THRESHOLD,
+    DEDUP_HISTORY_CONFIRM_THRESHOLD: process.env.DEDUP_HISTORY_CONFIRM_THRESHOLD,
 };
 
 const PORT = parseInt(process.env.PORT || '3001', 10);

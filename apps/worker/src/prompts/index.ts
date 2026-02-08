@@ -61,7 +61,7 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, enableCurrentAffairs: _enableCurrentAffairs, currentAffairsTheme } = params;
+  const { theme, styles, totalCount, currentAffairsTheme } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
 
   // Build style instructions

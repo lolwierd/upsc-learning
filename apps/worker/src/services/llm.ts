@@ -9,7 +9,10 @@ import {
 } from "./validator.js";
 import {
   generateFingerprint,
+  generateConceptKey,
+  calculateTextSimilarity,
   FINGERPRINT_QUERIES,
+  CLUSTER_QUERIES,
 } from "./deduplication.js";
 import { dumpLlmCall, serializeError } from "./llm-dump.js";
 import { GENERATED_QUESTION_ARRAY_SCHEMA } from "./structured-output.js";
@@ -25,6 +28,62 @@ import {
 const DEFAULT_MAX_RETRIES = 15;
 const DEFAULT_RETRY_DELAY_MS = 2000; // Base delay for exponential backoff
 const RATE_LIMIT_RETRY_DELAY_MS = 60000; // 60s for 429 errors
+
+const METADATA_SUBJECTS = [
+  "polity",
+  "economy",
+  "environment",
+  "geography",
+  "history",
+  "science",
+  "culture",
+] as const;
+
+const METADATA_SUBJECT_SET = new Set<string>(METADATA_SUBJECTS);
+
+function clampNumber(value: number, min: number, max: number): number {
+  if (!Number.isFinite(value)) return min;
+  return Math.min(max, Math.max(min, value));
+}
+
+function parseIntEnv(value: string | undefined, fallback: number): number {
+  if (value == null || value === "") return fallback;
+  const parsed = parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function parseFloatEnv(value: string | undefined, fallback: number): number {
+  if (value == null || value === "") return fallback;
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function canonicalizeSubjectKey(subject: string): string {
+  // UI uses "art_culture" but question metadata uses "culture".
+  if (subject === "art_culture") return "culture";
+  return subject;
+}
+
+function subjectAliases(canonical: string): string[] {
+  if (canonical === "culture") return ["culture", "art_culture"];
+  return [canonical];
+}
+
+function getEffectiveSubjectKey(requestSubject: string, q: GeneratedQuestion): string {
+  if (requestSubject === "random") {
+    const meta = q.metadata as { subject?: unknown } | undefined;
+    if (meta?.subject && typeof meta.subject === "string") {
+      const canonical = canonicalizeSubjectKey(meta.subject);
+      // If the model returns an unexpected subject label, bucket it under "random"
+      // so history is still loadable and dedupe remains effective.
+      if (METADATA_SUBJECT_SET.has(canonical)) return canonical;
+      return "random";
+    }
+    return "random";
+  }
+
+  return canonicalizeSubjectKey(requestSubject);
+}
 
 interface GenerateQuizParams {
   subject: string;
@@ -172,35 +231,93 @@ async function retryWithBackoff<T>(
   throw lastError;
 }
 
-// Load existing fingerprints from database for deduplication
-async function loadExistingFingerprints(
-  db: D1Database,
-  subject: string
-): Promise<Set<string>> {
-  try {
-    const result = await db
-      .prepare(FINGERPRINT_QUERIES.checkExistsBySubject)
-      .bind(subject)
-      .all();
+type DedupHistoryBucket = {
+  fingerprints: Set<string>;
+  previews: string[]; // question_text_preview (for similarity checks)
+  clusters: Map<string, string>; // cluster_hash -> representative_text
+};
 
-    const fingerprints = new Set<string>();
-    if (result.results) {
-      for (const row of result.results) {
-        fingerprints.add((row as { fingerprint: string }).fingerprint);
+async function loadDedupHistoryBucket(
+  db: D1Database,
+  canonicalSubject: string,
+  fingerprintLimit: number,
+  clusterLimit: number
+): Promise<DedupHistoryBucket> {
+  const fingerprints = new Set<string>();
+  const previews: string[] = [];
+  const clusters = new Map<string, string>();
+
+  for (const alias of subjectAliases(canonicalSubject)) {
+    try {
+      const fpResult = await db
+        .prepare(FINGERPRINT_QUERIES.checkExistsBySubject)
+        .bind(alias, fingerprintLimit)
+        .all();
+
+      for (const row of (fpResult.results ?? []) as Array<{ fingerprint?: unknown; question_text_preview?: unknown }>) {
+        if (typeof row.fingerprint === "string") fingerprints.add(row.fingerprint);
+        if (typeof row.question_text_preview === "string") previews.push(row.question_text_preview);
       }
+    } catch (error) {
+      console.warn(`Could not load fingerprints for ${alias}:`, error);
     }
-    return fingerprints;
-  } catch (error) {
-    console.warn("Could not load fingerprints:", error);
-    return new Set();
+
+    try {
+      const clResult = await db
+        .prepare(CLUSTER_QUERIES.loadBySubject)
+        .bind(alias, clusterLimit)
+        .all();
+
+      for (const row of (clResult.results ?? []) as Array<{ cluster_hash?: unknown; representative_text?: unknown }>) {
+        if (typeof row.cluster_hash !== "string") continue;
+        if (clusters.has(row.cluster_hash)) continue; // keep newest (query is ordered desc)
+        if (typeof row.representative_text === "string") {
+          clusters.set(row.cluster_hash, row.representative_text);
+        }
+      }
+    } catch (error) {
+      console.warn(`Could not load clusters for ${alias}:`, error);
+    }
   }
+
+  return {
+    fingerprints,
+    previews: [...new Set(previews)],
+    clusters,
+  };
+}
+
+async function loadDedupHistory(
+  db: D1Database,
+  requestSubject: string,
+  fingerprintLimit: number,
+  clusterLimit: number
+): Promise<Map<string, DedupHistoryBucket>> {
+  const buckets = new Map<string, DedupHistoryBucket>();
+
+  if (requestSubject === "random") {
+    for (const s of METADATA_SUBJECTS) {
+      const bucket = await loadDedupHistoryBucket(db, s, fingerprintLimit, clusterLimit);
+      buckets.set(s, bucket);
+    }
+    // Questions generated under "random" with missing/unknown metadata are stored under subject "random".
+    // Load that bucket too so historical dedupe still works for those cases.
+    const randomBucket = await loadDedupHistoryBucket(db, "random", fingerprintLimit, clusterLimit);
+    buckets.set("random", randomBucket);
+    return buckets;
+  }
+
+  const canonical = canonicalizeSubjectKey(requestSubject);
+  const bucket = await loadDedupHistoryBucket(db, canonical, fingerprintLimit, clusterLimit);
+  buckets.set(canonical, bucket);
+  return buckets;
 }
 
 // Save fingerprints to database
 async function saveFingerprints(
   db: D1Database,
   questions: GeneratedQuestion[],
-  subject: string,
+  requestSubject: string,
   theme?: string
 ): Promise<{ attempted: number; insertErrors: number }> {
   let savedCount = 0;
@@ -208,13 +325,14 @@ async function saveFingerprints(
 
   for (const question of questions) {
     try {
+      const subjectKey = getEffectiveSubjectKey(requestSubject, question);
       const fingerprint = generateFingerprint(question);
       await db
         .prepare(FINGERPRINT_QUERIES.insert) // Uses INSERT OR IGNORE
         .bind(
           crypto.randomUUID(),
           fingerprint,
-          subject,
+          subjectKey,
           theme || null,
           question.questionText.slice(0, 200),
           null
@@ -230,6 +348,42 @@ async function saveFingerprints(
 
   if (errorCount > 0) {
     console.warn(`Saved ${savedCount}/${questions.length} fingerprints (${errorCount} errors)`);
+  }
+
+  return { attempted: questions.length, insertErrors: errorCount };
+}
+
+async function saveClusters(
+  db: D1Database,
+  questions: GeneratedQuestion[],
+  requestSubject: string
+): Promise<{ attempted: number; insertErrors: number }> {
+  let savedCount = 0;
+  let errorCount = 0;
+
+  for (const question of questions) {
+    try {
+      const subjectKey = getEffectiveSubjectKey(requestSubject, question);
+      const conceptKey = generateConceptKey(question);
+      await db
+        .prepare(CLUSTER_QUERIES.upsert)
+        .bind(
+          crypto.randomUUID(),
+          // Store concept key as the cluster hash used for future dedupe.
+          conceptKey,
+          subjectKey,
+          question.questionText.slice(0, 500)
+        )
+        .run();
+      savedCount++;
+    } catch (error) {
+      errorCount++;
+      console.warn("Cluster upsert failed:", error);
+    }
+  }
+
+  if (errorCount > 0) {
+    console.warn(`Saved ${savedCount}/${questions.length} clusters (${errorCount} errors)`);
   }
 
   return { attempted: questions.length, insertErrors: errorCount };
@@ -559,14 +713,24 @@ export async function generateQuiz(
   const overallCallId = crypto.randomUUID();
   const groundingEnabled = !!enableCurrentAffairs; // Force enable if requested (ignoring env var)
 
-  // Load fingerprints if deduplication is enabled
-  let existingFingerprints = new Set<string>();
+  const dedupHistoryLimit = clampNumber(parseIntEnv(env.DEDUP_HISTORY_LIMIT, 600), 0, 5000);
+  const dedupClusterLimit = clampNumber(parseIntEnv(env.DEDUP_CLUSTER_LIMIT, 600), 0, 5000);
+  const dedupHistorySimThreshold = clampNumber(parseFloatEnv(env.DEDUP_HISTORY_SIM_THRESHOLD, 0.62), 0, 1);
+  const dedupIntraConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_INTRA_CONFIRM_THRESHOLD, 0.50), 0, 1);
+  const dedupHistoryConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_HISTORY_CONFIRM_THRESHOLD, 0.50), 0, 1);
+
+  // Load history if deduplication is enabled.
+  const dedupHistory = new Map<string, DedupHistoryBucket>();
   if (enableDeduplication && env.DB) {
-    existingFingerprints = await loadExistingFingerprints(
+    const loaded = await loadDedupHistory(
       env.DB as any,
-      subject
+      subject,
+      dedupHistoryLimit,
+      dedupClusterLimit
     );
-    console.log(`Loaded ${existingFingerprints.size} existing fingerprints for ${subject}`);
+    for (const [k, v] of loaded.entries()) dedupHistory.set(k, v);
+    const fpCount = [...dedupHistory.values()].reduce((s, b) => s + b.fingerprints.size, 0);
+    console.log(`Loaded ${fpCount} existing fingerprints for dedupe (${subject})`);
   }
 
   console.log(`Starting single-call generation for ${count} questions`);
@@ -658,37 +822,90 @@ export async function generateQuiz(
     question.questionType === "statement" && !hasStatementList(question.questionText);
 
   let invalidStatementCount = 0;
-
-  // Deduplication
-  let finalQuestions = fixedQuestions.filter((question) => {
-    if (!isInvalidStatementQuestion(question)) return true;
-    invalidStatementCount++;
-    return false;
-  });
   let dedupFilteredCount = 0;
   let standardReclassifiedCount = 0;
 
-  if (enableDeduplication) {
-    const dedupedQuestions: GeneratedQuestion[] = [];
+  const dedupReasonCounts = {
+    fingerprint: 0,
+    intraConcept: 0,
+    historyConcept: 0,
+    historySimilarity: 0,
+  };
 
-    for (const question of fixedQuestions) {
-      const fingerprint = generateFingerprint(question);
-      if (existingFingerprints.has(fingerprint)) {
-        dedupFilteredCount++;
-      } else {
-        dedupedQuestions.push(question);
-        existingFingerprints.add(fingerprint);
+  type RuntimeDedupBucket = {
+    seenFingerprints: Set<string>;
+    seenConceptKeys: Set<string>;
+    conceptRepText: Map<string, string>; // conceptKey -> representative questionText (within this quiz)
+    historyPreviews: string[];
+    historyClusters: Map<string, string>; // conceptKey -> representative_text (history)
+  };
+
+  const runtimeBuckets = new Map<string, RuntimeDedupBucket>();
+
+  const getRuntimeBucket = (subjectKey: string): RuntimeDedupBucket => {
+    const canonical = canonicalizeSubjectKey(subjectKey);
+    const existing = runtimeBuckets.get(canonical);
+    if (existing) return existing;
+
+    const history = dedupHistory.get(canonical);
+    const bucket: RuntimeDedupBucket = {
+      seenFingerprints: new Set(history?.fingerprints ?? []),
+      seenConceptKeys: new Set(),
+      conceptRepText: new Map(),
+      historyPreviews: history?.previews ?? [],
+      historyClusters: history?.clusters ?? new Map(),
+    };
+    runtimeBuckets.set(canonical, bucket);
+    return bucket;
+  };
+
+  const checkAndAccept = (question: GeneratedQuestion): { accepted: boolean; reason?: keyof typeof dedupReasonCounts } => {
+    const effectiveSubject = getEffectiveSubjectKey(subject, question);
+    const bucket = getRuntimeBucket(effectiveSubject);
+
+    const fingerprint = generateFingerprint(question);
+    if (bucket.seenFingerprints.has(fingerprint)) {
+      return { accepted: false, reason: "fingerprint" };
+    }
+
+    const conceptKey = generateConceptKey(question);
+    if (bucket.seenConceptKeys.has(conceptKey)) {
+      const rep = bucket.conceptRepText.get(conceptKey);
+      if (rep && calculateTextSimilarity(question.questionText, rep) >= dedupIntraConfirmThreshold) {
+        return { accepted: false, reason: "intraConcept" };
       }
     }
-    finalQuestions = dedupedQuestions;
-    if (dedupFilteredCount > 0) {
-      console.warn(`Deduplicated ${dedupFilteredCount} questions`);
-    }
-  }
 
-  if (finalQuestions.length > 0) {
-    for (const question of finalQuestions) {
-      if (question.questionType !== "standard") continue;
+    const historyRep = bucket.historyClusters.get(conceptKey);
+    if (historyRep && calculateTextSimilarity(question.questionText, historyRep) >= dedupHistoryConfirmThreshold) {
+      return { accepted: false, reason: "historyConcept" };
+    }
+
+    for (const preview of bucket.historyPreviews) {
+      if (calculateTextSimilarity(question.questionText, preview) >= dedupHistorySimThreshold) {
+        return { accepted: false, reason: "historySimilarity" };
+      }
+    }
+
+    // Accept: update runtime state
+    bucket.seenFingerprints.add(fingerprint);
+    bucket.seenConceptKeys.add(conceptKey);
+    if (!bucket.conceptRepText.has(conceptKey)) {
+      bucket.conceptRepText.set(conceptKey, question.questionText);
+    }
+    return { accepted: true };
+  };
+
+  // Deduplication and early validation pass (keeps invalid statement questions out of runtime state)
+  let finalQuestions: GeneratedQuestion[] = [];
+  for (const question of fixedQuestions) {
+    if (isInvalidStatementQuestion(question)) {
+      invalidStatementCount++;
+      continue;
+    }
+
+    // Reclassify statement-like standard questions (before dedupe).
+    if (question.questionType === "standard") {
       const text = question.questionText.toLowerCase();
       if (
         text.includes("consider the following statements") ||
@@ -700,17 +917,35 @@ export async function generateQuiz(
           standardReclassifiedCount++;
         } else {
           invalidStatementCount++;
+          continue;
         }
       }
     }
-    if (standardReclassifiedCount > 0) {
-      console.warn(`Reclassified ${standardReclassifiedCount} standard questions as statement style`);
+
+    if (enableDeduplication) {
+      const result = checkAndAccept(question);
+      if (!result.accepted) {
+        dedupFilteredCount++;
+        if (result.reason) dedupReasonCounts[result.reason] += 1;
+        continue;
+      }
     }
+
+    finalQuestions.push(question);
   }
 
+  if (standardReclassifiedCount > 0) {
+    console.warn(`Reclassified ${standardReclassifiedCount} standard questions as statement style`);
+  }
   if (invalidStatementCount > 0) {
-    finalQuestions = finalQuestions.filter((question) => !isInvalidStatementQuestion(question));
     console.warn(`Filtered ${invalidStatementCount} statement questions missing statements`);
+  }
+  if (enableDeduplication && dedupFilteredCount > 0) {
+    console.warn(
+      `Deduplicated ${dedupFilteredCount} question(s) ` +
+      `(fingerprint=${dedupReasonCounts.fingerprint}, intraConcept=${dedupReasonCounts.intraConcept}, ` +
+      `historyConcept=${dedupReasonCounts.historyConcept}, historySimilarity=${dedupReasonCounts.historySimilarity})`
+    );
   }
 
   const factualMinimum = Math.round(count * 0.40);
@@ -786,35 +1021,36 @@ export async function generateQuiz(
           invalidStatementCount++;
           continue;
         }
-        if (enableDeduplication) {
-          const fingerprint = generateFingerprint(question);
-          if (existingFingerprints.has(fingerprint)) {
-            dedupFilteredCount++;
-            continue;
-          }
-          existingFingerprints.add(fingerprint);
-        }
 
-        const text = question.questionText.toLowerCase();
-        if (
-          question.questionType === "standard" &&
-          (
+        // Reclassify statement-like standard questions (before dedupe).
+        if (question.questionType === "standard") {
+          const text = question.questionText.toLowerCase();
+          if (
             text.includes("consider the following statements") ||
             text.includes("how many of the above") ||
             text.includes("which of the statements")
-          )
-        ) {
-          if (hasStatementList(question.questionText)) {
-            question.questionType = "statement";
-            standardReclassifiedCount++;
-          } else {
-            invalidStatementCount++;
-            continue;
+          ) {
+            if (hasStatementList(question.questionText)) {
+              question.questionType = "statement";
+              standardReclassifiedCount++;
+            } else {
+              invalidStatementCount++;
+              continue;
+            }
           }
         }
 
         if (factualOnly && question.questionType !== "standard") {
           continue;
+        }
+
+        if (enableDeduplication) {
+          const result = checkAndAccept(question);
+          if (!result.accepted) {
+            dedupFilteredCount++;
+            if (result.reason) dedupReasonCounts[result.reason] += 1;
+            continue;
+          }
         }
 
         finalQuestions.push(question);
@@ -902,9 +1138,12 @@ export async function generateQuiz(
 
   // Save fingerprints
   if (enableDeduplication && env.DB && finalQuestions.length > 0) {
-    // Fire and forget fingerprint saving to save time
+    // Fire and forget dedupe persistence to save time
     saveFingerprints(env.DB as any, finalQuestions, subject, theme).catch(err =>
       console.error("Background fingerprint save failed:", err)
+    );
+    saveClusters(env.DB as any, finalQuestions, subject).catch(err =>
+      console.error("Background cluster save failed:", err)
     );
   }
 

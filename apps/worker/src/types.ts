@@ -27,4 +27,11 @@ export interface Env {
   LLM_DUMP?: string; // "1" to enable dumping even in production
   LLM_MAX_RETRIES?: string; // Max retry attempts for LLM calls (default: 3)
   LLM_RETRY_DELAY_MS?: string; // Base delay for exponential backoff in ms (default: 2000)
+
+  // Dedupe tuning knobs (optional)
+  DEDUP_HISTORY_LIMIT?: string; // default: 600
+  DEDUP_CLUSTER_LIMIT?: string; // default: 600
+  DEDUP_HISTORY_SIM_THRESHOLD?: string; // default: 0.62
+  DEDUP_INTRA_CONFIRM_THRESHOLD?: string; // default: 0.50
+  DEDUP_HISTORY_CONFIRM_THRESHOLD?: string; // default: 0.50
 }

@@ -1,5 +1,74 @@
 import type { GeneratedQuestion } from "@mcqs/shared";
 
+const DEFAULT_MAX_KEYWORDS = 8;
+
+const ROMAN_NUMERAL_RE =
+  /^(?=[ivxlcdm]+$)m{0,4}(cm|cd|d?c{0,3})(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})$/i;
+
+function isRomanNumeralToken(token: string): boolean {
+  // Guard against pathological long tokens; Roman numerals in questions are short.
+  if (token.length === 0 || token.length > 15) return false;
+  return ROMAN_NUMERAL_RE.test(token);
+}
+
+const STOP_WORDS = new Set([
+  // Articles
+  "the",
+  "a",
+  "an",
+  "is",
+  "are",
+  "was",
+  "were",
+  "of",
+  "in",
+  "to",
+  "for",
+  "with",
+  "on",
+  "at",
+  "by",
+  "from",
+  "as",
+  "and",
+  "or",
+  "that",
+  "this",
+  "these",
+  "those",
+  // Question boilerplate
+  "statement",
+  "statements",
+  "option",
+  "options",
+  "following",
+  "above",
+  "below",
+  "correct",
+  "incorrect",
+  "consider",
+  "which",
+  "among",
+  "how",
+  "many",
+  "given",
+  "with",
+  "reference",
+  "regard",
+  "regarding",
+  "choose",
+  "select",
+  "best",
+  "describes",
+  "most",
+  "appropriate",
+  "pairs",
+  "pair",
+  "match",
+  "code",
+  "codes",
+]);
+
 // Normalize text for fingerprinting - removes noise, keeps semantics
 // IMPORTANT: We keep numbers (article numbers, years, amendments) as they are critical for UPSC questions
 function normalizeText(text: string): string {
@@ -9,10 +78,73 @@ function normalizeText(text: string): string {
     .replace(/[^\w\s\d]/g, "") // Remove punctuation but keep digits
     .replace(/\b(the|a|an|is|are|was|were|of|in|to|for|with|on|at|by)\b/g, "") // Remove stop words
     .replace(/\b(statement|option|following|above|below|correct|incorrect)\b/g, "") // Remove MCQ boilerplate
-    .replace(/\b[ivxlcdm]+\b/g, "") // Remove roman numerals (lowercase only to avoid matching words)
+    .replace(/\b[ivxlcdm]+\b/g, (m) => (isRomanNumeralToken(m) ? "" : m)) // Remove valid roman numerals only
     // NOTE: We do NOT normalize numbers - "Article 21" and "Article 22" must be distinct
     .trim()
     .replace(/\s+/g, " "); // Clean up again
+}
+
+function tokenizeForConcept(text: string): string[] {
+  const cleaned = text
+    .toLowerCase()
+    .replace(/[^\w\s\d]/g, " ") // keep token boundaries
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned) return [];
+
+  const tokens = cleaned.split(" ").filter(Boolean);
+
+  return tokens.filter((t) => {
+    if (STOP_WORDS.has(t)) return false;
+    if (isRomanNumeralToken(t)) return false;
+    if (t.length <= 2 && !/\d/.test(t)) return false;
+    if (/^[a-d]$/.test(t)) return false;
+    return true;
+  });
+}
+
+function hash32Hex(input: string): string {
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash).toString(16);
+}
+
+export function extractKeywords(text: string, maxKeywords = DEFAULT_MAX_KEYWORDS): string[] {
+  const tokens = tokenizeForConcept(text);
+  if (tokens.length === 0) return [];
+
+  const counts = new Map<string, number>();
+  for (const t of tokens) {
+    counts.set(t, (counts.get(t) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .sort((a, b) => {
+      const diff = b[1] - a[1];
+      if (diff !== 0) return diff;
+      return a[0].localeCompare(b[0]);
+    })
+    .slice(0, maxKeywords)
+    .map(([t]) => t)
+    .sort();
+}
+
+export function calculateTextSimilarity(textA: string, textB: string): number {
+  const a = new Set(tokenizeForConcept(textA));
+  const b = new Set(tokenizeForConcept(textB));
+
+  if (a.size === 0 || b.size === 0) return 0;
+  let intersection = 0;
+  for (const t of a) {
+    if (b.has(t)) intersection++;
+  }
+  const union = new Set([...a, ...b]).size;
+  return union === 0 ? 0 : intersection / union;
 }
 
 // Extract key entities/concepts from question text
@@ -51,7 +183,12 @@ function extractKeyEntities(text: string): string[] {
     }
   }
 
-  return [...new Set(entities)].sort();
+  return [...new Set(entities)]
+    .map((e) => e.trim())
+    .filter(Boolean)
+    // Filter generic title-case captures (e.g. "Consider", "Which") from the proper-noun regex.
+    .filter((e) => !STOP_WORDS.has(e))
+    .sort();
 }
 
 // Strip option prefix (A), B), etc.) from option text
@@ -67,31 +204,24 @@ export function generateFingerprint(question: GeneratedQuestion): string {
   const combined = `${question.questionText} ${correctAnswer}`;
   const normalized = normalizeText(combined);
 
-  // Simple hash function (32-bit) - sufficient for moderate scale
-  // For high-volume generation, consider upgrading to SHA-256
-  let hash = 0;
-  for (let i = 0; i < normalized.length; i++) {
-    const char = normalized.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
+  return `fp_${hash32Hex(normalized)}`;
+}
 
-  return `fp_${Math.abs(hash).toString(16)}`;
+// Generate a concept key (sub-sub-topic proxy) based on entities + keywords.
+export function generateConceptKey(question: GeneratedQuestion): string {
+  const entities = extractKeyEntities(question.questionText).slice(0, 8);
+  const keywords = extractKeywords(question.questionText, 8);
+
+  // Combine, de-dupe, and limit to keep the signature stable.
+  const combined = [...new Set([...entities, ...keywords])].sort().slice(0, 16);
+  const keyStr = combined.join("|");
+  return `ck_${hash32Hex(keyStr)}`;
 }
 
 // Generate a cluster hash based on key entities
 export function generateClusterHash(question: GeneratedQuestion): string {
-  const entities = extractKeyEntities(question.questionText);
-  const entityStr = entities.slice(0, 5).join("|"); // Top 5 entities
-
-  let hash = 0;
-  for (let i = 0; i < entityStr.length; i++) {
-    const char = entityStr.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-
-  return `cl_${Math.abs(hash).toString(16)}`;
+  // Keep for backward compatibility; align it to the new concept key.
+  return generateConceptKey(question).replace(/^ck_/, "cl_");
 }
 
 // Calculate similarity between two questions (0-1 scale)
@@ -218,7 +348,7 @@ export const FINGERPRINT_QUERIES = {
     FROM question_fingerprints 
     WHERE subject = ? 
     ORDER BY created_at DESC 
-    LIMIT 600
+    LIMIT ?
   `,
 
   // Use INSERT OR IGNORE to handle race conditions and duplicate fingerprints gracefully
@@ -231,4 +361,23 @@ export const FINGERPRINT_QUERIES = {
     DELETE FROM question_fingerprints 
     WHERE created_at < unixepoch() - (86400 * 90)
   `, // Delete fingerprints older than 90 days
+};
+
+export const CLUSTER_QUERIES = {
+  loadBySubject: `
+    SELECT cluster_hash, representative_text
+    FROM question_clusters
+    WHERE subject = ?
+    ORDER BY updated_at DESC
+    LIMIT ?
+  `,
+
+  upsert: `
+    INSERT INTO question_clusters (id, cluster_hash, subject, representative_text)
+    VALUES (?, ?, ?, ?)
+    ON CONFLICT(cluster_hash, subject) DO UPDATE SET
+      question_count = question_count + 1,
+      representative_text = excluded.representative_text,
+      updated_at = unixepoch()
+  `,
 };
