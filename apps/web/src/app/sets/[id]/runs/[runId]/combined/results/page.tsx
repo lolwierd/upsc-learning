@@ -5,7 +5,7 @@ export const runtime = "edge";
 import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Card, Button } from "@/components/ui";
+import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getRunAttempt } from "@/lib/api";
 import type { RunAttemptWithAnswers, Subject } from "@mcqs/shared";
@@ -317,9 +317,7 @@ export default function CombinedResultsPage() {
                   {displayIndex + 1}
                 </span>
                 <div className="flex-1">
-                  <p className="text-gray-900 whitespace-pre-wrap">
-                    {answer.questionText}
-                  </p>
+                  <Markdown className="text-gray-900" text={answer.questionText} />
                   {answer.markedForReview && (
                     <span className="inline-flex items-center gap-1 mt-2 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
                       <svg
@@ -391,7 +389,9 @@ export default function CombinedResultsPage() {
                       >
                         {isCorrectOption ? "✓" : isSelected ? "✗" : optionLabel}
                       </span>
-                      <span className={cn("text-sm", textColor)}>{option}</span>
+                      <span className={cn("text-sm", textColor)}>
+                        <Markdown inline text={option} />
+                      </span>
                     </div>
                   );
                 })}
@@ -403,9 +403,7 @@ export default function CombinedResultsPage() {
                   <p className="text-sm font-medium text-blue-800 mb-1">
                     Explanation
                   </p>
-                  <p className="text-sm text-blue-700 whitespace-pre-wrap">
-                    {answer.explanation}
-                  </p>
+                  <Markdown className="text-sm text-blue-700" text={answer.explanation} />
                 </div>
               )}
             </Card>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, Button, Select } from "@/components/ui";
+import { Card, Button, Select, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getWrongAnswers } from "@/lib/api";
 import type { WrongAnswer } from "@mcqs/shared";
@@ -100,9 +100,7 @@ export default function ReviewPage() {
                   <span className="flex-shrink-0 w-8 h-8 bg-red-100 text-red-700 rounded-lg flex items-center justify-center font-medium text-sm">
                     {index + 1}
                   </span>
-                  <p className="text-gray-900 whitespace-pre-wrap">
-                    {answer.questionText}
-                  </p>
+                  <Markdown className="text-gray-900" text={answer.questionText} />
                 </div>
 
                 {/* Options */}
@@ -143,7 +141,9 @@ export default function ReviewPage() {
                         >
                           {isCorrectOption ? "✓" : isSelected ? "✗" : optionLabel}
                         </span>
-                        <span className={cn("text-sm", textColor)}>{option}</span>
+                        <span className={cn("text-sm", textColor)}>
+                          <Markdown inline text={option} />
+                        </span>
                       </div>
                     );
                   })}
@@ -154,7 +154,7 @@ export default function ReviewPage() {
                   <p className="text-sm font-medium text-blue-800 mb-1">
                     Explanation
                   </p>
-                  <p className="text-sm text-blue-700">{answer.explanation}</p>
+                  <Markdown className="text-sm text-blue-700" text={answer.explanation} />
                 </div>
               </Card>
             );

@@ -4,7 +4,7 @@ export const runtime = "edge";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Card, Button } from "@/components/ui";
+import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
 import { SUBJECT_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
@@ -571,9 +571,7 @@ export default function QuizPage() {
                     <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center font-medium text-sm">
                       {i + 1}
                     </span>
-                    <p className="text-gray-900 whitespace-pre-wrap">
-                      {question.questionText}
-                    </p>
+                    <Markdown className="text-gray-900" text={question.questionText} />
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -691,7 +689,7 @@ export default function QuizPage() {
                                 : "text-gray-700"
                           )}
                         >
-                          {option}
+                          <Markdown inline text={option} />
                         </span>
                       </button>
                     );
@@ -756,7 +754,7 @@ export default function QuizPage() {
                     {question.explanation && (
                       <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm font-medium text-blue-900 mb-1">Explanation</p>
-                        <p className="text-sm text-blue-800 whitespace-pre-wrap">{question.explanation}</p>
+                        <Markdown className="text-sm text-blue-800" text={question.explanation} />
                       </div>
                     )}
 
