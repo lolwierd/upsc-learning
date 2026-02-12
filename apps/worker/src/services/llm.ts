@@ -99,6 +99,7 @@ interface GenerateQuizParams {
   regenerationIndex?: number; // 0 = initial, >0 = regeneration call index
   shuffleSeed?: number; // Seed for theme randomization
   temperatureOverride?: number; // Override temperature for this call (used for regen diversity)
+  previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
 }
 
 export interface GenerateQuizMetrics {
@@ -468,6 +469,7 @@ async function generateQuizCall(
     excludeTopics,
     regenerationIndex = 0,
     shuffleSeed,
+    previousSearchQueries,
   } = params;
 
   // Use primary generation model for all cases (including grounding)
@@ -494,6 +496,7 @@ async function generateQuizCall(
     excludeTopics,
     regenerationIndex,
     shuffleSeed,
+    previousSearchQueries,
   });
 
   const promptChars = prompt.length;
@@ -862,6 +865,13 @@ export async function generateQuiz(
   let totalTokens = 0;
   let totalGroundingSources = 0;
 
+  // Accumulate web search queries across calls for search diversity feedback
+  const accumulatedSearchQueries: string[] = [];
+  const initialSearchQueries = singleResult.groundingMetadata?.webSearchQueries;
+  if (initialSearchQueries?.length) {
+    accumulatedSearchQueries.push(...initialSearchQueries);
+  }
+
   allQuestions = allQuestions.concat(singleResult.questions);
   totalPromptChars += singleResult.metrics.promptChars || 0;
   totalResponseChars += singleResult.metrics.responseChars || 0;
@@ -1102,6 +1112,7 @@ export async function generateQuiz(
               excludeTopics: currentExcludeTopics,
               regenerationIndex,
               shuffleSeed,
+              previousSearchQueries: accumulatedSearchQueries,
               ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
             },
             overallCallId,
@@ -1125,6 +1136,12 @@ export async function generateQuiz(
           operationName: `Quiz Regeneration (${subject}/${theme || 'no-theme'})`,
         }
       );
+
+      // Collect search queries from this regen call for future diversity feedback
+      const regenSearchQueries = regenerated.groundingMetadata?.webSearchQueries;
+      if (regenSearchQueries?.length) {
+        accumulatedSearchQueries.push(...regenSearchQueries);
+      }
 
       totalPromptChars += regenerated.metrics.promptChars || 0;
       totalResponseChars += regenerated.metrics.responseChars || 0;
@@ -1245,6 +1262,7 @@ export async function generateQuiz(
                 excludeTopics: emergencyExcludeTopics,
                 regenerationIndex: 1000 + emergencyAttempt,
                 shuffleSeed,
+                previousSearchQueries: accumulatedSearchQueries,
                 ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
               },
               overallCallId,
@@ -1272,6 +1290,12 @@ export async function generateQuiz(
         console.error(`Emergency regeneration attempt ${emergencyAttempt} failed:`, error);
         emergencyAttempt += 1;
         continue;
+      }
+
+      // Collect search queries from emergency call
+      const emergencySearchQueries = regenerated.groundingMetadata?.webSearchQueries;
+      if (emergencySearchQueries?.length) {
+        accumulatedSearchQueries.push(...emergencySearchQueries);
       }
 
       totalPromptChars += regenerated.metrics.promptChars || 0;

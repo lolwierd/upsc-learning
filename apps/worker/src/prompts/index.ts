@@ -17,6 +17,7 @@ interface PromptParams {
   excludeTopics?: string[]; // Topics already covered — model should avoid these
   regenerationIndex?: number; // 0 = initial call, >0 = regeneration call index
   shuffleSeed?: number; // Seed for theme randomization (changes per call)
+  previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
 }
 
 // ============================================================================
@@ -149,100 +150,68 @@ new areas within the subject. Explore lesser-known, niche, or under-tested areas
 }
 
 // ============================================================================
-// SEARCH DIVERSITY — RANDOMIZED SEARCH FOCUS AREAS
+// SEARCH DIVERSITY — PREVIOUS QUERY EXCLUSION + TEMPORAL VARIATION
 // ============================================================================
-// Pool of current-affairs search angles. A random subset is picked per call
-// so the model searches for different things each generation.
 
-const CA_SEARCH_POOL = [
-  // Polity & Governance
-  "India new legislation bills passed 2025 2026",
-  "Supreme Court landmark judgments 2025 India",
-  "Constitutional amendments India recent",
-  "Election Commission reforms India 2025",
-  "Governor state legislature controversy India",
-  "Women reservation implementation India",
-  "Digital Personal Data Protection Act India",
-  "One Nation One Election India",
-  // Economy
-  "Union Budget 2025-26 key announcements India",
-  "RBI monetary policy 2025 2026 repo rate",
-  "India GDP growth latest quarterly data",
-  "GST Council recent decisions India",
-  "India free trade agreements 2025",
-  "PLI scheme manufacturing India results",
-  "Digital rupee CBDC India adoption",
-  "India sovereign green bonds",
-  // Environment
-  "COP climate summit latest India commitments",
-  "India renewable energy capacity 2025 2026",
-  "Wildlife Protection Act amendments India",
-  "New national parks sanctuaries India 2025",
-  "India wetland conservation Ramsar sites 2025",
-  "Carbon credit market India",
-  "India green hydrogen mission progress",
-  "Forest conservation amendment India",
-  // Science & Tech
-  "ISRO missions launches 2025 2026",
-  "Gaganyaan mission latest update",
-  "India semiconductor manufacturing progress",
-  "India quantum computing mission",
-  "AI regulation policy India 2025",
-  "India deep ocean mission update",
-  "India nuclear energy new reactors",
-  "India space economy startups ISRO",
-  // Geography & Disasters
-  "India infrastructure projects 2025 corridors highways",
-  "Geographical indications new India 2025",
-  "India river interlinking project update",
-  "India critical minerals policy lithium",
-  "Smart cities mission India results",
-  // History & Culture
-  "UNESCO World Heritage new India",
-  "Intangible Cultural Heritage India 2025",
-  "Archaeological Survey India discoveries 2025",
-  "India G20 cultural initiatives legacy",
-  // International Relations
-  "India BRICS 2025 cooperation",
-  "India UN Security Council reform",
-  "India bilateral agreements 2025",
-  "India Indo-Pacific strategy QUAD",
-  "India Africa cooperation summit",
+// Months pool for temporal anchoring — model is directed to explore events
+// from a specific time window that changes per call.
+const TEMPORAL_ANCHORS = [
+  "January 2025", "February 2025", "March 2025", "April 2025",
+  "May 2025", "June 2025", "July 2025", "August 2025",
+  "September 2025", "October 2025", "November 2025", "December 2025",
+  "January 2026", "February 2026",
 ];
 
 /**
- * Pick a random subset of search focus areas from the pool.
- * Returns `count` items, shuffled using the provided seed.
+ * Build the search diversity section for the prompt.
+ * Two mechanisms:
+ * 1. Previous search query exclusion — tells model what it already searched for
+ * 2. Temporal anchor — directs model to focus on a specific time window
  */
-function pickSearchFocusAreas(seed: number, count: number): string[] {
-  const rng = seededRandom(seed);
-  const shuffled = shuffleArray(CA_SEARCH_POOL, rng);
-  return shuffled.slice(0, Math.min(count, CA_SEARCH_POOL.length));
-}
+function buildSearchDiversitySection(
+  previousSearchQueries: string[],
+  seed: number,
+  regenerationIndex: number,
+): string {
+  const parts: string[] = [];
 
-/**
- * Build the search diversity directive for the prompt.
- */
-function buildSearchDiversitySection(seed: number, regenerationIndex: number): string {
-  // Pick 6-8 focus areas, different per call
-  const focusCount = 6 + (regenerationIndex % 3); // 6, 7, or 8
-  const areas = pickSearchFocusAreas(seed + regenerationIndex * 4951, focusCount);
-  return `
-WEB SEARCH DIVERSITY DIRECTIVE (IMPORTANT):
+  // Temporal anchor: pick a month based on seed + regen index
+  const rng = seededRandom(seed + regenerationIndex * 4951);
+  const anchorIndex = Math.floor(rng() * TEMPORAL_ANCHORS.length);
+  const temporalAnchor = TEMPORAL_ANCHORS[anchorIndex];
 
-When using Google Search for current affairs questions, DO NOT always search the
-same generic queries. Instead, focus your searches on these SPECIFIC areas for
-THIS generation (these change each time — explore them):
+  parts.push(`
+SEARCH DIVERSITY DIRECTIVE:
 
-${areas.map((a, i) => `${i + 1}. ${a}`).join('\n')}
+TIME WINDOW FOCUS: For this generation, prioritize discovering current affairs
+developments from around ${temporalAnchor}. Search for government announcements,
+policy changes, international events, and scientific developments from this period.
+This is your STARTING POINT — follow interesting leads from this time window into
+related topics, even if they span other months.`);
 
+  if (previousSearchQueries.length > 0) {
+    const uniqueQueries = [...new Set(previousSearchQueries)];
+    // Cap at 20 to keep prompt size reasonable
+    const queriesForPrompt = uniqueQueries.slice(0, 20);
+    parts.push(`
+PREVIOUS SEARCHES (DO NOT REPEAT THESE — find DIFFERENT angles):
+${queriesForPrompt.map(q => `- "${q}"`).join('\n')}
+
+You have already searched for the above. Do NOT repeat these searches or minor
+variations of them. Instead, search for ENTIRELY DIFFERENT topics, events, or
+policy areas. Dig into niche, under-reported, or recently emerging developments
+that the above searches would not have covered.`);
+  }
+
+  parts.push(`
 SEARCH STRATEGY:
-- Use the focus areas above as STARTING POINTS for your searches
-- Go DEEPER into specific sub-topics rather than broad overviews
-- Look for recent developments (Jan 2025 onwards) within these areas
-- If you've already covered a topic, search for ADJACENT or NICHE topics instead
-- Prefer official sources: PIB, government portals, ministry websites
-`;
+- Start from the time window above and explore outward
+- Search for specific events, bills, judgments, missions — not generic topic overviews
+- Go DEEP into one or two specific developments rather than broad surveys
+- Prefer official sources: PIB press releases, ministry websites, gazette notifications
+- Look for developments that would surprise a UPSC aspirant who only reads mainstream news`);
+
+  return parts.join('\n');
 }
 
 // ============================================================================
@@ -290,7 +259,7 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, currentAffairsTheme, excludeTopics, regenerationIndex = 0, shuffleSeed } = params;
+  const { theme, styles, totalCount, currentAffairsTheme, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [] } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
   const seed = shuffleSeed ?? Date.now();
 
@@ -390,7 +359,7 @@ CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
 - Can include significant 2024 events if still relevant
 - MUST use Google Search to verify facts and get sources
 
-${buildSearchDiversitySection(seed, regenerationIndex)}
+${buildSearchDiversitySection(previousSearchQueries, seed, regenerationIndex)}
 
 IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
 `}
@@ -1998,7 +1967,8 @@ export function getPrompt(params: PromptParams): string {
   const eraInstruction = CURRENT_ERA_INSTRUCTION;
 
   // Current affairs is always included now for better 2026 predictions
-  const searchDiversity = buildSearchDiversitySection(seed, regenerationIndex);
+  const previousSearchQueries = params.previousSearchQueries ?? [];
+  const searchDiversity = buildSearchDiversitySection(previousSearchQueries, seed, regenerationIndex);
   const currentAffairsSection = enableCurrentAffairs
     ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
