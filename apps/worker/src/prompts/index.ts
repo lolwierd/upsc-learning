@@ -150,68 +150,44 @@ new areas within the subject. Explore lesser-known, niche, or under-tested areas
 }
 
 // ============================================================================
-// SEARCH DIVERSITY — PREVIOUS QUERY EXCLUSION + TEMPORAL VARIATION
+// SEARCH DIVERSITY — PREVIOUS QUERY EXCLUSION
 // ============================================================================
-
-// Months pool for temporal anchoring — model is directed to explore events
-// from a specific time window that changes per call.
-const TEMPORAL_ANCHORS = [
-  "January 2025", "February 2025", "March 2025", "April 2025",
-  "May 2025", "June 2025", "July 2025", "August 2025",
-  "September 2025", "October 2025", "November 2025", "December 2025",
-  "January 2026", "February 2026",
-];
 
 /**
  * Build the search diversity section for the prompt.
- * Two mechanisms:
- * 1. Previous search query exclusion — tells model what it already searched for
- * 2. Temporal anchor — directs model to focus on a specific time window
+ * Uses previous search query exclusion: after each generation call, we collect
+ * the web search queries the model used (from grounding metadata) and pass them
+ * to subsequent calls so the model knows what it already searched for and is
+ * forced to explore different topics.
+ *
+ * On the initial call (no previous queries), this returns empty — we let the
+ * model search freely the first time.
  */
 function buildSearchDiversitySection(
   previousSearchQueries: string[],
-  seed: number,
-  regenerationIndex: number,
 ): string {
-  const parts: string[] = [];
+  if (previousSearchQueries.length === 0) return '';
 
-  // Temporal anchor: pick a month based on seed + regen index
-  const rng = seededRandom(seed + regenerationIndex * 4951);
-  const anchorIndex = Math.floor(rng() * TEMPORAL_ANCHORS.length);
-  const temporalAnchor = TEMPORAL_ANCHORS[anchorIndex];
+  const uniqueQueries = [...new Set(previousSearchQueries)];
+  // Cap at 20 to keep prompt size reasonable
+  const queriesForPrompt = uniqueQueries.slice(0, 20);
 
-  parts.push(`
-SEARCH DIVERSITY DIRECTIVE:
+  return `
+SEARCH DIVERSITY (IMPORTANT — DO NOT REPEAT PREVIOUS SEARCHES):
 
-TIME WINDOW FOCUS: For this generation, prioritize discovering current affairs
-developments from around ${temporalAnchor}. Search for government announcements,
-policy changes, international events, and scientific developments from this period.
-This is your STARTING POINT — follow interesting leads from this time window into
-related topics, even if they span other months.`);
-
-  if (previousSearchQueries.length > 0) {
-    const uniqueQueries = [...new Set(previousSearchQueries)];
-    // Cap at 20 to keep prompt size reasonable
-    const queriesForPrompt = uniqueQueries.slice(0, 20);
-    parts.push(`
-PREVIOUS SEARCHES (DO NOT REPEAT THESE — find DIFFERENT angles):
+You have already performed these web searches in prior generation attempts:
 ${queriesForPrompt.map(q => `- "${q}"`).join('\n')}
 
-You have already searched for the above. Do NOT repeat these searches or minor
-variations of them. Instead, search for ENTIRELY DIFFERENT topics, events, or
-policy areas. Dig into niche, under-reported, or recently emerging developments
-that the above searches would not have covered.`);
-  }
+DO NOT repeat these searches or minor variations of them. You MUST search for
+ENTIRELY DIFFERENT topics, events, or policy areas. Explore niche, under-reported,
+or recently emerging developments that the above searches would not have covered.
 
-  parts.push(`
-SEARCH STRATEGY:
-- Start from the time window above and explore outward
-- Search for specific events, bills, judgments, missions — not generic topic overviews
-- Go DEEP into one or two specific developments rather than broad surveys
-- Prefer official sources: PIB press releases, ministry websites, gazette notifications
-- Look for developments that would surprise a UPSC aspirant who only reads mainstream news`);
-
-  return parts.join('\n');
+Tips for finding fresh content:
+- Search for specific bills, judgments, missions, or schemes by name
+- Look into lesser-known government initiatives and policy changes
+- Explore recent PIB press releases, gazette notifications, ministry announcements
+- Search for developments in areas you haven't covered yet
+`;
 }
 
 // ============================================================================
@@ -359,7 +335,7 @@ CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
 - Can include significant 2024 events if still relevant
 - MUST use Google Search to verify facts and get sources
 
-${buildSearchDiversitySection(previousSearchQueries, seed, regenerationIndex)}
+${buildSearchDiversitySection(previousSearchQueries)}
 
 IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
 `}
@@ -1968,7 +1944,7 @@ export function getPrompt(params: PromptParams): string {
 
   // Current affairs is always included now for better 2026 predictions
   const previousSearchQueries = params.previousSearchQueries ?? [];
-  const searchDiversity = buildSearchDiversitySection(previousSearchQueries, seed, regenerationIndex);
+  const searchDiversity = buildSearchDiversitySection(previousSearchQueries);
   const currentAffairsSection = enableCurrentAffairs
     ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
