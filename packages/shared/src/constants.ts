@@ -117,14 +117,20 @@ export const API_ENDPOINTS = {
   // Quiz Sets
   QUIZ_SETS: "/api/quiz-sets",
   QUIZ_SET_GET: (id: string) => `/api/quiz-sets/${id}`,
+  QUIZ_SET_DUPLICATE: (id: string) => `/api/quiz-sets/${id}/duplicate`,
   QUIZ_SET_ITEMS: (setId: string) => `/api/quiz-sets/${setId}/items`,
   QUIZ_SET_ITEM: (setId: string, itemId: string) => `/api/quiz-sets/${setId}/items/${itemId}`,
   QUIZ_SET_ITEMS_REORDER: (setId: string) => `/api/quiz-sets/${setId}/items/reorder`,
   QUIZ_SET_GENERATE: (setId: string) => `/api/quiz-sets/${setId}/generate`,
   QUIZ_SET_RUNS: (setId: string) => `/api/quiz-sets/${setId}/runs`,
   QUIZ_SET_RUN: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}`,
+  QUIZ_SET_NOTIFIERS: (setId: string) => `/api/quiz-sets/${setId}/notifiers`,
+  QUIZ_SET_NOTIFIER: (setId: string, notifierId: string) =>
+    `/api/quiz-sets/${setId}/notifiers/${notifierId}`,
   QUIZ_SET_SCHEDULE: (setId: string) => `/api/quiz-sets/${setId}/schedule`,
   QUIZ_SET_SCHEDULE_TOGGLE: (setId: string) => `/api/quiz-sets/${setId}/schedule/toggle`,
+  AI_METRIC_PROMPT: (metricId: string) => `/api/metrics/ai/${metricId}/prompt`,
+  AI_METRIC_RESPONSE: (metricId: string) => `/api/metrics/ai/${metricId}/response`,
   // Run Attempts (Combined Quiz)
   RUN_COMBINED_QUESTIONS: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/combined-questions`,
   RUN_ATTEMPT_START: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/attempt/start`,

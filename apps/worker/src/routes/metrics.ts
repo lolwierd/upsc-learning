@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { Env } from "../types.js";
 import {
   listAiGenerationMetrics,
+  getAiGenerationMetricById,
   type AiMetricStatus,
 } from "../services/ai-metrics.js";
 
@@ -36,6 +37,32 @@ metrics.get("/ai", zValidator("query", aiMetricsQuerySchema), async (c) => {
       500
     );
   }
+});
+
+metrics.get("/ai/:id/prompt", async (c) => {
+  const metricId = c.req.param("id");
+  const metric = await getAiGenerationMetricById(c.env.DB, metricId);
+  if (!metric) {
+    return c.json({ error: "Metric not found" }, 404);
+  }
+  if (!metric.requestPrompt) {
+    return c.json({ error: "Prompt not available for this metric" }, 404);
+  }
+  c.header("Content-Type", "text/plain; charset=utf-8");
+  return c.text(metric.requestPrompt);
+});
+
+metrics.get("/ai/:id/response", async (c) => {
+  const metricId = c.req.param("id");
+  const metric = await getAiGenerationMetricById(c.env.DB, metricId);
+  if (!metric) {
+    return c.json({ error: "Metric not found" }, 404);
+  }
+  if (!metric.rawResponse) {
+    return c.json({ error: "Raw response not available for this metric" }, 404);
+  }
+  c.header("Content-Type", "text/plain; charset=utf-8");
+  return c.text(metric.rawResponse);
 });
 
 export { metrics as metricsRoutes };

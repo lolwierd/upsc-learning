@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardTitle, Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { getQuizSets, generateQuizSet, deleteQuizSet } from "@/lib/api";
+import { getQuizSets, generateQuizSet, deleteQuizSet, duplicateQuizSet } from "@/lib/api";
 import type { QuizSetListItem } from "@mcqs/shared";
 
 export default function QuizSetsPage() {
+  const router = useRouter();
   const [sets, setSets] = useState<QuizSetListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [generatingSetId, setGeneratingSetId] = useState<string | null>(null);
+  const [duplicatingSetId, setDuplicatingSetId] = useState<string | null>(null);
 
   useEffect(() => {
     loadSets();
@@ -86,6 +89,24 @@ export default function QuizSetsPage() {
       await loadSets();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete quiz set");
+    }
+  };
+
+  const handleDuplicate = async (setId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setDuplicatingSetId(setId);
+    try {
+      const duplicated = await duplicateQuizSet(setId, {
+        includeSchedule: false,
+        includeNotifiers: false,
+      });
+      router.push(`/sets/${duplicated.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to duplicate quiz set");
+    } finally {
+      setDuplicatingSetId(null);
     }
   };
 
@@ -187,6 +208,14 @@ export default function QuizSetsPage() {
 
                   {/* Right side: Actions */}
                   <div className="flex items-center gap-2 flex-shrink-0">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={(e) => handleDuplicate(set.id, e)}
+                      disabled={duplicatingSetId === set.id}
+                    >
+                      {duplicatingSetId === set.id ? "Duplicating..." : "Duplicate"}
+                    </Button>
                     <Button
                       variant="secondary"
                       size="sm"

@@ -27,6 +27,11 @@ export interface Env {
   LLM_DUMP?: string; // "1" to enable dumping even in production
   LLM_MAX_RETRIES?: string; // Max retry attempts for LLM calls (default: 3)
   LLM_RETRY_DELAY_MS?: string; // Base delay for exponential backoff in ms (default: 2000)
+  REGENERATION_MAX_ATTEMPTS?: string; // Max regeneration cycles to recover filtered shortfalls
+  REGENERATION_EMERGENCY_ATTEMPTS?: string; // Additional no-dedupe regeneration attempts
+  NOTIFICATION_WEB_BASE_URL?: string; // Public web URL used in notifier links
+  NOTIFICATION_API_BASE_URL?: string; // Public API URL used in notifier links
+  NOTIFICATION_DISCORD_USERNAME?: string; // Optional Discord webhook username override
 
   // Dedupe tuning knobs (optional)
   DEDUP_HISTORY_LIMIT?: string; // default: 600

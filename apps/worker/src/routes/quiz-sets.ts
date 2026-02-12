@@ -4,12 +4,15 @@ import { nanoid } from "nanoid";
 import type { Env } from "../types.js";
 import {
   createQuizSetRequestSchema,
+  duplicateQuizSetRequestSchema,
   updateQuizSetRequestSchema,
   addQuizSetItemRequestSchema,
   updateQuizSetItemRequestSchema,
   reorderQuizSetItemsRequestSchema,
   quizSetScheduleRequestSchema,
   toggleScheduleRequestSchema,
+  createQuizSetNotifierRequestSchema,
+  updateQuizSetNotifierRequestSchema,
 } from "@mcqs/shared";
 import type {
   QuizSetItem,
@@ -18,9 +21,17 @@ import type {
   QuizSetRunItem,
   QuizSetListItem,
   QuizSetWithSchedule,
+  QuizSetNotifier,
 } from "@mcqs/shared";
 import { triggerQuizSetGeneration } from "../services/quiz-set-generator.js";
 import { getScheduler } from "../services/scheduler.js";
+import {
+  createQuizSetNotifier,
+  updateQuizSetNotifier,
+  deleteQuizSetNotifier,
+  emitQuizSetNotifierEvent,
+  listQuizSetNotifiers,
+} from "../services/notifiers.js";
 
 const quizSets = new Hono<{ Bindings: Env }>();
 
@@ -90,6 +101,19 @@ interface QuizSetRunItemRow {
   error: string | null;
   started_at: number | null;
   completed_at: number | null;
+}
+
+interface SourceQuizSetRow extends QuizSetRow {
+  user_id: string;
+}
+
+interface NotificationDestinationCopyRow {
+  user_id: string;
+  provider: string;
+  label: string | null;
+  target_url: string;
+  events: string;
+  is_enabled: number;
 }
 
 // Helper functions
@@ -163,6 +187,24 @@ function mapRunItemRowToResponse(row: QuizSetRunItemRow): QuizSetRunItem {
     startedAt: row.started_at || undefined,
     completedAt: row.completed_at || undefined,
   };
+}
+
+async function emitQuizSetModified(
+  env: Env,
+  quizSetId: string,
+  action: string,
+  details?: Record<string, unknown>
+): Promise<void> {
+  try {
+    await emitQuizSetNotifierEvent(env, {
+      type: "quiz_set.modified",
+      quizSetId,
+      action,
+      details,
+    });
+  } catch (error) {
+    console.warn("Failed to emit quiz set modified notification:", error);
+  }
 }
 
 // ============================================
@@ -274,7 +316,209 @@ quizSets.post(
       itemCount: itemsResult.results.length,
     };
 
+    await emitQuizSetModified(c.env, setId, "set_created", {
+      name: body.name,
+      itemCount: itemsResult.results.length,
+    });
+
     return c.json(quizSet, 201);
+  }
+);
+
+// POST /api/quiz-sets/:id/duplicate - Duplicate an existing quiz set
+quizSets.post(
+  "/:id/duplicate",
+  zValidator("json", duplicateQuizSetRequestSchema),
+  async (c) => {
+    const sourceSetId = c.req.param("id");
+    const body = c.req.valid("json");
+    const now = Math.floor(Date.now() / 1000);
+
+    const sourceSet = await c.env.DB.prepare(
+      `SELECT id, user_id, name, description, is_active, created_at, updated_at
+       FROM quiz_sets
+       WHERE id = ?`
+    )
+      .bind(sourceSetId)
+      .first<SourceQuizSetRow>();
+
+    if (!sourceSet) {
+      return c.json({ error: "Quiz set not found" }, 404);
+    }
+
+    const duplicateName = body.name || (
+      sourceSet.name.length <= 93
+        ? `${sourceSet.name} (Copy)`
+        : `${sourceSet.name.slice(0, 93)} (Copy)`
+    );
+
+    const newSetId = nanoid();
+
+    // Fetch all source data upfront, then batch-insert for atomicity
+    const sourceItems = await c.env.DB.prepare(
+      `SELECT *
+       FROM quiz_set_items
+       WHERE quiz_set_id = ?
+       ORDER BY sequence_number ASC`
+    )
+      .bind(sourceSetId)
+      .all<QuizSetItemRow>();
+
+    const batchStatements = [
+      c.env.DB.prepare(
+        `INSERT INTO quiz_sets (id, user_id, name, description, is_active, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind(
+        newSetId,
+        "public",
+        duplicateName,
+        sourceSet.description || null,
+        sourceSet.is_active,
+        now,
+        now
+      ),
+    ];
+
+    for (const item of sourceItems.results) {
+      batchStatements.push(
+        c.env.DB.prepare(
+          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+          nanoid(),
+          newSetId,
+          item.sequence_number,
+          item.subject,
+          item.theme || null,
+          item.styles,
+          item.question_count,
+          item.era || "current",
+          item.enable_current_affairs,
+          item.current_affairs_theme || null,
+          now,
+          now
+        )
+      );
+    }
+
+    if (body.includeSchedule) {
+      const sourceSchedule = await c.env.DB.prepare(
+        `SELECT cron_expression, timezone, is_enabled
+         FROM quiz_set_schedules
+         WHERE quiz_set_id = ?`
+      )
+        .bind(sourceSetId)
+        .first<{
+          cron_expression: string;
+          timezone: string;
+          is_enabled: number;
+        }>();
+
+      if (sourceSchedule) {
+        batchStatements.push(
+          c.env.DB.prepare(
+            `INSERT INTO quiz_set_schedules (id, quiz_set_id, cron_expression, timezone, is_enabled, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`
+          ).bind(
+            nanoid(),
+            newSetId,
+            sourceSchedule.cron_expression,
+            sourceSchedule.timezone,
+            sourceSchedule.is_enabled,
+            now,
+            now
+          )
+        );
+      }
+    }
+
+    if (body.includeNotifiers) {
+      const sourceNotifiers = await c.env.DB.prepare(
+        `SELECT user_id, provider, label, target_url, events, is_enabled
+         FROM notification_destinations
+         WHERE scope_type = 'quiz_set' AND scope_id = ?
+         ORDER BY created_at ASC`
+      )
+        .bind(sourceSetId)
+        .all<NotificationDestinationCopyRow>();
+
+      for (const notifier of sourceNotifiers.results) {
+        const copiedTargetUrl = notifier.target_url?.trim()
+          ? notifier.target_url
+          : "https://discord.invalid/webhook-needs-setup";
+        batchStatements.push(
+          c.env.DB.prepare(
+            `INSERT INTO notification_destinations
+              (id, user_id, scope_type, scope_id, provider, label, target_url, events, is_enabled, created_at, updated_at)
+             VALUES (?, ?, 'quiz_set', ?, ?, ?, ?, ?, ?, ?, ?)`
+          ).bind(
+            nanoid(),
+            "public",
+            newSetId,
+            notifier.provider,
+            notifier.label ? `${notifier.label} (needs setup)` : "(needs setup)",
+            copiedTargetUrl,
+            notifier.events,
+            0,
+            now,
+            now
+          )
+        );
+      }
+    }
+
+    // Execute statements sequentially for compatibility across runtimes.
+    for (const statement of batchStatements) {
+      await statement.run();
+    }
+
+    const setRow = await c.env.DB.prepare(
+      `SELECT * FROM quiz_sets WHERE id = ?`
+    )
+      .bind(newSetId)
+      .first<QuizSetRow>();
+    const itemsResult = await c.env.DB.prepare(
+      `SELECT * FROM quiz_set_items WHERE quiz_set_id = ? ORDER BY sequence_number`
+    )
+      .bind(newSetId)
+      .all<QuizSetItemRow>();
+    const scheduleRow = await c.env.DB.prepare(
+      `SELECT * FROM quiz_set_schedules WHERE quiz_set_id = ?`
+    )
+      .bind(newSetId)
+      .first<QuizSetScheduleRow>();
+
+    if (body.includeSchedule) {
+      try {
+        await getScheduler(c.env).reloadQuizSetSchedule(newSetId);
+      } catch (error) {
+        console.warn(
+          "Failed to reload duplicated quiz set schedule:",
+          error instanceof Error ? error.message : error
+        );
+      }
+    }
+
+    await emitQuizSetModified(c.env, sourceSetId, "set_duplicated", {
+      duplicatedSetId: newSetId,
+      includeSchedule: body.includeSchedule,
+      includeNotifiers: body.includeNotifiers,
+    });
+    await emitQuizSetModified(c.env, newSetId, "set_created_from_duplicate", {
+      sourceSetId,
+      sourceSetName: sourceSet.name,
+      includeSchedule: body.includeSchedule,
+      includeNotifiers: body.includeNotifiers,
+    });
+
+    const duplicatedQuizSet: QuizSetWithSchedule = {
+      ...mapQuizSetRowToResponse(setRow!),
+      items: itemsResult.results.map(mapQuizSetItemRowToResponse),
+      itemCount: itemsResult.results.length,
+      schedule: scheduleRow ? mapScheduleRowToResponse(scheduleRow) : undefined,
+    };
+
+    return c.json(duplicatedQuizSet, 201);
   }
 );
 
@@ -366,6 +610,12 @@ quizSets.patch(
       .bind(setId)
       .first<QuizSetRow>();
 
+    await emitQuizSetModified(c.env, setId, "set_metadata_updated", {
+      name: body.name,
+      description: body.description,
+      isActive: body.isActive,
+    });
+
     return c.json(mapQuizSetRowToResponse(setRow!));
   }
 );
@@ -384,6 +634,18 @@ quizSets.delete("/:id", async (c) => {
   if (!existing) {
     return c.json({ error: "Quiz set not found" }, 404);
   }
+
+  await emitQuizSetModified(c.env, setId, "set_deleted", {
+    quizSetId: setId,
+  });
+
+  // Delete scoped notifiers explicitly (notification_destinations has no FK to quiz_sets).
+  await c.env.DB.prepare(
+    `DELETE FROM notification_destinations
+     WHERE scope_type = 'quiz_set' AND scope_id = ?`
+  )
+    .bind(setId)
+    .run();
 
   // Delete (cascade will handle items, schedules, runs)
   await c.env.DB.prepare(`DELETE FROM quiz_sets WHERE id = ?`)
@@ -459,6 +721,14 @@ quizSets.post(
     )
       .bind(itemId)
       .first<QuizSetItemRow>();
+
+    await emitQuizSetModified(c.env, setId, "set_item_added", {
+      subject: body.subject,
+      theme: body.theme,
+      questionCount: body.questionCount,
+      styles: body.styles,
+      sequenceNumber,
+    });
 
     return c.json(mapQuizSetItemRowToResponse(itemRow!), 201);
   }
@@ -536,6 +806,14 @@ quizSets.patch(
       .bind(itemId)
       .first<QuizSetItemRow>();
 
+    await emitQuizSetModified(c.env, setId, "set_item_updated", {
+      itemId,
+      subject: body.subject,
+      theme: body.theme,
+      questionCount: body.questionCount,
+      styles: body.styles,
+    });
+
     return c.json(mapQuizSetItemRowToResponse(itemRow!));
   }
 );
@@ -579,6 +857,11 @@ quizSets.delete("/:id/items/:itemId", async (c) => {
     .bind(now, setId)
     .run();
 
+  await emitQuizSetModified(c.env, setId, "set_item_deleted", {
+    itemId,
+    sequenceNumber: existing.sequence_number,
+  });
+
   return c.json({ success: true });
 });
 
@@ -618,6 +901,10 @@ quizSets.post(
     )
       .bind(now, setId)
       .run();
+
+    await emitQuizSetModified(c.env, setId, "set_items_reordered", {
+      itemCount: body.itemIds.length,
+    });
 
     return c.json({ success: true });
   }
@@ -683,6 +970,133 @@ quizSets.post("/:id/generate", async (c) => {
 // ============================================
 // Quiz Set Runs
 // ============================================
+
+// ============================================
+// Quiz Set Notifiers
+// ============================================
+
+// GET /api/quiz-sets/:id/notifiers - List notifiers
+quizSets.get("/:id/notifiers", async (c) => {
+  const setId = c.req.param("id");
+
+  const existing = await c.env.DB.prepare(
+    `SELECT id FROM quiz_sets WHERE id = ?`
+  )
+    .bind(setId)
+    .first();
+
+  if (!existing) {
+    return c.json({ error: "Quiz set not found" }, 404);
+  }
+
+  const notifiers: QuizSetNotifier[] = await listQuizSetNotifiers(c.env, setId);
+  return c.json({ notifiers });
+});
+
+// POST /api/quiz-sets/:id/notifiers - Create notifier
+quizSets.post(
+  "/:id/notifiers",
+  zValidator("json", createQuizSetNotifierRequestSchema),
+  async (c) => {
+    const setId = c.req.param("id");
+    const body = c.req.valid("json");
+
+    const existing = await c.env.DB.prepare(
+      `SELECT id FROM quiz_sets WHERE id = ?`
+    )
+      .bind(setId)
+      .first();
+
+    if (!existing) {
+      return c.json({ error: "Quiz set not found" }, 404);
+    }
+
+    try {
+      const notifier = await createQuizSetNotifier(c.env, {
+        quizSetId: setId,
+        provider: body.provider,
+        label: body.label,
+        targetUrl: body.targetUrl,
+        isEnabled: body.isEnabled,
+        events: body.events,
+      });
+
+      return c.json({ notifier }, 201);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("Target URL")) {
+        return c.json({ error: error.message }, 400);
+      }
+      throw error;
+    }
+  }
+);
+
+// PATCH /api/quiz-sets/:id/notifiers/:notifierId - Update notifier
+quizSets.patch(
+  "/:id/notifiers/:notifierId",
+  zValidator("json", updateQuizSetNotifierRequestSchema),
+  async (c) => {
+    const setId = c.req.param("id");
+    const notifierId = c.req.param("notifierId");
+    const body = c.req.valid("json");
+
+    const existing = await c.env.DB.prepare(
+      `SELECT id FROM quiz_sets WHERE id = ?`
+    )
+      .bind(setId)
+      .first();
+
+    if (!existing) {
+      return c.json({ error: "Quiz set not found" }, 404);
+    }
+
+    try {
+      const notifier = await updateQuizSetNotifier(c.env, {
+        quizSetId: setId,
+        notifierId,
+        label: body.label,
+        targetUrl: body.targetUrl,
+        isEnabled: body.isEnabled,
+        events: body.events,
+      });
+      return c.json({ notifier });
+    } catch (error) {
+      if (error instanceof Error && error.message === "Notifier not found") {
+        return c.json({ error: "Notifier not found" }, 404);
+      }
+      if (
+        error instanceof Error &&
+        (error.message.includes("target URL") || error.message.includes("Target URL"))
+      ) {
+        return c.json({ error: error.message }, 400);
+      }
+      throw error;
+    }
+  }
+);
+
+// DELETE /api/quiz-sets/:id/notifiers/:notifierId - Delete notifier
+quizSets.delete("/:id/notifiers/:notifierId", async (c) => {
+  const setId = c.req.param("id");
+  const notifierId = c.req.param("notifierId");
+
+  const existing = await c.env.DB.prepare(
+    `SELECT id FROM quiz_sets WHERE id = ?`
+  )
+    .bind(setId)
+    .first();
+
+  if (!existing) {
+    return c.json({ error: "Quiz set not found" }, 404);
+  }
+
+  const deleted = await deleteQuizSetNotifier(c.env, setId, notifierId);
+  if (!deleted) {
+    return c.json({ error: "Notifier not found" }, 404);
+  }
+
+  return c.json({ success: true });
+});
 
 // GET /api/quiz-sets/:id/runs - List generation runs
 quizSets.get("/:id/runs", async (c) => {
@@ -856,6 +1270,12 @@ quizSets.put(
       );
     }
 
+    await emitQuizSetModified(c.env, setId, "set_schedule_updated", {
+      cronExpression: body.cronExpression,
+      timezone: body.timezone,
+      isEnabled: body.isEnabled,
+    });
+
     return c.json({ schedule: mapScheduleRowToResponse(scheduleRow!) });
   }
 );
@@ -889,6 +1309,8 @@ quizSets.delete("/:id/schedule", async (c) => {
       error instanceof Error ? error.message : error
     );
   }
+
+  await emitQuizSetModified(c.env, setId, "set_schedule_deleted", {});
 
   return c.json({ success: true });
 });
@@ -937,6 +1359,10 @@ quizSets.post(
         error instanceof Error ? error.message : error
       );
     }
+
+    await emitQuizSetModified(c.env, setId, "set_schedule_toggled", {
+      isEnabled: body.isEnabled,
+    });
 
     return c.json({ schedule: mapScheduleRowToResponse(scheduleRow!) });
   }

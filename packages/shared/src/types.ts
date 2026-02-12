@@ -308,6 +308,32 @@ export interface QuizSetRunWithItems extends QuizSetRun {
   runItems: QuizSetRunItem[];
 }
 
+// ============================================
+// Quiz Set Notifier Types
+// ============================================
+
+export type QuizSetNotifierProvider = "discord_webhook";
+
+export type QuizSetNotifierEventType =
+  | "quiz_set.modified"
+  | "quiz_set.generation.started"
+  | "quiz_set.generation.completed"
+  | "quiz_set.generation.partial"
+  | "quiz_set.generation.failed"
+  | "quiz_set.generation.item_failed";
+
+export interface QuizSetNotifier {
+  id: string;
+  quizSetId: string;
+  provider: QuizSetNotifierProvider;
+  label?: string;
+  targetUrlMasked: string;
+  isEnabled: boolean;
+  events: QuizSetNotifierEventType[];
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface QuizAttemptSummary {
   attemptId: string;
   quizId: string;

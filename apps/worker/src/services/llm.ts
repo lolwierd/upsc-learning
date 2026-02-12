@@ -109,6 +109,13 @@ export interface GenerateQuizMetrics {
   returnedCount: number;
   dedupEnabled: boolean;
   dedupFilteredCount: number;
+  emergencyNoDedupeAcceptedCount: number;
+  regenerationAttemptsUsed: number;
+  emergencyRegenerationAttemptsUsed: number;
+  generationCallCount: number;
+  initialGenerationCallCount: number;
+  regenerationCallCount: number;
+  emergencyRegenerationCallCount: number;
   standardReclassifiedCount: number;
   validationIsValid: boolean;
   validationInvalidCount: number;
@@ -739,9 +746,18 @@ export async function generateQuiz(
   // Get retry config from env or use defaults
   const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
   const baseDelayMs = parseInt(env.LLM_RETRY_DELAY_MS || String(DEFAULT_RETRY_DELAY_MS), 10);
+  let generationCallCount = 0;
+  let initialGenerationCallCount = 0;
+  let regenerationCallCount = 0;
+  let emergencyRegenerationCallCount = 0;
+  let regenerationAttemptsUsed = 0;
+  let emergencyRegenerationAttemptsUsed = 0;
+  let emergencyNoDedupeAcceptedCount = 0;
 
   const singleResult = await retryWithBackoff(
     async () => {
+      generationCallCount++;
+      initialGenerationCallCount++;
       const result = await generateQuizCall(
         env,
         {
@@ -790,7 +806,7 @@ export async function generateQuiz(
   totalTokens += singleResult.metrics.usageTotalTokens || 0;
   totalGroundingSources += singleResult.groundingSourceCount || 0;
 
-  console.log(`Generated ${allQuestions.length}/${count} questions total`);
+  console.log(`Initial generation produced ${allQuestions.length}/${count} questions before filtering`);
 
   const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
     questions.map((q, i) => ({
@@ -831,6 +847,7 @@ export async function generateQuiz(
     historyConcept: 0,
     historySimilarity: 0,
   };
+  type DedupRejectReason = keyof typeof dedupReasonCounts;
 
   type RuntimeDedupBucket = {
     seenFingerprints: Set<string>;
@@ -859,7 +876,7 @@ export async function generateQuiz(
     return bucket;
   };
 
-  const checkAndAccept = (question: GeneratedQuestion): { accepted: boolean; reason?: keyof typeof dedupReasonCounts } => {
+  const checkAndAccept = (question: GeneratedQuestion): { accepted: boolean; reason?: DedupRejectReason } => {
     const effectiveSubject = getEffectiveSubjectKey(subject, question);
     const bucket = getRuntimeBucket(effectiveSubject);
 
@@ -894,6 +911,27 @@ export async function generateQuiz(
       bucket.conceptRepText.set(conceptKey, question.questionText);
     }
     return { accepted: true };
+  };
+
+  const forceAcceptAndTrack = (question: GeneratedQuestion) => {
+    const effectiveSubject = getEffectiveSubjectKey(subject, question);
+    const bucket = getRuntimeBucket(effectiveSubject);
+    const fingerprint = generateFingerprint(question);
+    const conceptKey = generateConceptKey(question);
+    bucket.seenFingerprints.add(fingerprint);
+    bucket.seenConceptKeys.add(conceptKey);
+    if (!bucket.conceptRepText.has(conceptKey)) {
+      bucket.conceptRepText.set(conceptKey, question.questionText);
+    }
+  };
+
+  const shouldForceAccept = (reason: DedupRejectReason | undefined, relaxationLevel: number): boolean => {
+    if (!reason || relaxationLevel <= 0) return false;
+    if (relaxationLevel === 1) return reason === "historySimilarity";
+    if (relaxationLevel === 2) {
+      return reason === "historySimilarity" || reason === "historyConcept" || reason === "intraConcept";
+    }
+    return true;
   };
 
   // Deduplication and early validation pass (keeps invalid statement questions out of runtime state)
@@ -951,32 +989,40 @@ export async function generateQuiz(
   const factualMinimum = Math.round(count * 0.40);
   const getFactualCount = () =>
     finalQuestions.filter(q => q.questionType === "standard").length;
-  const hasFactualMinimum = () => getFactualCount() >= factualMinimum;
-  const shouldRegenerate = () => finalQuestions.length < count || !hasFactualMinimum();
+  const getMissingCount = () => Math.max(count - finalQuestions.length, 0);
+  const getMissingFactualCount = () => Math.max(factualMinimum - getFactualCount(), 0);
+  const shouldRegenerate = () => getMissingCount() > 0 || getMissingFactualCount() > 0;
 
   if (shouldRegenerate()) {
-    let remaining = enableDeduplication
-      ? Math.max(count - finalQuestions.length, factualMinimum - getFactualCount())
-      : Math.max(factualMinimum - getFactualCount(), 0);
+    let remaining = Math.max(getMissingCount(), getMissingFactualCount());
     let regenerationIndex = 1;
-    const regenerationLimit = 3;
+    const regenerationLimit = clampNumber(parseIntEnv(env.REGENERATION_MAX_ATTEMPTS, 18), 1, 200);
+    const dedupOversampleFactor = 2;
+    const dedupOversampleCap = 24;
+    let dedupRelaxationLevel = 0;
+    let stalledAttempts = 0;
 
     while (remaining > 0 && regenerationIndex <= regenerationLimit) {
-      const factualNeededNow = Math.max(factualMinimum - getFactualCount(), 0);
+      regenerationAttemptsUsed++;
+      const factualNeededNow = getMissingFactualCount();
       const factualOnly = factualNeededNow > 0;
-      const reason = enableDeduplication
-        ? factualOnly
-          ? "to meet factual minimum"
-          : "after dedup"
-        : "to meet factual minimum";
-      console.log(`Regenerating ${remaining} question(s) ${reason} (attempt ${regenerationIndex})...`);
+      const reason = factualOnly ? "to meet factual minimum" : "to fill filtered shortfall";
+      const requestCount = enableDeduplication
+        ? Math.min(remaining * dedupOversampleFactor, dedupOversampleCap)
+        : remaining;
+      console.log(
+        `Regenerating ${remaining} question(s) ${reason} (attempt ${regenerationIndex}, requesting ${requestCount})...`
+      );
+      const acceptedBefore = finalQuestions.length;
       const regenerated = await retryWithBackoff(
         async () => {
+          generationCallCount++;
+          regenerationCallCount++;
           const result = await generateQuizCall(
             env,
             {
               ...params,
-              count: remaining,
+              count: requestCount,
               styles: factualOnly ? ["factual"] : params.styles,
               enableCurrentAffairs: groundingEnabled,
               currentAffairsTheme,
@@ -1049,6 +1095,10 @@ export async function generateQuiz(
           if (!result.accepted) {
             dedupFilteredCount++;
             if (result.reason) dedupReasonCounts[result.reason] += 1;
+            if (shouldForceAccept(result.reason, dedupRelaxationLevel)) {
+              forceAcceptAndTrack(question);
+              finalQuestions.push(question);
+            }
             continue;
           }
         }
@@ -1056,13 +1106,146 @@ export async function generateQuiz(
         finalQuestions.push(question);
       }
 
-      if (enableDeduplication) {
-        remaining = Math.max(count - finalQuestions.length, factualMinimum - getFactualCount());
+      remaining = Math.max(getMissingCount(), getMissingFactualCount());
+      const acceptedThisAttempt = finalQuestions.length - acceptedBefore;
+      if (acceptedThisAttempt === 0) {
+        stalledAttempts++;
       } else {
-        remaining = Math.max(factualMinimum - getFactualCount(), 0);
+        stalledAttempts = 0;
+      }
+
+      if (enableDeduplication) {
+        const nextRelaxationLevel = stalledAttempts >= 6 ? 3 : stalledAttempts >= 4 ? 2 : stalledAttempts >= 2 ? 1 : 0;
+        if (nextRelaxationLevel !== dedupRelaxationLevel) {
+          dedupRelaxationLevel = nextRelaxationLevel;
+          if (dedupRelaxationLevel > 0) {
+            console.warn(
+              `Regeneration is stalled; applying dedupe relaxation level ${dedupRelaxationLevel} ` +
+              `(1=historySimilarity, 2=historyConcept/intraConcept, 3=allow all duplicates)`
+            );
+          }
+        }
       }
 
       regenerationIndex += 1;
+    }
+
+    const emergencyFingerprints = new Set<string>();
+    // Seed with fingerprints from questions already accepted in the normal phase
+    for (const q of finalQuestions) {
+      emergencyFingerprints.add(q.questionText.trim().toLowerCase().slice(0, 120));
+    }
+    const emergencyLimit = clampNumber(parseIntEnv(env.REGENERATION_EMERGENCY_ATTEMPTS, 8), 1, 100);
+    let emergencyAttempt = 1;
+    while ((getMissingCount() > 0 || getMissingFactualCount() > 0) && emergencyAttempt <= emergencyLimit) {
+      emergencyRegenerationAttemptsUsed++;
+      const factualNeededNow = getMissingFactualCount();
+      const factualOnly = factualNeededNow > 0;
+      const requestCount = Math.max(getMissingCount(), getMissingFactualCount());
+      console.warn(
+        `Emergency regeneration ${emergencyAttempt}/${emergencyLimit}: requesting ${requestCount} question(s) without dedupe`
+      );
+
+      let regenerated: Awaited<ReturnType<typeof generateQuizCall>>;
+      try {
+        regenerated = await retryWithBackoff(
+          async () => {
+            generationCallCount++;
+            emergencyRegenerationCallCount++;
+            const result = await generateQuizCall(
+              env,
+              {
+                ...params,
+                count: requestCount,
+                styles: factualOnly ? ["factual"] : params.styles,
+                enableCurrentAffairs: groundingEnabled,
+                currentAffairsTheme,
+              },
+              overallCallId,
+              1000 + emergencyAttempt
+            );
+
+            if (result.questions.length === 0) {
+              const parseError = new Error(
+                `Parse failed: LLM returned ${result.rawResponse.length} chars but parsed to 0 questions`
+              );
+              (parseError as any).isParseFailure = true;
+              throw parseError;
+            }
+
+            return result;
+          },
+          {
+            maxRetries,
+            baseDelayMs,
+            rateLimitDelayMs: RATE_LIMIT_RETRY_DELAY_MS,
+            operationName: `Quiz Emergency Regeneration (${subject}/${theme || 'no-theme'})`,
+          }
+        );
+      } catch (error) {
+        console.error(`Emergency regeneration attempt ${emergencyAttempt} failed:`, error);
+        emergencyAttempt += 1;
+        continue;
+      }
+
+      totalPromptChars += regenerated.metrics.promptChars || 0;
+      totalResponseChars += regenerated.metrics.responseChars || 0;
+      totalPromptTokens += regenerated.metrics.usagePromptTokens || 0;
+      totalCompletionTokens += regenerated.metrics.usageCompletionTokens || 0;
+      totalTokens += regenerated.metrics.usageTotalTokens || 0;
+      totalGroundingSources += regenerated.groundingSourceCount || 0;
+
+      const normalizedRegenerated = normalizeQuestions(
+        regenerated.questions,
+        finalQuestions.length
+      );
+      const fixedRegenerated = normalizedRegenerated.map(autoFixQuestion);
+
+      for (const question of fixedRegenerated) {
+        if (isInvalidStatementQuestion(question)) {
+          invalidStatementCount++;
+          continue;
+        }
+
+        if (question.questionType === "standard") {
+          const text = question.questionText.toLowerCase();
+          if (
+            text.includes("consider the following statements") ||
+            text.includes("how many of the above") ||
+            text.includes("which of the statements")
+          ) {
+            if (hasStatementList(question.questionText)) {
+              question.questionType = "statement";
+              standardReclassifiedCount++;
+            } else {
+              invalidStatementCount++;
+              continue;
+            }
+          }
+        }
+
+        if (factualOnly && question.questionType !== "standard") {
+          continue;
+        }
+
+        const fp = `${question.questionText.trim().toLowerCase().slice(0, 120)}`;
+        if (emergencyFingerprints.has(fp)) {
+          continue;
+        }
+        emergencyFingerprints.add(fp);
+        finalQuestions.push(question);
+        emergencyNoDedupeAcceptedCount++;
+      }
+
+      emergencyAttempt += 1;
+    }
+
+    if (getMissingCount() > 0 || getMissingFactualCount() > 0) {
+      const unresolvedCount = getMissingCount();
+      const unresolvedFactualCount = getMissingFactualCount();
+      throw new Error(
+        `Failed to reach required count after regeneration attempts. requested=${count}, accepted=${finalQuestions.length}, missing=${unresolvedCount}, factualMissing=${unresolvedFactualCount}, maxAttempts=${regenerationLimit}, emergencyAttempts=${emergencyLimit}`
+      );
     }
   }
 
@@ -1073,6 +1256,13 @@ export async function generateQuiz(
   } else {
     finalQuestions = finalQuestions.slice(0, count);
   }
+
+  console.log(`Finalized ${finalQuestions.length}/${count} questions before fact check`);
+  console.log(
+    `Generation stages summary: calls(total=${generationCallCount}, initial=${initialGenerationCallCount}, regeneration=${regenerationCallCount}, emergency=${emergencyRegenerationCallCount}), ` +
+    `attempts(regeneration=${regenerationAttemptsUsed}, emergency=${emergencyRegenerationAttemptsUsed}), ` +
+    `emergencyNoDedupeAccepted=${emergencyNoDedupeAcceptedCount}`
+  );
 
   // Validation
   const validationResult = validateBatch(finalQuestions);
@@ -1168,6 +1358,13 @@ export async function generateQuiz(
       returnedCount: finalQuestions.length,
       dedupEnabled: enableDeduplication || false,
       dedupFilteredCount,
+      emergencyNoDedupeAcceptedCount,
+      regenerationAttemptsUsed,
+      emergencyRegenerationAttemptsUsed,
+      generationCallCount,
+      initialGenerationCallCount,
+      regenerationCallCount,
+      emergencyRegenerationCallCount,
       standardReclassifiedCount,
       validationIsValid: validationResult.isValid,
       validationInvalidCount: validationResult.invalidQuestions,

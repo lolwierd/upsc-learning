@@ -3,12 +3,13 @@
 export const runtime = "edge";
 
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardTitle, Input, Button } from "@/components/ui";
 import { QuizItemForm } from "@/components/quiz-sets/QuizItemForm";
 import { ScheduleBuilder } from "@/components/quiz-sets/ScheduleBuilder";
 import { ItemReorderList } from "@/components/quiz-sets/ItemReorderList";
+import { NotifierManager } from "@/components/quiz-sets/NotifierManager";
 import {
   getQuizSet,
   updateQuizSet,
@@ -21,6 +22,7 @@ import {
   setQuizSetSchedule,
   deleteQuizSetSchedule,
   toggleQuizSetSchedule,
+  duplicateQuizSet,
 } from "@/lib/api";
 import type {
   QuizSetWithSchedule,
@@ -34,6 +36,7 @@ import { cn } from "@/lib/utils";
 
 export default function QuizSetDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const setId = params.id as string;
 
   const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
@@ -48,11 +51,13 @@ export default function QuizSetDetailPage() {
   const [showItemForm, setShowItemForm] = useState(false);
   const [editingItem, setEditingItem] = useState<QuizSetItem | null>(null);
   const [showScheduleBuilder, setShowScheduleBuilder] = useState(false);
+  const [showNotifierManager, setShowNotifierManager] = useState(false);
 
   // Action states
   const [generating, setGenerating] = useState(false);
   const [savingName, setSavingName] = useState(false);
   const [savingItem, setSavingItem] = useState(false);
+  const [duplicating, setDuplicating] = useState(false);
 
   const loadQuizSet = useCallback(async () => {
     try {
@@ -179,6 +184,21 @@ export default function QuizSetDetailPage() {
     }
   };
 
+  const handleDuplicate = async () => {
+    setDuplicating(true);
+    try {
+      const duplicated = await duplicateQuizSet(setId, {
+        includeSchedule: false,
+        includeNotifiers: false,
+      });
+      router.push(`/sets/${duplicated.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to duplicate quiz set");
+    } finally {
+      setDuplicating(false);
+    }
+  };
+
   const formatDateTime = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString("en-IN", {
@@ -273,13 +293,28 @@ export default function QuizSetDetailPage() {
             </div>
           )}
         </div>
-        <Button
-          onClick={handleGenerate}
-          loading={generating}
-          disabled={quizSet.items.length === 0}
-        >
-          {generating ? "Starting..." : "Generate All"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            onClick={handleDuplicate}
+            loading={duplicating}
+          >
+            {duplicating ? "Duplicating..." : "Duplicate"}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setShowNotifierManager((prev) => !prev)}
+          >
+            {showNotifierManager ? "Close Notify" : "Notify"}
+          </Button>
+          <Button
+            onClick={handleGenerate}
+            loading={generating}
+            disabled={quizSet.items.length === 0}
+          >
+            {generating ? "Starting..." : "Generate All"}
+          </Button>
+        </div>
       </div>
 
       {/* Error */}
@@ -292,6 +327,10 @@ export default function QuizSetDetailPage() {
             </svg>
           </button>
         </div>
+      )}
+
+      {showNotifierManager && (
+        <NotifierManager setId={setId} />
       )}
 
       {/* Quick Start - Combined Quiz */}

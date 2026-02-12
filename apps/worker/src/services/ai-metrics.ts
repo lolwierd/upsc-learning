@@ -23,6 +23,13 @@ export interface AiGenerationMetricInsert {
   returnedCount: number;
   dedupEnabled: boolean;
   dedupFilteredCount: number;
+  emergencyNoDedupeAcceptedCount?: number | null;
+  regenerationAttemptsUsed?: number | null;
+  emergencyRegenerationAttemptsUsed?: number | null;
+  generationCallCount?: number | null;
+  initialGenerationCallCount?: number | null;
+  regenerationCallCount?: number | null;
+  emergencyRegenerationCallCount?: number | null;
 
   validationIsValid?: boolean | null;
   validationInvalidCount?: number | null;
@@ -68,6 +75,13 @@ export async function insertAiGenerationMetric(
       status, error_message,
       requested_count, returned_count,
       dedup_enabled, dedup_filtered_count,
+      emergency_no_dedupe_accepted_count,
+      regeneration_attempts_used,
+      emergency_regeneration_attempts_used,
+      generation_call_count,
+      initial_generation_call_count,
+      regeneration_call_count,
+      emergency_regeneration_call_count,
       validation_is_valid, validation_invalid_count, validation_error_count, validation_warning_count, validation_batch_warnings,
       parse_strategy, prompt_chars, response_chars,
       total_duration_ms, generation_duration_ms,
@@ -82,6 +96,7 @@ export async function insertAiGenerationMetric(
       ?, ?,
       ?, ?,
       ?, ?,
+      ?, ?, ?, ?, ?, ?, ?,
       ?, ?, ?, ?, ?,
       ?, ?, ?,
       ?, ?,
@@ -116,6 +131,13 @@ export async function insertAiGenerationMetric(
 
       metric.dedupEnabled ? 1 : 0,
       metric.dedupFilteredCount,
+      metric.emergencyNoDedupeAcceptedCount ?? 0,
+      metric.regenerationAttemptsUsed ?? 0,
+      metric.emergencyRegenerationAttemptsUsed ?? 0,
+      metric.generationCallCount ?? 0,
+      metric.initialGenerationCallCount ?? 0,
+      metric.regenerationCallCount ?? 0,
+      metric.emergencyRegenerationCallCount ?? 0,
 
       metric.validationIsValid === null || metric.validationIsValid === undefined
         ? null
@@ -168,6 +190,13 @@ export interface AiGenerationMetricRow {
   returnedCount: number;
   dedupEnabled: boolean;
   dedupFilteredCount: number;
+  emergencyNoDedupeAcceptedCount: number;
+  regenerationAttemptsUsed: number;
+  emergencyRegenerationAttemptsUsed: number;
+  generationCallCount: number;
+  initialGenerationCallCount: number;
+  regenerationCallCount: number;
+  emergencyRegenerationCallCount: number;
   validationIsValid: boolean | null;
   validationInvalidCount: number | null;
   validationErrorCount: number | null;
@@ -222,6 +251,13 @@ export async function listAiGenerationMetrics(
       returned_count,
       dedup_enabled,
       dedup_filtered_count,
+      emergency_no_dedupe_accepted_count,
+      regeneration_attempts_used,
+      emergency_regeneration_attempts_used,
+      generation_call_count,
+      initial_generation_call_count,
+      regeneration_call_count,
+      emergency_regeneration_call_count,
       validation_is_valid,
       validation_invalid_count,
       validation_error_count,
@@ -280,6 +316,13 @@ export async function listAiGenerationMetrics(
     returnedCount: Number(r.returned_count),
     dedupEnabled: Number(r.dedup_enabled) === 1,
     dedupFilteredCount: Number(r.dedup_filtered_count),
+    emergencyNoDedupeAcceptedCount: Number(r.emergency_no_dedupe_accepted_count ?? 0),
+    regenerationAttemptsUsed: Number(r.regeneration_attempts_used ?? 0),
+    emergencyRegenerationAttemptsUsed: Number(r.emergency_regeneration_attempts_used ?? 0),
+    generationCallCount: Number(r.generation_call_count ?? 0),
+    initialGenerationCallCount: Number(r.initial_generation_call_count ?? 0),
+    regenerationCallCount: Number(r.regeneration_call_count ?? 0),
+    emergencyRegenerationCallCount: Number(r.emergency_regeneration_call_count ?? 0),
     validationIsValid:
       r.validation_is_valid === null || r.validation_is_valid === undefined
         ? null
@@ -344,4 +387,154 @@ export async function listAiGenerationMetrics(
     rawResponse: (r.raw_response as string) ?? null,
     createdAt: Number(r.created_at),
   }));
+}
+
+export async function getAiGenerationMetricById(
+  db: DatabaseLike | D1Database,
+  metricId: string
+): Promise<AiGenerationMetricRow | null> {
+  const result = await db.prepare(
+    `SELECT
+      id,
+      quiz_id,
+      provider,
+      model,
+      fact_check_model,
+      subject,
+      theme,
+      styles,
+      era,
+      status,
+      error_message,
+      requested_count,
+      returned_count,
+      dedup_enabled,
+      dedup_filtered_count,
+      emergency_no_dedupe_accepted_count,
+      regeneration_attempts_used,
+      emergency_regeneration_attempts_used,
+      generation_call_count,
+      initial_generation_call_count,
+      regeneration_call_count,
+      emergency_regeneration_call_count,
+      validation_is_valid,
+      validation_invalid_count,
+      validation_error_count,
+      validation_warning_count,
+      validation_batch_warnings,
+      parse_strategy,
+      prompt_chars,
+      response_chars,
+      total_duration_ms,
+      generation_duration_ms,
+      fact_check_enabled,
+      fact_check_duration_ms,
+      fact_check_checked_count,
+      fact_check_issue_count,
+      usage_prompt_tokens,
+      usage_completion_tokens,
+      usage_total_tokens,
+      grounding_enabled,
+      grounding_source_count,
+      request_prompt,
+      raw_response,
+      created_at
+    FROM ai_generation_metrics
+    WHERE id = ?
+    LIMIT 1`
+  )
+    .bind(metricId)
+    .all();
+
+  const rows = (result.results ?? []) as Record<string, unknown>[];
+  if (rows.length === 0) return null;
+
+  const [r] = rows;
+  return {
+    id: String(r.id),
+    quizId: (r.quiz_id as string) ?? null,
+    provider: r.provider as AiProvider,
+    model: String(r.model),
+    factCheckModel: (r.fact_check_model as string) ?? null,
+    subject: String(r.subject),
+    theme: (r.theme as string) ?? null,
+    styles: safeJsonParse(r.styles),
+    era: (r.era as string) ?? null,
+    status: r.status as AiMetricStatus,
+    errorMessage: (r.error_message as string) ?? null,
+    requestedCount: Number(r.requested_count),
+    returnedCount: Number(r.returned_count),
+    dedupEnabled: Number(r.dedup_enabled) === 1,
+    dedupFilteredCount: Number(r.dedup_filtered_count),
+    emergencyNoDedupeAcceptedCount: Number(r.emergency_no_dedupe_accepted_count ?? 0),
+    regenerationAttemptsUsed: Number(r.regeneration_attempts_used ?? 0),
+    emergencyRegenerationAttemptsUsed: Number(r.emergency_regeneration_attempts_used ?? 0),
+    generationCallCount: Number(r.generation_call_count ?? 0),
+    initialGenerationCallCount: Number(r.initial_generation_call_count ?? 0),
+    regenerationCallCount: Number(r.regeneration_call_count ?? 0),
+    emergencyRegenerationCallCount: Number(r.emergency_regeneration_call_count ?? 0),
+    validationIsValid:
+      r.validation_is_valid === null || r.validation_is_valid === undefined
+        ? null
+        : Number(r.validation_is_valid) === 1,
+    validationInvalidCount:
+      r.validation_invalid_count === null || r.validation_invalid_count === undefined
+        ? null
+        : Number(r.validation_invalid_count),
+    validationErrorCount:
+      r.validation_error_count === null || r.validation_error_count === undefined
+        ? null
+        : Number(r.validation_error_count),
+    validationWarningCount:
+      r.validation_warning_count === null || r.validation_warning_count === undefined
+        ? null
+        : Number(r.validation_warning_count),
+    validationBatchWarnings: safeJsonParse(r.validation_batch_warnings),
+    parseStrategy: (r.parse_strategy as AiParseStrategy) ?? null,
+    promptChars:
+      r.prompt_chars === null || r.prompt_chars === undefined ? null : Number(r.prompt_chars),
+    responseChars:
+      r.response_chars === null || r.response_chars === undefined ? null : Number(r.response_chars),
+    totalDurationMs:
+      r.total_duration_ms === null || r.total_duration_ms === undefined
+        ? null
+        : Number(r.total_duration_ms),
+    generationDurationMs:
+      r.generation_duration_ms === null || r.generation_duration_ms === undefined
+        ? null
+        : Number(r.generation_duration_ms),
+    factCheckEnabled: Number(r.fact_check_enabled) === 1,
+    factCheckDurationMs:
+      r.fact_check_duration_ms === null || r.fact_check_duration_ms === undefined
+        ? null
+        : Number(r.fact_check_duration_ms),
+    factCheckCheckedCount:
+      r.fact_check_checked_count === null || r.fact_check_checked_count === undefined
+        ? null
+        : Number(r.fact_check_checked_count),
+    factCheckIssueCount:
+      r.fact_check_issue_count === null || r.fact_check_issue_count === undefined
+        ? null
+        : Number(r.fact_check_issue_count),
+    usagePromptTokens:
+      r.usage_prompt_tokens === null || r.usage_prompt_tokens === undefined
+        ? null
+        : Number(r.usage_prompt_tokens),
+    usageCompletionTokens:
+      r.usage_completion_tokens === null || r.usage_completion_tokens === undefined
+        ? null
+        : Number(r.usage_completion_tokens),
+    usageTotalTokens:
+      r.usage_total_tokens === null || r.usage_total_tokens === undefined
+        ? null
+        : Number(r.usage_total_tokens),
+    groundingEnabled: Number(r.grounding_enabled) === 1,
+    groundingSourceCount:
+      r.grounding_source_count === null || r.grounding_source_count === undefined
+        ? null
+        : Number(r.grounding_source_count),
+    requestPrompt: (r.request_prompt as string) ?? null,
+    rawResponse: (r.raw_response as string) ?? null,
+    createdAt: Number(r.created_at),
+  };
 }

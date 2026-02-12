@@ -3,6 +3,7 @@ import type { Env } from "../types.js";
 import { generateQuiz } from "./llm.js";
 import { insertAiGenerationMetric } from "./ai-metrics.js";
 import type { QuizSetRunStatus } from "@mcqs/shared";
+import { emitQuizSetNotifierEvent } from "./notifiers.js";
 
 interface QuizSetItemRow {
   id: string;
@@ -274,6 +275,13 @@ export async function executeQuizSetGeneration(
           returnedCount: metrics.returnedCount,
           dedupEnabled: metrics.dedupEnabled,
           dedupFilteredCount: metrics.dedupFilteredCount,
+          emergencyNoDedupeAcceptedCount: metrics.emergencyNoDedupeAcceptedCount,
+          regenerationAttemptsUsed: metrics.regenerationAttemptsUsed,
+          emergencyRegenerationAttemptsUsed: metrics.emergencyRegenerationAttemptsUsed,
+          generationCallCount: metrics.generationCallCount,
+          initialGenerationCallCount: metrics.initialGenerationCallCount,
+          regenerationCallCount: metrics.regenerationCallCount,
+          emergencyRegenerationCallCount: metrics.emergencyRegenerationCallCount,
           validationIsValid: metrics.validationIsValid,
           validationInvalidCount: metrics.validationInvalidCount,
           validationErrorCount: metrics.validationErrorCount,
@@ -340,6 +348,21 @@ export async function executeQuizSetGeneration(
       )
         .bind(failedCount, runId)
         .run();
+
+      try {
+        await emitQuizSetNotifierEvent(env, {
+          type: "quiz_set.generation.item_failed",
+          quizSetId,
+          runId,
+          runItemId: runItem.id,
+          subject: runItem.subject,
+          theme: runItem.theme,
+          questionCount: runItem.question_count,
+          error: errorMessage,
+        });
+      } catch (notifyError) {
+        console.warn("Failed to send item failure notification:", notifyError);
+      }
     }
   }
 
@@ -383,6 +406,22 @@ export async function executeQuizSetGeneration(
   )
     .bind(finalStatus, completedAt, runId)
     .run();
+
+  try {
+    await emitQuizSetNotifierEvent(env, {
+      type:
+        finalStatus === "completed"
+          ? "quiz_set.generation.completed"
+          : finalStatus === "partial"
+            ? "quiz_set.generation.partial"
+            : "quiz_set.generation.failed",
+      quizSetId,
+      runId,
+      triggerType,
+    });
+  } catch (notifyError) {
+    console.warn("Failed to send run completion notification:", notifyError);
+  }
 
   // If this was a scheduled run, update the schedule's last run info
   if (triggerType === "scheduled") {
@@ -457,6 +496,18 @@ export async function triggerQuizSetGeneration(
     quizSetId,
     triggerType,
   });
+
+  try {
+    await emitQuizSetNotifierEvent(env, {
+      type: "quiz_set.generation.started",
+      quizSetId,
+      runId,
+      triggerType,
+      scheduleId: scheduleId || null,
+    });
+  } catch (notifyError) {
+    console.warn("Failed to send run start notification:", notifyError);
+  }
 
   // Queue background task
   if (waitUntil) {

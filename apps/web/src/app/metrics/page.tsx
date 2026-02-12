@@ -291,7 +291,7 @@ export default function MetricsPage() {
                     {statusBadge(m.status)}
                   </div>
 
-                  <div className="mt-2 grid grid-cols-2 md:grid-cols-7 gap-2 text-sm">
+                  <div className="mt-2 grid grid-cols-2 md:grid-cols-8 gap-2 text-sm">
                     <div className="text-gray-600">
                       <span className="text-gray-400">Count:</span>{" "}
                       <span className="font-medium tabular-nums">
@@ -314,6 +314,12 @@ export default function MetricsPage() {
                       <span className="text-gray-400">Dedup:</span>{" "}
                       <span className="font-medium tabular-nums">
                         {m.dedupFilteredCount}
+                      </span>
+                    </div>
+                    <div className="text-gray-600">
+                      <span className="text-gray-400">Emergency:</span>{" "}
+                      <span className="font-medium tabular-nums">
+                        {m.emergencyNoDedupeAcceptedCount}
                       </span>
                     </div>
                     <div className="text-gray-600">
@@ -372,6 +378,12 @@ export default function MetricsPage() {
                             {m.responseChars ?? "—"}
                           </span>
                         </div>
+                        <div>
+                          <span className="text-gray-400">Calls:</span>{" "}
+                          <span className="font-medium tabular-nums">
+                            {m.generationCallCount} (i{m.initialGenerationCallCount}/r{m.regenerationCallCount}/e{m.emergencyRegenerationCallCount})
+                          </span>
+                        </div>
                       </div>
 
                       <div>
@@ -399,6 +411,18 @@ export default function MetricsPage() {
                           <span className="text-gray-400">Token usage:</span>{" "}
                           <span className="font-medium tabular-nums">
                             {m.usageTotalTokens ?? "—"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Stage attempts:</span>{" "}
+                          <span className="font-medium tabular-nums">
+                            regen={m.regenerationAttemptsUsed}, emergency={m.emergencyRegenerationAttemptsUsed}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Emergency no-dedupe accepted:</span>{" "}
+                          <span className="font-medium tabular-nums">
+                            {m.emergencyNoDedupeAcceptedCount}
                           </span>
                         </div>
                         {m.status === "error" && m.errorMessage && (

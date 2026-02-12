@@ -2,6 +2,8 @@
 
 A comprehensive documentation of how the MCQ generation system works, including prompt engineering, validation, fact-checking, and deduplication.
 
+For the exact end-to-end runtime execution flow (API -> DB status transitions -> retries/regeneration/failure behavior), see `docs/quiz-generation-flow.md`.
+
 ## Table of Contents
 
 1. [System Overview](#system-overview)

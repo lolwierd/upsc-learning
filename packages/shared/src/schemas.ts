@@ -229,6 +229,15 @@ export type HistoryQuery = z.infer<typeof historyQuerySchema>;
 export const quizSetRunStatusSchema = z.enum(["running", "completed", "partial", "failed"]);
 export const quizSetRunTriggerTypeSchema = z.enum(["manual", "scheduled"]);
 export const quizSetRunItemStatusSchema = z.enum(["pending", "generating", "completed", "failed"]);
+export const quizSetNotifierProviderSchema = z.enum(["discord_webhook"]);
+export const quizSetNotifierEventTypeSchema = z.enum([
+  "quiz_set.modified",
+  "quiz_set.generation.started",
+  "quiz_set.generation.completed",
+  "quiz_set.generation.partial",
+  "quiz_set.generation.failed",
+  "quiz_set.generation.item_failed",
+]);
 
 // Quiz set item configuration (for creating/updating items)
 export const quizSetItemConfigSchema = z.object({
@@ -246,6 +255,13 @@ export const createQuizSetRequestSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   description: z.string().max(500).optional(),
   items: z.array(quizSetItemConfigSchema).optional(),
+});
+
+// Duplicate quiz set request
+export const duplicateQuizSetRequestSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  includeSchedule: z.boolean().optional().default(false),
+  includeNotifiers: z.boolean().optional().default(false),
 });
 
 // Update quiz set request
@@ -341,12 +357,42 @@ export const quizSetRunItemSchema = z.object({
   completedAt: z.number().optional(),
 });
 
+export const createQuizSetNotifierRequestSchema = z.object({
+  provider: quizSetNotifierProviderSchema.default("discord_webhook"),
+  label: z.string().max(120).optional(),
+  targetUrl: z.string().url(),
+  isEnabled: z.boolean().optional().default(true),
+  events: z.array(quizSetNotifierEventTypeSchema).min(1),
+});
+
+export const updateQuizSetNotifierRequestSchema = z.object({
+  label: z.string().max(120).optional(),
+  targetUrl: z.string().url().optional(),
+  isEnabled: z.boolean().optional(),
+  events: z.array(quizSetNotifierEventTypeSchema).min(1).optional(),
+});
+
+export const quizSetNotifierSchema = z.object({
+  id: z.string(),
+  quizSetId: z.string(),
+  provider: quizSetNotifierProviderSchema,
+  label: z.string().optional(),
+  targetUrlMasked: z.string(),
+  isEnabled: z.boolean(),
+  events: z.array(quizSetNotifierEventTypeSchema),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+
 // Type inference for quiz set schemas
 // Note: QuizSetItemConfig is exported from types.ts to avoid duplicate export
 export type CreateQuizSetRequest = z.infer<typeof createQuizSetRequestSchema>;
+export type DuplicateQuizSetRequest = z.infer<typeof duplicateQuizSetRequestSchema>;
 export type UpdateQuizSetRequest = z.infer<typeof updateQuizSetRequestSchema>;
 export type AddQuizSetItemRequest = z.infer<typeof addQuizSetItemRequestSchema>;
 export type UpdateQuizSetItemRequest = z.infer<typeof updateQuizSetItemRequestSchema>;
 export type ReorderQuizSetItemsRequest = z.infer<typeof reorderQuizSetItemsRequestSchema>;
 export type QuizSetScheduleRequest = z.infer<typeof quizSetScheduleRequestSchema>;
 export type ToggleScheduleRequest = z.infer<typeof toggleScheduleRequestSchema>;
+export type CreateQuizSetNotifierRequest = z.infer<typeof createQuizSetNotifierRequestSchema>;
+export type UpdateQuizSetNotifierRequest = z.infer<typeof updateQuizSetNotifierRequestSchema>;

@@ -15,8 +15,12 @@ import type {
   QuizSetRunWithItems,
   QuizSetItemConfig,
   CreateQuizSetRequest,
+  DuplicateQuizSetRequest,
   UpdateQuizSetRequest,
   QuizSetScheduleRequest,
+  CreateQuizSetNotifierRequest,
+  UpdateQuizSetNotifierRequest,
+  QuizSetNotifier,
   QuizAttemptSummary,
   CombinedQuestion,
   RunAttemptWithAnswers,
@@ -149,6 +153,13 @@ export interface AiGenerationMetric {
   returnedCount: number;
   dedupEnabled: boolean;
   dedupFilteredCount: number;
+  emergencyNoDedupeAcceptedCount: number;
+  regenerationAttemptsUsed: number;
+  emergencyRegenerationAttemptsUsed: number;
+  generationCallCount: number;
+  initialGenerationCallCount: number;
+  regenerationCallCount: number;
+  emergencyRegenerationCallCount: number;
   validationIsValid: boolean | null;
   validationInvalidCount: number | null;
   validationErrorCount: number | null;
@@ -264,6 +275,17 @@ export async function createQuizSet(
   data: CreateQuizSetRequest
 ): Promise<QuizSetWithSchedule> {
   return fetchAPI(API_ENDPOINTS.QUIZ_SETS, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+// Duplicate an existing quiz set
+export async function duplicateQuizSet(
+  id: string,
+  data: Partial<DuplicateQuizSetRequest> = {}
+): Promise<QuizSetWithSchedule> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_DUPLICATE(id), {
     method: "POST",
     body: JSON.stringify(data),
   });
@@ -407,6 +429,46 @@ export async function toggleQuizSetSchedule(
   return fetchAPI(API_ENDPOINTS.QUIZ_SET_SCHEDULE_TOGGLE(setId), {
     method: "POST",
     body: JSON.stringify({ isEnabled }),
+  });
+}
+
+// ============================================
+// Quiz Set Notifier APIs
+// ============================================
+
+export async function getQuizSetNotifiers(
+  setId: string
+): Promise<{ notifiers: QuizSetNotifier[] }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_NOTIFIERS(setId));
+}
+
+export async function createQuizSetNotifierApi(
+  setId: string,
+  data: CreateQuizSetNotifierRequest
+): Promise<{ notifier: QuizSetNotifier }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_NOTIFIERS(setId), {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateQuizSetNotifierApi(
+  setId: string,
+  notifierId: string,
+  data: UpdateQuizSetNotifierRequest
+): Promise<{ notifier: QuizSetNotifier }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_NOTIFIER(setId, notifierId), {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteQuizSetNotifierApi(
+  setId: string,
+  notifierId: string
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_NOTIFIER(setId, notifierId), {
+    method: "DELETE",
   });
 }
 
