@@ -149,6 +149,103 @@ new areas within the subject. Explore lesser-known, niche, or under-tested areas
 }
 
 // ============================================================================
+// SEARCH DIVERSITY — RANDOMIZED SEARCH FOCUS AREAS
+// ============================================================================
+// Pool of current-affairs search angles. A random subset is picked per call
+// so the model searches for different things each generation.
+
+const CA_SEARCH_POOL = [
+  // Polity & Governance
+  "India new legislation bills passed 2025 2026",
+  "Supreme Court landmark judgments 2025 India",
+  "Constitutional amendments India recent",
+  "Election Commission reforms India 2025",
+  "Governor state legislature controversy India",
+  "Women reservation implementation India",
+  "Digital Personal Data Protection Act India",
+  "One Nation One Election India",
+  // Economy
+  "Union Budget 2025-26 key announcements India",
+  "RBI monetary policy 2025 2026 repo rate",
+  "India GDP growth latest quarterly data",
+  "GST Council recent decisions India",
+  "India free trade agreements 2025",
+  "PLI scheme manufacturing India results",
+  "Digital rupee CBDC India adoption",
+  "India sovereign green bonds",
+  // Environment
+  "COP climate summit latest India commitments",
+  "India renewable energy capacity 2025 2026",
+  "Wildlife Protection Act amendments India",
+  "New national parks sanctuaries India 2025",
+  "India wetland conservation Ramsar sites 2025",
+  "Carbon credit market India",
+  "India green hydrogen mission progress",
+  "Forest conservation amendment India",
+  // Science & Tech
+  "ISRO missions launches 2025 2026",
+  "Gaganyaan mission latest update",
+  "India semiconductor manufacturing progress",
+  "India quantum computing mission",
+  "AI regulation policy India 2025",
+  "India deep ocean mission update",
+  "India nuclear energy new reactors",
+  "India space economy startups ISRO",
+  // Geography & Disasters
+  "India infrastructure projects 2025 corridors highways",
+  "Geographical indications new India 2025",
+  "India river interlinking project update",
+  "India critical minerals policy lithium",
+  "Smart cities mission India results",
+  // History & Culture
+  "UNESCO World Heritage new India",
+  "Intangible Cultural Heritage India 2025",
+  "Archaeological Survey India discoveries 2025",
+  "India G20 cultural initiatives legacy",
+  // International Relations
+  "India BRICS 2025 cooperation",
+  "India UN Security Council reform",
+  "India bilateral agreements 2025",
+  "India Indo-Pacific strategy QUAD",
+  "India Africa cooperation summit",
+];
+
+/**
+ * Pick a random subset of search focus areas from the pool.
+ * Returns `count` items, shuffled using the provided seed.
+ */
+function pickSearchFocusAreas(seed: number, count: number): string[] {
+  const rng = seededRandom(seed);
+  const shuffled = shuffleArray(CA_SEARCH_POOL, rng);
+  return shuffled.slice(0, Math.min(count, CA_SEARCH_POOL.length));
+}
+
+/**
+ * Build the search diversity directive for the prompt.
+ */
+function buildSearchDiversitySection(seed: number, regenerationIndex: number): string {
+  // Pick 6-8 focus areas, different per call
+  const focusCount = 6 + (regenerationIndex % 3); // 6, 7, or 8
+  const areas = pickSearchFocusAreas(seed + regenerationIndex * 4951, focusCount);
+  return `
+WEB SEARCH DIVERSITY DIRECTIVE (IMPORTANT):
+
+When using Google Search for current affairs questions, DO NOT always search the
+same generic queries. Instead, focus your searches on these SPECIFIC areas for
+THIS generation (these change each time — explore them):
+
+${areas.map((a, i) => `${i + 1}. ${a}`).join('\n')}
+
+SEARCH STRATEGY:
+- Use the focus areas above as STARTING POINTS for your searches
+- Go DEEPER into specific sub-topics rather than broad overviews
+- Look for recent developments (Jan 2025 onwards) within these areas
+- If you've already covered a topic, search for ADJACENT or NICHE topics instead
+- Prefer official sources: PIB, government portals, ministry websites
+`;
+}
+
+// ============================================================================
 // UPSC 2024-2025 REALISTIC STYLE DISTRIBUTION
 // ============================================================================
 // Prep mix target:
@@ -242,57 +339,16 @@ SMART SELECTION RULES:
 
 TOPIC PRIORITIZATION (CRITICAL)
 
-HIGH-YIELD TOPICS (60-70% of questions MUST be from these):
+HIGH-YIELD TOPICS: Refer to the RANDOMIZED SUBJECT THEMES section below for
+detailed, per-subject topic lists. These are derived from 13 years of UPSC PYQ
+analysis and are shuffled each generation to ensure broad coverage over time.
 
-POLITY HOT TOPICS:
-- Women's Reservation Act (106th Amendment) - implementation & impact
-- Recent Supreme Court judgments (2025-2026)
-- New government schemes launched 2025+
-- Electoral reforms and ECI powers
-- Parliament procedures, Money Bill controversies
-- Fundamental Rights vs Directive Principles conflicts
+For current affairs topics, refer to the WEB SEARCH DIVERSITY DIRECTIVE below
+which provides specific, varied search angles for this generation.
 
-ENVIRONMENT HOT TOPICS:
-- COP30 outcomes and India's climate commitments
-- India's updated NDC targets for 2030
-- New environmental policies (2025+)
-- Wildlife Protection Act amendments
-- Recently declared protected areas/sanctuaries
-- Renewable energy targets and achievements
-
-GEOGRAPHY HOT TOPICS:
-- Climate change impacts on Indian regions
-- New infrastructure projects (highways, ports, metros)
-- Water resource management and inter-state disputes
-- Monsoon patterns and agricultural impacts
-- Geographical indications (new additions 2025+)
-
-HISTORY HOT TOPICS:
-- Recent archaeological discoveries in India
-- Freedom struggle anniversaries in 2025-2026
-- UNESCO heritage sites (new additions)
-- Historical connections to current geopolitical issues
-
-ECONOMY HOT TOPICS:
-- Economic Survey 2025-26 highlights
-- Union Budget 2025-26 key announcements
-- RBI monetary policy changes (2025+)
-- New taxation reforms and GST updates
-- Digital payment infrastructure evolution
-- India's trade agreements signed in 2025
-
-SCIENCE HOT TOPICS:
-- Gaganyaan mission updates and timeline
-- ISRO satellite launches (2025-2026)
-- New medical breakthroughs and vaccines
-- AI/ML policy frameworks in India
-- Semiconductor manufacturing initiatives
-
-ART & CULTURE HOT TOPICS:
-- New cultural festivals launched
-- Intangible Cultural Heritage additions
-- Major temple/monument restorations
-- Traditional knowledge preservation efforts
+60-70% of questions MUST come from the themes listed in RANDOMIZED SUBJECT THEMES.
+The remaining 30-40% should come from your own predictions of likely 2026 topics,
+informed by web search results.
 
 ${theme ? `
 THEMATIC FOCUS: "${theme}"
@@ -334,11 +390,7 @@ CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
 - Can include significant 2024 events if still relevant
 - MUST use Google Search to verify facts and get sources
 
-USE GOOGLE SEARCH to identify:
-- Trending UPSC-relevant topics (2025-2026)
-- Recent government announcements (PIB.gov.in)
-- Current international affairs
-- Latest scientific developments
+${buildSearchDiversitySection(seed, regenerationIndex)}
 
 IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
 `}
@@ -1946,8 +1998,9 @@ export function getPrompt(params: PromptParams): string {
   const eraInstruction = CURRENT_ERA_INSTRUCTION;
 
   // Current affairs is always included now for better 2026 predictions
+  const searchDiversity = buildSearchDiversitySection(seed, regenerationIndex);
   const currentAffairsSection = enableCurrentAffairs
-    ? `${CURRENT_AFFAIRS_CONTEXT}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
+    ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
 
   // Build style distribution instructions

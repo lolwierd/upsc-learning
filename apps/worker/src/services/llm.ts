@@ -414,7 +414,6 @@ function extractTopicSummary(question: GeneratedQuestion): string {
   const patterns = [
     /(?:with reference to|in (?:the )?context of|regarding|about)\s+(.+?)(?:,|\.|\?|consider|which)/i,
     /consider the following (?:statements?|pairs?)(?:\s+regarding|\s+about|\s+related to)?\s*(.+?)(?::|\.)/i,
-    /match list.+?with list/i,
   ];
 
   for (const pattern of patterns) {
