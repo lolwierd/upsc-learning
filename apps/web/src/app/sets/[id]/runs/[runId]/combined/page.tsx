@@ -386,12 +386,12 @@ export default function CombinedQuizPage() {
           </div>
 
           {/* Progress Bar */}
-          <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+          {/* <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-primary-500 transition-all duration-300"
               style={{ width: `${(progressCount / questions.length) * 100}%` }}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -746,7 +746,7 @@ export default function CombinedQuizPage() {
       </div>
 
       {/* Mobile Progress Bar */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-gray-200 p-4">
+      {/* <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-gray-200 p-4">
         <div className="flex items-center justify-between gap-4 mb-2">
           <span className="text-sm text-gray-600">
             {answeredCount}/{questions.length} {learnMode ? "studied" : "answered"}
@@ -763,7 +763,7 @@ export default function CombinedQuizPage() {
             style={{ width: `${(answeredCount / questions.length) * 100}%` }}
           />
         </div>
-      </div>
+      </div> */}
       </div>
       </>
       );
