@@ -14,6 +14,138 @@ interface PromptParams {
   totalCount: number;
   enableCurrentAffairs?: boolean; // Enable current affairs context injection
   currentAffairsTheme?: string; // Optional focus area for current affairs
+  excludeTopics?: string[]; // Topics already covered — model should avoid these
+  regenerationIndex?: number; // 0 = initial call, >0 = regeneration call index
+  shuffleSeed?: number; // Seed for theme randomization (changes per call)
+}
+
+// ============================================================================
+// THEME RANDOMIZATION UTILITIES
+// ============================================================================
+
+/**
+ * Simple seeded PRNG (mulberry32). Returns a function that produces [0,1) floats.
+ */
+function seededRandom(seed: number): () => number {
+  let s = seed | 0;
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Fisher-Yates shuffle using a seeded PRNG.
+ */
+function shuffleArray<T>(arr: T[], rng: () => number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * Parse a theme string into { header, items[] } groups.
+ * Headers are lines that DON'T start with "- " (after trimming).
+ * Items are lines that start with "- ".
+ */
+function parseThemeGroups(themeString: string): { header: string; items: string[] }[] {
+  const lines = themeString.split('\n');
+  const groups: { header: string; items: string[] }[] = [];
+  let currentHeader = '';
+  let currentItems: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith('- ')) {
+      currentItems.push(trimmed);
+    } else {
+      if (currentItems.length > 0) {
+        groups.push({ header: currentHeader, items: currentItems });
+        currentItems = [];
+      }
+      currentHeader = trimmed;
+    }
+  }
+  if (currentHeader || currentItems.length > 0) {
+    groups.push({ header: currentHeader, items: currentItems });
+  }
+  return groups;
+}
+
+/**
+ * Reassemble theme groups back into a string, optionally shuffling items within
+ * each group and the groups themselves.
+ */
+function reassembleThemes(groups: { header: string; items: string[] }[], rng: () => number): string {
+  const shuffledGroups = shuffleArray(groups, rng);
+  return shuffledGroups
+    .map(g => {
+      const shuffledItems = shuffleArray(g.items, rng);
+      return g.header ? `${g.header}\n${shuffledItems.join('\n')}` : shuffledItems.join('\n');
+    })
+    .join('\n\n');
+}
+
+/**
+ * Select a random subset of theme items (across all groups), keeping group headers.
+ * `ratio` is the fraction of items to keep (0-1).
+ */
+function subsetThemes(
+  groups: { header: string; items: string[] }[],
+  ratio: number,
+  rng: () => number
+): { header: string; items: string[] }[] {
+  return groups
+    .map(g => {
+      const count = Math.max(1, Math.round(g.items.length * ratio));
+      const shuffled = shuffleArray(g.items, rng);
+      return { header: g.header, items: shuffled.slice(0, count) };
+    })
+    .filter(g => g.items.length > 0);
+}
+
+/**
+ * Shuffle and optionally subset a theme string.
+ * - Initial call (regenIndex 0): shuffle only, full list
+ * - Regeneration calls (regenIndex > 0): shuffle + subset to ~50%
+ */
+function processThemeString(
+  themeString: string,
+  seed: number,
+  regenerationIndex: number
+): string {
+  if (!themeString) return themeString;
+  const rng = seededRandom(seed + regenerationIndex * 7919); // different seed per regen call
+  const groups = parseThemeGroups(themeString);
+  if (regenerationIndex > 0) {
+    // Regeneration: subset to ~50% and shuffle
+    const subsetted = subsetThemes(groups, 0.5, rng);
+    return reassembleThemes(subsetted, rng);
+  }
+  // Initial call: shuffle only (full list)
+  return reassembleThemes(groups, rng);
+}
+
+/**
+ * Build the excluded-topics prompt section.
+ */
+function buildExcludeTopicsSection(excludeTopics: string[]): string {
+  if (!excludeTopics.length) return '';
+  const topicList = excludeTopics.map(t => `- ${t}`).join('\n');
+  return `
+ALREADY COVERED TOPICS (DO NOT REPEAT — generate questions on DIFFERENT themes):
+${topicList}
+
+CRITICAL: The above topics have already been generated. You MUST choose DIFFERENT
+sub-topics, concepts, and themes. Do not rephrase the same topic — pick entirely
+new areas within the subject. Explore lesser-known, niche, or under-tested areas.
+`;
 }
 
 // ============================================================================
@@ -61,8 +193,23 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, currentAffairsTheme } = params;
+  const { theme, styles, totalCount, currentAffairsTheme, excludeTopics, regenerationIndex = 0, shuffleSeed } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
+  const seed = shuffleSeed ?? Date.now();
+
+  // Apply theme randomization to subject-specific theme data
+  const allSubjects = ['polity', 'economy', 'environment', 'geography', 'history', 'science', 'art_culture'] as const;
+  const processedThemes = allSubjects.map(s => ({
+    subject: s,
+    themes: processThemeString(getSubjectThemes(s), seed, regenerationIndex),
+  })).filter(t => t.themes);
+
+  // Build randomized combined themes section (injected later in prompt)
+  const randomizedThemesSection = processedThemes.length > 0
+    ? `RANDOMIZED SUBJECT THEMES (HIGH-PRIORITY TOPICS — order varies per generation):\n\n${
+        processedThemes.map(t => `${t.subject.toUpperCase()} THEMES:\n${t.themes}`).join('\n\n')
+      }`
+    : '';
 
   // Build style instructions
   const styleInstructions = styleDistribution
@@ -300,6 +447,10 @@ ${getSubjectStrategicTraps('science')}
 
 CULTURE TRAPS:
 ${getSubjectStrategicTraps('art_culture')}
+
+${randomizedThemesSection}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ''}
 
 QUESTION QUALITY STANDARDS (NON-NEGOTIABLE)
 
@@ -1751,12 +1902,17 @@ export function getPrompt(params: PromptParams): string {
     totalCount,
     enableCurrentAffairs = true, // Current affairs always enabled by default
     currentAffairsTheme,
+    excludeTopics,
+    regenerationIndex = 0,
+    shuffleSeed,
   } = params;
 
   // Special handling for random mode - multi-subject quiz generation
   if (subject === 'random') {
     return getRandomModePrompt(params);
   }
+
+  const seed = shuffleSeed ?? Date.now();
 
   // Auto-calculate style distribution if not provided (UPSC 2024-2025 realistic pattern)
   const styles = providedStyles && providedStyles.length > 0
@@ -1768,10 +1924,10 @@ export function getPrompt(params: PromptParams): string {
     : `COVERAGE STRATEGY FOR ${subject}:
     - 80% from the provided SUBJECT THEMES below (proven high-yield from 2013-2025 PYQs)
     - 20% from YOUR OWN PREDICTION of emerging topics likely to appear in UPSC 2026
-      (consider: recent legislation, constitutional developments, international events, 
+      (consider: recent legislation, constitutional developments, international events,
        government initiatives, scientific breakthroughs not yet tested by UPSC)
-    
-    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would 
+
+    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would
     consider "fresh yet UPSC-worthy" — topics gaining policy traction but not yet examined.
     Use your web search capability to identify current developments that could become exam topics.`;
 
@@ -1779,7 +1935,9 @@ export function getPrompt(params: PromptParams): string {
   const subjectTraps = getSubjectTraps(subject);
 
   // Get enhanced theme and analysis data from new modules
-  const subjectThemes = getSubjectThemes(subject);
+  // Apply randomization: shuffle themes, and subset on regeneration calls
+  const rawSubjectThemes = getSubjectThemes(subject);
+  const subjectThemes = processThemeString(rawSubjectThemes, seed, regenerationIndex);
   const subjectStrategicTraps = getSubjectStrategicTraps(subject);
   const subjectAnalysis = getSubjectAnalysis(subject);
   const strategicSynthesis = getStrategicSynthesis();
@@ -1865,6 +2023,8 @@ ${strategicSynthesis}
     }
 
 ${DISTRACTOR_BLUEPRINT}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ''}
 
  QUESTION STYLE DISTRIBUTION:
 ${styleInstructions}

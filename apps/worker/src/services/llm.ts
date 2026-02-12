@@ -95,6 +95,10 @@ interface GenerateQuizParams {
   enableDeduplication?: boolean; // Check against previously generated questions
   enableCurrentAffairs?: boolean; // Enable Google Search grounding for current affairs
   currentAffairsTheme?: string; // Optional focus area for current affairs
+  excludeTopics?: string[]; // Topics already covered — prompt tells model to avoid these
+  regenerationIndex?: number; // 0 = initial, >0 = regeneration call index
+  shuffleSeed?: number; // Seed for theme randomization
+  temperatureOverride?: number; // Override temperature for this call (used for regen diversity)
 }
 
 export interface GenerateQuizMetrics {
@@ -397,6 +401,47 @@ async function saveClusters(
 }
 
 // ============================================================================
+// TOPIC EXTRACTION FOR EXCLUSION LIST
+// ============================================================================
+
+/**
+ * Extract a short topic descriptor from a question for the exclusion list.
+ * Takes the first meaningful clause of the question text (up to ~80 chars).
+ */
+function extractTopicSummary(question: GeneratedQuestion): string {
+  const text = question.questionText;
+  // Try to extract topic from common UPSC patterns
+  const patterns = [
+    /(?:with reference to|in (?:the )?context of|regarding|about)\s+(.+?)(?:,|\.|\?|consider|which)/i,
+    /consider the following (?:statements?|pairs?)(?:\s+regarding|\s+about|\s+related to)?\s*(.+?)(?::|\.)/i,
+    /match list.+?with list/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) {
+      return match[1].trim().slice(0, 80);
+    }
+  }
+
+  // Fallback: take first 80 chars, trimmed to last word boundary
+  const fallback = text.slice(0, 80);
+  const lastSpace = fallback.lastIndexOf(' ');
+  return lastSpace > 20 ? fallback.slice(0, lastSpace) : fallback;
+}
+
+/**
+ * Build an exclusion list from already-accepted questions.
+ */
+function buildExcludeTopics(questions: GeneratedQuestion[]): string[] {
+  const topics = new Set<string>();
+  for (const q of questions) {
+    topics.add(extractTopicSummary(q));
+  }
+  return [...topics];
+}
+
+// ============================================================================
 // VERTEX AI STRUCTURED OUTPUT GENERATION
 // ============================================================================
 
@@ -421,6 +466,9 @@ async function generateQuizCall(
     count,
     enableCurrentAffairs = true,
     currentAffairsTheme,
+    excludeTopics,
+    regenerationIndex = 0,
+    shuffleSeed,
   } = params;
 
   // Use primary generation model for all cases (including grounding)
@@ -444,6 +492,9 @@ async function generateQuizCall(
     totalCount: count,
     enableCurrentAffairs,
     currentAffairsTheme,
+    excludeTopics,
+    regenerationIndex,
+    shuffleSeed,
   });
 
   const promptChars = prompt.length;
@@ -536,6 +587,11 @@ Generate exactly ${count} questions now.`;
   try {
     console.log(`[Call ${callIndex}] Starting generation for ${count} questions${enableCurrentAffairs ? " (with NATIVE grounding)" : ""}...`);
 
+    // Determine temperature: use explicit override if provided, else default behavior
+    const effectiveTemperature = typeof params.temperatureOverride === "number"
+      ? params.temperatureOverride
+      : (enableCurrentAffairs ? 1.0 : undefined);
+
     const vertexResult = await generateVertexStructuredContent({
       serviceAccount,
       model: generationModel,
@@ -546,7 +602,7 @@ Generate exactly ${count} questions now.`;
       responseSchema: GENERATED_QUESTION_ARRAY_SCHEMA,
       enableGrounding: enableCurrentAffairs,
       thinkingLevel: enableCurrentAffairs ? undefined : "high",
-      temperature: enableCurrentAffairs ? 1.0 : undefined,
+      temperature: effectiveTemperature,
     });
 
     generationDurationMs = Date.now() - generationStart;
@@ -743,9 +799,16 @@ export async function generateQuiz(
   console.log(`Starting single-call generation for ${count} questions`);
   const overallStart = Date.now();
 
+  // Stable seed for theme randomization — changes per quiz but deterministic within a quiz
+  const shuffleSeed = Math.floor(Math.random() * 2147483647);
+
   // Get retry config from env or use defaults
   const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
   const baseDelayMs = parseInt(env.LLM_RETRY_DELAY_MS || String(DEFAULT_RETRY_DELAY_MS), 10);
+  // Optional temperature override for regeneration calls
+  const regenTemperature = env.REGENERATION_TEMPERATURE != null
+    ? parseFloatEnv(env.REGENERATION_TEMPERATURE, -1)
+    : -1; // -1 means "not configured"
   let generationCallCount = 0;
   let initialGenerationCallCount = 0;
   let regenerationCallCount = 0;
@@ -765,6 +828,8 @@ export async function generateQuiz(
           count,
           enableCurrentAffairs: groundingEnabled,
           currentAffairsTheme,
+          shuffleSeed,
+          regenerationIndex: 0,
         },
         overallCallId,
         0
@@ -1010,8 +1075,17 @@ export async function generateQuiz(
       const requestCount = enableDeduplication
         ? Math.min(remaining * dedupOversampleFactor, dedupOversampleCap)
         : remaining;
+
+      // Build exclusion list from already-accepted questions
+      const currentExcludeTopics = buildExcludeTopics(finalQuestions);
+
+      // Disable grounding for factual-only regen: factual questions are pure static
+      // and benefit from extended thinking (thinkingLevel: "high") instead of web search
+      const regenGrounding = factualOnly ? false : groundingEnabled;
+
       console.log(
-        `Regenerating ${remaining} question(s) ${reason} (attempt ${regenerationIndex}, requesting ${requestCount})...`
+        `Regenerating ${remaining} question(s) ${reason} (attempt ${regenerationIndex}, requesting ${requestCount}, ` +
+        `excluding ${currentExcludeTopics.length} topics, grounding=${regenGrounding})...`
       );
       const acceptedBefore = finalQuestions.length;
       const regenerated = await retryWithBackoff(
@@ -1024,8 +1098,12 @@ export async function generateQuiz(
               ...params,
               count: requestCount,
               styles: factualOnly ? ["factual"] : params.styles,
-              enableCurrentAffairs: groundingEnabled,
+              enableCurrentAffairs: regenGrounding,
               currentAffairsTheme,
+              excludeTopics: currentExcludeTopics,
+              regenerationIndex,
+              shuffleSeed,
+              ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
             },
             overallCallId,
             regenerationIndex
@@ -1142,8 +1220,13 @@ export async function generateQuiz(
       const factualNeededNow = getMissingFactualCount();
       const factualOnly = factualNeededNow > 0;
       const requestCount = Math.max(getMissingCount(), getMissingFactualCount());
+      // Build exclusion list for emergency too
+      const emergencyExcludeTopics = buildExcludeTopics(finalQuestions);
+      const emergencyGrounding = factualOnly ? false : groundingEnabled;
+
       console.warn(
-        `Emergency regeneration ${emergencyAttempt}/${emergencyLimit}: requesting ${requestCount} question(s) without dedupe`
+        `Emergency regeneration ${emergencyAttempt}/${emergencyLimit}: requesting ${requestCount} question(s) without dedupe ` +
+        `(excluding ${emergencyExcludeTopics.length} topics, grounding=${emergencyGrounding})`
       );
 
       let regenerated: Awaited<ReturnType<typeof generateQuizCall>>;
@@ -1158,8 +1241,12 @@ export async function generateQuiz(
                 ...params,
                 count: requestCount,
                 styles: factualOnly ? ["factual"] : params.styles,
-                enableCurrentAffairs: groundingEnabled,
+                enableCurrentAffairs: emergencyGrounding,
                 currentAffairsTheme,
+                excludeTopics: emergencyExcludeTopics,
+                regenerationIndex: 1000 + emergencyAttempt,
+                shuffleSeed,
+                ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
               },
               overallCallId,
               1000 + emergencyAttempt
