@@ -94,42 +94,115 @@ function reassembleThemes(groups: { header: string; items: string[] }[], rng: ()
 }
 
 /**
- * Select a random subset of theme items (across all groups), keeping group headers.
- * `ratio` is the fraction of items to keep (0-1).
+ * Select a random subset of theme items, distributing a target count across groups.
+ * Ensures at least 1 item per group (maintains breadth) then distributes remaining
+ * slots proportionally to group size.
  */
-function subsetThemes(
+function subsetThemesToCount(
   groups: { header: string; items: string[] }[],
-  ratio: number,
+  targetCount: number,
   rng: () => number
 ): { header: string; items: string[] }[] {
-  return groups
-    .map(g => {
-      const count = Math.max(1, Math.round(g.items.length * ratio));
-      const shuffled = shuffleArray(g.items, rng);
-      return { header: g.header, items: shuffled.slice(0, count) };
-    })
-    .filter(g => g.items.length > 0);
+  const totalItems = groups.reduce((s, g) => s + g.items.length, 0);
+  if (targetCount >= totalItems) {
+    // Target is >= total items, just shuffle within groups
+    return groups.map(g => ({ header: g.header, items: shuffleArray(g.items, rng) }));
+  }
+
+  // Phase 1: guarantee 1 item per group
+  const nonEmptyGroups = groups.filter(g => g.items.length > 0);
+  const guaranteed = Math.min(nonEmptyGroups.length, targetCount);
+  let remaining = targetCount - guaranteed;
+
+  // Phase 2: distribute remaining slots proportionally to group size
+  return nonEmptyGroups.map(g => {
+    const proportion = totalItems > 0 ? g.items.length / totalItems : 0;
+    const extra = Math.round(remaining * proportion);
+    const count = Math.min(g.items.length, 1 + extra);
+    const shuffled = shuffleArray(g.items, rng);
+    return { header: g.header, items: shuffled.slice(0, count) };
+  }).filter(g => g.items.length > 0);
 }
 
 /**
- * Shuffle and optionally subset a theme string.
- * - Initial call (regenIndex 0): shuffle only, full list
- * - Regeneration calls (regenIndex > 0): shuffle + subset to ~50%
+ * Filter theme groups to only include those matching a theme keyword.
+ * Matches group headers case-insensitively against the theme string.
+ * Returns all groups if no match found (fallback to full list).
+ */
+function filterThemeGroupsByTheme(
+  groups: { header: string; items: string[] }[],
+  theme: string
+): { header: string; items: string[] }[] {
+  const themeLower = theme.toLowerCase();
+
+  // Map of theme keywords to group header patterns
+  // Broader matching to include related groups (e.g., religion/philosophy for ancient, temples for both)
+  const themeKeywords: Record<string, string[]> = {
+    'ancient': ['ancient', 'indus', 'vedic', 'maurya', 'gupta', 'sangam', 'harappa', 'buddhis', 'religion', 'philosophy', 'temple', 'architecture'],
+    'medieval': ['medieval', 'sultanate', 'mughal', 'vijayanagara', 'bhakti', 'sufi', 'christianity', 'religion', 'philosophy', 'temple', 'architecture'],
+    'modern': ['modern', 'british', 'freedom', 'reform', 'literary', 'colonial', 'music', 'performing'],
+  };
+
+  // Find matching keywords from the theme
+  const matchPatterns: string[] = [];
+  for (const [keyword, patterns] of Object.entries(themeKeywords)) {
+    if (themeLower.includes(keyword)) {
+      matchPatterns.push(...patterns);
+    }
+  }
+
+  // If no keyword matched, try direct header matching
+  if (matchPatterns.length === 0) {
+    matchPatterns.push(themeLower);
+  }
+
+  const filtered = groups.filter(g => {
+    const headerLower = g.header.toLowerCase();
+    return matchPatterns.some(p => headerLower.includes(p));
+  });
+
+  // Fall back to full list if nothing matched
+  if (filtered.length === 0) return groups;
+  return filtered;
+}
+
+/**
+ * Shuffle and subset a theme string proportional to question count.
+ * - Initial call (regenIndex 0): max(count*4, 25) themes, shuffled
+ * - Regeneration calls (regenIndex > 0): max(count*2, 15) themes from full list, shuffled
+ * - When a theme is provided, groups are filtered to match before subsetting
  */
 function processThemeString(
   themeString: string,
   seed: number,
-  regenerationIndex: number
+  regenerationIndex: number,
+  totalCount?: number,
+  theme?: string
 ): string {
   if (!themeString) return themeString;
   const rng = seededRandom(seed + regenerationIndex * 7919); // different seed per regen call
-  const groups = parseThemeGroups(themeString);
-  if (regenerationIndex > 0) {
-    // Regeneration: subset to ~50% and shuffle
-    const subsetted = subsetThemes(groups, 0.5, rng);
+  let groups = parseThemeGroups(themeString);
+
+  // Filter groups by theme if provided (e.g., "Ancient History" → only ancient groups)
+  if (theme) {
+    groups = filterThemeGroupsByTheme(groups, theme);
+  }
+
+  if (totalCount != null && totalCount > 0) {
+    // Proportional subsetting based on question count
+    const targetCount = regenerationIndex > 0
+      ? Math.max(totalCount * 2, 15)  // Regen: tighter subset, still from full pool
+      : Math.max(totalCount * 4, 25); // Initial: generous but capped
+    const subsetted = subsetThemesToCount(groups, targetCount, rng);
     return reassembleThemes(subsetted, rng);
   }
-  // Initial call: shuffle only (full list)
+
+  // Legacy fallback: no count provided
+  if (regenerationIndex > 0) {
+    const totalItems = groups.reduce((s, g) => s + g.items.length, 0);
+    const subsetted = subsetThemesToCount(groups, Math.round(totalItems * 0.5), rng);
+    return reassembleThemes(subsetted, rng);
+  }
   return reassembleThemes(groups, rng);
 }
 
@@ -240,10 +313,12 @@ function getRandomModePrompt(params: PromptParams): string {
   const seed = shuffleSeed ?? Date.now();
 
   // Apply theme randomization to subject-specific theme data
+  // In random mode, each subject gets themes proportional to its share of the quiz
   const allSubjects = ['polity', 'economy', 'environment', 'geography', 'history', 'science', 'art_culture'] as const;
+  const perSubjectCount = Math.max(Math.round(totalCount / allSubjects.length), 3);
   const processedThemes = allSubjects.map(s => ({
     subject: s,
-    themes: processThemeString(getSubjectThemes(s), seed, regenerationIndex),
+    themes: processThemeString(getSubjectThemes(s), seed, regenerationIndex, perSubjectCount),
   })).filter(t => t.themes);
 
   // Build randomized combined themes section (injected later in prompt)
@@ -284,18 +359,16 @@ SMART SELECTION RULES:
 - Favor cross-subject questions (Environment + Geography, Polity + Current Affairs)
 - DO NOT force even distribution - follow UPSC exam patterns
 
-TOPIC PRIORITIZATION (CRITICAL)
+TOPIC SELECTION (MANDATORY — THEME LIST IS YOUR ASSIGNMENT)
 
-HIGH-YIELD TOPICS: Refer to the RANDOMIZED SUBJECT THEMES section below for
-detailed, per-subject topic lists. These are derived from 13 years of UPSC PYQ
-analysis and are shuffled each generation to ensure broad coverage over time.
+The RANDOMIZED SUBJECT THEMES section below contains a curated subset of topics
+selected from 13 years of UPSC PYQ analysis. This subset changes every generation
+to ensure broad coverage over time.
 
-For current affairs topics, refer to the WEB SEARCH DIVERSITY DIRECTIVE below
-which provides specific, varied search angles for this generation.
-
-60-70% of questions MUST come from the themes listed in RANDOMIZED SUBJECT THEMES.
-The remaining 30-40% should come from your own predictions of likely 2026 topics,
-informed by web search results.
+90% of questions MUST be drawn directly from the theme items listed below.
+Each question should map to a specific theme item — treat the list as your assignment.
+Only 10% may come from your own predictions of likely 2026 topics.
+Do NOT ignore the theme list in favor of topics you find easier to generate.
 
 ${theme ? `
 THEMATIC FOCUS: "${theme}"
@@ -1938,24 +2011,25 @@ export function getPrompt(params: PromptParams): string {
     : calculateStyleDistribution(totalCount);
 
   const themeContext = theme
-    ? `SPECIFIC FOCUS: "${theme}" - Prefer this theme but include ~25% adjacent subtopics for breadth within ${subject}.`
-    : `COVERAGE STRATEGY FOR ${subject}:
-    - 80% from the provided SUBJECT THEMES below (proven high-yield from 2013-2025 PYQs)
-    - 20% from YOUR OWN PREDICTION of emerging topics likely to appear in UPSC 2026
-      (consider: recent legislation, constitutional developments, international events,
-       government initiatives, scientific breakthroughs not yet tested by UPSC)
-
-    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would
-    consider "fresh yet UPSC-worthy" — topics gaining policy traction but not yet examined.
-    Use your web search capability to identify current developments that could become exam topics.`;
+    ? `SPECIFIC FOCUS: "${theme}" — You MUST generate questions from this theme area.
+    The SUBJECT THEMES below have been filtered to match "${theme}".
+    Every question MUST be drawn from the provided theme list. Do NOT stray into other areas of ${subject}.`
+    : `TOPIC SELECTION STRATEGY FOR ${subject} (MANDATORY):
+    - 90% of questions MUST come from the SUBJECT THEMES listed below. Each question should
+      map to a specific theme item. Do NOT ignore the theme list — it was curated from 13 years
+      of PYQ analysis and has been specifically selected for this generation.
+    - 10% from YOUR OWN PREDICTION of emerging topics likely to appear in UPSC 2026
+      (recent legislation, constitutional developments, international events, scientific breakthroughs)
+    - If a theme item is listed below, it is a STRONG SIGNAL to generate a question on it.
+      Treat the theme list as your assignment, not optional guidance.`;
 
   const subjectContext = getSubjectContext(subject);
   const subjectTraps = getSubjectTraps(subject);
 
   // Get enhanced theme and analysis data from new modules
-  // Apply randomization: shuffle themes, and subset on regeneration calls
+  // Apply randomization + proportional subsetting based on question count
   const rawSubjectThemes = getSubjectThemes(subject);
-  const subjectThemes = processThemeString(rawSubjectThemes, seed, regenerationIndex);
+  const subjectThemes = processThemeString(rawSubjectThemes, seed, regenerationIndex, totalCount, theme);
   const subjectStrategicTraps = getSubjectStrategicTraps(subject);
   const subjectAnalysis = getSubjectAnalysis(subject);
   const strategicSynthesis = getStrategicSynthesis();
