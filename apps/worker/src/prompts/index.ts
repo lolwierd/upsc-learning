@@ -692,7 +692,7 @@ MANDATORY WEB SEARCH (for Direct CA only):
 - Each Direct CA question must cite at least one URL
 
 FOR DERIVED STATIC QUESTIONS (25%):
-- Use web search or memory to identify trending topics from past 12 months
+- Use web search to identify trending topics from past 12 months
 - Examples: Governor-state conflicts, SEBI regulatory debates, Heatwave discussions
 - Frame question purely from textbook/NCERT as if the topic is timeless
 - NO mention of the triggering event in question text
@@ -825,7 +825,7 @@ ECONOMY TRAP PATTERNS (Apply at least one per question):
 - Fiscal deficit vs Revenue deficit vs Primary deficit
 - FDI vs FPI vs FII distinctions
 - NBFC vs Bank regulatory differences
-- Recent: CBDC properties, PLI schemes, Production-linked distinctions`,
+- Recent: PLI schemes, Production-linked distinctions`,
 
   environment: `
 ENVIRONMENT TRAP PATTERNS (Apply at least one per question):
@@ -850,7 +850,7 @@ SCIENCE & TECHNOLOGY TRAP PATTERNS (Apply at least one per question):
 - Satellite types: GEO vs LEO vs MEO purposes
 - Biotech: Gene editing vs GM vs traditional breeding
 - Health: Disease mechanisms, vaccine types
-- IT: Blockchain vs Crypto vs CBDC distinctions
+- IT: Blockchain vs Crypto distinctions
 - Defense: Indigenous vs Imported systems`,
 
   history: `

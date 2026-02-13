@@ -171,7 +171,6 @@ CORE STRATEGY - "APPLICATION MAPS" & "TECH STACKS":
 INSTITUTIONAL GRID TRAPS:
 - Regulators: GEAC (MoEFCC - Env Release) vs DBT/ICMR (Research); MeitY vs DST vs CSIR mandates
 - NavIC: Not global GPS; L5/S + new L1 civilian band
-- UPI vs CBDC: UPI is a rail; CBDC is currency
 - CAR-T vs CRISPR: CAR-T = engineered T-cells; CRISPR = gene editing scissors
 
 2025-26 WATCHLIST:
@@ -205,6 +204,6 @@ PHYSICS & CHEMISTRY TRAPS:
 TECHNOLOGY TRAPS:
 - AI/ML/Quantum computing definitions
 - Health: Disease mechanisms, vaccine types
-- IT: Blockchain vs Crypto vs CBDC distinctions
+- IT: Blockchain vs Crypto distinctions
 - Defense: Indigenous vs Imported systems
 `;

@@ -20,8 +20,7 @@ MONETARY POLICY & BANKING:
 - Expansionary monetary policy: repo/bank rate/SLR
 
 DIGITAL FINANCE & FINTECH:
-- Digital Rupee (CBDC): RBI liability; convertibility
-- CBDC: bypassing USD/SWIFT; programmability
+- Digital Rupee (CBDC): RBI liability; convertibility; bypassing USD/SWIFT; programmability
 - Digital public infrastructure: UPI international
 - Payments infrastructure: RTGS vs NEFT
 - BHIM/UPI digital payments; authentication factors
@@ -146,7 +145,6 @@ FOREIGN TRADE TRAPS:
 2025-26 WATCHLIST:
 - Economic Survey structure (Vol-I themes vs Vol-II stats)
 - Union Budget 2025-26: Deficit glide path, taxation changes, disinvestment targets
-- CBDC: Retail vs Wholesale pilots vs UPI
 - Fintech Rails: Account Aggregator ("Consent Architecture"), OCEN
 - RBI Circulars: Liquidity windows
 - Major FTAs/CEPAs concluded or upgraded
@@ -175,7 +173,6 @@ TECHNICAL DEFINITIONS:
 - Legal tender money: definition and implications
 
 CURRENT AFFAIRS LINKAGE:
-- CBDC properties vs UPI vs cryptocurrency
 - PLI schemes: sector-specific distinctions
 - Production-linked vs Input-based incentives
 `;
