@@ -14,6 +14,180 @@ interface PromptParams {
   totalCount: number;
   enableCurrentAffairs?: boolean; // Enable current affairs context injection
   currentAffairsTheme?: string; // Optional focus area for current affairs
+  excludeTopics?: string[]; // Topics already covered — model should avoid these
+  regenerationIndex?: number; // 0 = initial call, >0 = regeneration call index
+  shuffleSeed?: number; // Seed for theme randomization (changes per call)
+  previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
+}
+
+// ============================================================================
+// THEME RANDOMIZATION UTILITIES
+// ============================================================================
+
+/**
+ * Simple seeded PRNG (mulberry32). Returns a function that produces [0,1) floats.
+ */
+function seededRandom(seed: number): () => number {
+  let s = seed | 0;
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Fisher-Yates shuffle using a seeded PRNG.
+ */
+function shuffleArray<T>(arr: T[], rng: () => number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * Parse a theme string into { header, items[] } groups.
+ * Headers are lines that DON'T start with "- " (after trimming).
+ * Items are lines that start with "- ".
+ */
+function parseThemeGroups(themeString: string): { header: string; items: string[] }[] {
+  const lines = themeString.split('\n');
+  const groups: { header: string; items: string[] }[] = [];
+  let currentHeader = '';
+  let currentItems: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith('- ')) {
+      currentItems.push(trimmed);
+    } else {
+      if (currentItems.length > 0) {
+        groups.push({ header: currentHeader, items: currentItems });
+        currentItems = [];
+      }
+      currentHeader = trimmed;
+    }
+  }
+  if (currentHeader || currentItems.length > 0) {
+    groups.push({ header: currentHeader, items: currentItems });
+  }
+  return groups;
+}
+
+/**
+ * Reassemble theme groups back into a string, optionally shuffling items within
+ * each group and the groups themselves.
+ */
+function reassembleThemes(groups: { header: string; items: string[] }[], rng: () => number): string {
+  const shuffledGroups = shuffleArray(groups, rng);
+  return shuffledGroups
+    .map(g => {
+      const shuffledItems = shuffleArray(g.items, rng);
+      return g.header ? `${g.header}\n${shuffledItems.join('\n')}` : shuffledItems.join('\n');
+    })
+    .join('\n\n');
+}
+
+/**
+ * Select a random subset of theme items (across all groups), keeping group headers.
+ * `ratio` is the fraction of items to keep (0-1).
+ */
+function subsetThemes(
+  groups: { header: string; items: string[] }[],
+  ratio: number,
+  rng: () => number
+): { header: string; items: string[] }[] {
+  return groups
+    .map(g => {
+      const count = Math.max(1, Math.round(g.items.length * ratio));
+      const shuffled = shuffleArray(g.items, rng);
+      return { header: g.header, items: shuffled.slice(0, count) };
+    })
+    .filter(g => g.items.length > 0);
+}
+
+/**
+ * Shuffle and optionally subset a theme string.
+ * - Initial call (regenIndex 0): shuffle only, full list
+ * - Regeneration calls (regenIndex > 0): shuffle + subset to ~50%
+ */
+function processThemeString(
+  themeString: string,
+  seed: number,
+  regenerationIndex: number
+): string {
+  if (!themeString) return themeString;
+  const rng = seededRandom(seed + regenerationIndex * 7919); // different seed per regen call
+  const groups = parseThemeGroups(themeString);
+  if (regenerationIndex > 0) {
+    // Regeneration: subset to ~50% and shuffle
+    const subsetted = subsetThemes(groups, 0.5, rng);
+    return reassembleThemes(subsetted, rng);
+  }
+  // Initial call: shuffle only (full list)
+  return reassembleThemes(groups, rng);
+}
+
+/**
+ * Build the excluded-topics prompt section.
+ */
+function buildExcludeTopicsSection(excludeTopics: string[]): string {
+  if (!excludeTopics.length) return '';
+  const topicList = excludeTopics.map(t => `- ${t}`).join('\n');
+  return `
+ALREADY COVERED TOPICS (DO NOT REPEAT — generate questions on DIFFERENT themes):
+${topicList}
+
+CRITICAL: The above topics have already been generated. You MUST choose DIFFERENT
+sub-topics, concepts, and themes. Do not rephrase the same topic — pick entirely
+new areas within the subject. Explore lesser-known, niche, or under-tested areas.
+`;
+}
+
+// ============================================================================
+// SEARCH DIVERSITY — PREVIOUS QUERY EXCLUSION
+// ============================================================================
+
+/**
+ * Build the search diversity section for the prompt.
+ * Uses previous search query exclusion: after each generation call, we collect
+ * the web search queries the model used (from grounding metadata) and pass them
+ * to subsequent calls so the model knows what it already searched for and is
+ * forced to explore different topics.
+ *
+ * On the initial call (no previous queries), this returns empty — we let the
+ * model search freely the first time.
+ */
+function buildSearchDiversitySection(
+  previousSearchQueries: string[],
+): string {
+  if (previousSearchQueries.length === 0) return '';
+
+  const uniqueQueries = [...new Set(previousSearchQueries)];
+  // Cap at 20 to keep prompt size reasonable
+  const queriesForPrompt = uniqueQueries.slice(0, 20);
+
+  return `
+SEARCH DIVERSITY (IMPORTANT — DO NOT REPEAT PREVIOUS SEARCHES):
+
+You have already performed these web searches in prior generation attempts:
+${queriesForPrompt.map(q => `- "${q}"`).join('\n')}
+
+DO NOT repeat these searches or minor variations of them. You MUST search for
+ENTIRELY DIFFERENT topics, events, or policy areas. Explore niche, under-reported,
+or recently emerging developments that the above searches would not have covered.
+
+Tips for finding fresh content:
+- Search for specific bills, judgments, missions, or schemes by name
+- Look into lesser-known government initiatives and policy changes
+- Explore recent PIB press releases, gazette notifications, ministry announcements
+- Search for developments in areas you haven't covered yet
+`;
 }
 
 // ============================================================================
@@ -61,8 +235,23 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, currentAffairsTheme } = params;
+  const { theme, styles, totalCount, currentAffairsTheme, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [] } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
+  const seed = shuffleSeed ?? Date.now();
+
+  // Apply theme randomization to subject-specific theme data
+  const allSubjects = ['polity', 'economy', 'environment', 'geography', 'history', 'science', 'art_culture'] as const;
+  const processedThemes = allSubjects.map(s => ({
+    subject: s,
+    themes: processThemeString(getSubjectThemes(s), seed, regenerationIndex),
+  })).filter(t => t.themes);
+
+  // Build randomized combined themes section (injected later in prompt)
+  const randomizedThemesSection = processedThemes.length > 0
+    ? `RANDOMIZED SUBJECT THEMES (HIGH-PRIORITY TOPICS — order varies per generation):\n\n${
+        processedThemes.map(t => `${t.subject.toUpperCase()} THEMES:\n${t.themes}`).join('\n\n')
+      }`
+    : '';
 
   // Build style instructions
   const styleInstructions = styleDistribution
@@ -95,57 +284,16 @@ SMART SELECTION RULES:
 
 TOPIC PRIORITIZATION (CRITICAL)
 
-HIGH-YIELD TOPICS (60-70% of questions MUST be from these):
+HIGH-YIELD TOPICS: Refer to the RANDOMIZED SUBJECT THEMES section below for
+detailed, per-subject topic lists. These are derived from 13 years of UPSC PYQ
+analysis and are shuffled each generation to ensure broad coverage over time.
 
-POLITY HOT TOPICS:
-- Women's Reservation Act (106th Amendment) - implementation & impact
-- Recent Supreme Court judgments (2025-2026)
-- New government schemes launched 2025+
-- Electoral reforms and ECI powers
-- Parliament procedures, Money Bill controversies
-- Fundamental Rights vs Directive Principles conflicts
+For current affairs topics, refer to the WEB SEARCH DIVERSITY DIRECTIVE below
+which provides specific, varied search angles for this generation.
 
-ENVIRONMENT HOT TOPICS:
-- COP30 outcomes and India's climate commitments
-- India's updated NDC targets for 2030
-- New environmental policies (2025+)
-- Wildlife Protection Act amendments
-- Recently declared protected areas/sanctuaries
-- Renewable energy targets and achievements
-
-GEOGRAPHY HOT TOPICS:
-- Climate change impacts on Indian regions
-- New infrastructure projects (highways, ports, metros)
-- Water resource management and inter-state disputes
-- Monsoon patterns and agricultural impacts
-- Geographical indications (new additions 2025+)
-
-HISTORY HOT TOPICS:
-- Recent archaeological discoveries in India
-- Freedom struggle anniversaries in 2025-2026
-- UNESCO heritage sites (new additions)
-- Historical connections to current geopolitical issues
-
-ECONOMY HOT TOPICS:
-- Economic Survey 2025-26 highlights
-- Union Budget 2025-26 key announcements
-- RBI monetary policy changes (2025+)
-- New taxation reforms and GST updates
-- Digital payment infrastructure evolution
-- India's trade agreements signed in 2025
-
-SCIENCE HOT TOPICS:
-- Gaganyaan mission updates and timeline
-- ISRO satellite launches (2025-2026)
-- New medical breakthroughs and vaccines
-- AI/ML policy frameworks in India
-- Semiconductor manufacturing initiatives
-
-ART & CULTURE HOT TOPICS:
-- New cultural festivals launched
-- Intangible Cultural Heritage additions
-- Major temple/monument restorations
-- Traditional knowledge preservation efforts
+60-70% of questions MUST come from the themes listed in RANDOMIZED SUBJECT THEMES.
+The remaining 30-40% should come from your own predictions of likely 2026 topics,
+informed by web search results.
 
 ${theme ? `
 THEMATIC FOCUS: "${theme}"
@@ -187,11 +335,7 @@ CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
 - Can include significant 2024 events if still relevant
 - MUST use Google Search to verify facts and get sources
 
-USE GOOGLE SEARCH to identify:
-- Trending UPSC-relevant topics (2025-2026)
-- Recent government announcements (PIB.gov.in)
-- Current international affairs
-- Latest scientific developments
+${buildSearchDiversitySection(previousSearchQueries)}
 
 IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
 `}
@@ -300,6 +444,10 @@ ${getSubjectStrategicTraps('science')}
 
 CULTURE TRAPS:
 ${getSubjectStrategicTraps('art_culture')}
+
+${randomizedThemesSection}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ''}
 
 QUESTION QUALITY STANDARDS (NON-NEGOTIABLE)
 
@@ -1751,12 +1899,17 @@ export function getPrompt(params: PromptParams): string {
     totalCount,
     enableCurrentAffairs = true, // Current affairs always enabled by default
     currentAffairsTheme,
+    excludeTopics,
+    regenerationIndex = 0,
+    shuffleSeed,
   } = params;
 
   // Special handling for random mode - multi-subject quiz generation
   if (subject === 'random') {
     return getRandomModePrompt(params);
   }
+
+  const seed = shuffleSeed ?? Date.now();
 
   // Auto-calculate style distribution if not provided (UPSC 2024-2025 realistic pattern)
   const styles = providedStyles && providedStyles.length > 0
@@ -1768,10 +1921,10 @@ export function getPrompt(params: PromptParams): string {
     : `COVERAGE STRATEGY FOR ${subject}:
     - 80% from the provided SUBJECT THEMES below (proven high-yield from 2013-2025 PYQs)
     - 20% from YOUR OWN PREDICTION of emerging topics likely to appear in UPSC 2026
-      (consider: recent legislation, constitutional developments, international events, 
+      (consider: recent legislation, constitutional developments, international events,
        government initiatives, scientific breakthroughs not yet tested by UPSC)
-    
-    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would 
+
+    For the 20% prediction slot: Think about what a UPSC paper-setter in 2026 would
     consider "fresh yet UPSC-worthy" — topics gaining policy traction but not yet examined.
     Use your web search capability to identify current developments that could become exam topics.`;
 
@@ -1779,7 +1932,9 @@ export function getPrompt(params: PromptParams): string {
   const subjectTraps = getSubjectTraps(subject);
 
   // Get enhanced theme and analysis data from new modules
-  const subjectThemes = getSubjectThemes(subject);
+  // Apply randomization: shuffle themes, and subset on regeneration calls
+  const rawSubjectThemes = getSubjectThemes(subject);
+  const subjectThemes = processThemeString(rawSubjectThemes, seed, regenerationIndex);
   const subjectStrategicTraps = getSubjectStrategicTraps(subject);
   const subjectAnalysis = getSubjectAnalysis(subject);
   const strategicSynthesis = getStrategicSynthesis();
@@ -1788,8 +1943,10 @@ export function getPrompt(params: PromptParams): string {
   const eraInstruction = CURRENT_ERA_INSTRUCTION;
 
   // Current affairs is always included now for better 2026 predictions
+  const previousSearchQueries = params.previousSearchQueries ?? [];
+  const searchDiversity = buildSearchDiversitySection(previousSearchQueries);
   const currentAffairsSection = enableCurrentAffairs
-    ? `${CURRENT_AFFAIRS_CONTEXT}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
+    ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
 
   // Build style distribution instructions
@@ -1865,6 +2022,8 @@ ${strategicSynthesis}
     }
 
 ${DISTRACTOR_BLUEPRINT}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ''}
 
  QUESTION STYLE DISTRIBUTION:
 ${styleInstructions}
