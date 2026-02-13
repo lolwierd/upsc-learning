@@ -407,11 +407,22 @@ async function saveClusters(
 
 /**
  * Extract a short topic descriptor from a question for the exclusion list.
- * Takes the first meaningful clause of the question text (up to ~80 chars).
+ * Prefers model-declared topicTag from metadata; falls back to regex extraction.
  */
 function extractTopicSummary(question: GeneratedQuestion): string {
+  // Prefer model-declared topicTag (from structured output schema)
+  const meta = question.metadata as { topicTag?: unknown; subtopicTag?: unknown } | undefined;
+  if (meta?.topicTag && typeof meta.topicTag === "string" && meta.topicTag.trim().length > 0) {
+    const tag = meta.topicTag.trim().slice(0, 80);
+    // Include subtopic for more specificity if available
+    if (meta.subtopicTag && typeof meta.subtopicTag === "string" && meta.subtopicTag.trim().length > 0) {
+      return `${tag} — ${meta.subtopicTag.trim().slice(0, 40)}`;
+    }
+    return tag;
+  }
+
+  // Fallback: regex extraction from question text
   const text = question.questionText;
-  // Try to extract topic from common UPSC patterns
   const patterns = [
     /(?:with reference to|in (?:the )?context of|regarding|about)\s+(.+?)(?:,|\.|\?|consider|which)/i,
     /consider the following (?:statements?|pairs?)(?:\s+regarding|\s+about|\s+related to)?\s*(.+?)(?::|\.)/i,
@@ -1008,6 +1019,9 @@ export async function generateQuiz(
     return true;
   };
 
+  // Track topics from rejected duplicates so we can tell the model to avoid them too
+  const rejectedDuplicateTopics: string[] = [];
+
   // Deduplication and early validation pass (keeps invalid statement questions out of runtime state)
   let finalQuestions: GeneratedQuestion[] = [];
   for (const question of fixedQuestions) {
@@ -1039,6 +1053,8 @@ export async function generateQuiz(
       if (!result.accepted) {
         dedupFilteredCount++;
         if (result.reason) dedupReasonCounts[result.reason] += 1;
+        // Collect topic from rejected duplicate so model knows to avoid it
+        rejectedDuplicateTopics.push(extractTopicSummary(question));
         continue;
       }
     }
@@ -1060,7 +1076,17 @@ export async function generateQuiz(
     );
   }
 
-  const factualMinimum = Math.round(count * 0.40);
+  // Reduce factual minimum by reclassified count: the model attempted to generate standard
+  // questions but embedded statement patterns. They're still valid questions in the quiz,
+  // just re-typed. Don't penalize the factual quota for the model's labeling error.
+  const rawFactualMinimum = Math.round(count * 0.40);
+  const factualMinimum = Math.max(rawFactualMinimum - standardReclassifiedCount, 0);
+  if (standardReclassifiedCount > 0 && factualMinimum < rawFactualMinimum) {
+    console.log(
+      `Factual minimum reduced from ${rawFactualMinimum} to ${factualMinimum} ` +
+      `(${standardReclassifiedCount} reclassified questions counted toward quota)`
+    );
+  }
   const getFactualCount = () =>
     finalQuestions.filter(q => q.questionType === "standard").length;
   const getMissingCount = () => Math.max(count - finalQuestions.length, 0);
@@ -1085,8 +1111,11 @@ export async function generateQuiz(
         ? Math.min(remaining * dedupOversampleFactor, dedupOversampleCap)
         : remaining;
 
-      // Build exclusion list from already-accepted questions
-      const currentExcludeTopics = buildExcludeTopics(finalQuestions);
+      // Build exclusion list from accepted questions + rejected duplicates
+      const currentExcludeTopics = [
+        ...buildExcludeTopics(finalQuestions),
+        ...rejectedDuplicateTopics,
+      ].filter((v, i, a) => a.indexOf(v) === i); // dedupe
 
       // Disable grounding for factual-only regen: factual questions are pure static
       // and benefit from extended thinking (thinkingLevel: "high") instead of web search
@@ -1189,6 +1218,8 @@ export async function generateQuiz(
           if (!result.accepted) {
             dedupFilteredCount++;
             if (result.reason) dedupReasonCounts[result.reason] += 1;
+            // Collect topic from rejected duplicate so model knows to avoid it
+            rejectedDuplicateTopics.push(extractTopicSummary(question));
             if (shouldForceAccept(result.reason, dedupRelaxationLevel)) {
               forceAcceptAndTrack(question);
               finalQuestions.push(question);
@@ -1236,8 +1267,11 @@ export async function generateQuiz(
       const factualNeededNow = getMissingFactualCount();
       const factualOnly = factualNeededNow > 0;
       const requestCount = Math.max(getMissingCount(), getMissingFactualCount());
-      // Build exclusion list for emergency too
-      const emergencyExcludeTopics = buildExcludeTopics(finalQuestions);
+      // Build exclusion list for emergency too (include rejected topics)
+      const emergencyExcludeTopics = [
+        ...buildExcludeTopics(finalQuestions),
+        ...rejectedDuplicateTopics,
+      ].filter((v, i, a) => a.indexOf(v) === i);
       const emergencyGrounding = factualOnly ? false : groundingEnabled;
 
       console.warn(

@@ -80,6 +80,8 @@ export interface GroundingSource {
 export interface QuestionMetadata {
   category: QuestionCategory;
   subject: QuestionSubject;
+  topicTag?: string;
+  subtopicTag?: string;
   groundingSources?: GroundingSource[];
   hasGrounding: boolean;
   hasRelevanceTag: boolean;

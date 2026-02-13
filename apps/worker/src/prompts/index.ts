@@ -169,8 +169,8 @@ function buildSearchDiversitySection(
   if (previousSearchQueries.length === 0) return '';
 
   const uniqueQueries = [...new Set(previousSearchQueries)];
-  // Cap at 20 to keep prompt size reasonable
-  const queriesForPrompt = uniqueQueries.slice(0, 20);
+  // Cap at 20, keeping most recent queries (appended last) since those are most likely being repeated
+  const queriesForPrompt = uniqueQueries.slice(-20);
 
   return `
 SEARCH DIVERSITY (IMPORTANT — DO NOT REPEAT PREVIOUS SEARCHES):
@@ -253,9 +253,11 @@ function getRandomModePrompt(params: PromptParams): string {
       }`
     : '';
 
-  // Build style instructions
+  // Build style instructions — map "factual" to "standard" so model sees the same name as questionType output
+  const styleDisplayName = (style: QuestionStyle): string =>
+    style === "factual" ? "standard (direct factual)" : style;
   const styleInstructions = styleDistribution
-    .map(({ style, count }) => `- ${style}: ${count} questions`)
+    .map(({ style, count }) => `- ${styleDisplayName(style)}: ${count} questions`)
     .join('\n');
 
   return `
@@ -500,7 +502,19 @@ Generate EXACTLY ${totalCount} questions in valid JSON array format:
 METADATA REQUIREMENTS:
 - category: MUST match the question type (direct-ca has [Relevance], derived-static does not)
 - subject: Primary subject being tested (polity, economy, environment, geography, history, science, culture)
+- topicTag: Short topic label (3-8 words) identifying the core concept tested
+- subtopicTag: Optional narrower sub-topic within the topicTag
 - derivedFromTopic: ONLY for derived-static questions - briefly note the news event that triggered this topic selection
+
+questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
+- "standard": ONLY for direct one-line factual stems with NO numbered sub-items.
+  Examples: "Which of the following...", "The irrigation device called 'Araghatta' was..."
+- "statement": ANY question containing numbered statements (1., 2., 3.) with
+  "Which/How many of the above is/are correct?" — EVEN IF the style requested was "standard".
+  If you write numbered statements, you MUST set questionType to "statement".
+- "match": ANY question with "Match List-I with List-II" or "Consider the following pairs"
+- "assertion": ANY question with "Statement-I / Statement-II" or "Assertion (A) / Reason (R)"
+A question with the WRONG questionType will be rejected and regenerated. Label correctly.
 
 FINAL CHECKLIST BEFORE GENERATION:
 - Subject distribution follows UPSC pattern (not uniform)
@@ -1184,39 +1198,46 @@ const STYLE_INSTRUCTIONS: Record<QuestionStyle, string> = {
   factual: `
 QUESTION STYLE: STANDARD / FACTUAL MCQ
 
-Format: Direct question with 4 options(A, B, C, D)
+Format: Direct question with 4 options (A, B, C, D)
 questionType: "standard"
+
+THIS IS THE SIMPLEST QUESTION FORMAT. A single direct question stem, NO numbered sub-items.
+
+NEVER USE these patterns for standard/factual questions (they belong to OTHER questionTypes):
+✗ "Consider the following statements: 1. ... 2. ..."  → This is questionType "statement"
+✗ "How many of the above statements is/are correct?"  → This is questionType "statement"
+✗ "Which of the statements given above is/are correct?" → This is questionType "statement"
+✗ "Consider the following pairs: ..."  → This is questionType "match"
+✗ "Match List-I with List-II"  → This is questionType "match"
+✗ "Statement-I: ... Statement-II: ..."  → This is questionType "assertion"
+If you catch yourself writing numbered statements (1., 2., 3.), STOP — that is NOT a standard question.
+
+CORRECT patterns for standard/factual questions:
+✓ "Which of the following..." with 4 direct answer options
+✓ "Which one of the following..."
+✓ "The [entity] was..." (fill-in-the-blank style)
+✓ "Who among the following..."
+✓ "What is the correct sequence of..."
+✓ Direct one-line factual stems
 
 UPSC Pattern Guidelines:
 - Question should test specific knowledge or understanding
-  - Frame questions as "Which of the following...", "What/Who/Where...", or direct questions
-  - Favor direct one-line factual stems like the 2024/2025 paper examples
-    (e.g., "The irrigation device called 'Araghatta' was", "The longest border between any two countries...",
-    "The first Gandharva Mahavidyalaya ... was set up in 1901 by ... in")
-  - Statement-style stems belong to statement questions; keep factual questions direct
-    - All four options must be grammatically consistent with the question stem
-      - Correct answer must be definitively correct, not "most correct"
+- Frame questions as "Which of the following...", "What/Who/Where...", or direct questions
+- Favor direct one-line factual stems like the 2024/2025 paper examples
+- All four options must be grammatically consistent with the question stem
+- Correct answer must be definitively correct, not "most correct"
 
 Examples (2024/2025 direct factual):
 - "The irrigation device called 'Araghatta' was"
 - "The longest border between any two countries in the world is between"
 - "The first Gandharva Mahavidyalaya, a music training school, was set up in 1901 by Vishnu Digambar Paluskar in"
+- "Which of the following is NOT a feature borrowed from the British Constitution?"
 
-Distractor Design(CRITICAL):
+Distractor Design (CRITICAL):
 - DO NOT use absolute words like "only", "always", "never", "all", "none" in wrong options
-  (UPSC aspirants know these are usually wrong - your distractors must be smarter)
-  - Each distractor should be a plausible misconception or commonly confused fact
-    - Distractors should test genuine knowledge gaps, not trick through wordplay
-      - Include distractors that would trap someone who studied superficially
-
-Example Structure:
-Q: Which of the following is NOT a feature of the Indian Constitution borrowed from the British Constitution ?
-  A) Parliamentary system of government
-B) Rule of law
-C) Single citizenship
-D) Bicameral legislature
-
-  (Here C is correct - Single citizenship is from British; others are also from British but the "NOT" makes it tricky)`,
+- Each distractor should be a plausible misconception or commonly confused fact
+- Distractors should test genuine knowledge gaps, not trick through wordplay
+- Include distractors that would trap someone who studied superficially`,
 
   conceptual: `
 QUESTION STYLE: CONCEPTUAL / APPLICATION MCQ
@@ -1949,11 +1970,13 @@ export function getPrompt(params: PromptParams): string {
     ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
 
-  // Build style distribution instructions
+  // Build style distribution instructions — map "factual" to "standard" for model clarity
+  const styleDisplayName = (style: QuestionStyle): string =>
+    style === "factual" ? "standard (direct factual)" : style;
   const styleInstructions = styles
     .map(({ style, count }) => {
       return `
-GENERATE ${count} QUESTION(S) IN THE FOLLOWING STYLE:
+GENERATE ${count} QUESTION(S) WITH questionType="${style === "factual" ? "standard" : style}":
 ${STYLE_INSTRUCTIONS[style]} `;
     })
     .join("\n");
@@ -2087,6 +2110,16 @@ OUTPUT REQUIREMENTS:
 - Explanation must be educational and cite sources where applicable.
 - Direct CA questions (15%) MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
 - Derived Static (25%) and Pure Static (60%) MUST NOT include [Relevance] or Sources.
+
+questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
+- "standard": ONLY for direct one-line factual stems with NO numbered sub-items.
+  Examples: "Which of the following...", "The irrigation device called 'Araghatta' was..."
+- "statement": ANY question containing numbered statements (1., 2., 3.) with
+  "Which/How many of the above is/are correct?" — EVEN IF the style requested was "standard".
+  If you write numbered statements, you MUST set questionType to "statement".
+- "match": ANY question with "Match List-I with List-II" or "Consider the following pairs"
+- "assertion": ANY question with "Statement-I / Statement-II" or "Assertion (A) / Reason (R)"
+A question with the WRONG questionType will be rejected and regenerated. Label correctly.
 
 CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
 THREE-TIER DISTRIBUTION BASED ON UPSC 2025 PATTERN ANALYSIS

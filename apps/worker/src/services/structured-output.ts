@@ -7,7 +7,7 @@ const QUESTION_SUBJECT_ENUM = ["polity", "economy", "environment", "geography", 
 const QUESTION_METADATA_SCHEMA = {
   type: "OBJECT",
   description: "Metadata about the question category and subject.",
-  propertyOrdering: ["category", "subject", "derivedFromTopic"],
+  propertyOrdering: ["category", "subject", "topicTag", "subtopicTag", "derivedFromTopic"],
   properties: {
     category: {
       type: "STRING",
@@ -21,13 +21,22 @@ const QUESTION_METADATA_SCHEMA = {
       enum: QUESTION_SUBJECT_ENUM,
       description: "Primary subject being tested.",
     },
+    topicTag: {
+      type: "STRING",
+      description: "Short topic label (3-8 words) identifying the core concept tested. E.g. 'Article 356 President\\'s Rule', 'Coral Reef Bleaching', 'Repo Rate Mechanism'. Must be specific enough to distinguish from other questions.",
+    },
+    subtopicTag: {
+      type: "STRING",
+      nullable: true,
+      description: "Optional narrower sub-topic within the topicTag. E.g. if topicTag is 'Fundamental Rights' then subtopicTag could be 'Right to Privacy'.",
+    },
     derivedFromTopic: {
       type: "STRING",
       nullable: true,
       description: "For derived-static questions only: briefly note the news event that triggered this topic selection.",
     },
   },
-  required: ["category", "subject"],
+  required: ["category", "subject", "topicTag"],
 } as const;
 
 export const GENERATED_QUESTION_SCHEMA = {
