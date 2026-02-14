@@ -1,0 +1,804 @@
+
+w minimal value.",
+                "It can be imposed only by a Sessions Court or higher judiciary.",{
+    "id": "cV1OiBaEGLF184lDm4HnM",
+    "subject": "polity",
+    "theme": null,
+    "styles": [],
+    "questionCount": 25,
+    "status": "completed",
+    "error": null,
+    "createdAt": 1771049182,
+    "questions": [
+        {
+            "id": "U5STlE6MEU6H-gDT-9qNy",
+            "sequenceNumber": 1,
+            "questionText": "With reference to the Bharatiya Nyaya Sanhita (BNS), 2023, which of the following statements regarding 'Community Service' is correct?",
+            "questionType": "standard",
+            "options": [
+                "It is mandated as a punishment for all offences punishable with imprisonment of less than 3 years.",
+                "It has been introduced as a punishment for specific petty offences like theft of property be
+                                "It is an alternative to death penalty in rarest of rare cases."
+                                            ],
+                                                        "metadata": {
+                                                                          "category": "direct-ca",
+                                                                                          "subject": "polity",
+                                                                                                          "groundingSources": [
+                                                                                                                              {
+                                                                                                                                                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEm3PejAgGWbfmePJvQIMXzDPgrm-1RMnth-UpHl7trckl4d8OYuzmbdAKnWJ6UO3_INp8m7Xz9G4Az4pV6h-ouiXePHDjhNbKnnpCNBHwZWIa-jStNs7InlosAzLFYz_234kf46ryB0scUMZWCiJ4Ibslm4s9vejekDRNObX_4Ym_4TsicZFtO4fOlrXK2pSF0eW90JYo=",
+                                                                                                                                                                                "title": "drishtiias.com",
+                                                                                                                                                                                                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH_DMHiyxzWNDZcKoNqh6aqsnhvcVblsStICOIAIONFEt-zNEy9lPDfUtKCuBH7RHWMDUYtDxQEWtvWFA2BJt8m6fsNTTg5U5o7Id_gULhZwjhVuWFw5ZWhXGsBpWsoQJUYwbgYvimL1gd5fuT0l8wPiP6bOYr-z_3DfONNbUdHXqDPi4oTd4go68O63Wj7ZcayOe6xw2Q8jqBoLGl2OqDL35NAUqRtdspaeq9WgGq4iS66-fOc0FR-mVXh-byYey5X6NC_Zgd7LnzTZXGDeCpWC4qJRtMg",
+                        "title": "newsonair.gov.in",
+                        "domain": "newsonair.gov.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE0I-FqzlFKlIbyj1uJNWMWqflWev4VQ92iScBLTRgyo8Y976W_G7gPwcvtwhVdouJx3Hy2LNPGnjCBguLVPOLra8xjZD9QWDRJvVcZ3Dn41SgW3uKW1BnDoAAupivqHgeTnPjRSSbsAW_DKWfmO-ck0DWYn9XJyUZkJ296ZZGl9Hz7Mi8EzQUfSmz5Kj5CY0M_7AliRQ-T-E04zLaw",
+                        "title": "scobserver.in",
+                        "domain": "scobserver.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHgBs4qLYhTNZKxUIY7vMmMDh39ym5Q8jR5OS8XkUgTNGYurj4Ui4-Pm_ObW0QtB788I0JnLFUW0UNnpGs1ZvIQI0VKSUHiTpJ-qmXaGOUl9aA_P4ypeUgJsfYQMVRB-1Rx8PHbDelVqjzzrZnvBz8NOemdlN_zTDou87h2WSmDmsq1fO60h-usApjqiykNQhlnHru_cxdWTNSYquRN3wWYPZmrGPrjLg==",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtUajGn8tnB-0UCtq1EdNxFWrbbvF3zwiYt9jsP5bhu8h9NPia_5TMysduuCHivmfOZhzajCj-gdbpiBDPYWfA5G1pxLP66NGUO6EgV2iwNfFcJulKL4OLpV2KXDqPiWP0Y8pzoSt0T9yQXEV1WXcS9Yhv9EzSIn_L89KwSDaPCNzxhUD78OABkvkBmPog_4IS7UsIlv8gBEXf4I_KG_8S5JP_TiCCQ8RSGuy8JxXIRIen1DjXrMH6",
+                        "title": "visionias.in",
+                        "domain": "visionias.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFDQlC84nex1lVBtBAzNstNeYR6siz2q4JoRo0SyDM5v92YmRYWK3bBIkjGZLEQKbsM0MyPUNsXuAQT2pa6hwPEso1ogp751h3pseEUKF1F48IVbtB2TeZAnEKDejyOKaoI70BV6blVsnDX5zMm29nK7QsVNkisECUVbXcZ_9Wgg1Gu0qnPxuUogcgKpLcU5vk-4fO7JkH3Hdixo-zgMzwvDmeMI-zYoQ==",
+                        "title": "legalkart.com",
+                        "domain": "legalkart.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyg5KS1kr661oy7Hcolf-1YTUXMCCSz83DlbyiwNc7E65vLWDhyj7zyiCdx8QC5crReAWLYsmiFoRdpYwwytmBUdCmt7HQ3KjcqDHCvazz5Gn0gQ2DTGd8bBzn38y-FKuEiJbshKBaT5QHZHYabSd_5HlAa_yDUfOLdD8mZP7nwJr9lmxznMeVM3S7nxBGNOERcDLQ7Yz3RCIXzOJqcWU3RUyHuNq31vSd",
+                        "title": "civilsdaily.com",
+                        "domain": "civilsdaily.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGR6XF0-JT3Sc0vwrxNQ7O0eBw3GdY7a9a1lyN84UIDs_9abBsp3HB6OBnhVhVfphEny8L7QI5Z4BCu23q5ElGQmwEzMKhWlsHjFJ7_y6rhXbDmbnk7uGugE8953jjckLGInCr9sghDspMQIqfj712tUaFOmCNitkFAGYy5CwMTA8SSqY-Ybw8D5B4f73-CdJ1Cp79L8zQdxnI4ZoqJbRUUB2xXuARj6-Xn9VS6qMbvu69pCSpLPR0uwAGYrA3mdTizzHGgK4Y7QnpXtIF05PXe7Dir69WvvHupn7DM6DtPXrfduM1ATirvXF6PLBs=",
+                        "title": "economictimes.com",
+                        "domain": "economictimes.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKDg9R-ALrnJ_oS9qMR2_6TmBcJ3cfZkVTrIctpvSVqduLl_CQ2bEaLvDxw8G0qHfHnncCzAJSezTt-isCOr1J5hdhg9xmugzJfPI-WU7EFfHf8s8ir2v8By8S1MV1DVbFogYPdSEa62Z3PRv8sPLnpYAFQX8O83J0kXX3EdtIyQbZQrzlOb1C0amI0MvaPeAofT-BOUgpE10v95DMqoyK-mwlyQJBtdekEmDkhQosVqRzxpHLehI4rncPDutatVFWPhll9oyPUNL3nya3331RwC7LQ2C3yJgElQ==",
+                        "title": "thehindu.com",
+                        "domain": "thehindu.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFb6ZMgnucGOkKHbPOsZ1e0yLK8XZXBYZ4hEXJkQF7bdgs26ZDcuc3Z26WLBEshnazM2HwZ5D9ojdPeGxExJNXzmHIzRD2qvYtQH6c3APn85Xhs_Ne16p7sLSkLv6zY93llu1q1Qo7s4kzzrGVAgd-bWTvWSRKRJC9QXvfZGmKW-oNsrPG8_kDLRw8FMJMAluVtqNdgWJxdZuZ84S7gto8Knvhdo4_4EWc=",
+                        "title": "ddnews.gov.in",
+                        "domain": "ddnews.gov.in"
+                    }
+                ],
+                "hasGrounding": true,
+                "hasRelevanceTag": true,
+                "hasSources": true
+            },
+            "correctOption": 1,
+            "explanation": "Option B is correct: The BNS introduces 'Community Service' as a specific punishment for the first time for petty offences, such as theft of property of value less than ₹5,000 (Section 303(2)), misconduct in public by a drunken person (Section 355), and defamation. \nOption A is incorrect: It is not mandated for *all* offences <3 years; it is discretionary for specific sections.\nOption C is incorrect: Magistrates can impose it.\nOption D is incorrect: It is for minor offences, not capital ones.\n[Relevance: BNS fully operational and first judicial applications in 2025. Sources: https://www.drishtijudiciary.com/current-affairs/community-service-in-bns]"
+        },
+        {
+            "id": "QIaA6rL_6x1jVP8q4sWnT",
+            "sequenceNumber": 2,
+            "questionText": "Which one of the following is correct regarding the Delimitation Commission in India?",
+            "questionType": "standard",
+            "options": [
+                "Its orders are subject to judicial review by the Supreme Court only.",
+                "Its orders have the force of law and cannot be called in question in any court.",
+                "The Chief Election Commissioner is the ex-officio Chairperson of the Commission.",
+                "It is a constitutional body mentioned under Article 324."
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Option B is correct: Under the Delimitation Commission Act, the orders of the Commission have the force of law and cannot be challenged in any court. This is to ensure finality of election boundaries.\nOption A is incorrect: Judicial review is barred.\nOption C is incorrect: A retired Supreme Court judge is usually the Chairperson; the CEC is an ex-officio *member*.\nOption D is incorrect: It is a statutory body constituted under Acts of Parliament (Article 82 empowers Parliament to enact), not a permanent constitutional body like ECI.\n(Derived from upcoming post-Census delimitation discussions)"
+        },
+        {
+            "id": "jg8SBpJCS0Qc-VYHPsdYG",
+            "sequenceNumber": 3,
+            "questionText": "With reference to the Constitution of India, which one of the following comes under the 'Union List' in the Seventh Schedule?",
+            "questionType": "standard",
+            "options": [
+                "Public health and sanitation",
+                "Banking and Insurance",
+                "Agriculture",
+                "Police"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Option B is correct: Banking, Insurance, Currency, Foreign Affairs are core Union List subjects.\nOption A (Health) is State List.\nOption C (Agriculture) is State List.\nOption D (Police) is State List."
+        },
+        {
+            "id": "HDGDUWubRCGEmK_hI-63W",
+            "sequenceNumber": 4,
+            "questionText": "Which of the following Fundamental Rights are available ONLY to citizens of India and NOT to foreigners?\n1. Article 15 (Prohibition of discrimination)\n2. Article 16 (Equality of opportunity in public employment)\n3. Article 19 (Protection of six rights regarding freedom)\n4. Article 21 (Protection of life and personal liberty)\n\nSelect the correct answer using the code given below:",
+            "questionType": "standard",
+            "options": [
+                "1 and 2 only",
+                "1, 2 and 3 only",
+                "3 and 4 only",
+                "1, 3 and 4 only"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Articles 15, 16, 19, 29, and 30 are available ONLY to citizens.\nArticle 14, 20, 21, 21A, 22, 23, 24, 25-28 are available to BOTH citizens and foreigners (except enemy aliens).\nTherefore, 1, 2, and 3 are exclusive to citizens. 4 (Life) is for all."
+        },
+        {
+            "id": "OouqLyNeNU9wP-eK351xV",
+            "sequenceNumber": 5,
+            "questionText": "The power to declare an area as a 'Scheduled Area' under the Fifth Schedule of the Constitution is vested in the:",
+            "questionType": "standard",
+            "options": [
+                "Parliament of India",
+                "President of India",
+                "Governor of the State",
+                "National Commission for Scheduled Tribes"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Option B is correct: Paragraph 6 of the Fifth Schedule empowers the *President* to declare, increase, decrease, or alter Scheduled Areas (usually in consultation with the Governor, but the power is Presidential)."
+        },
+        {
+            "id": "pa19LIbP9Yf575ujoCaSP",
+            "sequenceNumber": 6,
+            "questionText": "Which one of the following authorities is NOT a constitutional body?",
+            "questionType": "standard",
+            "options": [
+                "State Public Service Commission",
+                "State Election Commission",
+                "State Information Commission",
+                "Advocate General of the State"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Option C is correct: State Information Commission is a statutory body under the RTI Act, 2005.\nOption A is Constitutional (Art 315).\nOption B is Constitutional (Art 243K).\nOption D is Constitutional (Art 165)."
+        },
+        {
+            "id": "zll5_arCqOIZT-xZIhVEL",
+            "sequenceNumber": 7,
+            "questionText": "The 'Zero FIR' provision, which mandates that a First Information Report can be filed in any police station regardless of the place of the incident, has received explicit statutory backing under which one of the following legislations?",
+            "questionType": "standard",
+            "options": [
+                "The Bharatiya Nyaya Sanhita (BNS), 2023",
+                "The Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023",
+                "The Bharatiya Sakshya Adhiniyam (BSA), 2023",
+                "The Police Act, 1861 (Amendment 2024)"
+            ],
+            "metadata": {
+                "category": "direct-ca",
+                "subject": "polity",
+                "groundingSources": [
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEm3PejAgGWbfmePJvQIMXzDPgrm-1RMnth-UpHl7trckl4d8OYuzmbdAKnWJ6UO3_INp8m7Xz9G4Az4pV6h-ouiXePHDjhNbKnnpCNBHwZWIa-jStNs7InlosAzLFYz_234kf46ryB0scUMZWCiJ4Ibslm4s9vejekDRNObX_4Ym_4TsicZFtO4fOlrXK2pSF0eW90JYo=",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH_DMHiyxzWNDZcKoNqh6aqsnhvcVblsStICOIAIONFEt-zNEy9lPDfUtKCuBH7RHWMDUYtDxQEWtvWFA2BJt8m6fsNTTg5U5o7Id_gULhZwjhVuWFw5ZWhXGsBpWsoQJUYwbgYvimL1gd5fuT0l8wPiP6bOYr-z_3DfONNbUdHXqDPi4oTd4go68O63Wj7ZcayOe6xw2Q8jqBoLGl2OqDL35NAUqRtdspaeq9WgGq4iS66-fOc0FR-mVXh-byYey5X6NC_Zgd7LnzTZXGDeCpWC4qJRtMg",
+                        "title": "newsonair.gov.in",
+                        "domain": "newsonair.gov.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE0I-FqzlFKlIbyj1uJNWMWqflWev4VQ92iScBLTRgyo8Y976W_G7gPwcvtwhVdouJx3Hy2LNPGnjCBguLVPOLra8xjZD9QWDRJvVcZ3Dn41SgW3uKW1BnDoAAupivqHgeTnPjRSSbsAW_DKWfmO-ck0DWYn9XJyUZkJ296ZZGl9Hz7Mi8EzQUfSmz5Kj5CY0M_7AliRQ-T-E04zLaw",
+                        "title": "scobserver.in",
+                        "domain": "scobserver.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHgBs4qLYhTNZKxUIY7vMmMDh39ym5Q8jR5OS8XkUgTNGYurj4Ui4-Pm_ObW0QtB788I0JnLFUW0UNnpGs1ZvIQI0VKSUHiTpJ-qmXaGOUl9aA_P4ypeUgJsfYQMVRB-1Rx8PHbDelVqjzzrZnvBz8NOemdlN_zTDou87h2WSmDmsq1fO60h-usApjqiykNQhlnHru_cxdWTNSYquRN3wWYPZmrGPrjLg==",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtUajGn8tnB-0UCtq1EdNxFWrbbvF3zwiYt9jsP5bhu8h9NPia_5TMysduuCHivmfOZhzajCj-gdbpiBDPYWfA5G1pxLP66NGUO6EgV2iwNfFcJulKL4OLpV2KXDqPiWP0Y8pzoSt0T9yQXEV1WXcS9Yhv9EzSIn_L89KwSDaPCNzxhUD78OABkvkBmPog_4IS7UsIlv8gBEXf4I_KG_8S5JP_TiCCQ8RSGuy8JxXIRIen1DjXrMH6",
+                        "title": "visionias.in",
+                        "domain": "visionias.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFDQlC84nex1lVBtBAzNstNeYR6siz2q4JoRo0SyDM5v92YmRYWK3bBIkjGZLEQKbsM0MyPUNsXuAQT2pa6hwPEso1ogp751h3pseEUKF1F48IVbtB2TeZAnEKDejyOKaoI70BV6blVsnDX5zMm29nK7QsVNkisECUVbXcZ_9Wgg1Gu0qnPxuUogcgKpLcU5vk-4fO7JkH3Hdixo-zgMzwvDmeMI-zYoQ==",
+                        "title": "legalkart.com",
+                        "domain": "legalkart.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyg5KS1kr661oy7Hcolf-1YTUXMCCSz83DlbyiwNc7E65vLWDhyj7zyiCdx8QC5crReAWLYsmiFoRdpYwwytmBUdCmt7HQ3KjcqDHCvazz5Gn0gQ2DTGd8bBzn38y-FKuEiJbshKBaT5QHZHYabSd_5HlAa_yDUfOLdD8mZP7nwJr9lmxznMeVM3S7nxBGNOERcDLQ7Yz3RCIXzOJqcWU3RUyHuNq31vSd",
+                        "title": "civilsdaily.com",
+                        "domain": "civilsdaily.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGR6XF0-JT3Sc0vwrxNQ7O0eBw3GdY7a9a1lyN84UIDs_9abBsp3HB6OBnhVhVfphEny8L7QI5Z4BCu23q5ElGQmwEzMKhWlsHjFJ7_y6rhXbDmbnk7uGugE8953jjckLGInCr9sghDspMQIqfj712tUaFOmCNitkFAGYy5CwMTA8SSqY-Ybw8D5B4f73-CdJ1Cp79L8zQdxnI4ZoqJbRUUB2xXuARj6-Xn9VS6qMbvu69pCSpLPR0uwAGYrA3mdTizzHGgK4Y7QnpXtIF05PXe7Dir69WvvHupn7DM6DtPXrfduM1ATirvXF6PLBs=",
+                        "title": "economictimes.com",
+                        "domain": "economictimes.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKDg9R-ALrnJ_oS9qMR2_6TmBcJ3cfZkVTrIctpvSVqduLl_CQ2bEaLvDxw8G0qHfHnncCzAJSezTt-isCOr1J5hdhg9xmugzJfPI-WU7EFfHf8s8ir2v8By8S1MV1DVbFogYPdSEa62Z3PRv8sPLnpYAFQX8O83J0kXX3EdtIyQbZQrzlOb1C0amI0MvaPeAofT-BOUgpE10v95DMqoyK-mwlyQJBtdekEmDkhQosVqRzxpHLehI4rncPDutatVFWPhll9oyPUNL3nya3331RwC7LQ2C3yJgElQ==",
+                        "title": "thehindu.com",
+                        "domain": "thehindu.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFb6ZMgnucGOkKHbPOsZ1e0yLK8XZXBYZ4hEXJkQF7bdgs26ZDcuc3Z26WLBEshnazM2HwZ5D9ojdPeGxExJNXzmHIzRD2qvYtQH6c3APn85Xhs_Ne16p7sLSkLv6zY93llu1q1Qo7s4kzzrGVAgd-bWTvWSRKRJC9QXvfZGmKW-oNsrPG8_kDLRw8FMJMAluVtqNdgWJxdZuZ84S7gto8Knvhdo4_4EWc=",
+                        "title": "ddnews.gov.in",
+                        "domain": "ddnews.gov.in"
+                    }
+                ],
+                "hasGrounding": true,
+                "hasRelevanceTag": true,
+                "hasSources": true
+            },
+            "correctOption": 1,
+            "explanation": "The Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023, which replaced the CrPC, explicitly codified the concept of 'Zero FIR' in Section 173. It allows a police officer to register an FIR irrespective of the jurisdiction of the police station. The case is then transferred to the police station having the appropriate jurisdiction for investigation. Previously, Zero FIR was based on Ministry of Home Affairs advisories and Supreme Court judgments; it is now a statutory provision. [Relevance: The new criminal laws (BNS, BNSS, BSA) came into force on July 1, 2024, and continue to be a major governance theme in 2025-26] Sources: https://www.mha.gov.in/sites/default/files/2024-07/BNSS_English.pdf"
+        },
+        {
+            "id": "tuFGotl7haT7aCN5Fj5w3",
+            "sequenceNumber": 8,
+            "questionText": "If the President of India directs the Governor of a State to return a reserved Bill (which is not a Money Bill) to the State Legislature for reconsideration, within what time period must the House or Houses reconsider the Bill?",
+            "questionType": "standard",
+            "options": [
+                "Three months from the date of receipt",
+                "Six months from the date of receipt",
+                "One year from the date of receipt",
+                "No specific time limit is prescribed by the Constitution"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false,
+                "derivedFromTopic": "Governor-State Conflict on Bills"
+            },
+            "correctOption": 1,
+            "explanation": "According to the proviso of Article 201 of the Constitution, if the President directs the Governor to return a Bill to the State Legislature, the House or Houses must reconsider it within a period of six months from the date of receipt of such message. If it is again passed by the House or Houses with or without amendment, it is presented again to the President for consideration. This is a specific time limit often confused with the lack of time limit for the Governor's initial assent under Article 200."
+        },
+        {
+            "id": "-KlLNFkvNeOUQZlU1Rd0K",
+            "sequenceNumber": 9,
+            "questionText": "The 'Right to be forgotten', which allows individuals to seek the removal of personal information from the internet, is legally recognized in India as an intrinsic part of which one of the following Fundamental Rights?",
+            "questionType": "standard",
+            "options": [
+                "Right to Equality under Article 14",
+                "Right to Freedom of Speech and Expression under Article 19(1)(a)",
+                "Right to Privacy under Article 21",
+                "Right against Exploitation under Article 23"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "The Supreme Court, in the K.S. Puttaswamy judgment (2017), recognized the 'Right to Privacy' as a fundamental right under Article 21. The 'Right to be forgotten' falls under the ambit of informational privacy within Article 21. While it is not absolute, it allows individuals to control the dissemination of their personal details on the internet after a certain period or relevance has expired."
+        },
+        {
+            "id": "6TLKASeE918U6qM8MB5Zv",
+            "sequenceNumber": 10,
+            "questionText": "Which one of the following powers is possessed by the President of India but NOT by the Governor of a State in the context of pardoning powers?",
+            "questionType": "standard",
+            "options": [
+                "Power to suspend a sentence",
+                "Power to remit a sentence",
+                "Power to grant pardon in cases of death sentence",
+                "Power to commute a sentence"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Under Article 72, the President has the power to grant pardons, reprieves, respites or remissions of punishment or to suspend, remit or commute the sentence of any person convicted of any offence, including where the sentence is a sentence of death. Under Article 161, the Governor also has pardoning powers, but the Governor CANNOT grant a 'pardon' (complete absolution) in the case of a death sentence. The Governor can suspend, remit, or commute a death sentence, but the exclusive power to 'pardon' a death sentence lies with the President."
+        },
+        {
+            "id": "4KRCP_iRM_v-6-GKQi0Y2",
+            "sequenceNumber": 11,
+            "questionText": "In the context of the Fifth Schedule of the Constitution, the power to declare an area as a 'Scheduled Area' is vested in:",
+            "questionType": "standard",
+            "options": [
+                "The Governor of the State",
+                "The Parliament of India",
+                "The President of India",
+                "The Tribal Advisory Council"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Paragraph 6 of the Fifth Schedule explicitly states that the expression 'Scheduled Areas' means such areas as the President may by order declare to be Scheduled Areas. While the Governor has significant powers regarding the administration and application of laws in these areas, the power of declaration (and alteration of boundaries) lies with the President."
+        },
+        {
+            "id": "IbN5YZUpFpGnHx7swgdrD",
+            "sequenceNumber": 12,
+            "questionText": "The Constitution of India explicitly defines the term 'Office of Profit' under which of the following?",
+            "questionType": "standard",
+            "options": [
+                "Article 102",
+                "Article 191",
+                "The Representation of the People Act, 1951",
+                "The Constitution does not explicitly define the term"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 3,
+            "explanation": "The term 'Office of Profit' is mentioned in Article 102 and Article 191 as a ground for disqualification for MPs and MLAs respectively. However, the Constitution DOES NOT explicitly define what constitutes an 'Office of Profit'. The definition has evolved through judicial interpretations (Supreme Court) and statutes like the Parliament (Prevention of Disqualification) Act, 1959."
+        },
+        {
+            "id": "-P9IDWZjBib2lHiLMz6nd",
+            "sequenceNumber": 13,
+            "questionText": "With reference to the recommendations of the 15th Finance Commission, consider the following statements:\n1. It recommended a vertical devolution of 41% from the divisible pool of taxes to the States.\n2. It used 2011 Census data as the sole basis for population-related criteria in horizontal devolution.\n3. 'Demographic Performance' was introduced as a criterion to reward states for progress in population control.\n\nHow many of the statements given above are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "direct-ca",
+                "subject": "polity",
+                "groundingSources": [
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEm3PejAgGWbfmePJvQIMXzDPgrm-1RMnth-UpHl7trckl4d8OYuzmbdAKnWJ6UO3_INp8m7Xz9G4Az4pV6h-ouiXePHDjhNbKnnpCNBHwZWIa-jStNs7InlosAzLFYz_234kf46ryB0scUMZWCiJ4Ibslm4s9vejekDRNObX_4Ym_4TsicZFtO4fOlrXK2pSF0eW90JYo=",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH_DMHiyxzWNDZcKoNqh6aqsnhvcVblsStICOIAIONFEt-zNEy9lPDfUtKCuBH7RHWMDUYtDxQEWtvWFA2BJt8m6fsNTTg5U5o7Id_gULhZwjhVuWFw5ZWhXGsBpWsoQJUYwbgYvimL1gd5fuT0l8wPiP6bOYr-z_3DfONNbUdHXqDPi4oTd4go68O63Wj7ZcayOe6xw2Q8jqBoLGl2OqDL35NAUqRtdspaeq9WgGq4iS66-fOc0FR-mVXh-byYey5X6NC_Zgd7LnzTZXGDeCpWC4qJRtMg",
+                        "title": "newsonair.gov.in",
+                        "domain": "newsonair.gov.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE0I-FqzlFKlIbyj1uJNWMWqflWev4VQ92iScBLTRgyo8Y976W_G7gPwcvtwhVdouJx3Hy2LNPGnjCBguLVPOLra8xjZD9QWDRJvVcZ3Dn41SgW3uKW1BnDoAAupivqHgeTnPjRSSbsAW_DKWfmO-ck0DWYn9XJyUZkJ296ZZGl9Hz7Mi8EzQUfSmz5Kj5CY0M_7AliRQ-T-E04zLaw",
+                        "title": "scobserver.in",
+                        "domain": "scobserver.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHgBs4qLYhTNZKxUIY7vMmMDh39ym5Q8jR5OS8XkUgTNGYurj4Ui4-Pm_ObW0QtB788I0JnLFUW0UNnpGs1ZvIQI0VKSUHiTpJ-qmXaGOUl9aA_P4ypeUgJsfYQMVRB-1Rx8PHbDelVqjzzrZnvBz8NOemdlN_zTDou87h2WSmDmsq1fO60h-usApjqiykNQhlnHru_cxdWTNSYquRN3wWYPZmrGPrjLg==",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtUajGn8tnB-0UCtq1EdNxFWrbbvF3zwiYt9jsP5bhu8h9NPia_5TMysduuCHivmfOZhzajCj-gdbpiBDPYWfA5G1pxLP66NGUO6EgV2iwNfFcJulKL4OLpV2KXDqPiWP0Y8pzoSt0T9yQXEV1WXcS9Yhv9EzSIn_L89KwSDaPCNzxhUD78OABkvkBmPog_4IS7UsIlv8gBEXf4I_KG_8S5JP_TiCCQ8RSGuy8JxXIRIen1DjXrMH6",
+                        "title": "visionias.in",
+                        "domain": "visionias.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFDQlC84nex1lVBtBAzNstNeYR6siz2q4JoRo0SyDM5v92YmRYWK3bBIkjGZLEQKbsM0MyPUNsXuAQT2pa6hwPEso1ogp751h3pseEUKF1F48IVbtB2TeZAnEKDejyOKaoI70BV6blVsnDX5zMm29nK7QsVNkisECUVbXcZ_9Wgg1Gu0qnPxuUogcgKpLcU5vk-4fO7JkH3Hdixo-zgMzwvDmeMI-zYoQ==",
+                        "title": "legalkart.com",
+                        "domain": "legalkart.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyg5KS1kr661oy7Hcolf-1YTUXMCCSz83DlbyiwNc7E65vLWDhyj7zyiCdx8QC5crReAWLYsmiFoRdpYwwytmBUdCmt7HQ3KjcqDHCvazz5Gn0gQ2DTGd8bBzn38y-FKuEiJbshKBaT5QHZHYabSd_5HlAa_yDUfOLdD8mZP7nwJr9lmxznMeVM3S7nxBGNOERcDLQ7Yz3RCIXzOJqcWU3RUyHuNq31vSd",
+                        "title": "civilsdaily.com",
+                        "domain": "civilsdaily.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGR6XF0-JT3Sc0vwrxNQ7O0eBw3GdY7a9a1lyN84UIDs_9abBsp3HB6OBnhVhVfphEny8L7QI5Z4BCu23q5ElGQmwEzMKhWlsHjFJ7_y6rhXbDmbnk7uGugE8953jjckLGInCr9sghDspMQIqfj712tUaFOmCNitkFAGYy5CwMTA8SSqY-Ybw8D5B4f73-CdJ1Cp79L8zQdxnI4ZoqJbRUUB2xXuARj6-Xn9VS6qMbvu69pCSpLPR0uwAGYrA3mdTizzHGgK4Y7QnpXtIF05PXe7Dir69WvvHupn7DM6DtPXrfduM1ATirvXF6PLBs=",
+                        "title": "economictimes.com",
+                        "domain": "economictimes.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKDg9R-ALrnJ_oS9qMR2_6TmBcJ3cfZkVTrIctpvSVqduLl_CQ2bEaLvDxw8G0qHfHnncCzAJSezTt-isCOr1J5hdhg9xmugzJfPI-WU7EFfHf8s8ir2v8By8S1MV1DVbFogYPdSEa62Z3PRv8sPLnpYAFQX8O83J0kXX3EdtIyQbZQrzlOb1C0amI0MvaPeAofT-BOUgpE10v95DMqoyK-mwlyQJBtdekEmDkhQosVqRzxpHLehI4rncPDutatVFWPhll9oyPUNL3nya3331RwC7LQ2C3yJgElQ==",
+                        "title": "thehindu.com",
+                        "domain": "thehindu.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFb6ZMgnucGOkKHbPOsZ1e0yLK8XZXBYZ4hEXJkQF7bdgs26ZDcuc3Z26WLBEshnazM2HwZ5D9ojdPeGxExJNXzmHIzRD2qvYtQH6c3APn85Xhs_Ne16p7sLSkLv6zY93llu1q1Qo7s4kzzrGVAgd-bWTvWSRKRJC9QXvfZGmKW-oNsrPG8_kDLRw8FMJMAluVtqNdgWJxdZuZ84S7gto8Knvhdo4_4EWc=",
+                        "title": "ddnews.gov.in",
+                        "domain": "ddnews.gov.in"
+                    }
+                ],
+                "hasGrounding": true,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Statement 1 is correct: The 15th Finance Commission (XVFC) recommended maintaining the vertical devolution at 41%, which is a 1% adjustment from the 14th FC's 42% to provide for the newly formed Union Territories of Jammu & Kashmir and Ladakh. Statement 2 is correct: Moving away from the practice of using 1971 Census data, the XVFC used only the 2011 Census data for its population-based calculations (weighted at 15%). Statement 3 is correct: To balance the concerns of states that had successfully reduced their population growth, the XVFC introduced 'Demographic Performance' as a criterion (weighted at 12.5%), which rewards states with a lower Total Fertility Rate (TFR)."
+        },
+        {
+            "id": "es_qA-aGjAqmNuNEjo3wI",
+            "sequenceNumber": 14,
+            "questionText": "In the context of the Supreme Court judgment in 'State of Punjab v. Davinder Singh' (2024-2025), consider the following statements regarding Scheduled Castes (SCs):\n1. States have the power to sub-classify Scheduled Castes to grant separate quotas for more backward groups.\n2. The 'creamy layer' principle is applicable to Scheduled Castes for the exclusion of benefits.\n3. A State can reserve 100% of the SC quota for a specific sub-group if empirical data supports it.\n\nHow many of the above statements are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "direct-ca",
+                "subject": "polity",
+                "groundingSources": [
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEm3PejAgGWbfmePJvQIMXzDPgrm-1RMnth-UpHl7trckl4d8OYuzmbdAKnWJ6UO3_INp8m7Xz9G4Az4pV6h-ouiXePHDjhNbKnnpCNBHwZWIa-jStNs7InlosAzLFYz_234kf46ryB0scUMZWCiJ4Ibslm4s9vejekDRNObX_4Ym_4TsicZFtO4fOlrXK2pSF0eW90JYo=",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH_DMHiyxzWNDZcKoNqh6aqsnhvcVblsStICOIAIONFEt-zNEy9lPDfUtKCuBH7RHWMDUYtDxQEWtvWFA2BJt8m6fsNTTg5U5o7Id_gULhZwjhVuWFw5ZWhXGsBpWsoQJUYwbgYvimL1gd5fuT0l8wPiP6bOYr-z_3DfONNbUdHXqDPi4oTd4go68O63Wj7ZcayOe6xw2Q8jqBoLGl2OqDL35NAUqRtdspaeq9WgGq4iS66-fOc0FR-mVXh-byYey5X6NC_Zgd7LnzTZXGDeCpWC4qJRtMg",
+                        "title": "newsonair.gov.in",
+                        "domain": "newsonair.gov.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE0I-FqzlFKlIbyj1uJNWMWqflWev4VQ92iScBLTRgyo8Y976W_G7gPwcvtwhVdouJx3Hy2LNPGnjCBguLVPOLra8xjZD9QWDRJvVcZ3Dn41SgW3uKW1BnDoAAupivqHgeTnPjRSSbsAW_DKWfmO-ck0DWYn9XJyUZkJ296ZZGl9Hz7Mi8EzQUfSmz5Kj5CY0M_7AliRQ-T-E04zLaw",
+                        "title": "scobserver.in",
+                        "domain": "scobserver.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHgBs4qLYhTNZKxUIY7vMmMDh39ym5Q8jR5OS8XkUgTNGYurj4Ui4-Pm_ObW0QtB788I0JnLFUW0UNnpGs1ZvIQI0VKSUHiTpJ-qmXaGOUl9aA_P4ypeUgJsfYQMVRB-1Rx8PHbDelVqjzzrZnvBz8NOemdlN_zTDou87h2WSmDmsq1fO60h-usApjqiykNQhlnHru_cxdWTNSYquRN3wWYPZmrGPrjLg==",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtUajGn8tnB-0UCtq1EdNxFWrbbvF3zwiYt9jsP5bhu8h9NPia_5TMysduuCHivmfOZhzajCj-gdbpiBDPYWfA5G1pxLP66NGUO6EgV2iwNfFcJulKL4OLpV2KXDqPiWP0Y8pzoSt0T9yQXEV1WXcS9Yhv9EzSIn_L89KwSDaPCNzxhUD78OABkvkBmPog_4IS7UsIlv8gBEXf4I_KG_8S5JP_TiCCQ8RSGuy8JxXIRIen1DjXrMH6",
+                        "title": "visionias.in",
+                        "domain": "visionias.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFDQlC84nex1lVBtBAzNstNeYR6siz2q4JoRo0SyDM5v92YmRYWK3bBIkjGZLEQKbsM0MyPUNsXuAQT2pa6hwPEso1ogp751h3pseEUKF1F48IVbtB2TeZAnEKDejyOKaoI70BV6blVsnDX5zMm29nK7QsVNkisECUVbXcZ_9Wgg1Gu0qnPxuUogcgKpLcU5vk-4fO7JkH3Hdixo-zgMzwvDmeMI-zYoQ==",
+                        "title": "legalkart.com",
+                        "domain": "legalkart.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyg5KS1kr661oy7Hcolf-1YTUXMCCSz83DlbyiwNc7E65vLWDhyj7zyiCdx8QC5crReAWLYsmiFoRdpYwwytmBUdCmt7HQ3KjcqDHCvazz5Gn0gQ2DTGd8bBzn38y-FKuEiJbshKBaT5QHZHYabSd_5HlAa_yDUfOLdD8mZP7nwJr9lmxznMeVM3S7nxBGNOERcDLQ7Yz3RCIXzOJqcWU3RUyHuNq31vSd",
+                        "title": "civilsdaily.com",
+                        "domain": "civilsdaily.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGR6XF0-JT3Sc0vwrxNQ7O0eBw3GdY7a9a1lyN84UIDs_9abBsp3HB6OBnhVhVfphEny8L7QI5Z4BCu23q5ElGQmwEzMKhWlsHjFJ7_y6rhXbDmbnk7uGugE8953jjckLGInCr9sghDspMQIqfj712tUaFOmCNitkFAGYy5CwMTA8SSqY-Ybw8D5B4f73-CdJ1Cp79L8zQdxnI4ZoqJbRUUB2xXuARj6-Xn9VS6qMbvu69pCSpLPR0uwAGYrA3mdTizzHGgK4Y7QnpXtIF05PXe7Dir69WvvHupn7DM6DtPXrfduM1ATirvXF6PLBs=",
+                        "title": "economictimes.com",
+                        "domain": "economictimes.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKDg9R-ALrnJ_oS9qMR2_6TmBcJ3cfZkVTrIctpvSVqduLl_CQ2bEaLvDxw8G0qHfHnncCzAJSezTt-isCOr1J5hdhg9xmugzJfPI-WU7EFfHf8s8ir2v8By8S1MV1DVbFogYPdSEa62Z3PRv8sPLnpYAFQX8O83J0kXX3EdtIyQbZQrzlOb1C0amI0MvaPeAofT-BOUgpE10v95DMqoyK-mwlyQJBtdekEmDkhQosVqRzxpHLehI4rncPDutatVFWPhll9oyPUNL3nya3331RwC7LQ2C3yJgElQ==",
+                        "title": "thehindu.com",
+                        "domain": "thehindu.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFb6ZMgnucGOkKHbPOsZ1e0yLK8XZXBYZ4hEXJkQF7bdgs26ZDcuc3Z26WLBEshnazM2HwZ5D9ojdPeGxExJNXzmHIzRD2qvYtQH6c3APn85Xhs_Ne16p7sLSkLv6zY93llu1q1Qo7s4kzzrGVAgd-bWTvWSRKRJC9QXvfZGmKW-oNsrPG8_kDLRw8FMJMAluVtqNdgWJxdZuZ84S7gto8Knvhdo4_4EWc=",
+                        "title": "ddnews.gov.in",
+                        "domain": "ddnews.gov.in"
+                    }
+                ],
+                "hasGrounding": true,
+                "hasRelevanceTag": true,
+                "hasSources": true
+            },
+            "correctOption": 1,
+            "explanation": "Statement 1 is correct: The 7-judge bench overruled *E.V. Chinnaiah* and held that States can sub-classify SCs to ensure substantive equality.\nStatement 2 is correct: The majority (Justice Gavai's concurring opinion, agreed to by others) held that the State must evolve a policy to identify and exclude the 'creamy layer' among SCs/STs, extending the Indra Sawhney principle (previously only for OBCs) to SCs/STs.\nStatement 3 is incorrect: The Court explicitly clarified that while sub-classification is allowed, the State *cannot* earmark 100% of the reservation for a sub-class to the exclusion of others.\n[Relevance: Landmark SC judgment and its implementation debated in 2025. Sources: https://www.drishtiias.com/daily-news-analysis/sc-allows-for-sub-classification-of-scs-and-sts]"
+        },
+        {
+            "id": "VoKBWDGAYk662ET7usqHG",
+            "sequenceNumber": 15,
+            "questionText": "Consider the following statements regarding the High-Level Committee on 'One Nation, One Election' (Kovind Panel):\n\nStatement-I: The Committee recommended that amendments to Article 83 and Article 172 for synchronizing the terms of Lok Sabha and State Assemblies do not require ratification by the States.\nStatement-II: The tenure of the Houses of Parliament and State Legislatures is not among the entrenched provisions listed in the proviso to Article 368(2).\n\nWhich one of the following is correct in respect of the above statements?",
+            "questionType": "assertion",
+            "options": [
+                "Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I",
+                "Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I",
+                "Statement-I is correct but Statement-II is incorrect",
+                "Statement-I is incorrect but Statement-II is correct"
+            ],
+            "metadata": {
+                "category": "direct-ca",
+                "subject": "polity",
+                "groundingSources": [
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEm3PejAgGWbfmePJvQIMXzDPgrm-1RMnth-UpHl7trckl4d8OYuzmbdAKnWJ6UO3_INp8m7Xz9G4Az4pV6h-ouiXePHDjhNbKnnpCNBHwZWIa-jStNs7InlosAzLFYz_234kf46ryB0scUMZWCiJ4Ibslm4s9vejekDRNObX_4Ym_4TsicZFtO4fOlrXK2pSF0eW90JYo=",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH_DMHiyxzWNDZcKoNqh6aqsnhvcVblsStICOIAIONFEt-zNEy9lPDfUtKCuBH7RHWMDUYtDxQEWtvWFA2BJt8m6fsNTTg5U5o7Id_gULhZwjhVuWFw5ZWhXGsBpWsoQJUYwbgYvimL1gd5fuT0l8wPiP6bOYr-z_3DfONNbUdHXqDPi4oTd4go68O63Wj7ZcayOe6xw2Q8jqBoLGl2OqDL35NAUqRtdspaeq9WgGq4iS66-fOc0FR-mVXh-byYey5X6NC_Zgd7LnzTZXGDeCpWC4qJRtMg",
+                        "title": "newsonair.gov.in",
+                        "domain": "newsonair.gov.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE0I-FqzlFKlIbyj1uJNWMWqflWev4VQ92iScBLTRgyo8Y976W_G7gPwcvtwhVdouJx3Hy2LNPGnjCBguLVPOLra8xjZD9QWDRJvVcZ3Dn41SgW3uKW1BnDoAAupivqHgeTnPjRSSbsAW_DKWfmO-ck0DWYn9XJyUZkJ296ZZGl9Hz7Mi8EzQUfSmz5Kj5CY0M_7AliRQ-T-E04zLaw",
+                        "title": "scobserver.in",
+                        "domain": "scobserver.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHgBs4qLYhTNZKxUIY7vMmMDh39ym5Q8jR5OS8XkUgTNGYurj4Ui4-Pm_ObW0QtB788I0JnLFUW0UNnpGs1ZvIQI0VKSUHiTpJ-qmXaGOUl9aA_P4ypeUgJsfYQMVRB-1Rx8PHbDelVqjzzrZnvBz8NOemdlN_zTDou87h2WSmDmsq1fO60h-usApjqiykNQhlnHru_cxdWTNSYquRN3wWYPZmrGPrjLg==",
+                        "title": "drishtiias.com",
+                        "domain": "drishtiias.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtUajGn8tnB-0UCtq1EdNxFWrbbvF3zwiYt9jsP5bhu8h9NPia_5TMysduuCHivmfOZhzajCj-gdbpiBDPYWfA5G1pxLP66NGUO6EgV2iwNfFcJulKL4OLpV2KXDqPiWP0Y8pzoSt0T9yQXEV1WXcS9Yhv9EzSIn_L89KwSDaPCNzxhUD78OABkvkBmPog_4IS7UsIlv8gBEXf4I_KG_8S5JP_TiCCQ8RSGuy8JxXIRIen1DjXrMH6",
+                        "title": "visionias.in",
+                        "domain": "visionias.in"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFDQlC84nex1lVBtBAzNstNeYR6siz2q4JoRo0SyDM5v92YmRYWK3bBIkjGZLEQKbsM0MyPUNsXuAQT2pa6hwPEso1ogp751h3pseEUKF1F48IVbtB2TeZAnEKDejyOKaoI70BV6blVsnDX5zMm29nK7QsVNkisECUVbXcZ_9Wgg1Gu0qnPxuUogcgKpLcU5vk-4fO7JkH3Hdixo-zgMzwvDmeMI-zYoQ==",
+                        "title": "legalkart.com",
+                        "domain": "legalkart.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyg5KS1kr661oy7Hcolf-1YTUXMCCSz83DlbyiwNc7E65vLWDhyj7zyiCdx8QC5crReAWLYsmiFoRdpYwwytmBUdCmt7HQ3KjcqDHCvazz5Gn0gQ2DTGd8bBzn38y-FKuEiJbshKBaT5QHZHYabSd_5HlAa_yDUfOLdD8mZP7nwJr9lmxznMeVM3S7nxBGNOERcDLQ7Yz3RCIXzOJqcWU3RUyHuNq31vSd",
+                        "title": "civilsdaily.com",
+                        "domain": "civilsdaily.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGR6XF0-JT3Sc0vwrxNQ7O0eBw3GdY7a9a1lyN84UIDs_9abBsp3HB6OBnhVhVfphEny8L7QI5Z4BCu23q5ElGQmwEzMKhWlsHjFJ7_y6rhXbDmbnk7uGugE8953jjckLGInCr9sghDspMQIqfj712tUaFOmCNitkFAGYy5CwMTA8SSqY-Ybw8D5B4f73-CdJ1Cp79L8zQdxnI4ZoqJbRUUB2xXuARj6-Xn9VS6qMbvu69pCSpLPR0uwAGYrA3mdTizzHGgK4Y7QnpXtIF05PXe7Dir69WvvHupn7DM6DtPXrfduM1ATirvXF6PLBs=",
+                        "title": "economictimes.com",
+                        "domain": "economictimes.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKDg9R-ALrnJ_oS9qMR2_6TmBcJ3cfZkVTrIctpvSVqduLl_CQ2bEaLvDxw8G0qHfHnncCzAJSezTt-isCOr1J5hdhg9xmugzJfPI-WU7EFfHf8s8ir2v8By8S1MV1DVbFogYPdSEa62Z3PRv8sPLnpYAFQX8O83J0kXX3EdtIyQbZQrzlOb1C0amI0MvaPeAofT-BOUgpE10v95DMqoyK-mwlyQJBtdekEmDkhQosVqRzxpHLehI4rncPDutatVFWPhll9oyPUNL3nya3331RwC7LQ2C3yJgElQ==",
+                        "title": "thehindu.com",
+                        "domain": "thehindu.com"
+                    },
+                    {
+                        "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFb6ZMgnucGOkKHbPOsZ1e0yLK8XZXBYZ4hEXJkQF7bdgs26ZDcuc3Z26WLBEshnazM2HwZ5D9ojdPeGxExJNXzmHIzRD2qvYtQH6c3APn85Xhs_Ne16p7sLSkLv6zY93llu1q1Qo7s4kzzrGVAgd-bWTvWSRKRJC9QXvfZGmKW-oNsrPG8_kDLRw8FMJMAluVtqNdgWJxdZuZ84S7gto8Knvhdo4_4EWc=",
+                        "title": "ddnews.gov.in",
+                        "domain": "ddnews.gov.in"
+                    }
+                ],
+                "hasGrounding": true,
+                "hasRelevanceTag": true,
+                "hasSources": true
+            },
+            "correctOption": 0,
+            "explanation": "Statement-I is correct: The Kovind Panel concluded that synchronizing the terms of LS and Assemblies (by amending Art 83 and 172) does not alter the federal distribution of powers or the specific entrenched lists, and thus can be passed by Parliament alone.\nStatement-II is correct and explains Statement-I: Article 368(2) proviso lists provisions requiring state ratification (e.g., election of President, Supreme Court/High Court powers, 7th Schedule, representation of States in Parliament). The *tenure* of Houses (Art 83/172) is *not* in this list, which is the constitutional logic used by the Committee.\n[Relevance: Cabinet accepted report in late 2024; implementation bills debated in 2025. Sources: https://pib.gov.in/PressReleasePage.aspx?PRID=2014699]"
+        },
+        {
+            "id": "K9d-Rqa_0NQFXQCuLEaqU",
+            "sequenceNumber": 16,
+            "questionText": "Consider the following statements regarding the Governor's powers over State Bills under Article 200:\n1. The Constitution sets a specific time limit of six months for the Governor to declare assent or withhold it.\n2. If the Governor withholds assent and returns the Bill, and the State Legislature passes it again, the Governor is constitutionally bound to give assent.\n3. The Governor can reserve a Bill for the President's consideration if it endangers the position of the State High Court.\n\nHow many of the above statements are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Statement 1 is incorrect: Article 200 uses the phrase 'as soon as possible' but does not specify a numerical time limit (like 6 months). This ambiguity is a source of conflict.\nStatement 2 is correct: The proviso to Article 200 states that if the Bill is passed again by the House with or without amendment and presented to the Governor for assent, the Governor 'shall not withhold assent therefrom'.\nStatement 3 is correct: The second proviso to Article 200 *mandates* reservation if the Bill derogates from the powers of the High Court. The Governor also has discretion to reserve other bills.\n(Derived from recent SC observations on Governors of TN/Punjab/Kerala)"
+        },
+        {
+            "id": "w6t81D-BisA9ouNTofCBp",
+            "sequenceNumber": 17,
+            "questionText": "Consider the following pairs regarding the Tenth Schedule (Anti-Defection Law):\n\nParagraph Provision\n1. Paragraph 2 : Disqualification on ground of defection\n2. Paragraph 3 : Disqualification on ground of split in party\n3. Paragraph 4 : Disqualification in case of merger\n\nHow many of the above pairs are correctly matched?",
+            "questionType": "match",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Pair 1 is correctly matched: Paragraph 2 lists grounds (giving up membership voluntarily or voting against whip).\nPair 2 is incorrectly matched: Paragraph 3 (which protected a 'split' by 1/3rd members) was OMITTED by the 91st Amendment Act, 2003. It no longer exists.\nPair 3 is correctly matched: Paragraph 4 provides exemption from disqualification in case of a 'merger' (requires 2/3rd members to agree).\n(Derived from political events in Maharashtra and Speaker's adjudications)"
+        },
+        {
+            "id": "jkhUvxf2L-FcO_82lJasS",
+            "sequenceNumber": 18,
+            "questionText": "With reference to the procedure for Money Bills in the Indian Parliament, consider the following statements:\n1. A Bill shall be deemed to be a Money Bill if it contains only provisions dealing with the imposition or abolition of any tax.\n2. The decision of the Speaker of the Lok Sabha on whether a Bill is a Money Bill is final for the Parliament but subject to judicial review.\n3. The Rajya Sabha has no power to reject or amend a Money Bill.\n\nHow many of the above statements are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Statement 1 is correct: Article 110(1) defines a Money Bill as one containing 'only' provisions dealing with taxes, borrowing, Consolidated Fund custody, etc.\nStatement 2 is correct: Article 110(3) says the Speaker's decision is final. However, the Supreme Court in *Aadhaar judgment (K.S. Puttaswamy)* held that the Speaker's decision is subject to judicial review if it suffers from illegality or unconstitutionality.\nStatement 3 is correct: Article 109 states Rajya Sabha can only make recommendations (within 14 days), which LS may accept or reject. RS cannot vote to reject/amend it.\n(Derived from debates on Finance Bills passed as Money Bills)"
+        },
+        {
+            "id": "fVshnmc-y7a53IDKxrDg_",
+            "sequenceNumber": 19,
+            "questionText": "Consider the following statements regarding the 'Right to Privacy' in India:\n1. It is protected as an intrinsic part of the right to life and personal liberty under Article 21.\n2. It acts as a vertical right against the State but cannot be enforced horizontally against private entities.\n3. The 'Right to be Forgotten' is an evolving facet of the Right to Privacy.\n\nWhich of the statements given above is/are correct?",
+            "questionType": "statement",
+            "options": [
+                "1 only",
+                "1 and 3 only",
+                "2 and 3 only",
+                "1, 2 and 3"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Statement 1 is correct: Established in *K.S. Puttaswamy v. Union of India* (2017).\nStatement 2 is incorrect: In *Kaushal Kishore* (2023) and privacy contexts, the SC has indicated that certain fundamental rights can be enforced horizontally against private non-state actors (e.g., Data Fiduciaries under new DPDP Act).\nStatement 3 is correct: The 'Right to be Forgotten' has been recognized by various High Courts and the SC as part of informational privacy, subject to reasonable restrictions.\n(Derived from Data Protection Act implementation)"
+        },
+        {
+            "id": "N46zTJh71AwvwyrVO6WfW",
+            "sequenceNumber": 20,
+            "questionText": "Match List-I with List-II regarding Constitutional Schedules:\n\nList-I (Schedule)          List-II (Subject)\n1. Third Schedule         A. Forms of Oaths or Affirmations\n2. Fourth Schedule       B. Allocation of seats in Rajya Sabha\n3. Fifth Schedule         C. Administration of Scheduled Areas\n4. Sixth Schedule         D. Administration of Tribal Areas in certain States\n\nIn how many rows is the information correctly matched?",
+            "questionType": "match",
+            "options": [
+                "Only one",
+                "Only two",
+                "Only three",
+                "All four"
+            ],
+            "metadata": {
+                "category": "derived-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 3,
+            "explanation": "Row 1 is correctly matched: 3rd Schedule deals with Oaths.\nRow 2 is correctly matched: 4th Schedule deals with Rajya Sabha seat allocation.\nRow 3 is correctly matched: 5th Schedule deals with Scheduled Areas (other than 6th Schedule states).\nRow 4 is correctly matched: 6th Schedule deals with Tribal Areas in Assam, Meghalaya, Tripura, Mizoram.\n(Derived from Ladakh's demand for 6th Schedule and J&K RS seats)"
+        },
+        {
+            "id": "NGWDTVz-pIYIuTCTXIR8M",
+            "sequenceNumber": 21,
+            "questionText": "With reference to the Preamble of the Constitution of India, consider the following statements:\n1. The terms 'Socialist', 'Secular', and 'Integrity' were added by the 42nd Constitutional Amendment Act.\n2. The Preamble is non-justiciable and cannot be enforced in a court of law.\n3. In the Berubari Union case (1960), the Supreme Court declared that the Preamble is an integral part of the Constitution.\n\nHow many of the above statements are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 1,
+            "explanation": "Statement 1 is correct: Added by 42nd Amendment (1976).\nStatement 2 is correct: It is non-justiciable (provisions not enforceable in courts).\nStatement 3 is incorrect: In *Berubari Union* (1960), the SC opined that the Preamble is *NOT* a part of the Constitution. This was overturned in *Kesavananda Bharati* (1973) where it was held to be an integral part."
+        },
+        {
+            "id": "y9uoQUx8eWkebKri0t_PL",
+            "sequenceNumber": 22,
+            "questionText": "Consider the following statements regarding the pardoning power of the President under Article 72:\n1. The President can grant pardon in all cases where the punishment or sentence is by a Court Martial.\n2. The power of the President to grant pardon is independent of the judiciary and is an executive act.\n3. The petitioner has a right to an oral hearing by the President before the petition is rejected.\n\nWhich of the statements given above is/are correct?",
+            "questionType": "statement",
+            "options": [
+                "1 and 2 only",
+                "2 and 3 only",
+                "1 and 3 only",
+                "1, 2 and 3"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 0,
+            "explanation": "Statement 1 is correct: Article 72 empowers the President to pardon Court Martial sentences (Governor cannot do this).\nStatement 2 is correct: It is an executive power designed to correct judicial errors or afford relief.\nStatement 3 is incorrect: The Supreme Court (in *Kehar Singh* case) held that there is *no right* to an oral hearing by the President."
+        },
+        {
+            "id": "iGH0ski9QhXd7uycGRN3P",
+            "sequenceNumber": 23,
+            "questionText": "Consider the following pairs of Parliamentary Committees:\n\nCommittee - Primary Function\n1. Public Accounts Committee : Examines the annual audit reports of the Comptroller and Auditor General (CAG)\n2. Estimates Committee : Examines the estimates included in the budget and suggests 'economies' in public expenditure\n3. Committee on Public Undertakings : Examines the reports and accounts of Public Sector Undertakings\n\nHow many of the above pairs are correctly matched?",
+            "questionType": "match",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 2,
+            "explanation": "Pair 1 is correct: PAC examines CAG reports (Appropriation, Finance, PSU).\nPair 2 is correct: Estimates Committee (largest committee, 30 members) suggests economies.\nPair 3 is correct: CoPU examines reports/accounts of PSUs.\nAll three standard definitions are matched correctly."
+        },
+        {
+            "id": "Ziq3OWAWtHjMdqocpUYEm",
+            "sequenceNumber": 24,
+            "questionText": "Consider the following statements regarding the election of the Vice-President of India:\n1. The Electoral College consists of both elected and nominated members of Parliament.\n2. The Electoral College includes the members of the State Legislative Assemblies.\n3. All disputes regarding the election are inquired into and decided by the Election Commission of India.\n\nHow many of the above statements are correct?",
+            "questionType": "statement",
+            "options": [
+                "Only one",
+                "Only two",
+                "All three",
+                "None"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 0,
+            "explanation": "Statement 1 is correct: VP Electoral College = All members of LS + RS (Elected + Nominated).\nStatement 2 is incorrect: State Assemblies are NOT part of VP election (unlike President's).\nStatement 3 is incorrect: Disputes are decided by the Supreme Court (Article 71), not the ECI."
+        },
+        {
+            "id": "PdPo4izaxUL1sq1foPynA",
+            "sequenceNumber": 25,
+            "questionText": "Consider the following statements regarding the 'Council of Ministers':\n\nStatement-I: The total number of Ministers, including the Prime Minister, in the Council of Ministers shall not exceed 15% of the total strength of the Lok Sabha.\nStatement-II: This provision was added to the Constitution by the 91st Constitutional Amendment Act, 2003 to curb jumbo cabinets.\n\nWhich one of the following is correct in respect of the above statements?",
+            "questionType": "assertion",
+            "options": [
+                "Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I",
+                "Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I",
+                "Statement-I is correct but Statement-II is incorrect",
+                "Statement-I is incorrect but Statement-II is correct"
+            ],
+            "metadata": {
+                "category": "pure-static",
+                "subject": "polity",
+                "hasGrounding": false,
+                "hasRelevanceTag": false,
+                "hasSources": false
+            },
+            "correctOption": 0,
+            "explanation": "Statement-I is correct: Article 75(1A) limits the Council to 15% of LS strength.\nStatement-II is correct and explains Statement-I: The 91st Amendment was specifically enacted to strengthen the Anti-Defection Law and limit the size of Council of Ministers to prevent political patronage via jumbo cabinets."
+        }
+    ],
+    "learnMode": true
+}"
+                                                                                                                              }
+                                                                                                          ]
+                                                        }
+"

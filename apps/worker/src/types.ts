@@ -39,5 +39,6 @@ export interface Env {
   DEDUP_CLUSTER_LIMIT?: string; // default: 600
   DEDUP_HISTORY_SIM_THRESHOLD?: string; // default: 0.62
   DEDUP_INTRA_CONFIRM_THRESHOLD?: string; // default: 0.50
+  DEDUP_INTRA_BATCH_TOPIC_THRESHOLD?: string; // default: 0.50 — topic-level similarity for within-quiz dedup
   DEDUP_HISTORY_CONFIRM_THRESHOLD?: string; // default: 0.50
 }

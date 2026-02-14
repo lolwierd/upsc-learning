@@ -11,6 +11,7 @@ import {
   generateFingerprint,
   generateConceptKey,
   calculateTextSimilarity,
+  calculateTopicSimilarity,
   FINGERPRINT_QUERIES,
   CLUSTER_QUERIES,
 } from "./deduplication.js";
@@ -729,13 +730,33 @@ Generate exactly ${count} questions now.`;
   };
 }
 
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(Number(num)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
+function decodeQuestionEntities(q: GeneratedQuestion): GeneratedQuestion {
+  return {
+    ...q,
+    questionText: decodeHtmlEntities(q.questionText),
+    options: q.options.map(decodeHtmlEntities),
+    explanation: q.explanation ? decodeHtmlEntities(q.explanation) : q.explanation,
+  };
+}
+
 function cleanLlmResponse(text: string): GeneratedQuestion[] {
   try {
     // 1. naive try
     try {
       const parsed = JSON.parse(text);
       if (Array.isArray(parsed)) {
-        return parsed as GeneratedQuestion[];
+        return (parsed as GeneratedQuestion[]).map(decodeQuestionEntities);
       }
     } catch {
       // ignore parse failure and try fallback strategies
@@ -747,7 +768,7 @@ function cleanLlmResponse(text: string): GeneratedQuestion[] {
       try {
         const parsed = JSON.parse(jsonMatch[0]);
         if (Array.isArray(parsed)) {
-          return parsed as GeneratedQuestion[];
+          return (parsed as GeneratedQuestion[]).map(decodeQuestionEntities);
         }
       } catch {
         // ignore and try next fallback
@@ -758,7 +779,7 @@ function cleanLlmResponse(text: string): GeneratedQuestion[] {
     const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
     const parsed = JSON.parse(cleaned);
     if (Array.isArray(parsed)) {
-      return parsed as GeneratedQuestion[];
+      return (parsed as GeneratedQuestion[]).map(decodeQuestionEntities);
     }
     return [];
   } catch (error) {
@@ -794,6 +815,7 @@ export async function generateQuiz(
   const dedupHistorySimThreshold = clampNumber(parseFloatEnv(env.DEDUP_HISTORY_SIM_THRESHOLD, 0.62), 0, 1);
   const dedupIntraConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_INTRA_CONFIRM_THRESHOLD, 0.50), 0, 1);
   const dedupHistoryConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_HISTORY_CONFIRM_THRESHOLD, 0.50), 0, 1);
+  const dedupIntraBatchTopicThreshold = clampNumber(parseFloatEnv(env.DEDUP_INTRA_BATCH_TOPIC_THRESHOLD, 0.50), 0, 1);
 
   // Load history if deduplication is enabled.
   const dedupHistory = new Map<string, DedupHistoryBucket>();
@@ -928,6 +950,7 @@ export async function generateQuiz(
 
   const dedupReasonCounts = {
     fingerprint: 0,
+    intraBatch: 0,
     intraConcept: 0,
     historyConcept: 0,
     historySimilarity: 0,
@@ -938,6 +961,7 @@ export async function generateQuiz(
     seenFingerprints: Set<string>;
     seenConceptKeys: Set<string>;
     conceptRepText: Map<string, string>; // conceptKey -> representative questionText (within this quiz)
+    intraBatchPreviews: string[]; // question texts accepted in THIS generation (for similarity scan)
     historyPreviews: string[];
     historyClusters: Map<string, string>; // conceptKey -> representative_text (history)
   };
@@ -954,6 +978,7 @@ export async function generateQuiz(
       seenFingerprints: new Set(history?.fingerprints ?? []),
       seenConceptKeys: new Set(),
       conceptRepText: new Map(),
+      intraBatchPreviews: [],
       historyPreviews: history?.previews ?? [],
       historyClusters: history?.clusters ?? new Map(),
     };
@@ -978,6 +1003,16 @@ export async function generateQuiz(
       }
     }
 
+    // Intra-batch topic similarity: compares entity/keyword signatures rather than
+    // full text, so "Fifth Schedule + governor powers" and "Fifth Schedule + TAC
+    // composition" are correctly flagged as same-topic even though full-text Jaccard
+    // would be low due to different statement details.
+    for (const preview of bucket.intraBatchPreviews) {
+      if (calculateTopicSimilarity(question.questionText, preview) >= dedupIntraBatchTopicThreshold) {
+        return { accepted: false, reason: "intraBatch" };
+      }
+    }
+
     const historyRep = bucket.historyClusters.get(conceptKey);
     if (historyRep && calculateTextSimilarity(question.questionText, historyRep) >= dedupHistoryConfirmThreshold) {
       return { accepted: false, reason: "historyConcept" };
@@ -995,6 +1030,7 @@ export async function generateQuiz(
     if (!bucket.conceptRepText.has(conceptKey)) {
       bucket.conceptRepText.set(conceptKey, question.questionText);
     }
+    bucket.intraBatchPreviews.push(question.questionText);
     return { accepted: true };
   };
 
@@ -1008,6 +1044,7 @@ export async function generateQuiz(
     if (!bucket.conceptRepText.has(conceptKey)) {
       bucket.conceptRepText.set(conceptKey, question.questionText);
     }
+    bucket.intraBatchPreviews.push(question.questionText);
   };
 
   const shouldForceAccept = (reason: DedupRejectReason | undefined, relaxationLevel: number): boolean => {
@@ -1016,6 +1053,8 @@ export async function generateQuiz(
     if (relaxationLevel === 2) {
       return reason === "historySimilarity" || reason === "historyConcept" || reason === "intraConcept";
     }
+    // Level 3: allow all except intraBatch (never allow same-topic dupes within one quiz)
+    if (relaxationLevel >= 3) return reason !== "intraBatch";
     return true;
   };
 
@@ -1071,7 +1110,7 @@ export async function generateQuiz(
   if (enableDeduplication && dedupFilteredCount > 0) {
     console.warn(
       `Deduplicated ${dedupFilteredCount} question(s) ` +
-      `(fingerprint=${dedupReasonCounts.fingerprint}, intraConcept=${dedupReasonCounts.intraConcept}, ` +
+      `(fingerprint=${dedupReasonCounts.fingerprint}, intraBatch=${dedupReasonCounts.intraBatch}, intraConcept=${dedupReasonCounts.intraConcept}, ` +
       `historyConcept=${dedupReasonCounts.historyConcept}, historySimilarity=${dedupReasonCounts.historySimilarity})`
     );
   }

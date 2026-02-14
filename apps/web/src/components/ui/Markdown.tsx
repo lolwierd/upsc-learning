@@ -11,6 +11,17 @@ type Block =
   | { type: "blockquote"; content: string }
   | { type: "hr" };
 
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(Number(num)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
 function normalizeNewlines(input: string): string {
   return input.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 }
@@ -384,8 +395,9 @@ export function Markdown({
   className?: string;
   inline?: boolean;
 }) {
-  const value = typeof text === "string" ? text : typeof children === "string" ? children : "";
-  if (!value) return null;
+  const raw = typeof text === "string" ? text : typeof children === "string" ? children : "";
+  if (!raw) return null;
+  const value = decodeHtmlEntities(raw);
 
   if (inline) {
     return <span className={cn(className)}>{renderInlineWithBreaks(value, "md-inline")}</span>;

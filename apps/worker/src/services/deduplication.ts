@@ -134,6 +134,30 @@ export function extractKeywords(text: string, maxKeywords = DEFAULT_MAX_KEYWORDS
     .sort();
 }
 
+/**
+ * Topic-level similarity: compares the key entities and top keywords of two
+ * questions rather than full text. This is much better at catching "same topic,
+ * different statements" duplicates because the detail/statement words don't
+ * dilute the score.
+ */
+export function calculateTopicSimilarity(textA: string, textB: string): number {
+  const entA = new Set(extractKeyEntities(textA));
+  const kwA = extractKeywords(textA, 6);
+  const sigA = new Set([...entA, ...kwA]);
+
+  const entB = new Set(extractKeyEntities(textB));
+  const kwB = extractKeywords(textB, 6);
+  const sigB = new Set([...entB, ...kwB]);
+
+  if (sigA.size === 0 || sigB.size === 0) return 0;
+  let intersection = 0;
+  for (const t of sigA) {
+    if (sigB.has(t)) intersection++;
+  }
+  const union = new Set([...sigA, ...sigB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
 export function calculateTextSimilarity(textA: string, textB: string): number {
   const a = new Set(tokenizeForConcept(textA));
   const b = new Set(tokenizeForConcept(textB));
