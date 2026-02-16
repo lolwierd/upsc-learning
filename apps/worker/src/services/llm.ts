@@ -915,41 +915,58 @@ export async function generateQuiz(
 
   console.log(`Initial generation produced ${allQuestions.length}/${count} questions before filtering`);
 
-  const salvageOptions = (options: unknown): string[] => {
-    if (!Array.isArray(options)) return [];
+  const salvageOptions = (options: unknown): { picked: string[]; extras: string[] } => {
+    if (!Array.isArray(options)) return { picked: [], extras: [] };
     // Filter to only string entries that look like real option text (not corrupted fragments)
     const valid = options.filter(
       (o): o is string => typeof o === "string" && o.trim().length > 0
     );
-    if (valid.length === 4) return valid;
-    // Try to extract the 4 labeled options (A/B/C/D) from a larger array
+    if (valid.length === 4) return { picked: valid, extras: [] };
     if (valid.length > 4) {
+      // Try to extract the 4 labeled options (A/B/C/D) first
       const labeled: string[] = [];
       const expectedPrefixes = ["A)", "B)", "C)", "D)"];
       for (const prefix of expectedPrefixes) {
         const match = valid.find((o) => o.trimStart().startsWith(prefix));
         if (match) labeled.push(match);
       }
-      if (labeled.length === 4) return labeled;
-      // Fallback: take first 4 valid strings
-      return valid.slice(0, 4);
+      if (labeled.length === 4) {
+        const extras = valid.filter((o) => !labeled.includes(o));
+        return { picked: labeled, extras };
+      }
+      // Otherwise take first 4, rest are extras
+      return { picked: valid.slice(0, 4), extras: valid.slice(4) };
     }
-    return [];
+    // Less than 4 but at least 1: use what we have, no fallback placeholders
+    if (valid.length > 0) return { picked: valid, extras: [] };
+    return { picked: [], extras: [] };
   };
 
   const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
     questions.map((q, i) => {
-      const salvaged = salvageOptions(q.options);
+      const { picked, extras } = salvageOptions(q.options);
+      const useOptions = picked.length >= 2
+        ? picked.length < 4
+          // Pad to 4 if we have 2-3 options (duplicate last to fill)
+          ? [...picked, ...Array(4 - picked.length).fill(picked[picked.length - 1])]
+          : picked.slice(0, 4)
+        : q.options?.length ? (q.options as string[]).slice(0, 4) : [];
+
+      // Prepend extra options info to explanation if LLM returned more than 4
+      let explanation = q.explanation || "No explanation provided.";
+      if (extras.length > 0) {
+        const extraText = extras.map((e) => `- ${e}`).join("\n");
+        explanation = `**Additional options from LLM (not shown):**\n${extraText}\n\n${explanation}`;
+      }
+
       return {
         questionText: q.questionText || `Question ${offset + i + 1}`,
         questionType: q.questionType || "standard",
-        options: salvaged.length === 4
-          ? salvaged
-          : ["A) Option A", "B) Option B", "C) Option C", "D) Option D"],
+        options: useOptions.length === 4 ? useOptions : [`Question ${offset + i + 1} had malformed options`],
         correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
           ? q.correctOption
           : 0,
-        explanation: q.explanation || "No explanation provided.",
+        explanation,
         metadata: q.metadata,
       };
     });
