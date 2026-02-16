@@ -917,7 +917,7 @@ export async function generateQuiz(
 
   const salvageOptions = (options: unknown): { picked: string[]; extras: string[] } => {
     if (!Array.isArray(options)) return { picked: [], extras: [] };
-    // Filter to only string entries that look like real option text (not corrupted fragments)
+    // Filter to only valid string entries (not null/numbers/objects/empty)
     const valid = options.filter(
       (o): o is string => typeof o === "string" && o.trim().length > 0
     );
@@ -937,39 +937,42 @@ export async function generateQuiz(
       // Otherwise take first 4, rest are extras
       return { picked: valid.slice(0, 4), extras: valid.slice(4) };
     }
-    // Less than 4 but at least 1: use what we have, no fallback placeholders
-    if (valid.length > 0) return { picked: valid, extras: [] };
-    return { picked: [], extras: [] };
+    // Less than 4 valid strings
+    return { picked: valid, extras: [] };
   };
 
   const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
-    questions.map((q, i) => {
-      const { picked, extras } = salvageOptions(q.options);
-      const useOptions = picked.length >= 2
-        ? picked.length < 4
-          // Pad to 4 if we have 2-3 options (duplicate last to fill)
-          ? [...picked, ...Array(4 - picked.length).fill(picked[picked.length - 1])]
-          : picked.slice(0, 4)
-        : q.options?.length ? (q.options as string[]).slice(0, 4) : [];
+    questions
+      .map((q, i) => {
+        const { picked, extras } = salvageOptions(q.options);
 
-      // Prepend extra options info to explanation if LLM returned more than 4
-      let explanation = q.explanation || "No explanation provided.";
-      if (extras.length > 0) {
-        const extraText = extras.map((e) => `- ${e}`).join("\n");
-        explanation = `**Additional options from LLM (not shown):**\n${extraText}\n\n${explanation}`;
-      }
+        // Must have at least 4 valid string options to form a usable MCQ
+        if (picked.length < 4) {
+          console.warn(
+            `Question ${offset + i + 1} dropped: only ${picked.length} valid options out of ${Array.isArray(q.options) ? q.options.length : 0} total`
+          );
+          return null;
+        }
 
-      return {
-        questionText: q.questionText || `Question ${offset + i + 1}`,
-        questionType: q.questionType || "standard",
-        options: useOptions.length === 4 ? useOptions : [`Question ${offset + i + 1} had malformed options`],
-        correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
-          ? q.correctOption
-          : 0,
-        explanation,
-        metadata: q.metadata,
-      };
-    });
+        // Prepend extra options info to explanation if LLM returned more than 4
+        let explanation = q.explanation || "No explanation provided.";
+        if (extras.length > 0) {
+          const extraText = extras.map((e) => `- ${e}`).join("\n");
+          explanation = `**Additional options from LLM (not shown):**\n${extraText}\n\n${explanation}`;
+        }
+
+        return {
+          questionText: q.questionText || `Question ${offset + i + 1}`,
+          questionType: q.questionType || "standard",
+          options: picked.slice(0, 4),
+          correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
+            ? q.correctOption
+            : 0,
+          explanation,
+          metadata: q.metadata,
+        };
+      })
+      .filter((q): q is NonNullable<typeof q> => q !== null);
 
   // Normalize questions
   const normalizedQuestions = normalizeQuestions(allQuestions.slice(0, count), 0);
