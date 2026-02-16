@@ -631,7 +631,7 @@ export default function CombinedQuizPage() {
                                 : "text-gray-700"
                           )}
                         >
-                          <Markdown inline text={option.replace(/^[A-Da-d]\)\s*/, "")} />
+                          <Markdown inline text={option} />
                         </span>
                       </button>
                     );

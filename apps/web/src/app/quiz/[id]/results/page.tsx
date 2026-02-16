@@ -375,7 +375,7 @@ export default function ResultsPage() {
                         {isCorrectOption ? "✓" : isSelected ? "✗" : optionLabel}
                       </span>
                       <span className={cn("text-sm", textColor)}>
-                        <Markdown inline text={option.replace(/^[A-Da-d]\)\s*/, "")} />
+                        <Markdown inline text={option} />
                       </span>
                     </div>
                   );
