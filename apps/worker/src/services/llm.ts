@@ -915,19 +915,44 @@ export async function generateQuiz(
 
   console.log(`Initial generation produced ${allQuestions.length}/${count} questions before filtering`);
 
+  const salvageOptions = (options: unknown): string[] => {
+    if (!Array.isArray(options)) return [];
+    // Filter to only string entries that look like real option text (not corrupted fragments)
+    const valid = options.filter(
+      (o): o is string => typeof o === "string" && o.trim().length > 0
+    );
+    if (valid.length === 4) return valid;
+    // Try to extract the 4 labeled options (A/B/C/D) from a larger array
+    if (valid.length > 4) {
+      const labeled: string[] = [];
+      const expectedPrefixes = ["A)", "B)", "C)", "D)"];
+      for (const prefix of expectedPrefixes) {
+        const match = valid.find((o) => o.trimStart().startsWith(prefix));
+        if (match) labeled.push(match);
+      }
+      if (labeled.length === 4) return labeled;
+      // Fallback: take first 4 valid strings
+      return valid.slice(0, 4);
+    }
+    return [];
+  };
+
   const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
-    questions.map((q, i) => ({
-      questionText: q.questionText || `Question ${offset + i + 1}`,
-      questionType: q.questionType || "standard",
-      options: Array.isArray(q.options) && q.options.length === 4
-        ? q.options
-        : ["A) Option A", "B) Option B", "C) Option D", "D) Option D"],
-      correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
-        ? q.correctOption
-        : 0,
-      explanation: q.explanation || "No explanation provided.",
-      metadata: q.metadata,
-    }));
+    questions.map((q, i) => {
+      const salvaged = salvageOptions(q.options);
+      return {
+        questionText: q.questionText || `Question ${offset + i + 1}`,
+        questionType: q.questionType || "standard",
+        options: salvaged.length === 4
+          ? salvaged
+          : ["A) Option A", "B) Option B", "C) Option C", "D) Option D"],
+        correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
+          ? q.correctOption
+          : 0,
+        explanation: q.explanation || "No explanation provided.",
+        metadata: q.metadata,
+      };
+    });
 
   // Normalize questions
   const normalizedQuestions = normalizeQuestions(allQuestions.slice(0, count), 0);
