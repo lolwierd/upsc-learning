@@ -915,19 +915,81 @@ export async function generateQuiz(
 
   console.log(`Initial generation produced ${allQuestions.length}/${count} questions before filtering`);
 
+  // Matches the same label prefix variants that autoFixQuestion strips:
+  // "A) ", "a) ", "A. ", "(A) ", "(a) ", "1. ", "1) " etc.
+  const OPTION_LABEL_RE = /^(?:\(?([A-Da-d])\s*[).]\s*|\(?([1-4])\s*[).]\s*)/;
+
+  const getOptionLabel = (s: string): string | null => {
+    const m = s.trimStart().match(OPTION_LABEL_RE);
+    if (!m) return null;
+    const letter = m[1] || m[2];
+    if (!letter) return null;
+    // Normalize: "a" -> "A", "1" -> "A", "2" -> "B", etc.
+    if (/[1-4]/.test(letter)) return String.fromCharCode(64 + parseInt(letter));
+    return letter.toUpperCase();
+  };
+
+  const salvageOptions = (options: unknown): { picked: string[]; extras: string[] } => {
+    if (!Array.isArray(options)) return { picked: [], extras: [] };
+    // Filter to only valid string entries (not null/numbers/objects/empty)
+    const valid = options.filter(
+      (o): o is string => typeof o === "string" && o.trim().length > 0
+    );
+    if (valid.length === 4) return { picked: valid, extras: [] };
+    if (valid.length > 4) {
+      // Try to extract the 4 labeled options (A/B/C/D) by matching label prefixes
+      const byLabel = new Map<string, string>();
+      for (const o of valid) {
+        const label = getOptionLabel(o);
+        if (label && !byLabel.has(label)) {
+          byLabel.set(label, o);
+        }
+      }
+      if (byLabel.size === 4 && byLabel.has("A") && byLabel.has("B") && byLabel.has("C") && byLabel.has("D")) {
+        const labeled = [byLabel.get("A")!, byLabel.get("B")!, byLabel.get("C")!, byLabel.get("D")!];
+        const labeledSet = new Set(labeled);
+        const extras = valid.filter((o) => !labeledSet.has(o));
+        return { picked: labeled, extras };
+      }
+      // Otherwise take first 4, rest are extras
+      return { picked: valid.slice(0, 4), extras: valid.slice(4) };
+    }
+    // Less than 4 valid strings
+    return { picked: valid, extras: [] };
+  };
+
   const normalizeQuestions = (questions: GeneratedQuestion[], offset: number) =>
-    questions.map((q, i) => ({
-      questionText: q.questionText || `Question ${offset + i + 1}`,
-      questionType: q.questionType || "standard",
-      options: Array.isArray(q.options) && q.options.length === 4
-        ? q.options
-        : ["A) Option A", "B) Option B", "C) Option D", "D) Option D"],
-      correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
-        ? q.correctOption
-        : 0,
-      explanation: q.explanation || "No explanation provided.",
-      metadata: q.metadata,
-    }));
+    questions
+      .map((q, i) => {
+        const { picked, extras } = salvageOptions(q.options);
+
+        // Must have at least 4 valid string options to form a usable MCQ
+        if (picked.length < 4) {
+          console.warn(
+            `Question ${offset + i + 1} dropped: only ${picked.length} valid options out of ${Array.isArray(q.options) ? q.options.length : 0} total`
+          );
+          return null;
+        }
+
+        // Prepend extra options info to explanation if LLM returned more than 4
+        let explanation = q.explanation || "No explanation provided.";
+        if (extras.length > 0) {
+          const extraText = extras.map((e) => `- ${e}`).join("\n");
+          explanation = `**Additional options from LLM (not shown):**\n${extraText}\n\n${explanation}`;
+        }
+
+        return {
+          questionText: q.questionText || `Question ${offset + i + 1}`,
+          questionType: q.questionType || "standard",
+          options: picked.slice(0, 4),
+          correctOption: typeof q.correctOption === "number" && q.correctOption >= 0 && q.correctOption <= 3
+            ? q.correctOption
+            : 0,
+          explanation,
+          metadata: q.metadata,
+        };
+      })
+      .filter((q): q is NonNullable<typeof q> => q !== null);
 
   // Normalize questions
   const normalizedQuestions = normalizeQuestions(allQuestions.slice(0, count), 0);
