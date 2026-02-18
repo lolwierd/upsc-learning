@@ -26,21 +26,22 @@ interface PromptParams {
 
 /**
  * Per-subject total CA ratio (direct-CA + derived-static combined).
- * Computed from UPSC GS1 PYQ analysis across 2013-2025 (1300 questions).
- * The direct:derived split within CA is ~37.5% : 62.5% (preserving current 15:25 ratio).
+ * Validated by Gemini 3 Pro classification of 900 UPSC GS1 PYQs (2017-2025).
+ * Using post-2016 data only — UPSC has trended more CA-heavy in recent years.
+ * The direct:derived split within CA is ~37.5% : 62.5% (preserving 15:25 ratio).
  */
 const SUBJECT_CA_RATIOS: Record<string, number> = {
-  history:     0.06,  // 6% CA  — almost entirely static
-  geography:   0.14,  // 14% CA — physical geography dominates
-  art_culture: 0.19,  // 19% CA — volatile but low average
-  science:     0.32,  // 32% CA — missions, emerging tech
-  polity:      0.32,  // 32% CA — amendments, schemes, judgments
-  economy:     0.39,  // 39% CA — budget, RBI, trade
-  environment: 0.42,  // 42% CA — climate, conservation
+  history:     0.17,  // 17% CA  — mostly static, some derived-static from heritage/policy events
+  art_culture: 0.23,  // 23% CA  — volatile (SD=29); heritage designations, cultural events
+  geography:   0.44,  // 44% CA  — disasters, resource discoveries, mapping exercises linked to news
+  polity:      0.49,  // 49% CA  — amendments, schemes, judgments, governance reforms
+  environment: 0.63,  // 63% CA  — climate summits, conservation policy, species in news
+  economy:     0.71,  // 71% CA  — budget, RBI policy, trade, fiscal events dominate
+  science:     0.80,  // 80% CA  — missions, emerging tech, defense, space; heavily CA-driven
 };
 
 function getSubjectCARatio(subject: string): { directCA: number; derivedStatic: number; pureStatic: number } {
-  const totalCA = SUBJECT_CA_RATIOS[subject] ?? 0.40;
+  const totalCA = SUBJECT_CA_RATIOS[subject] ?? 0.45;
   const directCA = totalCA * 0.375;      // 37.5% of CA portion
   const derivedStatic = totalCA * 0.625; // 62.5% of CA portion
   const pureStatic = 1 - totalCA;
@@ -448,16 +449,16 @@ Different subjects have different CA intensities. Apply these ratios PER SUBJECT
 
 | Subject        | Total CA | Direct CA | Derived Static | Pure Static |
 |----------------|----------|-----------|----------------|-------------|
-| History        | 6%       | 2%        | 4%             | 94%         |
-| Geography      | 14%      | 5%        | 9%             | 86%         |
-| Art & Culture  | 19%      | 7%        | 12%            | 81%         |
-| Science & Tech | 32%      | 12%       | 20%            | 68%         |
-| Polity         | 32%      | 12%       | 20%            | 68%         |
-| Economy        | 39%      | 15%       | 24%            | 61%         |
-| Environment    | 42%      | 16%       | 26%            | 58%         |
+| History        | 17%      | 6%        | 11%            | 83%         |
+| Art & Culture  | 23%      | 9%        | 14%            | 77%         |
+| Geography      | 44%      | 17%       | 28%            | 56%         |
+| Polity         | 49%      | 18%       | 31%            | 51%         |
+| Environment    | 63%      | 24%       | 39%            | 37%         |
+| Economy        | 71%      | 27%       | 44%            | 29%         |
+| Science & Tech | 80%      | 30%       | 50%            | 20%         |
 
-History/Geography questions should be mostly static.
-Economy/Environment questions should have significant CA integration.
+History/Art & Culture questions should be mostly static.
+Science/Economy/Environment questions should have MAJORITY CA integration — most questions derive from current events.
 
 GENERATE THREE CATEGORIES PER SUBJECT:
 

@@ -18,14 +18,15 @@ const SUBJECTS = [
 ];
 
 // Exact CA ratios (matching SUBJECT_CA_RATIOS in prompts/index.ts)
+// Validated by Gemini 3 Pro classification — 2017-2025 PYQs only
 const SUBJECT_CA_RATIOS = {
-  history:     0.06,
-  geography:   0.14,
-  art_culture: 0.19,
-  science:     0.32,
-  polity:      0.32,
-  economy:     0.39,
-  environment: 0.42,
+  history:     0.17,
+  geography:   0.44,
+  art_culture: 0.23,
+  science:     0.80,
+  polity:      0.49,
+  economy:     0.71,
+  environment: 0.63,
 };
 
 // Compute expected values the same way the code does
