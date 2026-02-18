@@ -21,6 +21,33 @@ interface PromptParams {
 }
 
 // ============================================================================
+// PER-SUBJECT CURRENT AFFAIRS RATIOS (From PYQ Analysis 2013-2025)
+// ============================================================================
+
+/**
+ * Per-subject total CA ratio (direct-CA + derived-static combined).
+ * Computed from UPSC GS1 PYQ analysis across 2013-2025 (1300 questions).
+ * The direct:derived split within CA is ~37.5% : 62.5% (preserving current 15:25 ratio).
+ */
+const SUBJECT_CA_RATIOS: Record<string, number> = {
+  history:     0.06,  // 6% CA  — almost entirely static
+  geography:   0.14,  // 14% CA — physical geography dominates
+  art_culture: 0.19,  // 19% CA — volatile but low average
+  science:     0.32,  // 32% CA — missions, emerging tech
+  polity:      0.32,  // 32% CA — amendments, schemes, judgments
+  economy:     0.39,  // 39% CA — budget, RBI, trade
+  environment: 0.42,  // 42% CA — climate, conservation
+};
+
+function getSubjectCARatio(subject: string): { directCA: number; derivedStatic: number; pureStatic: number } {
+  const totalCA = SUBJECT_CA_RATIOS[subject] ?? 0.40;
+  const directCA = totalCA * 0.375;      // 37.5% of CA portion
+  const derivedStatic = totalCA * 0.625; // 62.5% of CA portion
+  const pureStatic = 1 - totalCA;
+  return { directCA, derivedStatic, pureStatic };
+}
+
+// ============================================================================
 // THEME RANDOMIZATION UTILITIES
 // ============================================================================
 
@@ -405,33 +432,43 @@ PREDICTION STRATEGY:
   - Scientific missions and achievements
   - Environmental milestones and conventions
 
-CURRENT AFFAIRS QUESTION DESIGN (for the 40% CA questions only):
+CURRENT AFFAIRS QUESTION DESIGN (for CA questions per subject ratios above):
 - Use 2025-2026 events as the primary source (most recent)
 - Can include significant 2024 events if still relevant
 - MUST use Google Search to verify facts and get sources
 
 ${buildSearchDiversitySection(previousSearchQueries)}
 
-IMPORTANT: This section applies ONLY to the 40% current affairs questions, NOT to static questions
+IMPORTANT: This section applies ONLY to the current affairs questions (per subject ratios), NOT to static questions
 `}
 
-CRITICAL CONTENT DISTRIBUTION (MANDATORY - THREE-TIER SYSTEM):
+CRITICAL CONTENT DISTRIBUTION (PER-SUBJECT CA RATIOS FROM PYQ ANALYSIS 2013-2025):
 
-UPSC 2025 Pattern Analysis shows three distinct question types:
-- 15% Direct CA (explicit current events)
-- 25% Derived Static (CA-triggered topics, static framing)
-- 60% Pure Static (traditional textbook)
+Different subjects have different CA intensities. Apply these ratios PER SUBJECT:
 
-GENERATE EXACTLY (THREE CATEGORIES):
+| Subject        | Total CA | Direct CA | Derived Static | Pure Static |
+|----------------|----------|-----------|----------------|-------------|
+| History        | 6%       | 2%        | 4%             | 94%         |
+| Geography      | 14%      | 5%        | 9%             | 86%         |
+| Art & Culture  | 19%      | 7%        | 12%            | 81%         |
+| Science & Tech | 32%      | 12%       | 20%            | 68%         |
+| Polity         | 32%      | 12%       | 20%            | 68%         |
+| Economy        | 39%      | 15%       | 24%            | 61%         |
+| Environment    | 42%      | 16%       | 26%            | 58%         |
 
-1. DIRECT CURRENT AFFAIRS (15% - 3 out of 20, 7-8 out of 50):
+History/Geography questions should be mostly static.
+Economy/Environment questions should have significant CA integration.
+
+GENERATE THREE CATEGORIES PER SUBJECT:
+
+1. DIRECT CURRENT AFFAIRS (per subject % above):
    - Question explicitly mentions recent events from 2025-2026
    - Examples: "In context of Union Budget 2025-26...", "With reference to COP30..."
    - MUST include [Relevance: ...] tag in explanation
    - MUST include "Sources: <URL>" with verified links
    - Test static concepts THROUGH current events
 
-2. DERIVED STATIC (25% - 5 out of 20, 12-13 out of 50):
+2. DERIVED STATIC (per subject % above):
    - Topic selected BECAUSE it's in news, but question framed purely from textbooks
    - NO mention of recent events in question text
    - NO [Relevance] tag, NO Sources needed
@@ -441,14 +478,14 @@ GENERATE EXACTLY (THREE CATEGORIES):
      * News: "Heatwave alerts" → Question: "Wet-bulb temperature is associated with..."
    - The CA connection is invisible to the student - they see a pure static question
 
-3. PURE STATIC (60% - 12 out of 20, 30 out of 50):
+3. PURE STATIC (per subject % above):
    - Traditional textbook questions with NO current affairs influence
    - Topics selected from standard UPSC syllabus regardless of news
    - Geography (rivers, climate), History (dynasties, movements), Core Polity (articles)
    - Examples: "The Gupta period is known for...", "Western Ghats are characterized by..."
    - NO phrases like "In context of recent..." or "With reference to 2025..."
 
-DIRECT CA QUESTIONS (15% ONLY):
+DIRECT CA QUESTIONS (per the subject-specific ratios above):
 
 ${CURRENT_AFFAIRS_CONTEXT}
 
@@ -459,7 +496,7 @@ Prioritize this theme when selecting current affairs topics. Use web search
 to find recent developments (2025+) related to this theme.
 ` : ''}
 
-DERIVED STATIC QUESTIONS (25%):
+DERIVED STATIC QUESTIONS (per subject ratios above):
 - Topics trending in news (last 12 months) but framed as pure static questions
 - Use CA to SELECT topic, use NCERT/textbooks to FRAME question
 - NO explicit mention of dates, events, or recent developments
@@ -471,7 +508,7 @@ DERIVED STATIC QUESTIONS (25%):
   * Geography: Regions in geopolitical news, Critical minerals
   * History/Culture: NO derived static (these are always pure static)
 
-For random mode, spread the 15% direct CA across subjects:
+For random mode, spread the direct CA across subjects per their ratios:
 - Polity: Recent amendments, schemes, judgments (explicit reference)
 - Environment: Climate summits, conservation policies (explicit reference)
 - Economy: Budget, RBI policies, trade deals (explicit reference)
@@ -591,9 +628,10 @@ A question with the WRONG questionType will be rejected and regenerated. Label c
 
 FINAL CHECKLIST BEFORE GENERATION:
 - Subject distribution follows UPSC pattern (not uniform)
-- EXACTLY 15% Direct CA (with [Relevance] and Sources)
-- EXACTLY 25% Derived Static (CA topics, static framing, NO [Relevance])
-- EXACTLY 60% Pure Static (NO CA influence at all)
+- CA ratios applied PER SUBJECT (see table above): History ~6% CA, Environment ~42% CA, etc.
+- Direct CA questions include [Relevance] and Sources
+- Derived Static questions: CA topics with static framing, NO [Relevance]
+- Pure Static: NO CA influence at all
 - High-yield topics prioritized
 - Cross-subject linkages included where relevant
 - All questions maintain UPSC 2024-2025 standards
@@ -605,36 +643,41 @@ FINAL CHECKLIST BEFORE GENERATION:
 CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
 ═══════════════════════════════════════════════════════════════════════════════
 
-Out of ${totalCount} questions, distribute into THREE CATEGORIES:
+Out of ${totalCount} questions, apply PER-SUBJECT CA ratios:
 
-CATEGORY 1: DIRECT CA (15% = ${Math.round(totalCount * 0.15)} questions)
+| Subject        | Direct CA | Derived Static | Pure Static |
+|----------------|-----------|----------------|-------------|
+| History        | 2%        | 4%             | 94%         |
+| Geography      | 5%        | 9%             | 86%         |
+| Art & Culture  | 7%        | 12%            | 81%         |
+| Science & Tech | 12%       | 20%            | 68%         |
+| Polity         | 12%       | 20%            | 68%         |
+| Economy        | 15%       | 24%            | 61%         |
+| Environment    | 16%       | 26%            | 58%         |
+
+CATEGORY 1: DIRECT CA (per subject %)
   - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
   - MUST include [Relevance: ...] in explanation
   - MUST include "Sources: <URL>" with verified links from 2025+
-  - Example: "With reference to the Gaganyaan mission's recent progress in 2025, consider the following..."
+  - Applies most to Economy/Environment/Science, least to History/Geography
 
-CATEGORY 2: DERIVED STATIC (25% = ${Math.round(totalCount * 0.25)} questions)
+CATEGORY 2: DERIVED STATIC (per subject %)
   - Topic selected because it's trending in news (last 12 months)
   - Question framed purely from textbook - NO mention of recent events
   - NO [Relevance] tag, NO Sources needed
   - Looks identical to pure static question to the student
-  - Example: News triggers "Governor powers" → Question: "Consider the following statements about Article 200:
-    1. The Governor can withhold assent to a bill..."
-    (No mention of recent Governor-state conflicts)
 
-CATEGORY 3: PURE STATIC (60% = ${Math.round(totalCount * 0.6)} questions)
+CATEGORY 3: PURE STATIC (per subject %)
   - Traditional UPSC syllabus topics regardless of news cycle
   - NO current affairs influence in topic selection
-  - Geography (physical), History (dynasties, movements), Core Polity
-  - NO [Relevance] tag, NO Sources
-  - Example: "Consider the following rivers: 1. Chambal is a tributary of..."
+  - History/Geography questions should be almost entirely in this category
 
 DO NOT confuse categories. The key distinction:
 - Direct CA: Event VISIBLE in question text
 - Derived Static: Event influenced topic choice, but INVISIBLE in question
 - Pure Static: Topic chosen from syllabus, NO event influence
 
-Maintain EXACT ratios: 15% / 25% / 60%. This is non-negotiable.
+Maintain the PER-SUBJECT ratios from the table above. These are calibrated from 13 years of PYQ data.
 
 NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
 `;
@@ -647,13 +690,13 @@ NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
 const CURRENT_AFFAIRS_CONTEXT = `
 CURRENT AFFAIRS GUIDELINES (TWO USAGE MODES):
 
-IMPORTANT: Current affairs influence questions in TWO ways:
-1. DIRECT CA (15%): Explicit mention of recent events with [Relevance] + Sources
-2. DERIVED STATIC (25%): Use CA to pick topic, but frame purely from textbooks (NO [Relevance])
+IMPORTANT: Current affairs influence questions in TWO ways (ratios vary per subject):
+1. DIRECT CA: Explicit mention of recent events with [Relevance] + Sources
+2. DERIVED STATIC: Use CA to pick topic, but frame purely from textbooks (NO [Relevance])
 
 You have access to Google Search for retrieving recent information.
 
-FOR DIRECT CA QUESTIONS (15% only):
+FOR DIRECT CA QUESTIONS (per the subject-specific ratios specified above):
 
 1. INTEGRATE RECENT EVENTS as TRIGGERS for static concepts:
    - "In context of India's recent diplomatic engagements in 2025..." → Test foreign policy concepts
@@ -687,11 +730,11 @@ FOR DIRECT CA QUESTIONS (15% only):
    - Include: Sources: https://pib.gov.in/... ; https://example.gov.in/...
 
 MANDATORY WEB SEARCH (for Direct CA only):
-- MUST use Google Search for the 15% Direct CA questions
+- MUST use Google Search for the Direct CA questions
 - Filter search results to prioritize 2025 and 2026 dates
 - Each Direct CA question must cite at least one URL
 
-FOR DERIVED STATIC QUESTIONS (25%):
+FOR DERIVED STATIC QUESTIONS (per the subject-specific ratios specified above):
 - Use web search to identify trending topics from past 12 months
 - Examples: Governor-state conflicts, SEBI regulatory debates, Heatwave discussions
 - Frame question purely from textbook/NCERT as if the topic is timeless
@@ -699,10 +742,10 @@ FOR DERIVED STATIC QUESTIONS (25%):
 - NO [Relevance] tag, NO Sources
 - Student should NOT know this was CA-influenced
 
-CRITICAL REMINDER:
-- 15% Direct CA (event visible, [Relevance] + Sources)
-- 25% Derived Static (event invisible, pure textbook framing)
-- 60% Pure Static (no CA influence)
+CRITICAL REMINDER (ratios vary per subject — see subject-specific ratios above):
+- Direct CA (event visible, [Relevance] + Sources)
+- Derived Static (event invisible, pure textbook framing)
+- Pure Static (no CA influence)
 `;
 
 const CURRENT_AFFAIRS_THEME_CONTEXT = (theme: string) => `
@@ -1159,17 +1202,23 @@ UPSC EVOLUTION INSIGHT:
 - Current affairs TRIGGERS static concepts (not standalone static)
 `;
 
-const CONTENT_BALANCE_RATIO = `
-CONTENT BALANCE: THREE-TIER SYSTEM (MATCHES UPSC 2025 PATTERN)
+function getContentBalanceRatio(subject: string): string {
+  const { directCA, derivedStatic } = getSubjectCARatio(subject);
+  const dcPct = Math.round(directCA * 100);
+  const dsPct = Math.round(derivedStatic * 100);
+  const psPct = 100 - dcPct - dsPct; // ensure they sum to 100
 
-15% DIRECT CA + 25% DERIVED STATIC + 60% PURE STATIC
+  return `
+CONTENT BALANCE: THREE-TIER SYSTEM (CALIBRATED PER SUBJECT FROM PYQ ANALYSIS 2013-2025)
 
-1. DIRECT CA (15%):
+${dcPct}% DIRECT CA + ${dsPct}% DERIVED STATIC + ${psPct}% PURE STATIC (for ${subject})
+
+1. DIRECT CA (${dcPct}%):
    - Explicit mention of recent events (2025-2026)
    - MUST include [Relevance: ...] and Sources in explanation
    - Example: "With reference to India's inclusion in the JP Morgan Bond Index in 2025..."
 
-2. DERIVED STATIC (25%):
+2. DERIVED STATIC (${dsPct}%):
    - Topic selected because it's trending in news, but question is pure textbook
    - NO mention of recent events, NO [Relevance], NO Sources
    - The CA influence is invisible to the student
@@ -1177,21 +1226,21 @@ CONTENT BALANCE: THREE-TIER SYSTEM (MATCHES UPSC 2025 PATTERN)
      about derivatives is correct? 1. Options give the right but not obligation..."
      (No mention of SEBI or recent warnings)
 
-3. PURE STATIC (60%):
+3. PURE STATIC (${psPct}%):
    - Traditional syllabus topics regardless of news cycle
    - Core Geography, History, foundational Polity/Economy concepts
    - Example: "Consider the following rivers: 1. Chambal is a tributary of Yamuna..."
 
 CRITICAL EXAMPLES SHOWING THE DIFFERENCE:
 
-PURE STATIC (60% category):
+PURE STATIC (${psPct}% category):
 "Consider the following statements regarding Article 356:
 1. It can be imposed only on the recommendation of the Governor.
 2. A proclamation must be approved by both Houses of Parliament.
 Which of the statements given above is/are correct?"
 [No CA influence - core constitutional topic]
 
-DERIVED STATIC (25% category):
+DERIVED STATIC (${dsPct}% category):
 "Consider the following statements regarding the Governor's powers:
 1. The Governor can reserve a bill for the President's consideration.
 2. There is a time limit within which the Governor must give assent to a bill.
@@ -1199,7 +1248,7 @@ Which of the statements given above is/are correct?"
 [Same topic as above, but selected BECAUSE of recent Governor-state conflicts in news.
 Question itself has NO mention of these conflicts - appears identical to pure static]
 
-DIRECT CA (15% category):
+DIRECT CA (${dcPct}% category):
 "In the context of recent debates on the role of Governors in state legislation in 2025,
 consider the following statements regarding Article 200:
 1. The Governor can withhold assent to a bill indefinitely.
@@ -1208,6 +1257,7 @@ Which of the statements given above is/are correct?"
 [Explicitly mentions recent events, explanation will have [Relevance: Governor-state conflicts in
 Tamil Nadu/Kerala, 2025] and Sources: https://thehindu.com/...]
 `;
+}
 
 const RELEVANCE_FILTER = `
 RELEVANCE FILTER FOR 2026 PRELIMS
@@ -2063,7 +2113,7 @@ ${themeContext}
 
 ${PRELIMS_2026_FOCUS}
 
-${CONTENT_BALANCE_RATIO}
+${getContentBalanceRatio(subject)}
 
 ${RELEVANCE_FILTER}
 
@@ -2180,8 +2230,8 @@ OUTPUT REQUIREMENTS:
 - options must have exactly four items labeled "A) ", "B) ", "C) ", "D) ".
 - correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
 - Explanation must be educational and cite sources where applicable.
-- Direct CA questions (15%) MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
-- Derived Static (25%) and Pure Static (60%) MUST NOT include [Relevance] or Sources.
+- Direct CA questions MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
+- Derived Static and Pure Static MUST NOT include [Relevance] or Sources.
 
 questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
 - "standard": ONLY for direct one-line factual stems with NO numbered sub-items.
@@ -2194,11 +2244,19 @@ questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
 A question with the WRONG questionType will be rejected and regenerated. Label correctly.
 
 CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
-THREE-TIER DISTRIBUTION BASED ON UPSC 2025 PATTERN ANALYSIS
+THREE-TIER DISTRIBUTION CALIBRATED PER SUBJECT FROM PYQ ANALYSIS (2013-2025)
 
-Out of ${totalCount} questions, distribute into THREE CATEGORIES:
+${(() => {
+  const { directCA, derivedStatic } = getSubjectCARatio(subject);
+  const dcPct = Math.round(directCA * 100);
+  const dsPct = Math.round(derivedStatic * 100);
+  const psPct = 100 - dcPct - dsPct;
+  const dcCount = Math.round(totalCount * directCA);
+  const dsCount = Math.round(totalCount * derivedStatic);
+  const psCount = totalCount - dcCount - dsCount;
+  return `Out of ${totalCount} questions, distribute into THREE CATEGORIES:
 
-CATEGORY 1: DIRECT CA (15% = ${Math.round(totalCount * 0.15)} questions)
+CATEGORY 1: DIRECT CA (${dcPct}% = ${dcCount} questions)
   - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
   - MUST include [Relevance: ...] in explanation
   - MUST include "Sources: <URL>" with verified links from 2025+
@@ -2206,7 +2264,7 @@ CATEGORY 1: DIRECT CA (15% = ${Math.round(totalCount * 0.15)} questions)
   - Example: "With reference to the Union Budget 2025-26's focus on green energy, consider the
     following statements about Green Hydrogen..."
 
-CATEGORY 2: DERIVED STATIC (25% = ${Math.round(totalCount * 0.25)} questions)
+CATEGORY 2: DERIVED STATIC (${dsPct}% = ${dsCount} questions)
   - Topic selected because it's trending in news (last 12 months)
   - Question framed purely from textbook - NO mention of recent events in question text
   - NO [Relevance] tag, NO Sources needed in explanation
@@ -2220,7 +2278,7 @@ CATEGORY 2: DERIVED STATIC (25% = ${Math.round(totalCount * 0.25)} questions)
     1. The Governor can withhold assent to a bill..."
     (Selected because Governor-state conflicts were in news, but question is pure constitutional theory)
 
-CATEGORY 3: PURE STATIC (60% = ${Math.round(totalCount * 0.6)} questions)
+CATEGORY 3: PURE STATIC (${psPct}% = ${psCount} questions)
   - Traditional UPSC syllabus topics regardless of news cycle
   - NO current affairs influence in topic selection
   - Core subjects: Geography (rivers, climate), History (dynasties, movements, culture)
@@ -2235,20 +2293,8 @@ KEY DISTINCTION (CRITICAL TO UNDERSTAND):
 - Derived Static: Recent event influenced topic selection but is INVISIBLE in question
 - Pure Static: No current affairs influence at all
 
-CRITICAL OVERRIDE FOR ALL SUBJECTS:
-The 15% / 25% / 60% distribution is MANDATORY for ALL subjects (including Environment, Science, Economy, etc.).
-- Even for dynamic subjects like Environment or Science, you MUST ensure 60% of questions are PURE STATIC (textbook/theory based).
-- Do NOT increase the CA or Derived portions beyond the specified limits.
-- 60% PURE STATIC IS COMPULSORY.
-
-Maintain EXACT overall ratios: 15% / 25% / 60%. This matches UPSC 2025 actual pattern.
+Maintain EXACT ratios: ${dcPct}% / ${dsPct}% / ${psPct}% for ${subject}. These ratios are calibrated from 13 years of PYQ data.`;
+})()}
 
 NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS: `;
 }
-// SUBJECT-WISE GUIDANCE:
-// - History/Culture: 0% Direct CA, 0% Derived Static, 100% Pure Static
-// - Geography: 0% Direct CA, ~10% Derived Static (resources/conflicts), 90% Pure Static
-// - Polity: ~20% Direct CA, ~35% Derived Static, ~45% Pure Static
-// - Economy: ~20% Direct CA, ~30% Derived Static, ~50% Pure Static
-// - Environment: ~20% Direct CA, ~40% Derived Static, ~40% Pure Static
-// - Science: ~15% Direct CA, ~35% Derived Static, ~50% Pure Static

@@ -216,8 +216,8 @@ export default function NewQuizPage() {
               </span>
             </div>
             <p className="text-xs text-gray-500">
-              Uses web search to integrate recent events as question triggers. 20% of questions
-              will be AI predictions for UPSC 2026 based on emerging topics.
+              Current affairs ratio calibrated per subject from PYQ analysis
+              (e.g. ~42% for Environment, ~6% for History). Uses web search for recent events.
             </p>
             <Input
               id="currentAffairsTheme"
