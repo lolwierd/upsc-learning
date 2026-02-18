@@ -1,14 +1,13 @@
 # UPSC MCQ Generator
 
-Generate and practice UPSC-style MCQ quizzes with AI.
+Generate and practice UPSC-style MCQ quizzes with AI, including year-wise UPSC PYQ papers.
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
-- **Backend**: Cloudflare Workers (Hono framework)
-- **Database**: Cloudflare D1
-- **Cache**: Cloudflare KV
-- **AI**: Cloudflare Workers AI (Llama 3.1 70B) + optional BYOK OpenAI/Gemini
+- **Backend**: Hono API (Node runtime for local/prod Docker; Worker-style dev config also present)
+- **Database**: SQLite (local Node/Docker) + D1-compatible API patterns
+- **AI**: Vertex Gemini (service account based)
 
 ## Project Structure
 
@@ -17,6 +16,7 @@ Generate and practice UPSC-style MCQ quizzes with AI.
 ├── apps/
 │   ├── web/                 # Next.js frontend
 │   └── worker/              # Cloudflare Worker API
+│       └── pyqs/GS/         # PYQ assets (parsed JSON + official PDFs)
 ├── packages/
 │   ├── shared/              # Shared types, Zod schemas, constants
 │   └── db/                  # D1 migrations
@@ -50,31 +50,46 @@ pnpm dev
 
 # Or start individually
 pnpm --filter @mcqs/web dev
-pnpm --filter @mcqs/worker dev
+pnpm --filter @mcqs/worker dev:node
 ```
+
+### Local Testing over Tailscale / LAN
+
+```bash
+# Backend in Docker (binds host port 3001)
+docker compose -f apps/worker/docker-compose-dev.yml up -d --build
+
+# Frontend on all interfaces
+NEXT_PUBLIC_API_URL=http://localhost:3001 pnpm --filter @mcqs/web dev -- --hostname 0.0.0.0
+```
+
+Access:
+- Web: `http://<your-tailscale-ip>:3000`
+- API health: `http://<your-tailscale-ip>:3001/`
 
 ### Database Setup
 
-1. Create a D1 database:
+Run migrations:
 ```bash
-cd apps/worker
-wrangler d1 create upsc-mcq-db
+pnpm db:migrate
 ```
 
-2. Update `wrangler.toml` with the database ID
+For Node/Docker runtime, migrations are also applied automatically on backend startup.
 
-3. Run migrations:
-```bash
-pnpm --filter @mcqs/db migrate:local   # Local
-pnpm --filter @mcqs/db migrate:remote  # Production
-```
+### PYQ Support
+
+- PYQ years: `2013–2025` GS1 Set A
+- New UI entry: `/pyqs`
+- Paper list API: `GET /api/pyq/papers`
+- Official PDF API: `GET /api/pyq/papers/:quizId/pdf`
+- Dropped questions are highlighted red, locked, explanation shown, and excluded from scoring.
+- PYQ attempts are excluded from overall metrics endpoints.
 
 ### Deployment
 
-**Worker (API):**
+**API (Docker/Node):**
 ```bash
-cd apps/worker
-wrangler deploy
+docker compose -f apps/worker/docker-compose.yml up -d --build
 ```
 
 **Frontend:**
@@ -87,8 +102,8 @@ pnpm build
 ## Features
 
 - **Quiz Generation**: Create UPSC-style MCQs on various subjects
+- **PYQ Practice**: Attempt real UPSC GS1 papers year-wise with original PDF access
 - **Multiple Question Styles**: Factual, Conceptual, Statement, Match, Assertion-Reason
-- **Difficulty Levels**: Easy, Medium, Hard
 - **Quiz Taking**: All questions on one page, mark for review
 - **Results**: Detailed explanations, filter by wrong/marked
 - **History**: Track all past quizzes and scores
@@ -120,6 +135,8 @@ pnpm build
 | GET | /api/history/stats | Statistics |
 | GET | /api/settings | Get settings |
 | PATCH | /api/settings | Update settings |
+| GET | /api/pyq/papers | List PYQ papers |
+| GET | /api/pyq/papers/:quizId/pdf | Stream PYQ PDF |
 
 ## License
 

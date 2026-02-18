@@ -4,6 +4,7 @@
 
 - `apps/web/`: Next.js (App Router) frontend with Tailwind (`apps/web/src/`).
 - `apps/worker/`: Hono API backend that can run as a Node server (Docker/VM) via `src/server.ts` (primary) and also has Wrangler config for Worker-style dev (`apps/worker/src/`).
+- `apps/worker/pyqs/GS/`: committed PYQ assets (parsed JSON + official PDFs) used for PYQ practice import/sync.
 - `packages/shared/`: shared TypeScript types/Zod schemas/constants (`packages/shared/src/`).
 - `packages/db/`: SQL migrations used by the backend (`packages/db/migrations/`).
 - Monorepo tooling: `pnpm-workspace.yaml` (workspaces) + `turbo.json` (task runner).
@@ -19,8 +20,16 @@
 - App-specific examples:
   - `pnpm --filter @mcqs/web dev` (Next.js on `:3000`)
   - `pnpm --filter @mcqs/worker dev:node` (Node API dev server on `:3001`)
+  - `pnpm --filter @mcqs/web dev -- --hostname 0.0.0.0` (web exposed on all interfaces for LAN/Tailscale)
   - `docker compose -f apps/worker/docker-compose-dev.yml up --build` (backend in Docker for local dev)
   - `docker compose -f apps/worker/docker-compose.yml up --build` (prod-like Docker stack, includes optional `cloudflared`)
+
+## PYQ Data Flow
+
+- PYQ papers are imported from `apps/worker/pyqs/GS/parsed/*.json` into `quizzes/questions` on backend startup via idempotent sync.
+- Quiz rows imported from PYQ are marked with `origin='pyq'` and carry `source_meta` (year/paper/set/pdf info).
+- Original PDFs are served from backend endpoint `/api/pyq/papers/:quizId/pdf`.
+- Dropped questions are stored via metadata (`isDropped`) and are excluded from scoring/attempt totals.
 
 ## Coding Style & Naming Conventions
 

@@ -8,6 +8,7 @@ import { settingsRoutes } from "./routes/settings.js";
 import { metricsRoutes } from "./routes/metrics.js";
 import { quizSetsRoutes } from "./routes/quiz-sets.js";
 import { runAttemptRoutes, runAttemptByIdRoutes } from "./routes/run-attempt.js";
+import { pyqRoutes } from "./routes/pyq.js";
 import type { Env } from "./types.js";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -57,6 +58,7 @@ app.route("/api/metrics", metricsRoutes);
 app.route("/api/quiz-sets", quizSetsRoutes);
 app.route("/api/quiz-sets", runAttemptRoutes);
 app.route("/api/run-attempt", runAttemptByIdRoutes);
+app.route("/api/pyq", pyqRoutes);
 
 // 404 handler
 app.notFound((c) => {

@@ -19,6 +19,7 @@ services:
       - PORT=3001
       - DATABASE_PATH=/app/data/upsc-mcq.db
       - MIGRATIONS_DIR=/app/packages/db/migrations
+      - PYQ_ROOT=/app/pyqs/GS
       
       # CORS - update for your frontend domain
       - CORS_ORIGIN=https://upsc.lolwierd.com,http://localhost:3000

@@ -14,6 +14,7 @@ import app from './index.js';
 import type { Env } from './types.js';
 import { initializeScheduler, stopScheduler } from './services/scheduler.js';
 import { runStaleRecovery } from './services/stale-recovery.js';
+import { syncPyqData } from "./services/pyq-sync.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +39,7 @@ const env: Env = {
     LLM_RETRY_DELAY_MS: process.env.LLM_RETRY_DELAY_MS,
     REGENERATION_MAX_ATTEMPTS: process.env.REGENERATION_MAX_ATTEMPTS,
     REGENERATION_EMERGENCY_ATTEMPTS: process.env.REGENERATION_EMERGENCY_ATTEMPTS,
+    PYQ_ROOT: process.env.PYQ_ROOT,
     NOTIFICATION_WEB_BASE_URL: process.env.NOTIFICATION_WEB_BASE_URL,
     NOTIFICATION_API_BASE_URL: process.env.NOTIFICATION_API_BASE_URL,
     NOTIFICATION_DISCORD_USERNAME: process.env.NOTIFICATION_DISCORD_USERNAME,
@@ -82,6 +84,12 @@ async function main() {
     } catch (error) {
         console.error('❌ Failed to initialize database:', error);
         process.exit(1);
+    }
+
+    try {
+        await syncPyqData(env);
+    } catch (error) {
+        console.error("⚠️ Failed to sync PYQ data (non-fatal):", error);
     }
 
     // Initialize scheduler for quiz sets

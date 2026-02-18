@@ -199,7 +199,9 @@ history.get("/stats", async (c) => {
        SUM(a.score) as total_correct,
        SUM(a.total_questions) as total_questions
      FROM attempts a
-     WHERE a.status = 'completed'`
+     JOIN quizzes q ON a.quiz_id = q.id
+     WHERE a.status = 'completed'
+       AND COALESCE(q.origin, 'generated') != 'pyq'`
   )
     .bind()
     .first<OverallStatsRow>();
@@ -214,6 +216,7 @@ history.get("/stats", async (c) => {
      FROM attempts a
      JOIN quizzes q ON a.quiz_id = q.id
      WHERE a.status = 'completed'
+       AND COALESCE(q.origin, 'generated') != 'pyq'
      GROUP BY q.subject
      ORDER BY attempts DESC`
   )
@@ -253,7 +256,9 @@ history.get("/activity", async (c) => {
        SUM(a.score) as correct,
        SUM(a.total_questions) as total
      FROM attempts a
+     JOIN quizzes q ON a.quiz_id = q.id
      WHERE a.status = 'completed'
+       AND COALESCE(q.origin, 'generated') != 'pyq'
        AND a.submitted_at >= strftime('%s', 'now', '-' || ? || ' days')
      GROUP BY date(a.submitted_at, 'unixepoch')
      ORDER BY date ASC`
@@ -293,6 +298,7 @@ history.get("/stats/timeline", async (c) => {
     FROM attempts a
     JOIN quizzes q ON a.quiz_id = q.id
     WHERE a.status = 'completed'
+      AND COALESCE(q.origin, 'generated') != 'pyq'
     ORDER BY a.submitted_at DESC
     LIMIT ?`
   )

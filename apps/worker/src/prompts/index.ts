@@ -2045,8 +2045,6 @@ export function getPrompt(params: PromptParams): string {
     : "";
 
   // Build style distribution instructions — map "factual" to "standard" for model clarity
-  const styleDisplayName = (style: QuestionStyle): string =>
-    style === "factual" ? "standard (direct factual)" : style;
   const styleInstructions = styles
     .map(({ style, count }) => {
       return `

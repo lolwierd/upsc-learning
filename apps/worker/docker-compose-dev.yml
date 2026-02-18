@@ -15,6 +15,7 @@ services:
       - PORT=3001
       - DATABASE_PATH=/app/data/upsc-mcq.db
       - MIGRATIONS_DIR=/app/packages/db/migrations
+      - PYQ_ROOT=/app/pyqs/GS
       - CORS_ORIGIN=http://localhost:3000,http://localhost:3001
 
       # Google Cloud Configuration - REQUIRED

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
+import { getPyqPdfUrl, getQuiz, getSettings, getQuizSet, getQuizSetRun, startAttempt, saveAnswer, submitAttempt } from "@/lib/api";
 import { SUBJECT_LABELS, QUESTION_STYLE_LABELS } from "@mcqs/shared";
 import type { QuizSetRunWithItems, QuizSetWithSchedule, QuestionMetadata, QuestionCategory } from "@mcqs/shared";
 import { QuizStats } from "@/components/quiz/QuizStats";
@@ -25,16 +25,30 @@ interface LearnModeQuestion {
   correctOption?: number;
 }
 
+interface PyqSourceMeta {
+  year?: string;
+  paper?: string;
+  set?: string;
+  pdfFile?: string;
+  note?: string;
+  officialSource?: string;
+  droppedCount?: number;
+  attemptableCount?: number;
+}
+
 interface QuizData {
   id: string;
   subject: string;
   theme?: string;
-  style: string;
+  style?: string;
+  styles: string[];
   questionCount: number;
   questions: LearnModeQuestion[];
   learnMode?: boolean;
   status: "generating" | "completed" | "failed";
   error?: string;
+  origin?: "generated" | "pyq";
+  sourceMeta?: PyqSourceMeta;
 }
 
 interface Answer {
@@ -225,6 +239,9 @@ export default function QuizPage() {
   // Handle answer selection
   const handleAnswer = useCallback(
     async (questionId: string, option: number) => {
+      const isDroppedQuestion = quiz?.questions.find((q) => q.id === questionId)?.metadata?.isDropped;
+      if (isDroppedQuestion) return;
+
       // In learn mode, just reveal the answer without saving to server
       if (quiz?.learnMode) {
         const newAnswer: Answer = {
@@ -266,6 +283,9 @@ export default function QuizPage() {
   // Handle mark for review
   const handleMarkForReview = useCallback(
     async (questionId: string) => {
+      const isDroppedQuestion = quiz?.questions.find((q) => q.id === questionId)?.metadata?.isDropped;
+      if (isDroppedQuestion) return;
+
       if (!attemptId) return;
 
       const current = answers.get(questionId);
@@ -287,7 +307,7 @@ export default function QuizPage() {
         console.error("Failed to save review status:", err);
       }
     },
-    [attemptId, answers]
+    [attemptId, answers, quiz?.questions]
   );
 
   // Handle submit
@@ -295,7 +315,7 @@ export default function QuizPage() {
     if (!attemptId) return;
 
     const unanswered = Array.from(answers.values()).filter(
-      (a) => a.selectedOption === null
+      (a) => !droppedQuestionIds.has(a.questionId) && a.selectedOption === null
     ).length;
 
     if (unanswered > 0) {
@@ -390,12 +410,23 @@ export default function QuizPage() {
     );
   }
 
+  const droppedQuestionIds = new Set(
+    quiz.questions
+      .filter((question) => question.metadata?.isDropped)
+      .map((question) => question.id),
+  );
+  const attemptableQuestions = quiz.questions.filter(
+    (question) => !droppedQuestionIds.has(question.id),
+  );
+  const attemptableQuestionCount = attemptableQuestions.length;
   const answeredCount = Array.from(answers.values()).filter(
-    (a) => a.selectedOption !== null
+    (a) => !droppedQuestionIds.has(a.questionId) && a.selectedOption !== null,
   ).length;
-  const progressCount = quiz?.learnMode ? studiedQuestions.size : answeredCount;
+  const progressCount = quiz.learnMode
+    ? Array.from(studiedQuestions).filter((id) => !droppedQuestionIds.has(id)).length
+    : answeredCount;
   const markedCount = Array.from(answers.values()).filter(
-    (a) => a.markedForReview
+    (a) => !droppedQuestionIds.has(a.questionId) && a.markedForReview
   ).length;
   const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
@@ -415,9 +446,36 @@ export default function QuizPage() {
   const currentQuizIndex = orderedQuizIds.findIndex((id) => id === quizId);
   const nextQuizId =
     currentQuizIndex >= 0 ? orderedQuizIds[currentQuizIndex + 1] : null;
+  const isPyq = quiz.origin === "pyq";
+  const pyqPdfUrl = isPyq ? getPyqPdfUrl(quiz.id) : null;
+  const displayStyleLabel = (() => {
+    const style = quiz.style || quiz.styles?.[0];
+    if (!style) return "Mixed";
+    return QUESTION_STYLE_LABELS[style as keyof typeof QUESTION_STYLE_LABELS] || "Mixed";
+  })();
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
+      {isPyq && (
+        <Card className="mb-4 border border-blue-200 bg-blue-50/60">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <p className="text-sm font-semibold text-blue-900">
+                UPSC {quiz.sourceMeta?.year || ""} {quiz.sourceMeta?.paper || "GS1"} Set {quiz.sourceMeta?.set || "A"}
+              </p>
+              {quiz.sourceMeta?.note && (
+                <p className="text-xs text-blue-800 mt-1 max-w-3xl">{quiz.sourceMeta.note}</p>
+              )}
+            </div>
+            {pyqPdfUrl && (
+              <a href={pyqPdfUrl} target="_blank" rel="noreferrer">
+                <Button variant="secondary">Open Official PDF</Button>
+              </a>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* Header */}
       <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -441,7 +499,7 @@ export default function QuizPage() {
             )}
           </div>
           <p className="text-sm text-gray-500">
-            {QUESTION_STYLE_LABELS[quiz.style as keyof typeof QUESTION_STYLE_LABELS]}
+            {displayStyleLabel}
           </p>
         </div>
         <div className="flex items-center gap-4 text-sm">
@@ -451,7 +509,7 @@ export default function QuizPage() {
             </span>
           )}
           <span className="text-gray-600">
-            {progressCount}/{quiz.questionCount} {quiz.learnMode ? "studied" : "answered"}
+            {progressCount}/{attemptableQuestionCount} {quiz.learnMode ? "studied" : "answered"}
           </span>
           {!quiz.learnMode && markedCount > 0 && (
             <span className="text-amber-600">{markedCount} marked</span>
@@ -473,6 +531,7 @@ export default function QuizPage() {
                 const isRevealed = revealedQuestions.has(q.id);
                 const isCorrect = quiz.learnMode && isRevealed && answer?.selectedOption === q.correctOption;
                 const isIncorrect = quiz.learnMode && isRevealed && answer?.selectedOption !== q.correctOption;
+                const isDropped = Boolean(q.metadata?.isDropped);
 
                 return (
                   <button
@@ -486,7 +545,9 @@ export default function QuizPage() {
                     className={cn(
                       "w-8 h-8 text-sm font-medium rounded-lg transition-colors",
                       isCurrent && "ring-2 ring-primary-500",
-                      quiz.learnMode
+                      isDropped
+                        ? "border border-red-400 bg-red-100 text-red-700"
+                        : quiz.learnMode
                         ? isCorrect
                           ? "bg-green-100 text-green-700"
                           : isIncorrect
@@ -515,6 +576,12 @@ export default function QuizPage() {
                     <span className="w-3 h-3 bg-red-100 rounded" />
                     <span>Incorrect</span>
                   </div>
+                  {isPyq && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-red-200 rounded border border-red-400" />
+                      <span>Dropped</span>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -526,6 +593,12 @@ export default function QuizPage() {
                     <span className="w-3 h-3 bg-amber-100 rounded" />
                     <span>Marked for Review</span>
                   </div>
+                  {isPyq && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-red-200 rounded border border-red-400" />
+                      <span>Dropped</span>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -545,6 +618,7 @@ export default function QuizPage() {
             const isRevealed = revealedQuestions.has(question.id);
             const selectedOption = answer?.selectedOption;
             const isCorrectAnswer = selectedOption === question.correctOption;
+            const isDropped = Boolean(question.metadata?.isDropped);
 
             return (
               <Card
@@ -553,7 +627,8 @@ export default function QuizPage() {
                 data-question-id={question.id}
                 className={cn(
                   "scroll-mt-40",
-                  !quiz.learnMode && isMarked && "ring-2 ring-amber-400"
+                  !quiz.learnMode && isMarked && "ring-2 ring-amber-400",
+                  isDropped && "border-red-400 bg-red-50/40",
                 )}
               >
                 {/* Category and Subject Badges (Learn Mode Only) */}
@@ -571,7 +646,14 @@ export default function QuizPage() {
                     <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center font-medium text-sm">
                       {i + 1}
                     </span>
-                    <Markdown className="text-gray-900" text={question.questionText} />
+                    <div>
+                      {isDropped && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300 mb-2">
+                          Dropped
+                        </span>
+                      )}
+                      <Markdown className="text-gray-900" text={question.questionText} />
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -586,7 +668,7 @@ export default function QuizPage() {
                     >
                       {copiedQuestionId === question.id ? "Copied" : "Copy"}
                     </button>
-                    {!quiz.learnMode && (
+                    {!quiz.learnMode && !isDropped && (
                       <button
                         onClick={() => handleMarkForReview(question.id)}
                         className={cn(
@@ -627,7 +709,7 @@ export default function QuizPage() {
                       <button
                         key={optIndex}
                         onClick={() => {
-                          if (isRevealed) return;
+                          if (isRevealed || isDropped) return;
 
                           // Handle learn mode directly here with fresh state
                           if (quiz.learnMode) {
@@ -641,10 +723,12 @@ export default function QuizPage() {
                             handleAnswer(question.id, optIndex);
                           }
                         }}
-                        disabled={quiz.learnMode && isRevealed}
+                        disabled={isDropped || (quiz.learnMode && isRevealed)}
                         className={cn(
                           "w-full text-left p-3 rounded-lg border transition-colors flex items-start gap-3",
-                          quiz.learnMode && isRevealed
+                          isDropped
+                            ? "border-red-200 bg-red-100/70 text-red-700 cursor-not-allowed"
+                            : quiz.learnMode && isRevealed
                             ? showCorrect
                               ? "border-green-500 bg-green-50"
                               : showIncorrect
@@ -660,7 +744,9 @@ export default function QuizPage() {
                         <span
                           className={cn(
                             "flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-medium",
-                            quiz.learnMode && isRevealed
+                            isDropped
+                              ? "border-red-300 text-red-600"
+                              : quiz.learnMode && isRevealed
                               ? showCorrect
                                 ? "border-green-500 bg-green-500 text-white"
                                 : showIncorrect
@@ -678,7 +764,9 @@ export default function QuizPage() {
                         <span
                           className={cn(
                             "text-sm",
-                            quiz.learnMode && isRevealed
+                            isDropped
+                              ? "text-red-700"
+                              : quiz.learnMode && isRevealed
                               ? showCorrect
                                 ? "text-green-700"
                                 : showIncorrect
@@ -696,8 +784,17 @@ export default function QuizPage() {
                   })}
                 </div>
 
+                {isDropped && (
+                  <div className="mt-4 ml-11 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm font-semibold text-red-800">Dropped by UPSC</p>
+                    {question.explanation && (
+                      <Markdown className="text-sm text-red-700 mt-1" text={question.explanation} />
+                    )}
+                  </div>
+                )}
+
                 {/* Learn Mode: Answer Section */}
-                {quiz.learnMode && showAnswers && (
+                {quiz.learnMode && showAnswers && !isDropped && (
                   <div
                     className={cn(
                       "mt-4 ml-11 space-y-3 transition-all duration-200",
@@ -781,7 +878,7 @@ export default function QuizPage() {
           {/* Submit Button / Learn Mode Actions */}
           <Card className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {progressCount}/{quiz.questionCount} questions {quiz.learnMode ? "studied" : "answered"}
+              {progressCount}/{attemptableQuestionCount} questions {quiz.learnMode ? "studied" : "answered"}
             </p>
             {quiz.learnMode ? (
               setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 ? (
@@ -827,7 +924,7 @@ export default function QuizPage() {
           </Button>
           <div className="text-center">
             <span className="text-sm text-gray-600">
-              {currentQuestion + 1} / {quiz.questionCount}
+              {currentQuestion + 1} / {quiz.questions.length}
             </span>
             {quiz.learnMode && (
               <span className="block text-xs text-blue-600">
@@ -840,10 +937,10 @@ export default function QuizPage() {
             size="sm"
             onClick={() =>
               setCurrentQuestion(
-                Math.min(quiz.questionCount - 1, currentQuestion + 1)
+                Math.min(quiz.questions.length - 1, currentQuestion + 1)
               )
             }
-            disabled={currentQuestion === quiz.questionCount - 1}
+            disabled={currentQuestion === quiz.questions.length - 1}
           >
             Next
           </Button>

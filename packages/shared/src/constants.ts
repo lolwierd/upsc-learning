@@ -137,4 +137,7 @@ export const API_ENDPOINTS = {
   RUN_ATTEMPT_GET: (id: string) => `/api/run-attempt/${id}`,
   RUN_ATTEMPT_ANSWER: (id: string) => `/api/run-attempt/${id}/answer`,
   RUN_ATTEMPT_SUBMIT: (id: string) => `/api/run-attempt/${id}/submit`,
+  // PYQ
+  PYQ_PAPERS: "/api/pyq/papers",
+  PYQ_PAPER_PDF: (quizId: string) => `/api/pyq/papers/${quizId}/pdf`,
 } as const;

@@ -88,6 +88,11 @@ export interface QuestionMetadata {
   hasSources: boolean;
   theme?: string;
   derivedFromTopic?: string;
+  isDropped?: boolean;
+  source?: string;
+  year?: string;
+  paper?: string;
+  questionNumber?: number;
 }
 
 // ============================================
@@ -104,6 +109,17 @@ export interface Quiz {
   status: "generating" | "completed" | "failed";
   error?: string;
   createdAt: number;
+  origin?: "generated" | "pyq";
+  sourceMeta?: {
+    year?: string;
+    paper?: string;
+    set?: string;
+    pdfFile?: string;
+    note?: string;
+    officialSource?: string;
+    droppedCount?: number;
+    attemptableCount?: number;
+  };
 }
 
 export interface QuizWithQuestions extends Quiz {
@@ -359,6 +375,21 @@ export interface QuizSetListItem {
     lastRunAt?: number;
     lastRunStatus?: QuizSetRunStatus;
   };
+}
+
+export interface PyqPaperListItem {
+  quizId: string;
+  title: string;
+  year: string;
+  paper: string;
+  set: string;
+  questionCount: number;
+  droppedCount: number;
+  attemptableCount: number;
+  note?: string;
+  officialSource?: string;
+  hasPdf: boolean;
+  createdAt: number;
 }
 
 // ============================================

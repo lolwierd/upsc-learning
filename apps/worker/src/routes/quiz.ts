@@ -24,6 +24,8 @@ type QuizRow = {
   status: string | null;
   error: string | null;
   created_at: number;
+  origin: string | null;
+  source_meta: string | null;
 };
 
 type QuestionRow = {
@@ -253,6 +255,16 @@ function parseStyles(styleData: unknown): string[] {
   return ["factual"]; // Default fallback
 }
 
+function parseSourceMeta(sourceMeta: string | null): Record<string, unknown> | undefined {
+  if (!sourceMeta) return undefined;
+
+  try {
+    return JSON.parse(sourceMeta) as Record<string, unknown>;
+  } catch {
+    return undefined;
+  }
+}
+
 // Get quiz by ID
 quiz.get("/:id", async (c) => {
   const quizId = c.req.param("id");
@@ -289,29 +301,45 @@ quiz.get("/:id", async (c) => {
 
   const includeAnswers = withAnswers && learnModeEnabled;
 
-  const questions = questionsResult.results.map((q) => ({
-    id: q.id,
-    sequenceNumber: q.sequence_number,
-    questionText: q.question_text,
-    questionType: q.question_type,
-    options: JSON.parse(q.options),
-    metadata: q.metadata ? JSON.parse(q.metadata) : null,
-    // Include correct answer and explanation only in learn mode
-    ...(includeAnswers && {
-      correctOption: q.correct_option,
-      explanation: q.explanation,
-    }),
-  }));
+  const questions = questionsResult.results.map((q) => {
+    const parsedMetadata = q.metadata ? (JSON.parse(q.metadata) as Record<string, unknown>) : null;
+    const isDropped = parsedMetadata?.isDropped === true;
+
+    return {
+      id: q.id,
+      sequenceNumber: q.sequence_number,
+      questionText: q.question_text,
+      questionType: q.question_type,
+      options: JSON.parse(q.options),
+      metadata: parsedMetadata,
+      // Include correct answer and explanation in learn mode.
+      ...(includeAnswers && {
+        correctOption: q.correct_option,
+        explanation: q.explanation,
+      }),
+      // Always include explanation for dropped questions so users can see why it was dropped.
+      ...(!includeAnswers && isDropped && {
+        explanation: q.explanation,
+      }),
+    };
+  });
+
+  const styles = parseStyles(quizResult.style);
+  const sourceMeta = parseSourceMeta(quizResult.source_meta);
+  const origin = quizResult.origin || "generated";
 
   return c.json({
     id: quizResult.id,
     subject: quizResult.subject,
     theme: quizResult.theme,
-    styles: parseStyles(quizResult.style),
+    style: styles[0] || "factual",
+    styles,
     questionCount: quizResult.question_count,
     status: quizResult.status || 'completed', // Backfill default for old rows
     error: quizResult.error,
     createdAt: quizResult.created_at,
+    origin,
+    sourceMeta,
     questions,
     ...(includeAnswers && { learnMode: true }),
   });

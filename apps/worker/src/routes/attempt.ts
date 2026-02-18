@@ -7,7 +7,7 @@ import type { Env } from "../types.js";
 const attempt = new Hono<{ Bindings: Env }>();
 
 type QuizRow = {
-  question_count: number;
+  id: string;
 };
 
 type AttemptRow = {
@@ -29,6 +29,10 @@ type AttemptWithQuizRow = AttemptRow & {
 
 type QuestionIdRow = {
   id: string;
+};
+
+type QuestionCountRow = {
+  total: number;
 };
 
 type AnswerRow = {
@@ -122,6 +126,23 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     return c.json({ error: "Quiz not found" }, 404);
   }
 
+  const questionCountResult = await c.env.DB.prepare(
+    `SELECT COUNT(*) as total
+     FROM questions
+     WHERE quiz_id = ?
+       AND COALESCE(
+         CASE
+           WHEN metadata IS NOT NULL AND json_valid(metadata) THEN json_extract(metadata, '$.isDropped')
+           ELSE 0
+         END,
+         0
+       ) != 1`
+  )
+    .bind(quizId)
+    .first<QuestionCountRow>();
+
+  const attemptableQuestionCount = questionCountResult?.total || 0;
+
   // Check for existing in-progress attempt
   const existingAttempt = await c.env.DB.prepare(
     `SELECT * FROM attempts WHERE quiz_id = ? AND status = 'in_progress'`
@@ -144,12 +165,21 @@ attempt.post("/start", zValidator("json", startAttemptSchema), async (c) => {
     `INSERT INTO attempts (id, quiz_id, user_id, started_at, total_questions, status)
      VALUES (?, ?, ?, ?, ?, 'in_progress')`
   )
-    .bind(attemptId, quizId, "public", now, quiz.question_count)
+    .bind(attemptId, quizId, "public", now, attemptableQuestionCount)
     .run();
 
-  // Create empty answer records for each question
+  // Create empty answer records for each attemptable (non-dropped) question
   const questions = await c.env.DB.prepare(
-    `SELECT id FROM questions WHERE quiz_id = ?`
+    `SELECT id
+     FROM questions
+     WHERE quiz_id = ?
+       AND COALESCE(
+         CASE
+           WHEN metadata IS NOT NULL AND json_valid(metadata) THEN json_extract(metadata, '$.isDropped')
+           ELSE 0
+         END,
+         0
+       ) != 1`
   )
     .bind(quizId)
     .all<QuestionIdRow>();
@@ -186,7 +216,7 @@ attempt.patch("/:id/answer", zValidator("json", saveAnswerSchema), async (c) => 
   const now = Math.floor(Date.now() / 1000);
 
   // Update answer
-  await c.env.DB.prepare(
+  const updateResult = await c.env.DB.prepare(
     `UPDATE attempt_answers
      SET selected_option = ?, marked_for_review = ?, answered_at = ?
      WHERE attempt_id = ? AND question_id = ?`
@@ -199,6 +229,11 @@ attempt.patch("/:id/answer", zValidator("json", saveAnswerSchema), async (c) => 
       questionId
     )
     .run();
+
+  const updatedRows = updateResult.meta?.changes || 0;
+  if (updatedRows === 0) {
+    return c.json({ error: "Question is not attemptable for this quiz" }, 400);
+  }
 
   return c.json({ success: true });
 });
@@ -226,7 +261,14 @@ attempt.post("/:id/submit", async (c) => {
     `SELECT aa.*, q.correct_option
      FROM attempt_answers aa
      JOIN questions q ON aa.question_id = q.id
-     WHERE aa.attempt_id = ?`
+     WHERE aa.attempt_id = ?
+       AND COALESCE(
+         CASE
+           WHEN q.metadata IS NOT NULL AND json_valid(q.metadata) THEN json_extract(q.metadata, '$.isDropped')
+           ELSE 0
+         END,
+         0
+       ) != 1`
   )
     .bind(attemptId)
     .all<Pick<AnswerRow, "id" | "selected_option" | "correct_option">>();
@@ -247,17 +289,19 @@ attempt.post("/:id/submit", async (c) => {
   }
 
   // Update attempt status
+  const gradedQuestionCount = answers.results.length;
+
   await c.env.DB.prepare(
     `UPDATE attempts
-     SET status = 'completed', submitted_at = ?, score = ?, time_taken_seconds = ?
+     SET status = 'completed', submitted_at = ?, score = ?, total_questions = ?, time_taken_seconds = ?
      WHERE id = ?`
   )
-    .bind(now, score, timeTaken, attemptId)
+    .bind(now, score, gradedQuestionCount, timeTaken, attemptId)
     .run();
 
   return c.json({
     score,
-    totalQuestions: attemptRecord.total_questions,
+    totalQuestions: gradedQuestionCount,
     timeTakenSeconds: timeTaken,
   });
 });

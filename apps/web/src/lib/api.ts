@@ -25,6 +25,7 @@ import type {
   CombinedQuestion,
   RunAttemptWithAnswers,
   RunAttemptResult,
+  PyqPaperListItem,
 } from "@mcqs/shared";
 import { API_ENDPOINTS } from "@mcqs/shared";
 
@@ -61,7 +62,25 @@ export async function generateQuiz(
   });
 }
 
-export async function getQuiz(id: string, options?: { withAnswers?: boolean }): Promise<QuizWithQuestions & { learnMode?: boolean }> {
+export async function getQuiz(
+  id: string,
+  options?: { withAnswers?: boolean },
+): Promise<
+  QuizWithQuestions & {
+    learnMode?: boolean;
+    origin?: "generated" | "pyq";
+    sourceMeta?: {
+      year?: string;
+      paper?: string;
+      set?: string;
+      pdfFile?: string;
+      note?: string;
+      officialSource?: string;
+      droppedCount?: number;
+      attemptableCount?: number;
+    };
+  }
+> {
   const query = options?.withAnswers ? "?withAnswers=true" : "";
   return fetchAPI(`${API_ENDPOINTS.QUIZ_GET(id)}${query}`);
 }
@@ -259,6 +278,15 @@ export async function getStatsTimeline(
 ): Promise<{ timeline: TimelineDay[] }> {
   const query = limit ? `?limit=${limit}` : "";
   return fetchAPI(`${API_ENDPOINTS.STATS}/timeline${query}`);
+}
+
+// PYQ APIs
+export async function getPyqPapers(): Promise<{ papers: PyqPaperListItem[] }> {
+  return fetchAPI(API_ENDPOINTS.PYQ_PAPERS);
+}
+
+export function getPyqPdfUrl(quizId: string): string {
+  return `${API_BASE_URL}${API_ENDPOINTS.PYQ_PAPER_PDF(quizId)}`;
 }
 
 // ============================================
