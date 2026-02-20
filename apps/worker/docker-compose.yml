@@ -29,7 +29,7 @@ services:
       - GOOGLE_VERTEX_LOCATION=global
       
       # Model Configuration
-      - GENERATION_MODEL=gemini-3-pro-preview
+      - GENERATION_MODEL=gemini-3.1-pro-preview
       - FACT_CHECK_MODEL=gemini-3-flash-preview
       - ENABLE_FACT_CHECK=1
       - ENABLE_WEB_GROUNDING=0

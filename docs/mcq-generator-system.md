@@ -51,7 +51,7 @@ The MCQ Generator creates high-quality UPSC Prelims-style questions using a mult
 | Stage | Model | Purpose |
 |-------|-------|---------|
 | Generation | `gemini-3-flash-preview` | Fast, cost-effective question generation |
-| Fact-Check | `FACT_CHECK_MODEL` (default: `gemini-3-flash-preview`) | Verification of factual accuracy (configurable; can be set to `gemini-3-pro-preview` if available) |
+| Fact-Check | `FACT_CHECK_MODEL` (default: `gemini-3-flash-preview`) | Verification of factual accuracy (configurable; can be set to `gemini-3.1-pro-preview` if available) |
 
 ---
 

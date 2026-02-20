@@ -31,7 +31,7 @@ const env: Env = {
     ENABLE_FACT_CHECK: process.env.ENABLE_FACT_CHECK || '1',
     LLM_DEBUG: process.env.LLM_DEBUG || '0',
     LOCAL_LLM_DUMP_URL: process.env.LOCAL_LLM_DUMP_URL || (environment === 'development' ? 'http://127.0.0.1:8790/dump' : undefined),
-    GENERATION_MODEL: process.env.GENERATION_MODEL || 'gemini-3-pro-preview',
+    GENERATION_MODEL: process.env.GENERATION_MODEL || 'gemini-3.1-pro-preview',
     FACT_CHECK_MODEL: process.env.FACT_CHECK_MODEL || 'gemini-3-flash-preview',
     ENABLE_WEB_GROUNDING: process.env.ENABLE_WEB_GROUNDING,
     LLM_DUMP: process.env.LLM_DUMP,
