@@ -23,7 +23,7 @@
     "better-sqlite3": "^11.6.0",
     "cron-parser": "^4.9.0",
     "dotenv": "^16.4.5",
-    "hono": "^4.11.9",
+    "hono": "^4.11.10",
     "nanoid": "^5.0.9",
     "node-cron": "^3.0.3",
     "zod": "^3.24.1"
