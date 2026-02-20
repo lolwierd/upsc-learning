@@ -22,7 +22,7 @@ import { VertexAI } from "../apps/worker/node_modules/@google-cloud/vertexai/bui
 const PYQ_DIR = "apps/worker/pyqs/GS/parsed";
 const OUTPUT_FILE = "scripts/ca-validation-results.json";
 const BATCH_SIZE = 25;  // questions per API call
-const MODEL = "gemini-3-pro-preview";
+const MODEL = "gemini-3.1-pro-preview";
 const LOCATION = "global";
 const MAX_CONCURRENT = 2;  // parallel API calls
 const RETRY_DELAY = 5000;  // ms between retries

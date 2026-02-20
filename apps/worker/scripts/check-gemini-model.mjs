@@ -2,7 +2,7 @@ import process from "node:process";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-const model = process.argv[2] || "gemini-3-pro-preview";
+const model = process.argv[2] || "gemini-3.1-pro-preview";
 const apiKey = process.env.GOOGLE_API_KEY;
 
 if (!apiKey) {

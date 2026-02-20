@@ -569,7 +569,7 @@ Generate exactly ${count} questions now.`;
     "gemini-2.0-flash-001": 8192,
     "gemini-2.0-flash-exp": 8192,
     "gemini-2.0-flash-lite": 8192,
-    "gemini-3-pro-preview": 65536,
+    "gemini-3.1-pro-preview": 65536,
     "gemini-3-flash-preview": 65536,
     "gemini-3.0-pro": 65536,
   };

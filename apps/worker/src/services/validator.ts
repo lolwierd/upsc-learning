@@ -552,7 +552,7 @@ MARKED CORRECT: ${String.fromCharCode(65 + question.correctOption)} - ${stripOpt
   try {
     const vertexResult = await generateVertexStructuredContent({
       serviceAccount,
-      model: "gemini-3-pro-preview",
+      model: "gemini-3.1-pro-preview",
       systemPrompt: FACT_CHECK_PROMPT,
       userPrompt: questionDetails,
       maxOutputTokens: 1000,
