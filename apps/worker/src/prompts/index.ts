@@ -343,7 +343,7 @@ function getRandomModePrompt(params: PromptParams): string {
 
   // Apply theme randomization to subject-specific theme data
   // In random mode, each subject gets themes proportional to its share of the quiz
-  const allSubjects = ['polity', 'economy', 'environment', 'geography', 'history', 'science', 'art_culture'] as const;
+  const allSubjects = ['polity', 'economy', 'environment', 'geography', 'history', 'science', 'art_culture', 'international_relations'] as const;
   const perSubjectCount = Math.max(Math.round(totalCount / allSubjects.length), 3);
   const processedThemes = allSubjects.map(s => ({
     subject: s,
@@ -604,7 +604,7 @@ Generate EXACTLY ${totalCount} questions in valid JSON array format:
     "explanation": "Clear explanation mentioning subject area, static concept, and sources if current affairs...",
     "metadata": {
       "category": "direct-ca|derived-static|pure-static",
-      "subject": "polity|economy|environment|geography|history|science|culture",
+      "subject": "polity|economy|environment|geography|history|science|culture|international_relations",
       "derivedFromTopic": "Optional: For derived-static, briefly note the news event that made this topic relevant"
     }
   },
@@ -613,7 +613,7 @@ Generate EXACTLY ${totalCount} questions in valid JSON array format:
 
 METADATA REQUIREMENTS:
 - category: MUST match the question type (direct-ca has [Relevance], derived-static does not)
-- subject: Primary subject being tested (polity, economy, environment, geography, history, science, culture)
+- subject: Primary subject being tested (polity, economy, environment, geography, history, science, culture, international_relations)
 - topicTag: Short topic label (3-8 words) identifying the core concept tested
 - subtopicTag: Optional narrower sub-topic within the topicTag
 - derivedFromTopic: ONLY for derived-static questions - briefly note the news event that triggered this topic selection
