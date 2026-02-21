@@ -20,19 +20,19 @@ services:
       - DATABASE_PATH=/app/data/upsc-mcq.db
       - MIGRATIONS_DIR=/app/packages/db/migrations
       - PYQ_ROOT=/app/pyqs/GS
-      
+
       # CORS - update for your frontend domain
       - CORS_ORIGIN=https://upsc.lolwierd.com,http://localhost:3000
-      
+
       # Google Cloud Configuration - REQUIRED
       - GCP_SERVICE_ACCOUNT=${GCP_SERVICE_ACCOUNT}
       - GOOGLE_VERTEX_LOCATION=global
-      
+
       # Model Configuration
-      - GENERATION_MODEL=gemini-3.1-pro-preview
+      - GENERATION_MODEL={GENERATION_MODEL}
       - FACT_CHECK_MODEL=gemini-3-flash-preview
       - ENABLE_FACT_CHECK=1
-      - ENABLE_WEB_GROUNDING=0
+      - ENABLE_WEB_GROUNDING=1
       - REGENERATION_MAX_ATTEMPTS=${REGENERATION_MAX_ATTEMPTS:-18}
       - REGENERATION_EMERGENCY_ATTEMPTS=${REGENERATION_EMERGENCY_ATTEMPTS:-8}
 
@@ -40,7 +40,7 @@ services:
       - NOTIFICATION_WEB_BASE_URL=${NOTIFICATION_WEB_BASE_URL}
       - NOTIFICATION_API_BASE_URL=${NOTIFICATION_API_BASE_URL}
       - NOTIFICATION_DISCORD_USERNAME=${NOTIFICATION_DISCORD_USERNAME:-UPSC Notifier}
-      
+
       # Debug
       - LLM_DEBUG=0
       - LLM_DUMP=${LLM_DUMP}
