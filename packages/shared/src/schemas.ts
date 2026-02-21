@@ -24,7 +24,8 @@ export const questionSubjectSchema = z.enum([
   'geography', 
   'history', 
   'science', 
-  'culture'
+  'culture',
+  'international_relations'
 ]);
 
 export const groundingSourceSchema = z.object({

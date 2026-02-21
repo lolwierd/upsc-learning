@@ -1,0 +1,2332 @@
+{
+  "2013": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [],
+    "yearSummary": {
+      "dominantThemes": [
+        "None"
+      ],
+      "dominantStyle": "None",
+      "notablePatterns": "The 2013 GS Paper I contained no direct International Relations questions. Topics like Balance of Payments, Capital Account, and Forex Reserves were present but strictly within the domain of domestic macroeconomics. Similarly, international treaties were only mentioned in the context of domestic constitutional provisions (Article 253)."
+    }
+  },
+  "2014": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "2",
+        "snippet": "If a wetland of international importance is brought under the 'Montreux Record', what does it imply?",
+        "primaryTheme": "International Environmental Governance",
+        "subTopics": [
+          "Ramsar Convention",
+          "Montreux Record"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "6",
+        "snippet": "With reference to 'Global Environment Facility', which of the following statements is/are correct?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "Global Environment Facility (GEF)",
+          "Convention on Biological Diversity (CBD)",
+          "UNFCCC"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "10",
+        "snippet": "With reference to a conservation organization called 'Wetlands International', which of the following statements is/are c",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "Wetlands International",
+          "Ramsar Convention"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "11",
+        "snippet": "With reference to a grouping of countries known as BRICS, consider the following statements :",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "BRICS"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "BRICS summits are annual events; the 6th summit was held in 2014 in Brazil, making its history and membership highly relevant.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "34",
+        "snippet": "Recently, a series of uprisings of people referred to as 'Arab Spring' originally started from",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Arab Spring",
+          "Middle East"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Arab Spring and its geopolitical aftermath were major ongoing international events in the early 2010s.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "35",
+        "snippet": "Consider the following countries : 1. Denmark 2. Japan 3. Russian Federation 4. United Kingdom 5. United States of Ameri",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "Arctic Council"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "India was granted observer status in the Arctic Council in 2013, making its membership a prominent current affairs topic.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "36",
+        "snippet": "Consider the following pairs : Region often in news - Country",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Places in News",
+          "Chechnya",
+          "Darfur",
+          "Swat Valley"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "These regions were frequently in international news due to ongoing conflicts, civil wars, and terrorism.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "51",
+        "snippet": "Turkey is located between",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Middle East Map",
+          "Turkey"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Turkey was highly relevant in geopolitics due to the Syrian civil war, the rise of ISIS, and the resulting refugee crisis.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "52",
+        "snippet": "What is the correct sequence of occurrence of the following cities in South-East Asia as one proceeds from south to nort",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "South-East Asia Map",
+          "ASEAN"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "India's 'Look East' policy was being upgraded to 'Act East', increasing strategic and geopolitical focus on the ASEAN region.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "78",
+        "snippet": "Consider the following international agreements : 1. The International Treaty on Plant Genetic Resources for Food and Ag",
+        "primaryTheme": "International Environmental Governance",
+        "subTopics": [
+          "UNCCD",
+          "World Heritage Convention",
+          "ITPGRFA"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "79",
+        "snippet": "Consider the following statements regarding 'Earth Hour' : 1. It is an initiative of UNEP and UNESCO.",
+        "primaryTheme": "International Environmental Governance",
+        "subTopics": [
+          "Earth Hour",
+          "WWF",
+          "UNEP",
+          "UNESCO"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "ca-linked",
+        "caContext": "Earth Hour is an annual global event that generates significant international news coverage every March.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "99",
+        "snippet": "Which of the following organizations brings out the publication known as 'World Economic Outlook'?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "IMF",
+          "Global Reports"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "International Organizations",
+        "Geopolitics & Conflicts",
+        "International Environmental Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "notablePatterns": "There is a strong intersection between Environment and International Relations, with multiple questions testing the mandates of global environmental bodies and treaties. Map-based geography questions are heavily influenced by geopolitical hotspots (Middle East, SE Asia). Direct, factual questions on memberships and global reports are prominent."
+    }
+  },
+  "2015": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "3",
+        "snippet": "The 'Fortaleza Declaration', recently in the news, is related to the affairs of",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "BRICS"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The 6th BRICS Summit was held in Fortaleza, Brazil in 2014.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "12",
+        "snippet": "With reference to the International Union for Conservation of Nature and Natural Resources (IUCN) and the Convention on I",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "IUCN",
+          "CITES"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "17",
+        "snippet": "Among the following, which were frequently mentioned in the news for the outbreak of Ebola virus recently?",
+        "primaryTheme": "Places in News",
+        "subTopics": [
+          "Global Health",
+          "West Africa"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The devastating 2014-2015 Ebola virus epidemic heavily impacted West African nations like Guinea, Sierra Leone, and Liberia.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "21",
+        "snippet": "Which one of the following issues the 'Global Economic Prospects' report periodically?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Bank",
+          "Reports & Indices"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "31",
+        "snippet": "The terms 'Agreement on Agriculture', 'Agreement on the Application of Sanitary and Phytosanitary Measures' and 'Peace Cl",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "Agreement on Agriculture",
+          "Peace Clause"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The WTO Bali Ministerial Conference and the 'Peace Clause' regarding India's food security programs were highly debated in the news.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "33",
+        "snippet": "The area known as 'Golan Heights' sometimes appears in the news in the context of the events related to",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Middle East",
+          "Israel-Syria Conflict"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Spillover of the Syrian Civil War into the Golan Heights and ongoing Israel-Syria tensions kept the region in the news.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "40",
+        "snippet": "Which one of the following is associated with the issue of control and phasing out of the use of ozone-depleting substan",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Montreal Protocol"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "43",
+        "snippet": "What is Rio+20 Conference, often mentioned in the news?",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "UN Conference on Sustainable Development",
+          "Rio+20"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Rio+20 conference (2012) outcomes were actively discussed in the lead-up to the adoption of the 2015 Sustainable Development Goals (SDGs).",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "49",
+        "snippet": "Which of the following statements regarding 'Green Climate Fund' is/are correct?",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Green Climate Fund",
+          "UNFCCC"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The Green Climate Fund was being operationalized and receiving its initial resource pledges around 2014-2015 ahead of the Paris Agreement.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "53",
+        "snippet": "Amnesty International is",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "Amnesty International",
+          "Human Rights"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "56",
+        "snippet": "'BioCarbon Fund Initiative for Sustainable Forest Landscapes' is managed by the",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "World Bank",
+          "BioCarbon Fund"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The initiative was launched by the World Bank to support REDD+ and sustainable landscapes, gaining traction in climate finance discussions.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "57",
+        "snippet": "India is a member of which among the following? 1. Asia-Pacific Economic Cooperation 2. Association of South-East Asian",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "APEC",
+          "ASEAN",
+          "East Asia Summit",
+          "India's Memberships"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "64",
+        "snippet": "In the Mekong-Ganga Cooperation, an initiative of six countries, which of the following is/are not a participant/partici",
+        "primaryTheme": "Bilateral & Multilateral Relations",
+        "subTopics": [
+          "Mekong-Ganga Cooperation",
+          "Act East Policy"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "65",
+        "snippet": "'Basel III Accord' or simply 'Basel III', often seen in the news, seeks to",
+        "primaryTheme": "Global Economic Governance",
+        "subTopics": [
+          "Basel III",
+          "Banking Standards"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "The phased implementation of Basel III norms by the RBI and global central banks following the 2008 financial crisis was frequently in the news.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "67",
+        "snippet": "With reference to 'Indian Ocean Rim Association for Regional Cooperation (IOR-ARC)', consider the following statements :",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "IORA",
+          "Indian Ocean Region"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Growing geopolitical importance of the Indian Ocean and India's active engagement in revitalizing IORA.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "74",
+        "snippet": "With reference to 'Forest Carbon Partnership Facility', which of the following statements is/are correct?",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Forest Carbon Partnership Facility",
+          "World Bank",
+          "REDD+"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Climate finance and REDD+ mechanisms were heavily in focus leading up to the 2015 Paris Climate Conference.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "77",
+        "snippet": "Which one of the following countries of South-West Asia does not open out to the Mediterranean Sea?",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Middle East",
+          "Mediterranean Sea"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Syrian Civil War and the resulting refugee crisis across the Mediterranean Sea kept the Levant region's geography in the news.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "79",
+        "snippet": "'Beijing Declaration and Platform for Action', often seen in the news, is",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "Women's Empowerment",
+          "UN World Conference on Women"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "2015 marked the 20th anniversary of the Beijing Declaration (Beijing+20), leading to widespread news coverage and UN reviews.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "88",
+        "snippet": "Consider the following countries : 1. China 2. France 3. India 4. Israel 5. Pakistan Which among the above are Nuclear W",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "NPT",
+          "Nuclear Weapons States"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "94",
+        "snippet": "The problem of international liquidity is related to the non-availability of",
+        "primaryTheme": "Global Economic Governance",
+        "subTopics": [
+          "International Liquidity",
+          "Hard Currencies"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Global Environment Governance",
+        "International Organizations",
+        "Global Economic Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "notablePatterns": "A massive overlap between Environment and International Relations this year. UPSC heavily targeted global environmental funds, treaties, and initiatives (GCF, BioCarbon Fund, FCPF, Rio+20) reflecting the global build-up to the 2015 Paris Agreement. There was also a strong focus on India's membership in regional groupings (ASEAN, APEC, EAS, MGC, IORA)."
+    }
+  },
+  "2016": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "2",
+        "snippet": "Which of the following is/are the indicator/indicators used by IFPRI to compute the Global Hunger Index Report?",
+        "primaryTheme": "Global Reports & Indices",
+        "subTopics": [
+          "Global Hunger Index",
+          "IFPRI"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Release of the Global Hunger Index report",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "6",
+        "snippet": "The term 'Intended Nationally Determined Contributions' is sometimes seen in the news in the context of",
+        "primaryTheme": "Global Environmental Governance",
+        "subTopics": [
+          "UNFCCC",
+          "Paris Agreement",
+          "INDCs"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "Paris Climate Summit (COP21) in 2015 where INDCs were submitted",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "8",
+        "snippet": "With reference to 'IFC Masala Bonds', sometimes seen in the news, which of the statements given below is/are correct?",
+        "primaryTheme": "International Financial Institutions",
+        "subTopics": [
+          "International Finance Corporation (IFC)",
+          "World Bank",
+          "Masala Bonds"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "IFC issuing Masala Bonds to fund infrastructure projects in India",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "11",
+        "snippet": "In the context of which of the following do you sometimes find the terms 'amber box, blue box and green box' in the news?",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "Agreement on Agriculture"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "13",
+        "snippet": "What is/are the importance/importances of the 'United Nations Convention to Combat Desertification'?",
+        "primaryTheme": "Global Environmental Governance",
+        "subTopics": [
+          "UNCCD"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "14",
+        "snippet": "Recently, which one of the following currencies has been proposed to be added to the basket of IMF's SDR?",
+        "primaryTheme": "International Financial Institutions",
+        "subTopics": [
+          "IMF",
+          "Special Drawing Rights (SDR)",
+          "Renminbi"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "IMF's decision to include Chinese Renminbi (Yuan) in the SDR basket in late 2015",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "15",
+        "snippet": "With reference to the International Monetary and Financial Committee (IMFC), consider the following statements :",
+        "primaryTheme": "International Financial Institutions",
+        "subTopics": [
+          "IMF",
+          "IMFC",
+          "World Bank"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "19",
+        "snippet": "Consider the following pairs : Community sometimes mentioned in the news | In the affairs of",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Kurds",
+          "Madhesis",
+          "Rohingyas",
+          "Middle East",
+          "Nepal",
+          "Myanmar"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Ongoing conflicts involving Kurds in Syria/Iraq, Madhesi protests in Nepal, and Rohingya crisis in Myanmar",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "20",
+        "snippet": "With reference to 'Organization for the Prohibition of Chemical Weapons (OPCW)', consider the following statements :",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "OPCW",
+          "Chemical Weapons Convention"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "OPCW's ongoing work in Syria and winning the Nobel Peace Prize a few years prior",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "27",
+        "snippet": "The FAO accords the status of 'Globally Important Agricultural Heritage System (GIAHS)' to traditional agricultural systems.",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "FAO",
+          "GIAHS"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "30",
+        "snippet": "Consider the following pairs : Terms sometimes seen in the news | Their origin",
+        "primaryTheme": "Global Environmental Governance",
+        "subTopics": [
+          "Kyoto Protocol",
+          "Nagoya Protocol",
+          "Cartagena Protocol",
+          "UNFCCC",
+          "CBD"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "37",
+        "snippet": "India's ranking in the 'Ease of Doing Business Index' is sometimes seen in the news. Which of the following has declared",
+        "primaryTheme": "Global Reports & Indices",
+        "subTopics": [
+          "Ease of Doing Business Index",
+          "World Bank"
+        ]
+      }
+    ]
+  },
+  "2017": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "6",
+        "snippet": "Consider the following statements in respect of Trade Related Analysis of Fauna and Flora in Commerce (TRAFFIC):",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "TRAFFIC",
+          "UNEP",
+          "Wildlife Trade"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "9",
+        "snippet": "Which of the following gives ‘Global Gender Gap Index’ ranking to the countries of the world?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Economic Forum",
+          "Global Indices"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Annual release of the Global Gender Gap Report by the World Economic Forum.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "18",
+        "snippet": "The term ‘Digital Single Market Strategy’ seen in the news refers to",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "European Union",
+          "Digital Economy"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The EU's push for a Digital Single Market was frequently in the news around 2016-2017.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "27",
+        "snippet": "The term ‘Domestic Content Requirement’ is sometimes seen in the news with reference to",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "Solar Power",
+          "India-US Trade Dispute"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "India lost a WTO dispute against the US regarding domestic content requirements in its National Solar Mission.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "28",
+        "snippet": "Consider the following statements: 1. The Nuclear Security Summits are periodically held under the aegis of the United N",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Nuclear Security Summit",
+          "International Panel on Fissile Materials",
+          "IAEA"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The 4th and final Nuclear Security Summit was held in Washington D.C. in 2016.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "34",
+        "snippet": "With reference to the ‘National Intellectual Property Rights Policy’, consider the following statements:",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "TRIPS Agreement",
+          "Doha Development Agenda",
+          "Intellectual Property Rights"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India approved its first National IPR Policy in 2016, aligning its domestic regime with WTO's TRIPS agreement.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "41",
+        "snippet": "With reference to ‘Asia Pacific Ministerial Conference on Housing and Urban Development (APMCHUD)’, consider the followi",
+        "primaryTheme": "International Forums",
+        "subTopics": [
+          "APMCHUD",
+          "Urban Development"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The 6th APMCHUD was held in New Delhi, India in December 2016.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "52",
+        "snippet": "With reference to ‘Global Climate Change Alliance’, which of the following statements is/are correct?",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Global Climate Change Alliance",
+          "European Union",
+          "Climate Finance"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Climate finance and EU initiatives were in focus post-Paris Agreement (2015) and COP22 (2016).",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "54",
+        "snippet": "Mediterranean Sea is a border of which of the following countries?",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Middle East",
+          "Mediterranean Sea"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Syrian civil war and the resulting Mediterranean refugee crisis were major global news events.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "56",
+        "snippet": "The Global Infrastructure Facility is a/an",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Bank",
+          "Infrastructure Finance"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "ca-linked",
+        "caContext": "The GIF was launched by the World Bank to boost infrastructure investment, highly relevant amidst the rise of new MDBs like AIIB and NDB.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "60",
+        "snippet": "With reference to the role of UN-Habitat in the United Nations programme working towards a better urban future, which of",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UN-Habitat",
+          "Urban Development"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The UN Conference on Housing and Sustainable Urban Development (Habitat III) took place in October 2016, adopting the New Urban Agenda.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "65",
+        "snippet": "Consider the following statements: 1. Climate and Clean Air Coalition (CCAC) to Reduce Short Lived Climate Pollutants is",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Climate and Clean Air Coalition",
+          "UNEP",
+          "Short Lived Climate Pollutants"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Growing global focus on short-lived climate pollutants (like HFCs) leading up to the Kigali Amendment in 2016.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "68",
+        "snippet": "Consider the following in respect of Indian Ocean Naval Symposium (IONS):",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Indian Ocean Naval Symposium",
+          "Maritime Security"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Increasing focus on Indian Ocean maritime security and India's SAGAR (Security and Growth for All in the Region) vision.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "82",
+        "snippet": "‘Broad-based Trade and Investment Agreement (BTIA)’ is sometimes seen in the news in the context of negotiations held be",
+        "primaryTheme": "Bilateral Relations",
+        "subTopics": [
+          "India-EU Relations",
+          "Free Trade Agreements"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Stalled negotiations between India and the EU over the BTIA were frequently in the news.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "83",
+        "snippet": "Consider the following statements: 1. India has ratified the Trade Facilitation Agreement (TFA) of WTO.",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "Trade Facilitation Agreement",
+          "Bali Ministerial Package"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India ratified the WTO Trade Facilitation Agreement in April 2016, and it entered into force globally in early 2017.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "84",
+        "snippet": "What is the importance of developing Chabahar Port by India?",
+        "primaryTheme": "India Foreign Policy",
+        "subTopics": [
+          "Chabahar Port",
+          "India-Iran Relations",
+          "Geopolitics"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "India, Iran, and Afghanistan signed a historic trilateral transit agreement on the Chabahar port in May 2016.",
+        "difficulty": "easy"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Global Trade",
+        "Global Environment Governance",
+        "International Organizations"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "The 2017 paper featured a heavy emphasis on global environmental and trade governance. Many questions were directly linked to specific international agreements, funds, or coalitions that were recently in the news (e.g., WTO TFA, CCAC, GIF, APMCHUD), testing candidates on the exact institutional mandates and parent organizations of these bodies."
+    }
+  },
+  "2018": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "7",
+        "snippet": "What is/are the consequence/consequences of a country becoming the member of the ‘Nuclear Suppliers Group’ ?",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Nuclear Suppliers Group (NSG)",
+          "Non-Proliferation Treaty (NPT)"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India's diplomatic push to join the NSG and China's opposition.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "8",
+        "snippet": "With reference to India’s decision to levy an equalization tax of 6% on online advertisement services offered by non-resi",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "Double Taxation Avoidance Agreements (DTAA)",
+          "Equalization Levy"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Introduction of Equalization Levy in India and its interaction with international tax treaties.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "14",
+        "snippet": "\"Rule of Law Index\" is released by which of the following?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Justice Project",
+          "International Indices"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Annual release of the Rule of Law Index.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "18",
+        "snippet": "Very recently, in which of the following countries have lakhs of people either suffered from severe famine/acute malnutri",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Yemen",
+          "South Sudan",
+          "Humanitarian Crises"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Severe humanitarian crises and famines in Yemen and South Sudan due to ongoing civil wars.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "24",
+        "snippet": "The term \"two-state solution\" is sometimes mentioned in the news in the context of the affairs of",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Israel-Palestine Conflict"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Ongoing geopolitical developments and international diplomatic discussions regarding the Israel-Palestine conflict.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "26",
+        "snippet": "India enacted The Geographical Indications of Goods (Registration and Protection) Act, 1999 in order to comply with the o",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "TRIPS Agreement",
+          "Geographical Indications"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "30",
+        "snippet": "International Labour Organization’s Conventions 138 and 182 are related to",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "International Labour Organization (ILO)",
+          "Child Labour Conventions"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "India ratified ILO Conventions 138 and 182 regarding child labour in 2017.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "33",
+        "snippet": "In the Indian context, what is the implication of ratifying the ‘Additional Protocol’ with the ‘International Atomic Ener",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "International Atomic Energy Agency (IAEA)",
+          "Nuclear Safeguards"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "India's ratification of the IAEA Additional Protocol and its implications for civilian nuclear facilities.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "34",
+        "snippet": "Consider the following countries : 1. Australia 2. Canada 3. China 4. India 5. Japan 6. USA Which of the above are amon",
+        "primaryTheme": "Bilateral & Multilateral Relations",
+        "subTopics": [
+          "ASEAN",
+          "Free Trade Agreements (FTAs)",
+          "RCEP"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "Ongoing negotiations for the Regional Comprehensive Economic Partnership (RCEP) involving ASEAN and its FTA partners.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "35",
+        "snippet": "With reference to the ‘Global Alliance for Climate-Smart Agriculture (GACSA)’, which of the following statements is/are c",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Global Alliance for Climate-Smart Agriculture (GACSA)",
+          "FAO"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Growing international focus on climate-smart agriculture and India's stance on GACSA.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "37",
+        "snippet": "Consider the following pairs : Towns sometimes mentioned in news — Country 1. Aleppo — Syria 2. Kirkuk — Yemen",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Middle East Conflicts",
+          "Places in News"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Ongoing conflicts against ISIS and civil wars in Syria, Iraq, and Afghanistan.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "43",
+        "snippet": "What is “Terminal High Altitude Area Defense (THAAD)”, sometimes seen in the news?",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Missile Defense Systems",
+          "US-South Korea Relations"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Deployment of the US THAAD missile defense system in South Korea amidst tensions with North Korea.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "83",
+        "snippet": "The Partnership for Action on Green Economy (PAGE), a UN mechanism to assist countries transition towards greener and mor",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "UNEP",
+          "Partnership for Action on Green Economy (PAGE)",
+          "Rio+20"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "88",
+        "snippet": "“Momentum for Change : Climate Neutral Now” is an initiative launched by",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "UNFCCC",
+          "Climate Neutral Now"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "UNFCCC's push for climate neutrality and corporate/state commitments under the Paris Agreement framework.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "90",
+        "snippet": "Consider the following pairs : Regions sometimes mentioned in news — Country 1. Catalonia — Spain 2. Crimea — Hungary",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Secessionist Movements",
+          "Places in News"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Catalonia's independence referendum, ongoing Crimea dispute, and conflicts in Mindanao (Philippines) and Oromia (Ethiopia).",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "Global Environment Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "notablePatterns": "Heavy emphasis on places in news related to global conflicts (Middle East, secessionist movements) and international environmental/climate initiatives."
+    }
+  },
+  "2019": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "3",
+        "snippet": "The Global Competitiveness Report is published by the",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Economic Forum (WEF)",
+          "Global Reports and Indices"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Annual release of the Global Competitiveness Report by the WEF, which is frequently covered in the news.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "36",
+        "snippet": "Consider the following pairs : Sea Bordering country 1. Adriatic Sea Albania 2. Black Sea Croatia",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "World Geography",
+          "Places in News",
+          "Middle East & Europe"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Ongoing geopolitical conflicts and crises in the Middle East (Syria/Red Sea) and Eastern Europe (Black Sea/Crimea).",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "40",
+        "snippet": "Consider the following statements : 1. Under Ramsar Convention, it is mandatory on the part of the Government of India",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Ramsar Convention",
+          "Wetlands Conservation",
+          "International Treaties"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "54",
+        "snippet": "Consider the following statements : 1. The United Nations Convention against Corruption (UNCAC) has a 'Protocol against",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UNCAC",
+          "UNTOC",
+          "UNODC",
+          "Transnational Organized Crime"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Increasing global focus on economic offenders, asset recovery, and human smuggling, bringing UNODC treaties into the spotlight.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "71",
+        "snippet": "With reference to Asian Infrastructure Investment Bank (AIIB), consider the following statements : 1. AIIB has more than",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "AIIB",
+          "Multilateral Development Banks",
+          "Global Finance"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "AIIB's expanding global membership and India's prominent role as a major borrower and the second-largest shareholder.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "77",
+        "snippet": "Which one of the following is not a sub-index of the World Bank's 'Ease of Doing Business Index'?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Bank",
+          "Ease of Doing Business Index",
+          "Global Reports"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "India's significant and highly publicized jump in the Ease of Doing Business rankings around 2018-2019.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "88",
+        "snippet": "Which of the following adopted a law on data protection and privacy for its citizens known as 'General Data Protection",
+        "primaryTheme": "Global Governance",
+        "subTopics": [
+          "GDPR",
+          "European Union",
+          "Data Privacy Law"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The implementation of GDPR by the EU in May 2018, which had massive global ramifications for data privacy and tech companies.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "89",
+        "snippet": "Recently, India signed a deal known as 'Action Plan for Prioritization and Implementation of Cooperation Areas in the Nu",
+        "primaryTheme": "Bilateral Relations",
+        "subTopics": [
+          "India-Russia Relations",
+          "Nuclear Cooperation",
+          "Strategic Partnerships"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "India and Russia signed this specific nuclear cooperation action plan during a bilateral summit.",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "International Organizations & Reports",
+        "Global Governance & Treaties",
+        "Geopolitics & Places in News"
+      ],
+      "dominantStyle": "factual-recall",
+      "notablePatterns": "A strong emphasis on international reports/indices (WEF, World Bank) and recent global regulatory frameworks (GDPR). Questions on international organizations (AIIB, UNODC) required deep, specific knowledge of their mandates, protocols, and membership structures rather than just superficial awareness."
+    }
+  },
+  "2020": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "8",
+        "snippet": "Other than the Fundamental Rights, which of the following parts of the Constitution of India reflect/reflects the princi",
+        "primaryTheme": "UN System & International Law",
+        "subTopics": [
+          "Universal Declaration of Human Rights (UDHR)",
+          "Indian Constitution"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "10",
+        "snippet": "Consider the following pairs : International agreement/set-up Subject 1. Alma-Ata Declaration Healthcare of the people",
+        "primaryTheme": "International Agreements",
+        "subTopics": [
+          "Alma-Ata Declaration",
+          "Hague Convention",
+          "Talanoa Dialogue",
+          "Under2 Coalition"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Talanoa Dialogue and Under2 Coalition were frequently in the news regarding global climate change negotiations.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "17",
+        "snippet": "“Gold Tranche” (Reserve Tranche) refers to",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "IMF",
+          "Reserve Tranche Position"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "53",
+        "snippet": "The term ‘West Texas Intermediate’, sometimes found in news, refers to a grade of",
+        "primaryTheme": "Global Trade & Commodities",
+        "subTopics": [
+          "Crude Oil",
+          "West Texas Intermediate (WTI)"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "WTI crude oil prices crashed into negative territory in April 2020 due to the COVID-19 pandemic and the Russia-Saudi oil price war.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "55",
+        "snippet": "In India, why are some nuclear reactors kept under “IAEA Safeguards” while others are not ?",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "IAEA",
+          "Nuclear Safeguards",
+          "India's Nuclear Program"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "56",
+        "snippet": "With reference to Trade-Related Investment Measures (TRIMS), which of the following statements is/are correct ?",
+        "primaryTheme": "Global Trade",
+        "subTopics": [
+          "WTO",
+          "TRIMS"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "64",
+        "snippet": "Consider the following statements : 1. The value of Indo-Sri Lanka trade has consistently increased in the last decade.",
+        "primaryTheme": "India's Foreign Policy",
+        "subTopics": [
+          "Neighborhood First Policy",
+          "Bilateral Trade",
+          "South Asia"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India's trade relations and border dynamics with its neighbors (such as the Nepal map issue and Bangladesh relations) were highly discussed in 2019-2020.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "65",
+        "snippet": "In which one of the following groups are all the four countries members of G20 ?",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "G20"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "G20 summits are a regular current affairs topic; India was also gearing up for its future presidency.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "96",
+        "snippet": "Siachen Glacier is situated to the",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Siachen Glacier",
+          "Aksai Chin",
+          "India-China Border Dispute"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Galwan Valley clash and ongoing India-China border standoff in Ladakh in 2020 made the geography of this region highly significant.",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "International Organizations",
+        "Global Trade",
+        "Geopolitics & Conflicts"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "A strong emphasis on international organizations (IMF, WTO, IAEA, G20) and a clear reflection of major global events like the 2020 oil price crash and the India-China border tensions."
+    }
+  },
+  "2021": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "14",
+        "snippet": "With reference to ‘WaterCredit’, consider the following statements: 1. It puts microfinance tools to work in the water...",
+        "primaryTheme": "International Organizations & Initiatives",
+        "subTopics": [
+          "WaterCredit",
+          "World Health Organization",
+          "World Bank"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Water.org's WaterCredit initiative was gaining traction globally for water and sanitation financing, prompting UPSC to test its institutional backing.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "24",
+        "snippet": "With reference to the ‘New York Declaration on Forests’, which of the following statements are correct? 1. It was first...",
+        "primaryTheme": "Global Environmental Governance",
+        "subTopics": [
+          "New York Declaration on Forests",
+          "UN Climate Summit"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The NYDF goals for 2020 were in focus, and global forest conservation efforts were widely discussed in the lead-up to major climate summits.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "29",
+        "snippet": "The ‘Common Carbon Metric’, supported by UNEP, has been developed for",
+        "primaryTheme": "Global Environmental Governance",
+        "subTopics": [
+          "UNEP",
+          "Common Carbon Metric",
+          "Carbon Footprint"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "UNEP's initiatives on decarbonizing the building and construction sector and standardizing carbon footprint measurements.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "50",
+        "snippet": "Consider the following statements: 1. 21st February is declared to be the International Mother Language Day by UNESCO.",
+        "primaryTheme": "UN System & International Organizations",
+        "subTopics": [
+          "UNESCO",
+          "International Mother Language Day"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Annual observance of International Mother Language Day and ongoing domestic/global discussions around linguistic diversity.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "56",
+        "snippet": "Consider the following statements: 1. The Global Ocean Commission grants licences for seabed exploration and mining in...",
+        "primaryTheme": "Global Governance & International Law",
+        "subTopics": [
+          "Global Ocean Commission",
+          "International Seabed Authority",
+          "UNCLOS"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India's Deep Ocean Mission and the International Seabed Authority (ISA) granting exploration contracts for polymetallic nodules.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "59",
+        "snippet": "In the context of India’s preparation for Climate-Smart Agriculture, consider the following statements: 1. The ‘Climate...",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "CGIAR",
+          "CCAFS",
+          "Climate-Smart Agriculture"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Growing global emphasis on Climate-Smart Agriculture and India's collaboration with international agricultural research bodies.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "81",
+        "snippet": "Consider the following statements: 1. ‘Right to the City’ is an agreed human right and the UN-Habitat monitors the...",
+        "primaryTheme": "UN System & Global Governance",
+        "subTopics": [
+          "UN-Habitat",
+          "Right to the City",
+          "New Urban Agenda"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "UN-Habitat's New Urban Agenda and global discourse on urban rights, sustainable cities, and inclusive public spaces.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "97",
+        "snippet": "Consider the following statements: Statement 1: The United Nations Capital Development Fund (UNCDF) and the Arbor Day...",
+        "primaryTheme": "UN System & International Organizations",
+        "subTopics": [
+          "UNCDF",
+          "FAO",
+          "Arbor Day Foundation",
+          "Tree City of the World"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Hyderabad was recognized as a 2020 Tree City of the World by the Arbor Day Foundation and FAO (not UNCDF, making it a classic UPSC trap).",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "UN System & International Organizations",
+        "Global Environmental Governance"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "The 2021 paper showed a heavy emphasis on UN specialized agencies, funds, and international environmental/agricultural initiatives (UNEP, UN-Habitat, UNCDF, UNESCO, CGIAR). A distinct pattern was testing the exact mandate or parent body of these initiatives, frequently using incorrect UN bodies as traps in the statements."
+    }
+  },
+  "2022": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "1",
+        "snippet": "\"Rapid Financing Instrument\" and \"Rapid Credit Facility\" are related to the provisions of lending by which one of the f",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "IMF",
+          "COVID-19 Financial Assistance"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "IMF lending to various countries facing economic crises during the COVID-19 pandemic.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "4",
+        "snippet": "With reference to the \"G20 Common Framework\", consider the following statements :",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "G20",
+          "Paris Club",
+          "Sovereign Debt"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "G20 and Paris Club initiative for debt relief to low-income countries post-COVID.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "23",
+        "snippet": "Which one of the following lakes of West Africa has become dry and turned into a desert?",
+        "primaryTheme": "Geopolitics & Places in News",
+        "subTopics": [
+          "Africa",
+          "Lake Faguibine",
+          "Climate Change Impacts"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Ecological crisis and drying up of Lake Faguibine in Mali.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "26",
+        "snippet": "The term \"Levant\" often heard in the news roughly corresponds to which of the following regions?",
+        "primaryTheme": "Geopolitics & Places in News",
+        "subTopics": [
+          "Middle East",
+          "Eastern Mediterranean"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Frequent mentions of the Levant in the context of Middle Eastern geopolitics and conflicts.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "27",
+        "snippet": "Consider the following countries : 1. Azerbaijan 2. Kyrgyzstan 3. Tajikistan 4. Turkmenistan 5. Uzbekistan",
+        "primaryTheme": "Geopolitics & Places in News",
+        "subTopics": [
+          "Afghanistan",
+          "Central Asia",
+          "Border Geography"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Taliban takeover of Afghanistan in August 2021 made its borders highly relevant.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "34",
+        "snippet": "Which one of the following statements best reflects the idea behind the \"Fractional Orbital Bombardment System\" often ta",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Space Weapons",
+          "Hypersonic Missiles",
+          "Arms Race"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "China's testing of a hypersonic glide vehicle using FOBS in late 2021.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "41",
+        "snippet": "\"Climate Action Tracker\" which monitors the emission reduction pledges of different countries is a :",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Climate Change",
+          "Emissions Tracking",
+          "NGOs"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "COP26 in Glasgow and the focus on tracking countries' NDCs and net-zero pledges.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "42",
+        "snippet": "Consider the following statements : 1. \"The Climate Group\" is an international non-profit organization that drives clima",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "The Climate Group",
+          "EP100",
+          "Under2 Coalition"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Corporate and sub-national climate initiatives highlighted around COP26.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "44",
+        "snippet": "In the context of WHO Air Quality Guidelines, consider the following statements :",
+        "primaryTheme": "Global Health Governance",
+        "subTopics": [
+          "WHO",
+          "Air Quality",
+          "Pollution Standards"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "WHO updated its Global Air Quality Guidelines in September 2021 after 15 years.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "66",
+        "snippet": "Consider the following : 1. Asian Infrastructure Investment Bank 2. Missile Technology Control Regime 3. Shanghai Cooper",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "AIIB",
+          "MTCR",
+          "SCO",
+          "India's Memberships"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "67",
+        "snippet": "Consider the following statements : 1. Vietnam has been one of the fastest growing economies in the world in the recent ",
+        "primaryTheme": "Geopolitics & Global Economy",
+        "subTopics": [
+          "Vietnam",
+          "Global Supply Chains",
+          "Indo-Pacific"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Shift of global manufacturing supply chains from China to Vietnam (China Plus One strategy).",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "76",
+        "snippet": "With reference to the \"United Nations Credentials Committee\", consider the following statements :",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UN General Assembly",
+          "Credentials Committee"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Disputes over who should represent Afghanistan (Taliban) and Myanmar (Junta) at the UN.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "77",
+        "snippet": "Which one of the following statements best describes the 'Polar Code'?",
+        "primaryTheme": "International Law",
+        "subTopics": [
+          "IMO",
+          "Arctic Shipping",
+          "Maritime Safety"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "78",
+        "snippet": "With reference to the United Nations General Assembly, consider the following statements :",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UNGA",
+          "Observer Status"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "International Solar Alliance (ISA) was granted Observer Status by the UNGA in late 2021.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "82",
+        "snippet": "Consider the following statements : 1. Bidibidi is a large refugee settlement in north-western Kenya. 2. Some people wh",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Refugee Crises",
+          "Africa",
+          "Bidibidi",
+          "Dadaab"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Ongoing refugee crises in Africa and potential closure threats to Dadaab camp.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "83",
+        "snippet": "Consider the following countries : 1. Armenia 2. Azerbaijan 3. Croatia 4. Romania 5. Uzbekistan Which of the above are",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "Organization of Turkic States",
+          "Central Asia"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "Turkic Council was renamed to the Organization of Turkic States in November 2021.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "85",
+        "snippet": "With reference to the United Nations Convention on the Law of Sea, consider the following statements :",
+        "primaryTheme": "International Law",
+        "subTopics": [
+          "UNCLOS",
+          "Territorial Sea",
+          "EEZ",
+          "Innocent Passage"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Frequent freedom of navigation operations (FONOPs) and South China Sea disputes.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "86",
+        "snippet": "Which one of the following statements best reflects the issue with Senkaku Islands, sometimes mentioned in the news?",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Senkaku Islands",
+          "East China Sea",
+          "China-Japan Relations"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Ongoing maritime incursions and territorial disputes between China and Japan.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "87",
+        "snippet": "Consider the following pairs : Country - Important reason for being in the news recently",
+        "primaryTheme": "Geopolitics & Places in News",
+        "subTopics": [
+          "Coups",
+          "Political Crises",
+          "Africa",
+          "Middle East"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Military coups in Guinea and Chad, economic crisis in Lebanon, and suspension of parliament in Tunisia in 2021.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "88",
+        "snippet": "Consider the following pairs : Region often mentioned in the news - Country",
+        "primaryTheme": "Geopolitics & Places in News",
+        "subTopics": [
+          "Conflict Zones",
+          "Separatist Movements",
+          "Ethiopia",
+          "Mozambique"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Tigray/Amhara conflict in Ethiopia, insurgency in Cabo Delgado (Mozambique).",
+        "difficulty": "moderate"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Geopolitics & Places in News",
+        "UN System & International Law",
+        "Global Environment Governance"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "Unprecedented focus on African geography and conflicts (Lake Faguibine, Bidibidi, Chad, Guinea, Amhara, Cabo Delgado). Deep dive into UN system technicalities (Credentials Committee, UNGA Observer Status). High reliance on current affairs for framing IR questions, making it one of the most IR-heavy papers in recent years."
+    }
+  },
+  "2023": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "10",
+        "snippet": "With reference to India's projects on connectivity, consider the following statements: 1. East-West Corridor under Golde",
+        "primaryTheme": "India Foreign Policy",
+        "subTopics": [
+          "Trilateral Highway",
+          "BCIM Economic Corridor",
+          "Regional Connectivity"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Ongoing focus on India's Act East policy and regional connectivity projects in the neighborhood.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "13",
+        "snippet": "'Invasive Species Specialist Group' (that develops Global Invasive Species Database) belongs to which one of the followi",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "IUCN",
+          "Invasive Species"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "30",
+        "snippet": "Consider the following infrastructure sectors: 1. Affordable housing 2. Mass rapid transport 3. Health care 4. Renewable",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UNOPS",
+          "S3i Initiative"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "ca-linked",
+        "caContext": "UNOPS S3i was in the news due to its investments and subsequent controversies regarding funding mismanagement.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "61",
+        "snippet": "Consider the following countries: 1. Bulgaria 2. Czech Republic 3. Hungary 4. Latvia 5. Lithuania 6. Romania",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Ukraine",
+          "Eastern Europe Map"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "The Russia-Ukraine war made the geographical map of Ukraine and its bordering nations highly relevant.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "78",
+        "snippet": "Which one of the following countries has been suffering from decades of civil strife and food shortages and was in news ",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Somalia",
+          "Horn of Africa",
+          "Famine"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Severe drought and famine in Somalia, exacerbated by ongoing civil war and global grain shortages.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "79",
+        "snippet": "Consider the following statements: 1. In India, the Biodiversity Management Committees are key to the realization of the",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Nagoya Protocol",
+          "Convention on Biological Diversity"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "87",
+        "snippet": "Consider the following statements: Statement-I: Recently, the United States of America (USA) and the European Union (EU)",
+        "primaryTheme": "Bilateral/Multilateral Agreements",
+        "subTopics": [
+          "US-EU Trade and Technology Council"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The US and EU launched the Trade and Technology Council (TTC) to coordinate approaches to key global trade and technology issues.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "89",
+        "snippet": "Consider the following statements: The 'Stability and Growth Pact' of the European Union is a treaty that:",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "European Union",
+          "Stability and Growth Pact"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "ca-linked",
+        "caContext": "EU fiscal rules were heavily debated and reformed in the wake of the pandemic and subsequent economic crises.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "90",
+        "snippet": "Consider the following statements: 1. Recently, all the countries of the United Nations have adopted the first-ever comp",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "Global Compact for Migration"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Ongoing global migration crises and follow-up reviews of the GCM which was adopted in 2018.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "93",
+        "snippet": "Consider the following pairs: Regions often mentioned in news - Reason for being in news 1. North Kivu and Ituri",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Nagorno-Karabakh",
+          "Ukraine War",
+          "DRC Conflict"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Ongoing conflicts in the Democratic Republic of Congo, Armenia-Azerbaijan, and Russia-Ukraine.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "94",
+        "snippet": "Consider the following statements: Statement-I: Israel has established diplomatic relations with some Arab States.",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Israel-Arab Relations",
+          "Arab Peace Initiative",
+          "Abraham Accords"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The Abraham Accords and the ongoing normalization of diplomatic ties between Israel and various Arab states.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "97",
+        "snippet": "Consider the following pairs: Area of conflict mentioned in news - Country where it is located 1. Donbas",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Donbas",
+          "Kachin",
+          "Tigray"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Major ongoing wars and civil conflicts in Ukraine (Donbas), Myanmar (Kachin), and Ethiopia (Tigray).",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "98",
+        "snippet": "In the recent years Chad, Guinea, Mali and Sudan caught the international attention for which one of the following reaso",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "African Coups",
+          "Sahel Region"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "A prominent wave of military coups in the Sahel and surrounding regions of Africa over the past few years.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "100",
+        "snippet": "Consider the following statements about G-20: 1. The G-20 group was originally established as a platform for the Finance",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "G20",
+          "Digital Public Infrastructure"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India assumed the G20 Presidency in 2023, making its history and India's priorities (like DPI) highly relevant.",
+        "difficulty": "easy"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "UN System"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "There was a massive emphasis on 'Places in News' directly tied to global conflicts (Ukraine, Africa, Middle East). The paper also showed a shift towards asking specific, nuanced details about the mandates of international bodies and agreements (e.g., UNOPS S3i, EU Stability and Growth Pact, Global Compact for Migration)."
+    }
+  },
+  "2024": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "24",
+        "snippet": "Consider the following statements regarding World Toilet Organization : 1. It is one of the agencies of the United Nations.",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Toilet Organization",
+          "UN System"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "World Toilet Summit and World Toilet Day initiatives frequently appear in news regarding global sanitation efforts.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "26",
+        "snippet": "Which one of the following is the correct description of \"100 Million Farmers\" ?",
+        "primaryTheme": "Global Initiatives",
+        "subTopics": [
+          "World Economic Forum",
+          "Sustainable Agriculture"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "The World Economic Forum's '100 Million Farmers' initiative was in the news for promoting a transition to net-zero, nature-positive food systems.",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "51",
+        "snippet": "Statement-I : If the United States of America (USA) were to default on its debt, holders of US Treasury Bonds will not be able...",
+        "primaryTheme": "Global Economy",
+        "subTopics": [
+          "US Debt Ceiling",
+          "Sovereign Debt"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The US debt ceiling crisis and fears of a historic US default dominated global economic news in 2023.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "59",
+        "snippet": "Consider the following statements : 1. India is a member of the International Grains Council.",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "International Grains Council",
+          "Global Food Security"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Global wheat and rice export bans and food security issues due to the Russia-Ukraine war brought the IGC into focus.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "67",
+        "snippet": "Consider the following countries : 1. Italy 2. Japan 3. Nigeria 4. South Korea 5. South Africa Which of the above...",
+        "primaryTheme": "Global Demographics",
+        "subTopics": [
+          "Ageing Population",
+          "Declining Birth Rates"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Frequent international news reports about demographic crises and record low birth rates in South Korea, Japan, and Italy.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "79",
+        "snippet": "The longest border between any two countries in the world is between :",
+        "primaryTheme": "Geopolitics & Borders",
+        "subTopics": [
+          "International Borders"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "82",
+        "snippet": "Which of the following statements about 'Exercise Mitra Shakti-2023' are correct ? 1. This was a joint military exercise...",
+        "primaryTheme": "Defense & Security",
+        "subTopics": [
+          "Bilateral Military Exercises",
+          "India-Sri Lanka Relations"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Exercise Mitra Shakti-2023 was conducted between India and Sri Lanka in Pune.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "86",
+        "snippet": "Who of the following is the author of the books \"The India Way\" and \"Why Bharat Matters\" ?",
+        "primaryTheme": "India Foreign Policy",
+        "subTopics": [
+          "Diplomacy",
+          "Geopolitics"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "Release of the book 'Why Bharat Matters' by India's External Affairs Minister S. Jaishankar in early 2024.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "87",
+        "snippet": "Consider the following pairs : Country - Reason for being in the news 1. Argentina - Worst economic crisis...",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Places in News",
+          "Sudan Conflict",
+          "NATO"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Argentina's hyperinflation, Sudan's civil war between the RSF and Army, and Turkey's role in NATO expansion (Sweden's accession).",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "88",
+        "snippet": "Statement-I : Sumed pipeline is a strategic route for Persian Gulf oil and natural gas shipments to Europe.",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Strategic Chokepoints",
+          "Energy Security",
+          "Middle East"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The Red Sea crisis and Houthi attacks highlighted alternative routes like the Sumed pipeline for oil transport.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "91",
+        "snippet": "Statement-I : There is instability and worsening security situation in the Sahel region.",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Sahel Region",
+          "Military Coups",
+          "Africa"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "A series of military coups and rising insurgency in the Sahel region (Niger, Mali, Burkina Faso) in 2023-2024.",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "92",
+        "snippet": "Statement-I : India does not import apples from the United States of America.",
+        "primaryTheme": "International Trade",
+        "subTopics": [
+          "Bilateral Trade",
+          "WTO",
+          "GM Crops"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India lifted retaliatory tariffs on US apples in 2023, leading to a surge in imports and resolving a long-standing WTO dispute.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "96",
+        "snippet": "Statement-I : The European Parliament approved The Net-Zero Industry Act recently.",
+        "primaryTheme": "Global Governance",
+        "subTopics": [
+          "European Union",
+          "Climate Change Policy"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The EU passed the Net-Zero Industry Act to compete with the US Inflation Reduction Act and China in green technology manufacturing.",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "97",
+        "snippet": "Statement-I : Recently, Venezuela has achieved a rapid recovery from its economic crisis and succeeded in preventing its people...",
+        "primaryTheme": "Geopolitics & Conflicts",
+        "subTopics": [
+          "Venezuela Crisis",
+          "Global Oil Reserves"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Ongoing Venezuelan migrant crisis, US sanctions relief (and reimposition), and its status as having the world's largest oil reserves.",
+        "difficulty": "easy"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "Global Economy & Trade"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "Heavy emphasis on places in news and geopolitical crises (Sahel, Sudan, Red Sea/Sumed, Venezuela). High use of Assertion-Reasoning (Statement I & II) format for IR questions. Focus on global macroeconomic and demographic trends (US debt, low birth rates)."
+    }
+  },
+  "2025": {
+    "totalQuestionsInPaper": 100,
+    "irQuestions": [
+      {
+        "qNum": "6",
+        "snippet": "Consider the following statements : I. India has joined the Minerals Security Partnership as a member.",
+        "primaryTheme": "Strategic Partnerships & Geopolitics",
+        "subTopics": [
+          "Minerals Security Partnership (MSP)",
+          "Critical Minerals"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India joining the US-led Minerals Security Partnership to secure critical mineral supply chains",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "21",
+        "snippet": "Consider the following countries : I. Austria II. Bulgaria III. Croatia IV. Serbia V. Sweden VI. North Macedonia",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "NATO",
+          "European Geopolitics"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "Sweden officially joining NATO as its 32nd member",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "32",
+        "snippet": "Consider the following statements : Statement I : At the 28th United Nations Climate Change Conference (COP28), India",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "COP28",
+          "Declaration on Climate and Health"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "India's refusal to sign the COP28 Declaration on Climate and Health due to concerns over healthcare decarbonization",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "34",
+        "snippet": "Consider the following statements : Statement I : Article 6 of the Paris Agreement on climate change is frequently",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "Paris Agreement",
+          "Carbon Markets"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Ongoing global negotiations and operationalization of Article 6 carbon markets at recent COP summits",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "35",
+        "snippet": "Which one of the following launched the 'Nature Solutions Finance Hub for Asia and the Pacific'?",
+        "primaryTheme": "International Funds & Institutions",
+        "subTopics": [
+          "Asian Development Bank (ADB)",
+          "Climate Finance"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "ADB launching the Nature Solutions Finance Hub at COP28",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "62",
+        "snippet": "India is one of the founding members of the International North-South Transport Corridor (INSTC), a multimodal",
+        "primaryTheme": "Geopolitics & Connectivity",
+        "subTopics": [
+          "INSTC",
+          "India's Foreign Policy"
+        ],
+        "questionStyle": "conceptual",
+        "classification": "ca-linked",
+        "caContext": "Renewed strategic focus on INSTC as an alternative trade route amidst the Red Sea crisis",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "67",
+        "snippet": "Consider the following statements in respect of the International Bank for Reconstruction and Development (IBRD) :",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "World Bank Group",
+          "IBRD"
+        ],
+        "questionStyle": "institutional-mandate",
+        "classification": "static",
+        "caContext": "",
+        "difficulty": "easy"
+      },
+      {
+        "qNum": "69",
+        "snippet": "Consider the following countries : I. United Arab Emirates II. France III. Germany IV. Singapore V. Bangladesh",
+        "primaryTheme": "India's Economic Diplomacy",
+        "subTopics": [
+          "UPI Internationalization",
+          "Bilateral Relations"
+        ],
+        "questionStyle": "membership-based",
+        "classification": "ca-linked",
+        "caContext": "Expansion of UPI acceptance in various countries like France, UAE, and Singapore",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "90",
+        "snippet": "Which organization has enacted the Nature Restoration Law (NRL) to tackle climate change and biodiversity loss?",
+        "primaryTheme": "Global Environment Governance",
+        "subTopics": [
+          "European Union",
+          "Nature Restoration Law"
+        ],
+        "questionStyle": "factual-recall",
+        "classification": "ca-linked",
+        "caContext": "European Parliament passing the landmark Nature Restoration Law",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "92",
+        "snippet": "Consider the following statements in respect of BIMSTEC : I. It is a regional organization consisting of seven member",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "BIMSTEC",
+          "India's Neighborhood Policy"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "Recent developments and upcoming summits of BIMSTEC, explicitly referencing its status till January 2025",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "95",
+        "snippet": "Consider the following statements regarding AI Action Summit held in Grand Palais, Paris in February 2025 :",
+        "primaryTheme": "Global Governance & Multilateral Forums",
+        "subTopics": [
+          "AI Action Summit",
+          "Global AI Governance"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "The AI Action Summit held in Paris in early 2025",
+        "difficulty": "moderate"
+      },
+      {
+        "qNum": "96",
+        "snippet": "Consider the following pairs : Target/Goals Year I. International Year of the Woman Farmer 2026",
+        "primaryTheme": "UN System",
+        "subTopics": [
+          "UN International Years",
+          "UNGA Declarations"
+        ],
+        "questionStyle": "match-the-following",
+        "classification": "ca-linked",
+        "caContext": "Recent UNGA declarations for upcoming International Years",
+        "difficulty": "hard"
+      },
+      {
+        "qNum": "97",
+        "snippet": "Consider the following statements with regard to BRICS : I. 16th BRICS Summit was held under the Chairship of Russia",
+        "primaryTheme": "International Organizations",
+        "subTopics": [
+          "BRICS",
+          "Kazan Summit"
+        ],
+        "questionStyle": "statement-analysis",
+        "classification": "ca-linked",
+        "caContext": "16th BRICS Summit held in Kazan, Russia in 2024 and the expansion of BRICS membership",
+        "difficulty": "easy"
+      }
+    ],
+    "yearSummary": {
+      "dominantThemes": [
+        "Global Environment Governance",
+        "International Organizations",
+        "Geopolitics & Connectivity"
+      ],
+      "dominantStyle": "statement-analysis",
+      "notablePatterns": "A very strong emphasis on current affairs-linked global governance, particularly environmental and tech governance (COP28, AI Summit, Nature Restoration Law). Traditional international organizations like BRICS, NATO, and the World Bank continue to feature prominently, alongside India's economic diplomacy (UPI internationalization)."
+    }
+  }
+}

@@ -38,6 +38,7 @@ const SUBJECT_CA_RATIOS: Record<string, number> = {
   environment: 0.63,  // 63% CA  — climate summits, conservation policy, species in news
   economy:     0.71,  // 71% CA  — budget, RBI policy, trade, fiscal events dominate
   science:     0.80,  // 80% CA  — missions, emerging tech, defense, space; heavily CA-driven
+  international_relations: 0.90,  // 90% CA  — geopolitics, treaties, orgs; highest CA ratio of any subject (validated: 90% in 2022-2025 era, 83% in 2017-2021)
 };
 
 function getSubjectCARatio(subject: string): { directCA: number; derivedStatic: number; pureStatic: number } {

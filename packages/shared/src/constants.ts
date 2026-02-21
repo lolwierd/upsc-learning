@@ -11,6 +11,7 @@ export const SUBJECTS = [
   "science",
   "environment",
   "art_culture",
+  "international_relations",
 ] as const;
 
 export const SUBJECT_LABELS: Record<(typeof SUBJECTS)[number], string> = {
@@ -22,6 +23,7 @@ export const SUBJECT_LABELS: Record<(typeof SUBJECTS)[number], string> = {
   science: "Science & Technology",
   environment: "Environment & Ecology",
   art_culture: "Art & Culture",
+  international_relations: "International Relations",
 };
 
 export const SUBJECT_DESCRIPTIONS: Record<(typeof SUBJECTS)[number], string> = {
@@ -33,6 +35,7 @@ export const SUBJECT_DESCRIPTIONS: Record<(typeof SUBJECTS)[number], string> = {
   science: "General Science, Technology, and Recent Developments",
   environment: "Ecology, Biodiversity, and Environmental Issues",
   art_culture: "Indian Art, Architecture, and Cultural Heritage",
+  international_relations: "International Organizations, Treaties, Geopolitics, and Global Governance",
 };
 
 // ============================================

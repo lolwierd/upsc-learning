@@ -14,6 +14,7 @@ const SUBJECT_CONFIG: Record<QuestionSubject, { label: string; className: string
   history: { label: "History", className: "bg-orange-100 text-orange-800" },
   science: { label: "Science", className: "bg-cyan-100 text-cyan-800" },
   culture: { label: "Culture", className: "bg-pink-100 text-pink-800" },
+  international_relations: { label: "International Relations", className: "bg-sky-100 text-sky-800" },
 };
 
 export function SubjectBadge({ subject, className }: SubjectBadgeProps) {

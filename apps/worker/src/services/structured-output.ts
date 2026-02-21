@@ -2,7 +2,7 @@ export const JSON_RESPONSE_MIME_TYPE = "application/json";
 
 const QUESTION_TYPE_ENUM = ["standard", "statement", "match", "assertion"] as const;
 const QUESTION_CATEGORY_ENUM = ["direct-ca", "derived-static", "pure-static"] as const;
-const QUESTION_SUBJECT_ENUM = ["polity", "economy", "environment", "geography", "history", "science", "culture"] as const;
+const QUESTION_SUBJECT_ENUM = ["polity", "economy", "environment", "geography", "history", "science", "culture", "international_relations"] as const;
 
 const QUESTION_METADATA_SCHEMA = {
   type: "OBJECT",

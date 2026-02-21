@@ -10,7 +10,8 @@ export type Subject =
   | "economy"
   | "science"
   | "environment"
-  | "art_culture";
+  | "art_culture"
+  | "international_relations";
 
 export type QuestionStyle =
   | "factual"
@@ -69,7 +70,8 @@ export type QuestionSubject =
   | 'geography' 
   | 'history' 
   | 'science' 
-  | 'culture';
+  | 'culture'
+  | 'international_relations';
 
 export interface GroundingSource {
   uri: string;

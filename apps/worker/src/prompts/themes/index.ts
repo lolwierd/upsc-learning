@@ -9,6 +9,8 @@ import { HISTORY_THEMES, HISTORY_STRATEGIC_TRAPS } from "./history.js";
 import { SCIENCE_THEMES, SCIENCE_STRATEGIC_TRAPS } from "./science.js";
 import { ART_CULTURE_THEMES, ART_CULTURE_STRATEGIC_TRAPS } from "./art.js";
 
+import { IR_THEMES, IR_STRATEGIC_TRAPS } from "./international-relations.js";
+
 // Re-export all themes
 export {
     POLITY_THEMES,
@@ -25,6 +27,8 @@ export {
     SCIENCE_STRATEGIC_TRAPS,
     ART_CULTURE_THEMES,
     ART_CULTURE_STRATEGIC_TRAPS,
+    IR_THEMES,
+    IR_STRATEGIC_TRAPS,
 };
 
 // Subject to theme mapping
@@ -39,6 +43,9 @@ const SUBJECT_THEMES_MAP: Record<string, { themes: string; traps: string }> = {
     "art and culture": { themes: ART_CULTURE_THEMES, traps: ART_CULTURE_STRATEGIC_TRAPS },
     art: { themes: ART_CULTURE_THEMES, traps: ART_CULTURE_STRATEGIC_TRAPS },
     culture: { themes: ART_CULTURE_THEMES, traps: ART_CULTURE_STRATEGIC_TRAPS },
+    "international relations": { themes: IR_THEMES, traps: IR_STRATEGIC_TRAPS },
+    international_relations: { themes: IR_THEMES, traps: IR_STRATEGIC_TRAPS },
+    ir: { themes: IR_THEMES, traps: IR_STRATEGIC_TRAPS },
 };
 
 /**

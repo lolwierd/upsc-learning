@@ -1,0 +1,1100 @@
+{
+  "summary": {
+    "totalIRQuestions": 161,
+    "totalPaperQuestions": 1300,
+    "irPercentage": "12.4",
+    "staticCount": 33,
+    "caCount": 128,
+    "staticPct": "20.5",
+    "caPct": "79.5"
+  },
+  "yearlyStats": [
+    {
+      "year": "2013",
+      "total": 100,
+      "irCount": 0,
+      "irPct": "0.0",
+      "static": 0,
+      "ca": 0,
+      "caPct": "0.0",
+      "dominantThemes": [
+        "None"
+      ],
+      "dominantStyle": "None",
+      "patterns": "The 2013 GS Paper I contained no direct International Relations questions. Topics like Balance of Payments, Capital Account, and Forex Reserves were present but strictly within the domain of domestic macroeconomics. Similarly, international treaties were only mentioned in the context of domestic constitutional provisions (Article 253)."
+    },
+    {
+      "year": "2014",
+      "total": 100,
+      "irCount": 12,
+      "irPct": "12.0",
+      "static": 5,
+      "ca": 7,
+      "caPct": "58.3",
+      "dominantThemes": [
+        "International Organizations",
+        "Geopolitics & Conflicts",
+        "International Environmental Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "patterns": "There is a strong intersection between Environment and International Relations, with multiple questions testing the mandates of global environmental bodies and treaties. Map-based geography questions are heavily influenced by geopolitical hotspots (Middle East, SE Asia). Direct, factual questions on memberships and global reports are prominent."
+    },
+    {
+      "year": "2015",
+      "total": 100,
+      "irCount": 20,
+      "irPct": "20.0",
+      "static": 8,
+      "ca": 12,
+      "caPct": "60.0",
+      "dominantThemes": [
+        "Global Environment Governance",
+        "International Organizations",
+        "Global Economic Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "patterns": "A massive overlap between Environment and International Relations this year. UPSC heavily targeted global environmental funds, treaties, and initiatives (GCF, BioCarbon Fund, FCPF, Rio+20) reflecting the global build-up to the 2015 Paris Agreement. There was also a strong focus on India's membership in regional groupings (ASEAN, APEC, EAS, MGC, IORA)."
+    },
+    {
+      "year": "2016",
+      "total": 100,
+      "irCount": 12,
+      "irPct": "12.0",
+      "static": 6,
+      "ca": 6,
+      "caPct": "50.0",
+      "dominantThemes": [],
+      "dominantStyle": "",
+      "patterns": ""
+    },
+    {
+      "year": "2017",
+      "total": 100,
+      "irCount": 16,
+      "irPct": "16.0",
+      "static": 1,
+      "ca": 15,
+      "caPct": "93.8",
+      "dominantThemes": [
+        "Global Trade",
+        "Global Environment Governance",
+        "International Organizations"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "The 2017 paper featured a heavy emphasis on global environmental and trade governance. Many questions were directly linked to specific international agreements, funds, or coalitions that were recently in the news (e.g., WTO TFA, CCAC, GIF, APMCHUD), testing candidates on the exact institutional mandates and parent organizations of these bodies."
+    },
+    {
+      "year": "2018",
+      "total": 100,
+      "irCount": 15,
+      "irPct": "15.0",
+      "static": 2,
+      "ca": 13,
+      "caPct": "86.7",
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "Global Environment Governance"
+      ],
+      "dominantStyle": "factual-recall",
+      "patterns": "Heavy emphasis on places in news related to global conflicts (Middle East, secessionist movements) and international environmental/climate initiatives."
+    },
+    {
+      "year": "2019",
+      "total": 100,
+      "irCount": 8,
+      "irPct": "8.0",
+      "static": 1,
+      "ca": 7,
+      "caPct": "87.5",
+      "dominantThemes": [
+        "International Organizations & Reports",
+        "Global Governance & Treaties",
+        "Geopolitics & Places in News"
+      ],
+      "dominantStyle": "factual-recall",
+      "patterns": "A strong emphasis on international reports/indices (WEF, World Bank) and recent global regulatory frameworks (GDPR). Questions on international organizations (AIIB, UNODC) required deep, specific knowledge of their mandates, protocols, and membership structures rather than just superficial awareness."
+    },
+    {
+      "year": "2020",
+      "total": 100,
+      "irCount": 9,
+      "irPct": "9.0",
+      "static": 4,
+      "ca": 5,
+      "caPct": "55.6",
+      "dominantThemes": [
+        "International Organizations",
+        "Global Trade",
+        "Geopolitics & Conflicts"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "A strong emphasis on international organizations (IMF, WTO, IAEA, G20) and a clear reflection of major global events like the 2020 oil price crash and the India-China border tensions."
+    },
+    {
+      "year": "2021",
+      "total": 100,
+      "irCount": 8,
+      "irPct": "8.0",
+      "static": 0,
+      "ca": 8,
+      "caPct": "100.0",
+      "dominantThemes": [
+        "UN System & International Organizations",
+        "Global Environmental Governance"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "The 2021 paper showed a heavy emphasis on UN specialized agencies, funds, and international environmental/agricultural initiatives (UNEP, UN-Habitat, UNCDF, UNESCO, CGIAR). A distinct pattern was testing the exact mandate or parent body of these initiatives, frequently using incorrect UN bodies as traps in the statements."
+    },
+    {
+      "year": "2022",
+      "total": 100,
+      "irCount": 20,
+      "irPct": "20.0",
+      "static": 2,
+      "ca": 18,
+      "caPct": "90.0",
+      "dominantThemes": [
+        "Geopolitics & Places in News",
+        "UN System & International Law",
+        "Global Environment Governance"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "Unprecedented focus on African geography and conflicts (Lake Faguibine, Bidibidi, Chad, Guinea, Amhara, Cabo Delgado). Deep dive into UN system technicalities (Credentials Committee, UNGA Observer Status). High reliance on current affairs for framing IR questions, making it one of the most IR-heavy papers in recent years."
+    },
+    {
+      "year": "2023",
+      "total": 100,
+      "irCount": 14,
+      "irPct": "14.0",
+      "static": 2,
+      "ca": 12,
+      "caPct": "85.7",
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "UN System"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "There was a massive emphasis on 'Places in News' directly tied to global conflicts (Ukraine, Africa, Middle East). The paper also showed a shift towards asking specific, nuanced details about the mandates of international bodies and agreements (e.g., UNOPS S3i, EU Stability and Growth Pact, Global Compact for Migration)."
+    },
+    {
+      "year": "2024",
+      "total": 100,
+      "irCount": 14,
+      "irPct": "14.0",
+      "static": 1,
+      "ca": 13,
+      "caPct": "92.9",
+      "dominantThemes": [
+        "Geopolitics & Conflicts",
+        "International Organizations",
+        "Global Economy & Trade"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "Heavy emphasis on places in news and geopolitical crises (Sahel, Sudan, Red Sea/Sumed, Venezuela). High use of Assertion-Reasoning (Statement I & II) format for IR questions. Focus on global macroeconomic and demographic trends (US debt, low birth rates)."
+    },
+    {
+      "year": "2025",
+      "total": 100,
+      "irCount": 13,
+      "irPct": "13.0",
+      "static": 1,
+      "ca": 12,
+      "caPct": "92.3",
+      "dominantThemes": [
+        "Global Environment Governance",
+        "International Organizations",
+        "Geopolitics & Connectivity"
+      ],
+      "dominantStyle": "statement-analysis",
+      "patterns": "A very strong emphasis on current affairs-linked global governance, particularly environmental and tech governance (COP28, AI Summit, Nature Restoration Law). Traditional international organizations like BRICS, NATO, and the World Bank continue to feature prominently, alongside India's economic diplomacy (UPI internationalization)."
+    }
+  ],
+  "extractedThemes": {
+    "International Environmental Governance": [
+      "2014",
+      "2014",
+      "2014"
+    ],
+    "International Organizations": [
+      "2014",
+      "2014",
+      "2014",
+      "2014",
+      "2014",
+      "2015",
+      "2015",
+      "2015",
+      "2015",
+      "2015",
+      "2016",
+      "2017",
+      "2017",
+      "2017",
+      "2018",
+      "2018",
+      "2018",
+      "2019",
+      "2019",
+      "2019",
+      "2020",
+      "2020",
+      "2021",
+      "2022",
+      "2022",
+      "2022",
+      "2022",
+      "2023",
+      "2023",
+      "2024",
+      "2024",
+      "2025",
+      "2025",
+      "2025",
+      "2025"
+    ],
+    "Geopolitics & Conflicts": [
+      "2014",
+      "2014",
+      "2014",
+      "2014",
+      "2015",
+      "2015",
+      "2016",
+      "2017",
+      "2018",
+      "2018",
+      "2018",
+      "2018",
+      "2019",
+      "2020",
+      "2022",
+      "2022",
+      "2023",
+      "2023",
+      "2023",
+      "2023",
+      "2023",
+      "2023",
+      "2024",
+      "2024",
+      "2024",
+      "2024"
+    ],
+    "Global Environment Governance": [
+      "2015",
+      "2015",
+      "2015",
+      "2015",
+      "2015",
+      "2015",
+      "2017",
+      "2017",
+      "2017",
+      "2018",
+      "2018",
+      "2018",
+      "2019",
+      "2022",
+      "2022",
+      "2023",
+      "2023",
+      "2025",
+      "2025",
+      "2025"
+    ],
+    "Places in News": [
+      "2015"
+    ],
+    "Global Trade": [
+      "2015",
+      "2016",
+      "2017",
+      "2017",
+      "2017",
+      "2018",
+      "2018",
+      "2020"
+    ],
+    "Bilateral & Multilateral Relations": [
+      "2015",
+      "2018"
+    ],
+    "Global Economic Governance": [
+      "2015",
+      "2015"
+    ],
+    "UN System": [
+      "2015",
+      "2016",
+      "2017",
+      "2019",
+      "2022",
+      "2022",
+      "2023",
+      "2023",
+      "2025"
+    ],
+    "Defense & Security": [
+      "2015",
+      "2017",
+      "2017",
+      "2018",
+      "2018",
+      "2020",
+      "2022",
+      "2024"
+    ],
+    "Global Reports & Indices": [
+      "2016",
+      "2016"
+    ],
+    "Global Environmental Governance": [
+      "2016",
+      "2016",
+      "2016",
+      "2021",
+      "2021"
+    ],
+    "International Financial Institutions": [
+      "2016",
+      "2016",
+      "2016"
+    ],
+    "International Forums": [
+      "2017"
+    ],
+    "Bilateral Relations": [
+      "2017",
+      "2019"
+    ],
+    "India Foreign Policy": [
+      "2017",
+      "2023",
+      "2024"
+    ],
+    "Global Governance": [
+      "2019",
+      "2024"
+    ],
+    "UN System & International Law": [
+      "2020"
+    ],
+    "International Agreements": [
+      "2020"
+    ],
+    "Global Trade & Commodities": [
+      "2020"
+    ],
+    "India's Foreign Policy": [
+      "2020"
+    ],
+    "International Organizations & Initiatives": [
+      "2021"
+    ],
+    "UN System & International Organizations": [
+      "2021",
+      "2021"
+    ],
+    "Global Governance & International Law": [
+      "2021"
+    ],
+    "UN System & Global Governance": [
+      "2021"
+    ],
+    "Geopolitics & Places in News": [
+      "2022",
+      "2022",
+      "2022",
+      "2022",
+      "2022"
+    ],
+    "Global Health Governance": [
+      "2022"
+    ],
+    "Geopolitics & Global Economy": [
+      "2022"
+    ],
+    "International Law": [
+      "2022",
+      "2022"
+    ],
+    "Bilateral/Multilateral Agreements": [
+      "2023"
+    ],
+    "Global Initiatives": [
+      "2024"
+    ],
+    "Global Economy": [
+      "2024"
+    ],
+    "Global Demographics": [
+      "2024"
+    ],
+    "Geopolitics & Borders": [
+      "2024"
+    ],
+    "International Trade": [
+      "2024"
+    ],
+    "Strategic Partnerships & Geopolitics": [
+      "2025"
+    ],
+    "International Funds & Institutions": [
+      "2025"
+    ],
+    "Geopolitics & Connectivity": [
+      "2025"
+    ],
+    "India's Economic Diplomacy": [
+      "2025"
+    ],
+    "Global Governance & Multilateral Forums": [
+      "2025"
+    ]
+  },
+  "topSubTopics": [
+    {
+      "topic": "World Bank",
+      "count": 9,
+      "years": [
+        "2015",
+        "2016",
+        "2017",
+        "2019",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Middle East",
+      "count": 8,
+      "years": [
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2022",
+        "2024"
+      ]
+    },
+    {
+      "topic": "WTO",
+      "count": 7,
+      "years": [
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2020",
+        "2024"
+      ]
+    },
+    {
+      "topic": "European Union",
+      "count": 6,
+      "years": [
+        "2017",
+        "2019",
+        "2023",
+        "2024",
+        "2025"
+      ]
+    },
+    {
+      "topic": "UNFCCC",
+      "count": 5,
+      "years": [
+        "2014",
+        "2015",
+        "2016",
+        "2018"
+      ]
+    },
+    {
+      "topic": "Places in News",
+      "count": 5,
+      "years": [
+        "2014",
+        "2018",
+        "2019",
+        "2024"
+      ]
+    },
+    {
+      "topic": "UNEP",
+      "count": 5,
+      "years": [
+        "2014",
+        "2017",
+        "2018",
+        "2021"
+      ]
+    },
+    {
+      "topic": "IMF",
+      "count": 5,
+      "years": [
+        "2014",
+        "2016",
+        "2020",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Africa",
+      "count": 4,
+      "years": [
+        "2022",
+        "2024"
+      ]
+    },
+    {
+      "topic": "Ramsar Convention",
+      "count": 3,
+      "years": [
+        "2014",
+        "2019"
+      ]
+    },
+    {
+      "topic": "BRICS",
+      "count": 3,
+      "years": [
+        "2014",
+        "2015",
+        "2025"
+      ]
+    },
+    {
+      "topic": "ASEAN",
+      "count": 3,
+      "years": [
+        "2014",
+        "2015",
+        "2018"
+      ]
+    },
+    {
+      "topic": "FAO",
+      "count": 3,
+      "years": [
+        "2016",
+        "2018",
+        "2021"
+      ]
+    },
+    {
+      "topic": "G20",
+      "count": 3,
+      "years": [
+        "2020",
+        "2022",
+        "2023"
+      ]
+    },
+    {
+      "topic": "UNCCD",
+      "count": 2,
+      "years": [
+        "2014",
+        "2016"
+      ]
+    },
+    {
+      "topic": "UNESCO",
+      "count": 2,
+      "years": [
+        "2014",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Global Reports",
+      "count": 2,
+      "years": [
+        "2014",
+        "2019"
+      ]
+    },
+    {
+      "topic": "IUCN",
+      "count": 2,
+      "years": [
+        "2015",
+        "2023"
+      ]
+    },
+    {
+      "topic": "Agreement on Agriculture",
+      "count": 2,
+      "years": [
+        "2015",
+        "2016"
+      ]
+    },
+    {
+      "topic": "Rio+20",
+      "count": 2,
+      "years": [
+        "2015",
+        "2018"
+      ]
+    },
+    {
+      "topic": "India's Memberships",
+      "count": 2,
+      "years": [
+        "2015",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Mediterranean Sea",
+      "count": 2,
+      "years": [
+        "2015",
+        "2017"
+      ]
+    },
+    {
+      "topic": "Paris Agreement",
+      "count": 2,
+      "years": [
+        "2016",
+        "2025"
+      ]
+    },
+    {
+      "topic": "Nagoya Protocol",
+      "count": 2,
+      "years": [
+        "2016",
+        "2023"
+      ]
+    },
+    {
+      "topic": "Ease of Doing Business Index",
+      "count": 2,
+      "years": [
+        "2016",
+        "2019"
+      ]
+    },
+    {
+      "topic": "World Economic Forum",
+      "count": 2,
+      "years": [
+        "2017",
+        "2024"
+      ]
+    },
+    {
+      "topic": "IAEA",
+      "count": 2,
+      "years": [
+        "2017",
+        "2020"
+      ]
+    },
+    {
+      "topic": "TRIPS Agreement",
+      "count": 2,
+      "years": [
+        "2017",
+        "2018"
+      ]
+    },
+    {
+      "topic": "Urban Development",
+      "count": 2,
+      "years": [
+        "2017"
+      ]
+    },
+    {
+      "topic": "Climate Finance",
+      "count": 2,
+      "years": [
+        "2017",
+        "2025"
+      ]
+    },
+    {
+      "topic": "UN-Habitat",
+      "count": 2,
+      "years": [
+        "2017",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Geopolitics",
+      "count": 2,
+      "years": [
+        "2017",
+        "2024"
+      ]
+    },
+    {
+      "topic": "Nuclear Safeguards",
+      "count": 2,
+      "years": [
+        "2018",
+        "2020"
+      ]
+    },
+    {
+      "topic": "AIIB",
+      "count": 2,
+      "years": [
+        "2019",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Under2 Coalition",
+      "count": 2,
+      "years": [
+        "2020",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Bilateral Trade",
+      "count": 2,
+      "years": [
+        "2020",
+        "2024"
+      ]
+    },
+    {
+      "topic": "UNCLOS",
+      "count": 2,
+      "years": [
+        "2021",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Sovereign Debt",
+      "count": 2,
+      "years": [
+        "2022",
+        "2024"
+      ]
+    },
+    {
+      "topic": "Central Asia",
+      "count": 2,
+      "years": [
+        "2022"
+      ]
+    },
+    {
+      "topic": "Sahel Region",
+      "count": 2,
+      "years": [
+        "2023",
+        "2024"
+      ]
+    },
+    {
+      "topic": "NATO",
+      "count": 2,
+      "years": [
+        "2024",
+        "2025"
+      ]
+    },
+    {
+      "topic": "Montreux Record",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Global Environment Facility (GEF)",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Convention on Biological Diversity (CBD)",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Wetlands International",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Arab Spring",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Arctic Council",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Chechnya",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Darfur",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    },
+    {
+      "topic": "Swat Valley",
+      "count": 1,
+      "years": [
+        "2014"
+      ]
+    }
+  ],
+  "missingFromCodebase": [
+    {
+      "topic": "European Union",
+      "count": 6,
+      "years": [
+        "2017",
+        "2019",
+        "2023",
+        "2024",
+        "2025"
+      ]
+    },
+    {
+      "topic": "UNFCCC",
+      "count": 5,
+      "years": [
+        "2014",
+        "2015",
+        "2016",
+        "2018"
+      ]
+    },
+    {
+      "topic": "Places in News",
+      "count": 5,
+      "years": [
+        "2014",
+        "2018",
+        "2019",
+        "2024"
+      ]
+    },
+    {
+      "topic": "UNEP",
+      "count": 5,
+      "years": [
+        "2014",
+        "2017",
+        "2018",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Ramsar Convention",
+      "count": 3,
+      "years": [
+        "2014",
+        "2019"
+      ]
+    },
+    {
+      "topic": "G20",
+      "count": 3,
+      "years": [
+        "2020",
+        "2022",
+        "2023"
+      ]
+    },
+    {
+      "topic": "UNCCD",
+      "count": 2,
+      "years": [
+        "2014",
+        "2016"
+      ]
+    },
+    {
+      "topic": "UNESCO",
+      "count": 2,
+      "years": [
+        "2014",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Global Reports",
+      "count": 2,
+      "years": [
+        "2014",
+        "2019"
+      ]
+    },
+    {
+      "topic": "IUCN",
+      "count": 2,
+      "years": [
+        "2015",
+        "2023"
+      ]
+    },
+    {
+      "topic": "Agreement on Agriculture",
+      "count": 2,
+      "years": [
+        "2015",
+        "2016"
+      ]
+    },
+    {
+      "topic": "Rio+20",
+      "count": 2,
+      "years": [
+        "2015",
+        "2018"
+      ]
+    },
+    {
+      "topic": "India's Memberships",
+      "count": 2,
+      "years": [
+        "2015",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Mediterranean Sea",
+      "count": 2,
+      "years": [
+        "2015",
+        "2017"
+      ]
+    },
+    {
+      "topic": "Paris Agreement",
+      "count": 2,
+      "years": [
+        "2016",
+        "2025"
+      ]
+    },
+    {
+      "topic": "Nagoya Protocol",
+      "count": 2,
+      "years": [
+        "2016",
+        "2023"
+      ]
+    },
+    {
+      "topic": "Ease of Doing Business Index",
+      "count": 2,
+      "years": [
+        "2016",
+        "2019"
+      ]
+    },
+    {
+      "topic": "TRIPS Agreement",
+      "count": 2,
+      "years": [
+        "2017",
+        "2018"
+      ]
+    },
+    {
+      "topic": "Urban Development",
+      "count": 2,
+      "years": [
+        "2017"
+      ]
+    },
+    {
+      "topic": "Climate Finance",
+      "count": 2,
+      "years": [
+        "2017",
+        "2025"
+      ]
+    },
+    {
+      "topic": "UN-Habitat",
+      "count": 2,
+      "years": [
+        "2017",
+        "2021"
+      ]
+    },
+    {
+      "topic": "Geopolitics",
+      "count": 2,
+      "years": [
+        "2017",
+        "2024"
+      ]
+    },
+    {
+      "topic": "Nuclear Safeguards",
+      "count": 2,
+      "years": [
+        "2018",
+        "2020"
+      ]
+    },
+    {
+      "topic": "Under2 Coalition",
+      "count": 2,
+      "years": [
+        "2020",
+        "2022"
+      ]
+    },
+    {
+      "topic": "Bilateral Trade",
+      "count": 2,
+      "years": [
+        "2020",
+        "2024"
+      ]
+    }
+  ],
+  "styleDistribution": {
+    "conceptual": 12,
+    "institutional-mandate": 8,
+    "factual-recall": 54,
+    "membership-based": 10,
+    "match-the-following": 13,
+    "statement-analysis": 63,
+    "undefined": 1
+  },
+  "difficultyDistribution": {
+    "moderate": 88,
+    "hard": 27,
+    "easy": 45,
+    "undefined": 1
+  }
+}

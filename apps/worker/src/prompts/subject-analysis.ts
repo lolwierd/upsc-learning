@@ -129,6 +129,34 @@ Focus on "Energy Transition." Batteries, Hydrogen, Nuclear (SMRs) are the highes
 Understand applications of emerging technologies, not just definitions.
 `;
 
+export const IR_ANALYSIS = `
+INTERNATIONAL RELATIONS - UPSC PATTERN ANALYSIS (2014-2025)
+Note: 2013 had zero IR questions. IR as a distinct subject effectively starts from 2014.
+161 IR questions across 1300 total (12.4%). ~80% are CA-linked — the highest CA ratio of any subject.
+
+TREND EVOLUTION:
+- 2014-2016 (Factual & Memberships): "Who is a member of X?", "Where is HQ?", direct factual-recall on organizations and environmental treaties. ~55% CA-linked. Dominant style: factual-recall.
+- 2017-2021 (CA-Heavy & Places in News): Sharp CA spike (83%). Surge in match-the-following for conflict zones (Sahel, Middle East, secessionist movements). Heavy Env-IR crossover (UNFCCC, Paris Agreement, climate funds). Statement-analysis format emerges alongside factual-recall.
+- 2022-2025 (Deep Institutional): 90% CA-linked. Specific mandates, voting shares, origins (e.g., G20 Common Framework, creditor committees). Statement-analysis becomes dominant format (48% of IR Qs). Unprecedented focus on Africa geography and UN system technicalities.
+
+QUESTION FORMAT SHIFT:
+Statement-analysis (39%) has overtaken factual-recall (34%) as the dominant IR question style overall. Match-the-following (8%) and membership-based (6%) are secondary but consistent. Generate questions accordingly — prefer statement-based formats for recent-era questions.
+
+CURRENT AFFAIRS PATTERN - "GEOPOLITICAL CONTEXT":
+IR is ~80% CA-linked. Questions link static bodies to current crises.
+- Ukraine War → Questions on NATO Article 5, SWIFT system, UN Security Council veto
+- Climate Summits → Questions on specific funds (GEF vs GCF), UNFCCC mechanisms, Paris Agreement, new initiatives (Mangrove Alliance)
+- Debt Crisis → Questions on Paris Club, IMF Gold Tranche
+- EU Developments → Questions on EU regulations (Nature Restoration Law), Stability and Growth Pact
+- AI/Tech Governance → Questions on AI Action Summit, global governance frameworks
+
+KEY CROSSOVER — ENVIRONMENT × IR:
+Global environmental governance is the single largest IR theme across all years. Questions on UNFCCC, UNEP, Paris Agreement, GEF, GCF, Ramsar Convention, Nagoya Protocol, and CBD frequently appear as IR questions. Generate questions that test institutional mandates and funding mechanisms of these bodies.
+
+PREPARATION STRATEGY:
+Focus on "Conflict Mapping" and "Institutional Mandates." Don't just memorize members; understand *what the body does* and its *origin treaty*. Statement-analysis is now the dominant format — frame questions as multi-statement evaluation rather than simple factual recall.
+`;
+
 export const STRATEGIC_SYNTHESIS = `
 THE "UPSC MINDSET" - STRATEGIC SYNTHESIS
 
@@ -165,6 +193,9 @@ const SUBJECT_ANALYSIS_MAP: Record<string, string> = {
     "art and culture": HISTORY_ANALYSIS, // Art/Culture uses History analysis as they share themes
     art: HISTORY_ANALYSIS,
     culture: HISTORY_ANALYSIS,
+    "international relations": IR_ANALYSIS,
+    international_relations: IR_ANALYSIS,
+    ir: IR_ANALYSIS,
 };
 
 /**
