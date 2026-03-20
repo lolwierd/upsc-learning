@@ -219,12 +219,13 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
         message: "Attempt already completed",
       });
     }
-    // Resume in-progress attempt
-    return c.json({
-      attemptId: existingAttempt.id,
-      status: "in_progress",
-      message: "Resuming existing attempt",
-    });
+    if (existingAttempt.status === "in_progress") {
+      return c.json({
+        attemptId: existingAttempt.id,
+        status: "in_progress",
+        message: "Resuming existing attempt",
+      });
+    }
   }
 
   // Get all completed quizzes from this run
@@ -363,7 +364,7 @@ runAttemptById.get("/:id", async (c) => {
     score: attempt.score || undefined,
     totalQuestions: attempt.total_questions,
     timeTakenSeconds: attempt.time_taken_seconds || undefined,
-    status: attempt.status as "in_progress" | "completed",
+    status: attempt.status as RunAttemptWithAnswers["status"],
     shuffleSeed: attempt.shuffle_seed,
     quizSetName: attempt.quiz_set_name,
     answers,
@@ -397,6 +398,32 @@ runAttemptById.patch("/:id/answer", zValidator("json", saveAnswerSchema), async 
      WHERE run_attempt_id = ? AND question_id = ?`
   )
     .bind(selectedOption, markedForReview ? 1 : 0, now, attemptId, questionId)
+    .run();
+
+  return c.json({ success: true });
+});
+
+// POST /:id/abandon - Abandon an in-progress run attempt
+runAttemptById.post("/:id/abandon", async (c) => {
+  const attemptId = c.req.param("id");
+  const now = Math.floor(Date.now() / 1000);
+
+  const attempt = await c.env.DB.prepare(
+    `SELECT * FROM run_attempts WHERE id = ? AND status = 'in_progress'`
+  )
+    .bind(attemptId)
+    .first<RunAttemptRow>();
+
+  if (!attempt) {
+    return c.json({ error: "Attempt not found or already finished" }, 404);
+  }
+
+  await c.env.DB.prepare(
+    `UPDATE run_attempts
+     SET status = 'abandoned', submitted_at = ?, time_taken_seconds = ?
+     WHERE id = ?`
+  )
+    .bind(now, now - attempt.started_at, attemptId)
     .run();
 
   return c.json({ success: true });

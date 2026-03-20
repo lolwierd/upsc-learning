@@ -23,6 +23,7 @@ import {
   deleteQuizSetSchedule,
   toggleQuizSetSchedule,
   duplicateQuizSet,
+  cancelQuizSetRun,
 } from "@/lib/api";
 import type {
   QuizSetWithSchedule,
@@ -58,6 +59,9 @@ export default function QuizSetDetailPage() {
   const [savingName, setSavingName] = useState(false);
   const [savingItem, setSavingItem] = useState(false);
   const [duplicating, setDuplicating] = useState(false);
+  const [cancelingRunId, setCancelingRunId] = useState<string | null>(null);
+
+  const hasRunningRun = runs.some((run) => run.status === "running");
 
   const loadQuizSet = useCallback(async () => {
     try {
@@ -151,6 +155,22 @@ export default function QuizSetDetailPage() {
       setError(err instanceof Error ? err.message : "Failed to start generation");
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleCancelRun = async (runId: string) => {
+    if (!confirm("Cancel this generation run? Any in-progress items will be discarded and no further items will be generated.")) {
+      return;
+    }
+
+    setCancelingRunId(runId);
+    try {
+      await cancelQuizSetRun(setId, runId);
+      await Promise.all([loadRuns(), loadQuizSet()]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to cancel run");
+    } finally {
+      setCancelingRunId(null);
     }
   };
 
@@ -310,9 +330,9 @@ export default function QuizSetDetailPage() {
           <Button
             onClick={handleGenerate}
             loading={generating}
-            disabled={quizSet.items.length === 0}
+            disabled={quizSet.items.length === 0 || hasRunningRun}
           >
-            {generating ? "Starting..." : "Generate All"}
+            {generating ? "Starting..." : hasRunningRun ? "Run In Progress" : "Generate All"}
           </Button>
         </div>
       </div>
@@ -515,7 +535,8 @@ export default function QuizSetDetailPage() {
                         "w-2 h-2 rounded-full",
                         run.status === "completed" ? "bg-green-500" :
                           run.status === "running" ? "bg-amber-500 animate-pulse" :
-                            run.status === "partial" ? "bg-amber-500" : "bg-red-500"
+                            run.status === "partial" ? "bg-amber-500" :
+                              run.status === "cancelled" ? "bg-gray-400" : "bg-red-500"
                       )}
                     />
                     <span className="text-sm font-medium text-gray-900 capitalize">
@@ -531,11 +552,23 @@ export default function QuizSetDetailPage() {
                     {run.failedItems > 0 && ` · ${run.failedItems} failed`}
                   </div>
                 </div>
-                <Link href={`/sets/${setId}/runs/${run.id}`}>
-                  <Button variant="secondary" size="sm">
-                    View
-                  </Button>
-                </Link>
+                <div className="flex items-center gap-2">
+                  {run.status === "running" && (
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleCancelRun(run.id)}
+                      loading={cancelingRunId === run.id}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                  <Link href={`/sets/${setId}/runs/${run.id}`}>
+                    <Button variant="secondary" size="sm">
+                      View
+                    </Button>
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

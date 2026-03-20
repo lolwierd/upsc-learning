@@ -1183,6 +1183,120 @@ quizSets.get("/:id/runs/:runId", async (c) => {
   });
 });
 
+// POST /api/quiz-sets/:id/runs/:runId/cancel - Cancel an in-progress generation run
+quizSets.post("/:id/runs/:runId/cancel", async (c) => {
+  const setId = c.req.param("id");
+  const runId = c.req.param("runId");
+  const now = Math.floor(Date.now() / 1000);
+  const cancelMessage = "Run cancelled by user";
+
+  const existing = await c.env.DB.prepare(
+    `SELECT id FROM quiz_sets WHERE id = ?`
+  )
+    .bind(setId)
+    .first();
+
+  if (!existing) {
+    return c.json({ error: "Quiz set not found" }, 404);
+  }
+
+  const runRow = await c.env.DB.prepare(
+    `SELECT * FROM quiz_set_runs WHERE id = ? AND quiz_set_id = ?`
+  )
+    .bind(runId, setId)
+    .first<QuizSetRunRow>();
+
+  if (!runRow) {
+    return c.json({ error: "Run not found" }, 404);
+  }
+
+  if (runRow.status !== "running") {
+    return c.json({ error: `Run is already ${runRow.status}` }, 409);
+  }
+
+  const activeItems = await c.env.DB.prepare(
+    `SELECT id, quiz_id FROM quiz_set_run_items
+     WHERE run_id = ? AND status IN ('pending', 'generating')`
+  )
+    .bind(runId)
+    .all<{ id: string; quiz_id: string | null }>();
+
+  await c.env.DB.prepare(
+    `UPDATE quiz_set_runs
+     SET status = 'cancelled', completed_at = ?, error = ?
+     WHERE id = ?`
+  )
+    .bind(now, cancelMessage, runId)
+    .run();
+
+  await c.env.DB.prepare(
+    `UPDATE quiz_set_run_items
+     SET status = 'cancelled',
+         error = COALESCE(error, ?),
+         completed_at = COALESCE(completed_at, ?),
+         quiz_id = NULL
+     WHERE run_id = ? AND status IN ('pending', 'generating')`
+  )
+    .bind(cancelMessage, now, runId)
+    .run();
+
+  for (const item of activeItems.results) {
+    if (!item.quiz_id) continue;
+    await c.env.DB.prepare(
+      `DELETE FROM quizzes WHERE id = ?`
+    )
+      .bind(item.quiz_id)
+      .run();
+  }
+
+  const counts = await c.env.DB.prepare(
+    `SELECT
+       SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS completed,
+       SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failed
+     FROM quiz_set_run_items
+     WHERE run_id = ?`
+  )
+    .bind(runId)
+    .first<{ completed: number | null; failed: number | null }>();
+
+  await c.env.DB.prepare(
+    `UPDATE quiz_set_runs SET completed_items = ?, failed_items = ? WHERE id = ?`
+  )
+    .bind(counts?.completed ?? 0, counts?.failed ?? 0, runId)
+    .run();
+
+  if (runRow.trigger_type === "scheduled") {
+    await c.env.DB.prepare(
+      `UPDATE quiz_set_schedules
+       SET last_run_at = ?, last_run_status = ?, last_run_error = ?
+       WHERE quiz_set_id = ?`
+    )
+      .bind(now, "cancelled", cancelMessage, setId)
+      .run();
+  }
+
+  const cancelledRunRow = await c.env.DB.prepare(
+    `SELECT * FROM quiz_set_runs WHERE id = ? AND quiz_set_id = ?`
+  )
+    .bind(runId, setId)
+    .first<QuizSetRunRow>();
+
+  if (!cancelledRunRow) {
+    return c.json({ error: "Run not found after cancellation" }, 500);
+  }
+
+  const cancelledItemsResult = await c.env.DB.prepare(
+    `SELECT * FROM quiz_set_run_items WHERE run_id = ?`
+  )
+    .bind(runId)
+    .all<QuizSetRunItemRow>();
+
+  return c.json({
+    ...mapRunRowToResponse(cancelledRunRow),
+    runItems: cancelledItemsResult.results.map(mapRunItemRowToResponse),
+  });
+});
+
 // ============================================
 // Quiz Set Schedule
 // ============================================

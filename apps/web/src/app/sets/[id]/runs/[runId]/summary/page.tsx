@@ -237,6 +237,8 @@ export default function QuizSetRunSummaryPage() {
                         ? "bg-green-100 text-green-700"
                         : item.status === "failed"
                           ? "bg-red-100 text-red-700"
+                          : item.status === "cancelled"
+                            ? "bg-gray-200 text-gray-700"
                           : "bg-gray-100 text-gray-600"
                     )}
                   >

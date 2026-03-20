@@ -247,9 +247,14 @@ export interface UserStats {
 // Quiz Set Types
 // ============================================
 
-export type QuizSetRunStatus = "running" | "completed" | "partial" | "failed";
+export type QuizSetRunStatus = "running" | "completed" | "partial" | "failed" | "cancelled";
 export type QuizSetRunTriggerType = "manual" | "scheduled";
-export type QuizSetRunItemStatus = "pending" | "generating" | "completed" | "failed";
+export type QuizSetRunItemStatus =
+  | "pending"
+  | "generating"
+  | "completed"
+  | "failed"
+  | "cancelled";
 export interface QuizSetItemConfig {
   subject: Subject;
   theme?: string;
@@ -399,7 +404,7 @@ export interface PyqPaperListItem {
 // Run Attempt Types (Combined Quiz)
 // ============================================
 
-export type RunAttemptStatus = "in_progress" | "completed";
+export type RunAttemptStatus = "in_progress" | "completed" | "abandoned";
 
 export interface RunAttempt {
   id: string;

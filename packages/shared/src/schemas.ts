@@ -9,7 +9,7 @@ export const subjectSchema = z.enum(SUBJECTS);
 export const questionStyleSchema = z.enum(QUESTION_STYLES);
 
 export const questionTypeSchema = z.enum(["standard", "statement", "match", "assertion"]);
-export const attemptStatusSchema = z.enum(["in_progress", "completed"]);
+export const attemptStatusSchema = z.enum(["in_progress", "completed", "abandoned"]);
 export const modelProviderSchema = z.enum(["gemini", "openai"]);
 
 // ============================================
@@ -227,9 +227,15 @@ export type HistoryQuery = z.infer<typeof historyQuerySchema>;
 // Quiz Set Schemas
 // ============================================
 
-export const quizSetRunStatusSchema = z.enum(["running", "completed", "partial", "failed"]);
+export const quizSetRunStatusSchema = z.enum(["running", "completed", "partial", "failed", "cancelled"]);
 export const quizSetRunTriggerTypeSchema = z.enum(["manual", "scheduled"]);
-export const quizSetRunItemStatusSchema = z.enum(["pending", "generating", "completed", "failed"]);
+export const quizSetRunItemStatusSchema = z.enum([
+  "pending",
+  "generating",
+  "completed",
+  "failed",
+  "cancelled",
+]);
 export const quizSetNotifierProviderSchema = z.enum(["discord_webhook"]);
 export const quizSetNotifierEventTypeSchema = z.enum([
   "quiz_set.modified",

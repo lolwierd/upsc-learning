@@ -27,6 +27,39 @@ interface GenerationContext {
 }
 
 const RUN_ITEM_GENERATING_STALE_SECONDS = 10 * 60;
+const RUN_CANCELLED_ERROR = "Run cancelled by user";
+
+async function getQuizSetRunStatus(env: Env, runId: string): Promise<string | null> {
+  const row = await env.DB.prepare(`SELECT status FROM quiz_set_runs WHERE id = ? LIMIT 1`)
+    .bind(runId)
+    .first<{ status: string }>();
+
+  return row?.status ?? null;
+}
+
+async function cleanupCancelledRunItem(
+  env: Env,
+  runItemId: string,
+  completedAt: number,
+  quizId?: string | null
+): Promise<void> {
+  if (quizId) {
+    await env.DB.prepare(`DELETE FROM quizzes WHERE id = ?`)
+      .bind(quizId)
+      .run();
+  }
+
+  await env.DB.prepare(
+    `UPDATE quiz_set_run_items
+     SET status = 'cancelled',
+         error = COALESCE(error, ?),
+         completed_at = COALESCE(completed_at, ?),
+         quiz_id = NULL
+     WHERE id = ? AND status IN ('pending', 'generating')`
+  )
+    .bind(RUN_CANCELLED_ERROR, completedAt, runItemId)
+    .run();
+}
 
 /**
  * Start a quiz set generation run
@@ -129,8 +162,17 @@ export async function executeQuizSetGeneration(
     let activeQuizId: string | null = null;
 
     try {
+      const runStatus = await getQuizSetRunStatus(env, runId);
+      if (runStatus !== "running") {
+        return;
+      }
+
       // Skip already-finished items (important for resume)
-      if (runItem.status === "completed" || runItem.status === "failed") {
+      if (
+        runItem.status === "completed" ||
+        runItem.status === "failed" ||
+        runItem.status === "cancelled"
+      ) {
         continue;
       }
 
@@ -149,6 +191,12 @@ export async function executeQuizSetGeneration(
       )
         .bind(now, runItem.id)
         .run();
+
+      const statusAfterClaim = await getQuizSetRunStatus(env, runId);
+      if (statusAfterClaim !== "running") {
+        await cleanupCancelledRunItem(env, runItem.id, now);
+        return;
+      }
 
       // Create (or reuse) quiz placeholder
       let quizId = runItem.quiz_id ?? null;
@@ -225,6 +273,12 @@ export async function executeQuizSetGeneration(
         forceStatic,
       });
 
+      const statusAfterGeneration = await getQuizSetRunStatus(env, runId);
+      if (statusAfterGeneration !== "running") {
+        await cleanupCancelledRunItem(env, runItem.id, now, activeQuizId);
+        return;
+      }
+
       // Insert questions
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i];
@@ -248,20 +302,52 @@ export async function executeQuizSetGeneration(
           .run();
       }
 
+      const statusBeforeCompletion = await getQuizSetRunStatus(env, runId);
+      if (statusBeforeCompletion !== "running") {
+        await cleanupCancelledRunItem(env, runItem.id, now, activeQuizId);
+        return;
+      }
+
       // Update quiz status to completed
-      await env.DB.prepare(
-        `UPDATE quizzes SET status = 'completed', model_used = ? WHERE id = ?`
+      const completedAt = Math.floor(Date.now() / 1000);
+
+      const quizResult = await env.DB.prepare(
+        `UPDATE quizzes
+         SET status = 'completed', model_used = ?
+         WHERE id = ?
+           AND EXISTS (
+             SELECT 1
+             FROM quiz_set_runs
+             WHERE id = ? AND status = 'running'
+           )`
       )
-        .bind(metrics.model, quizId)
+        .bind(metrics.model, quizId, runId)
         .run();
 
+      if ((quizResult.meta?.changes ?? 0) === 0) {
+        await cleanupCancelledRunItem(env, runItem.id, completedAt, activeQuizId);
+        return;
+      }
+
       // Update run item as completed
-      const completedAt = Math.floor(Date.now() / 1000);
-      await env.DB.prepare(
-        `UPDATE quiz_set_run_items SET status = 'completed', quiz_id = ?, completed_at = ? WHERE id = ?`
+      const runItemResult = await env.DB.prepare(
+        `UPDATE quiz_set_run_items
+         SET status = 'completed', quiz_id = ?, completed_at = ?
+         WHERE id = ?
+           AND status = 'generating'
+           AND EXISTS (
+             SELECT 1
+             FROM quiz_set_runs
+             WHERE id = ? AND status = 'running'
+           )`
       )
-        .bind(quizId, completedAt, runItem.id)
+        .bind(quizId, completedAt, runItem.id, runId)
         .run();
+
+      if ((runItemResult.meta?.changes ?? 0) === 0) {
+        await cleanupCancelledRunItem(env, runItem.id, completedAt, activeQuizId);
+        return;
+      }
 
       completedCount++;
 
@@ -322,6 +408,17 @@ export async function executeQuizSetGeneration(
         .run();
 
     } catch (error) {
+      const stoppedRunStatus = await getQuizSetRunStatus(env, runId);
+      if (stoppedRunStatus !== "running") {
+        await cleanupCancelledRunItem(
+          env,
+          runItem.id,
+          Math.floor(Date.now() / 1000),
+          activeQuizId
+        );
+        return;
+      }
+
       console.error(`Failed to generate quiz for run item ${runItem.id}:`, error);
       const errorMessage = error instanceof Error ? error.message : String(error);
 
@@ -393,6 +490,11 @@ export async function executeQuizSetGeneration(
   )
     .bind(dbCompleted, dbFailed, runId)
     .run();
+
+  const currentRunStatus = await getQuizSetRunStatus(env, runId);
+  if (currentRunStatus !== "running") {
+    return;
+  }
 
   if (dbUnfinished > 0) {
     // Another worker may still be processing, or this run was resumed while items are in-flight.

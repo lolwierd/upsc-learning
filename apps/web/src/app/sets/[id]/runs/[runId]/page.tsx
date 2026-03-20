@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Card, CardTitle, Button } from "@/components/ui";
-import { getQuizSet, getQuizSetRun } from "@/lib/api";
+import { cancelQuizSetRun, getQuizSet, getQuizSetRun } from "@/lib/api";
 import type { QuizSetRunWithItems, QuizSetWithSchedule } from "@mcqs/shared";
 import { SUBJECT_LABELS } from "@mcqs/shared";
 import { cn } from "@/lib/utils";
@@ -20,6 +20,7 @@ export default function QuizSetRunPage() {
   const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [canceling, setCanceling] = useState(false);
 
   const itemMap = useMemo(() => {
     if (!quizSet?.items) return new Map();
@@ -41,11 +42,19 @@ export default function QuizSetRunPage() {
     if (!run) return false;
     if (run.runItems.length === 0) return false;
     const allDone = run.runItems.every(
-      (item) => item.status === "completed" || item.status === "failed"
+      (item) =>
+        item.status === "completed" ||
+        item.status === "failed" ||
+        item.status === "cancelled"
     );
     const hasQuiz = run.runItems.some((item) => item.quizId);
     return allDone && hasQuiz;
   }, [run]);
+
+  const cancelledItems = useMemo(
+    () => run?.runItems.filter((item) => item.status === "cancelled").length ?? 0,
+    [run]
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -82,6 +91,22 @@ export default function QuizSetRunPage() {
       hour: "numeric",
       minute: "2-digit",
     });
+  };
+
+  const handleCancelRun = async () => {
+    if (!confirm("Cancel this generation run? Any in-progress items will be discarded and no further items will be generated.")) {
+      return;
+    }
+
+    setCanceling(true);
+    try {
+      await cancelQuizSetRun(setId, runId);
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to cancel run");
+    } finally {
+      setCanceling(false);
+    }
   };
 
   if (loading) {
@@ -136,6 +161,8 @@ export default function QuizSetRunPage() {
                       ? "bg-amber-500 animate-pulse"
                       : run.status === "partial"
                         ? "bg-amber-500"
+                        : run.status === "cancelled"
+                          ? "bg-gray-400"
                         : "bg-red-500"
                 )}
               />
@@ -164,11 +191,17 @@ export default function QuizSetRunPage() {
             <p className="font-medium text-gray-900">
               {run.completedItems}/{run.totalItems} completed
               {run.failedItems > 0 ? ` · ${run.failedItems} failed` : ""}
+              {cancelledItems > 0 ? ` · ${cancelledItems} cancelled` : ""}
             </p>
           </div>
         </div>
 
         <div className="mt-4 flex items-center gap-2 flex-wrap">
+          {run.status === "running" && (
+            <Button variant="danger" onClick={handleCancelRun} loading={canceling}>
+              Cancel Run
+            </Button>
+          )}
           {canAttemptRun ? (
             <>
               <Link href={`/sets/${setId}/runs/${runId}/attempt`}>
@@ -239,12 +272,14 @@ export default function QuizSetRunPage() {
                           ? "bg-amber-100 text-amber-700"
                           : item.status === "pending"
                             ? "bg-gray-100 text-gray-600"
+                            : item.status === "cancelled"
+                              ? "bg-gray-200 text-gray-700"
                             : "bg-red-100 text-red-700"
                     )}
                   >
                     {item.status}
                   </span>
-                  {item.quizId && (
+                  {item.status === "completed" && item.quizId && (
                     <Link href={`/quiz/${item.quizId}?setId=${setId}&runId=${runId}`}>
                       <Button size="sm">Open Quiz</Button>
                     </Link>

@@ -44,7 +44,10 @@ export default function Home() {
                 } catch (err) {
                   console.warn("Failed to load latest run details:", err);
                 }
-              } else if (latestRun.status !== "failed") {
+              } else if (
+                latestRun.status === "completed" ||
+                latestRun.status === "partial"
+              ) {
                 redirectRun = latestRun;
               }
             }

@@ -196,6 +196,8 @@ export default function QuizSetsPage() {
                                 ? "bg-green-50 text-green-600"
                                 : set.schedule.lastRunStatus === "partial"
                                   ? "bg-amber-50 text-amber-600"
+                                  : set.schedule.lastRunStatus === "cancelled"
+                                    ? "bg-gray-100 text-gray-600"
                                   : "bg-red-50 text-red-600"
                             )}
                           >

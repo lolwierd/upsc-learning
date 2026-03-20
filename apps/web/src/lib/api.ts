@@ -418,6 +418,15 @@ export async function getQuizSetRun(
   return fetchAPI(API_ENDPOINTS.QUIZ_SET_RUN(setId, runId));
 }
 
+export async function cancelQuizSetRun(
+  setId: string,
+  runId: string
+): Promise<QuizSetRunWithItems> {
+  return fetchAPI(API_ENDPOINTS.QUIZ_SET_RUN_CANCEL(setId, runId), {
+    method: "POST",
+  });
+}
+
 // ============================================
 // Quiz Set Schedule APIs
 // ============================================
@@ -539,6 +548,14 @@ export async function saveRunAttemptAnswer(
   return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_ANSWER(runAttemptId), {
     method: "PATCH",
     body: JSON.stringify(data),
+  });
+}
+
+export async function abandonRunAttempt(
+  runAttemptId: string
+): Promise<{ success: boolean }> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_ABANDON(runAttemptId), {
+    method: "POST",
   });
 }
 

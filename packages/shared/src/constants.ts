@@ -127,6 +127,7 @@ export const API_ENDPOINTS = {
   QUIZ_SET_GENERATE: (setId: string) => `/api/quiz-sets/${setId}/generate`,
   QUIZ_SET_RUNS: (setId: string) => `/api/quiz-sets/${setId}/runs`,
   QUIZ_SET_RUN: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}`,
+  QUIZ_SET_RUN_CANCEL: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/cancel`,
   QUIZ_SET_NOTIFIERS: (setId: string) => `/api/quiz-sets/${setId}/notifiers`,
   QUIZ_SET_NOTIFIER: (setId: string, notifierId: string) =>
     `/api/quiz-sets/${setId}/notifiers/${notifierId}`,
@@ -139,6 +140,7 @@ export const API_ENDPOINTS = {
   RUN_ATTEMPT_START: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/attempt/start`,
   RUN_ATTEMPT_GET: (id: string) => `/api/run-attempt/${id}`,
   RUN_ATTEMPT_ANSWER: (id: string) => `/api/run-attempt/${id}/answer`,
+  RUN_ATTEMPT_ABANDON: (id: string) => `/api/run-attempt/${id}/abandon`,
   RUN_ATTEMPT_SUBMIT: (id: string) => `/api/run-attempt/${id}/submit`,
   // PYQ
   PYQ_PAPERS: "/api/pyq/papers",

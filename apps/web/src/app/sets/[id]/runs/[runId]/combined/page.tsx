@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import {
+  abandonRunAttempt,
   getCombinedQuestions,
   startRunAttempt,
   getRunAttempt,
@@ -49,6 +50,7 @@ export default function CombinedQuizPage() {
   const [answers, setAnswers] = useState<Map<string, Answer>>(new Map());
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [abandoning, setAbandoning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [learnMode, setLearnMode] = useState(false);
@@ -270,6 +272,26 @@ export default function CombinedQuizPage() {
     }
   };
 
+  const handleAbandon = async () => {
+    if (!attemptId) return;
+    const answered = Array.from(answers.values()).filter((a) => a.selectedOption !== null).length;
+    const confirmAbandon = window.confirm(
+      answered > 0
+        ? `Abandon this combined attempt and discard ${answered} saved answer(s)?`
+        : "Abandon this combined attempt?"
+    );
+    if (!confirmAbandon) return;
+
+    setAbandoning(true);
+    try {
+      await abandonRunAttempt(attemptId);
+      router.push(`/sets/${setId}/runs/${runId}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to abandon attempt");
+      setAbandoning(false);
+    }
+  };
+
   const formatCopyText = (question: CombinedQuestion, index: number) => {
     const optionLines = question.options.map((option, optIndex) => {
       const label = String.fromCharCode(65 + optIndex);
@@ -378,9 +400,19 @@ export default function CombinedQuizPage() {
                 <span className="text-amber-600">{markedCount} marked</span>
               )}
               {!learnMode && (
-                <Button onClick={handleSubmit} loading={submitting} size="sm">
-                  Submit
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="danger"
+                    onClick={handleAbandon}
+                    loading={abandoning}
+                    size="sm"
+                  >
+                    Abandon
+                  </Button>
+                  <Button onClick={handleSubmit} loading={submitting} size="sm">
+                    Submit
+                  </Button>
+                </div>
               )}
             </div>
           </div>
@@ -737,9 +769,19 @@ export default function CombinedQuizPage() {
                 <Button size="lg">Back to Run</Button>
               </Link>
             ) : (
-              <Button onClick={handleSubmit} loading={submitting} size="lg">
-                Submit Quiz
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="danger"
+                  onClick={handleAbandon}
+                  loading={abandoning}
+                  size="lg"
+                >
+                  Abandon
+                </Button>
+                <Button onClick={handleSubmit} loading={submitting} size="lg">
+                  Submit Quiz
+                </Button>
+              </div>
             )}
           </Card>
         </div>
