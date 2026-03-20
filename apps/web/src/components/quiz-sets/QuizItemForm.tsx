@@ -43,6 +43,9 @@ export function QuizItemForm({
   const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>(
     initialValues?.currentAffairsTheme || ""
   );
+  const [forceStatic, setForceStatic] = useState<boolean>(
+    initialValues?.forceStatic || false
+  );
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e?: React.SyntheticEvent) => {
@@ -62,8 +65,9 @@ export function QuizItemForm({
       styles: [], // Empty = auto-distribute based on UPSC pattern
       questionCount,
 
-      enableCurrentAffairs: true, // Always enabled
-      currentAffairsTheme: currentAffairsTheme || undefined,
+      enableCurrentAffairs: forceStatic ? false : true,
+      currentAffairsTheme: forceStatic ? undefined : currentAffairsTheme || undefined,
+      forceStatic,
     });
   };
 
@@ -109,14 +113,30 @@ export function QuizItemForm({
 
 
 
-      {/* Current Affairs (Always On) */}
+      {/* Static Only */}
+      <label className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={forceStatic}
+          onChange={(e) => setForceStatic(e.target.checked)}
+          className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+        />
+        <div>
+          <div className="text-sm font-medium text-gray-900">Force Static Only</div>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Generate pure-static questions only. Disables current affairs, grounding, and web search.
+          </p>
+        </div>
+      </label>
+
+      {/* Current Affairs */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-700">
             🌐 Current Affairs
           </span>
-          <span className="text-xs text-white bg-green-500 px-2 py-0.5 rounded-full">
-            Always On
+          <span className={`text-xs text-white px-2 py-0.5 rounded-full ${forceStatic ? "bg-gray-400" : "bg-green-500"}`}>
+            {forceStatic ? "Disabled" : "On"}
           </span>
         </div>
         <Input
@@ -125,7 +145,8 @@ export function QuizItemForm({
           placeholder="e.g., G20 Summit, Budget 2024"
           value={currentAffairsTheme}
           onChange={(e) => setCurrentAffairsTheme(e.target.value)}
-          helperText="Optionally focus on specific current affairs topics"
+          helperText={forceStatic ? "Unavailable while static-only mode is enabled" : "Optionally focus on specific current affairs topics"}
+          disabled={forceStatic}
         />
       </div>
 

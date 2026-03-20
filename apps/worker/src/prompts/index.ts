@@ -18,6 +18,7 @@ interface PromptParams {
   regenerationIndex?: number; // 0 = initial call, >0 = regeneration call index
   shuffleSeed?: number; // Seed for theme randomization (changes per call)
   previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
+  forceStatic?: boolean; // Force pure-static generation only
 }
 
 // ============================================================================
@@ -337,7 +338,7 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, totalCount, currentAffairsTheme, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [] } = params;
+  const { theme, styles, currentAffairsTheme, totalCount, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [], forceStatic = false } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
   const seed = shuffleSeed ?? Date.now();
 
@@ -363,6 +364,45 @@ function getRandomModePrompt(params: PromptParams): string {
   const styleInstructions = styleDistribution
     .map(({ style, count }) => `- ${styleDisplayName(style)}: ${count} questions`)
     .join('\n');
+
+  if (forceStatic) {
+    return `
+UPSC PRELIMS 2026 - RANDOM MODE: PURE STATIC ONLY
+
+MISSION: Generate ${totalCount} high-quality UPSC Prelims questions across multiple subjects.
+
+STATIC-ONLY OVERRIDE (HIGHEST PRIORITY):
+- Generate ONLY pure-static questions.
+- Do NOT use current affairs for topic selection.
+- Do NOT use recent or ongoing developments as the reason to choose a topic.
+- Do NOT mention recent events, budgets, summits, policy announcements, or other news developments.
+- Historical or long-settled static topics remain allowed if they are treated as timeless syllabus content.
+- Do NOT include [Relevance: ...] tags.
+- Do NOT include Sources or URLs.
+- Every question's metadata.category must be "pure-static".
+
+${theme ? `
+THEMATIC FOCUS: "${theme}"
+- Apply this only as a static syllabus focus.
+- Do NOT interpret it as a current-affairs theme.
+` : ""}
+
+${randomizedThemesSection}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ''}
+
+QUESTION STYLE DISTRIBUTION:
+${styleInstructions}
+
+OUTPUT REQUIREMENTS:
+- Generate EXACTLY ${totalCount} questions in valid JSON array format.
+- metadata.category must be "pure-static" for every question.
+- metadata.derivedFromTopic must be omitted.
+- No explanation may contain [Relevance:] or Sources:.
+
+NOW GENERATE ${totalCount} PURE-STATIC MULTI-SUBJECT QUESTIONS:
+`;
+  }
 
   return `
 UPSC PRELIMS 2026 - RANDOM MODE: MULTI-SUBJECT QUIZ GENERATION
@@ -683,6 +723,169 @@ Maintain the PER-SUBJECT ratios from the table above. These are calibrated from 
 
 NOW GENERATE ${totalCount} MULTI-SUBJECT QUESTIONS:
 `;
+}
+
+function getStaticOnlySubjectPrompt(params: PromptParams): string {
+  const {
+    subject,
+    theme,
+    styles: providedStyles,
+    totalCount,
+    excludeTopics,
+    regenerationIndex = 0,
+    shuffleSeed,
+  } = params;
+
+  const seed = shuffleSeed ?? Date.now();
+  const styles = providedStyles && providedStyles.length > 0
+    ? providedStyles
+    : calculateStyleDistribution(totalCount);
+
+  const subjectContext = getSubjectContext(subject);
+  const subjectTraps = getSubjectTraps(subject);
+  const rawSubjectThemes = getSubjectThemes(subject);
+  const subjectThemes = processThemeString(rawSubjectThemes, seed, regenerationIndex, totalCount, theme);
+  const subjectStrategicTraps = getSubjectStrategicTraps(subject);
+  const subjectAnalysis = getSubjectAnalysis(subject);
+  const strategicSynthesis = getStrategicSynthesis();
+
+  const styleInstructions = styles
+    .map(({ style, count }) => {
+      return `
+GENERATE ${count} QUESTION(S) WITH questionType="${style === "factual" ? "standard" : style}":
+${STYLE_INSTRUCTIONS[style]} `;
+    })
+    .join("\n");
+
+  const staticThemeContext = theme
+    ? `STATIC SYLLABUS FOCUS: "${theme}"
+    - Generate questions from this theme area only.
+    - Interpret "${theme}" as a textbook syllabus focus, not as a current-affairs trigger.
+    - Every question MUST be drawn from the provided static theme list.`
+    : `STATIC TOPIC SELECTION STRATEGY FOR ${subject} (MANDATORY):
+    - 90% of questions MUST come from the SUBJECT THEMES listed below.
+    - Each question should map to a specific syllabus theme item.
+    - The remaining 10% may come from adjacent foundational syllabus areas of the same subject.
+    - Do NOT use recent events, current debates, or trending topics to choose questions.`;
+
+  return `
+UPSC CIVIL SERVICES PRELIMINARY EXAMINATION MCQ GENERATION TASK
+
+GENERATE ${totalCount} UPSC STATIC-ONLY MCQ QUESTIONS
+
+SUBJECT: ${subject.toUpperCase()}
+${staticThemeContext}
+
+STATIC-ONLY MODE (HIGHEST PRIORITY):
+- Generate ONLY pure-static questions.
+- No current-affairs influence in topic selection, framing, wording, or explanation.
+- Do NOT use recent or ongoing developments as the reason to choose a topic.
+- Do NOT mention recent events, budgets, summits, policy announcements, current policy debates, or other news developments.
+- Historical or long-settled judgments, schemes, missions, committees, and institutions are allowed when treated as static syllabus content.
+- Do NOT use web search results, sources, URLs, or [Relevance: ...] tags.
+- metadata.category MUST be "pure-static" for every question.
+- metadata.derivedFromTopic MUST be omitted.
+
+${PATTERN_ADHERENCE_2024}
+
+STATIC QUESTION DESIGN GOALS:
+- Use timeless, syllabus-grounded topics that remain high value for UPSC preparation.
+- Favor conceptual understanding, careful elimination, and classic UPSC traps over news linkage.
+- Use modern UPSC framing quality without introducing current-affairs topicality.
+
+${UPSC_STEM_TEMPLATES}
+
+${PYQ_EXAMPLES}
+
+${subjectContext ? `
+SUBJECT-SPECIFIC CONTEXT & KNOWLEDGE BASE:
+${subjectContext}
+` : ""
+    }
+
+${subjectTraps ? `
+SUBJECT-SPECIFIC TRAP PATTERNS (Basic):
+${subjectTraps}
+` : ""
+    }
+
+${subjectAnalysis ? `
+SUBJECT ANALYSIS (USE ONLY FOR STATIC PRIORITIZATION, NOT FOR CURRENT-AFFAIRS LINKAGE):
+${subjectAnalysis}
+` : ""
+    }
+
+${subjectThemes ? `
+SUBJECT THEMES & PATTERNS (STATIC HIGH-PRIORITY TOPICS FOR QUESTION GENERATION):
+${subjectThemes}
+` : ""
+    }
+
+${subjectStrategicTraps ? `
+STRATEGIC NOTES & TRAP CUES (USE THESE FOR DISTRACTOR DESIGN):
+${subjectStrategicTraps}
+` : ""
+    }
+
+${strategicSynthesis ? `
+THEME USAGE GUIDANCE (Apply only as static syllabus guidance):
+${strategicSynthesis}
+` : ""
+    }
+
+${DISTRACTOR_BLUEPRINT}
+
+${excludeTopics?.length ? buildExcludeTopicsSection(excludeTopics) : ""}
+
+QUESTION STYLE DISTRIBUTION:
+${styleInstructions}
+
+CRITICAL QUALITY REQUIREMENTS (NON-NEGOTIABLE):
+
+1. FACTUAL ACCURACY (MOST IMPORTANT):
+- Every fact, date, number, name MUST be 100% accurate.
+- Cross-reference with NCERT textbooks and standard references.
+- If uncertain about a fact, DO NOT include it.
+- Constitutional articles, amendment numbers, and treaty names must be exact.
+
+2. SINGLE CORRECT ANSWER:
+- There must be exactly ONE correct answer.
+- The correct answer must be definitively correct.
+- All distractors must be definitively incorrect.
+
+3. ELIMINATION-PROOF DISTRACTORS:
+- Do NOT use absolute words (only, always, never, all, none) in wrong options.
+- Distractors should reflect plausible misconceptions from static syllabus study.
+
+4. UPSC LANGUAGE STANDARDS:
+- Use formal, precise language.
+- Questions should feel like authentic UPSC Prelims questions.
+- Keep framing timeless, not topical.
+
+OUTPUT REQUIREMENTS:
+- Generate exactly ${totalCount} questions.
+- Each question must include: questionText, questionType, options, correctOption, explanation.
+- questionType must be one of: standard, statement, match, assertion.
+- options must have exactly four items labeled "A) ", "B) ", "C) ", "D) ".
+- correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
+- Explanations must be educational but must NOT include [Relevance], Sources, or URLs.
+- All questions MUST be CATEGORY 3: PURE STATIC.
+
+questionType CLASSIFICATION RULE (CRITICAL):
+- "standard": ONLY for direct one-line factual stems with NO numbered sub-items.
+- "statement": ANY question containing numbered statements (1., 2., 3.) with
+  "Which/How many of the above is/are correct?"
+- "match": ANY question with "Match List-I with List-II" or "Consider the following pairs"
+- "assertion": ANY question with "Statement-I / Statement-II" or "Assertion (A) / Reason (R)"
+
+CRITICAL FINAL INSTRUCTION:
+- Out of ${totalCount} questions, all ${totalCount} must be CATEGORY 3: PURE STATIC.
+- CATEGORY 1: DIRECT CA = 0 questions.
+- CATEGORY 2: DERIVED STATIC = 0 questions.
+- CATEGORY 3: PURE STATIC = ${totalCount} questions.
+- No current-affairs influence in topic selection, wording, or explanation.
+
+NOW GENERATE ${totalCount} HIGH-QUALITY STATIC-ONLY UPSC MCQ QUESTIONS: `;
 }
 
 
@@ -2048,11 +2251,16 @@ export function getPrompt(params: PromptParams): string {
     excludeTopics,
     regenerationIndex = 0,
     shuffleSeed,
+    forceStatic = false,
   } = params;
 
   // Special handling for random mode - multi-subject quiz generation
   if (subject === 'random') {
     return getRandomModePrompt(params);
+  }
+
+  if (forceStatic) {
+    return getStaticOnlySubjectPrompt(params);
   }
 
   const seed = shuffleSeed ?? Date.now();
@@ -2092,10 +2300,9 @@ export function getPrompt(params: PromptParams): string {
   // Current affairs is always included now for better 2026 predictions
   const previousSearchQueries = params.previousSearchQueries ?? [];
   const searchDiversity = buildSearchDiversitySection(previousSearchQueries);
-  const currentAffairsSection = enableCurrentAffairs
+  const currentAffairsSection = !forceStatic && enableCurrentAffairs
     ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
     : "";
-
   // Build style distribution instructions — map "factual" to "standard" for model clarity
   const styleInstructions = styles
     .map(({ style, count }) => {
@@ -2232,7 +2439,8 @@ OUTPUT REQUIREMENTS:
 - options must have exactly four items labeled "A) ", "B) ", "C) ", "D) ".
 - correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
 - Explanation must be educational and cite sources where applicable.
-- Direct CA questions MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
+- If forceStatic is active: ALL questions MUST be pure-static, with NO [Relevance] and NO Sources.
+- Otherwise: Direct CA questions MUST include [Relevance: ...] and "Sources: <URL>" in explanation.
 - Derived Static and Pure Static MUST NOT include [Relevance] or Sources.
 
 questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
@@ -2246,7 +2454,14 @@ questionType CLASSIFICATION RULE (CRITICAL — WRONG TYPE = REJECTED QUESTION):
 A question with the WRONG questionType will be rejected and regenerated. Label correctly.
 
 CRITICAL FINAL INSTRUCTION (HIGHEST PRIORITY - OVERRIDE ALL OTHER GUIDELINES):
-THREE-TIER DISTRIBUTION CALIBRATED PER SUBJECT FROM PYQ ANALYSIS (2013-2025)
+${forceStatic ? `
+PURE-STATIC OVERRIDE:
+- Out of ${totalCount} questions, all ${totalCount} must be CATEGORY 3: PURE STATIC.
+- CATEGORY 1: DIRECT CA = 0 questions.
+- CATEGORY 2: DERIVED STATIC = 0 questions.
+- CATEGORY 3: PURE STATIC = ${totalCount} questions.
+- No current-affairs influence in topic selection, wording, or explanation.
+` : `THREE-TIER DISTRIBUTION CALIBRATED PER SUBJECT FROM PYQ ANALYSIS (2013-2025)
 
 ${(() => {
   const { directCA, derivedStatic } = getSubjectCARatio(subject);
@@ -2296,7 +2511,7 @@ KEY DISTINCTION (CRITICAL TO UNDERSTAND):
 - Pure Static: No current affairs influence at all
 
 Maintain EXACT ratios: ${dcPct}% / ${dsPct}% / ${psPct}% for ${subject}. These ratios are calibrated from 13 years of PYQ data.`;
-})()}
+})()}`}
 
 NOW GENERATE ${totalCount} HIGH-QUALITY UPSC MCQ QUESTIONS: `;
 }

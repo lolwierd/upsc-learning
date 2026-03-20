@@ -257,6 +257,7 @@ export interface QuizSetItemConfig {
   questionCount: number;
   enableCurrentAffairs?: boolean;
   currentAffairsTheme?: string;
+  forceStatic?: boolean;
 }
 
 export interface QuizSetItem extends QuizSetItemConfig {

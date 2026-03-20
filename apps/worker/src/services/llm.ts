@@ -1,6 +1,6 @@
 import type { Env } from "../types.js";
-import type { GeneratedQuestion, QuestionStyle } from "@mcqs/shared";
-import { getPrompt } from "../prompts/index.js";
+import type { GeneratedQuestion, QuestionStyle, QuestionSubject } from "@mcqs/shared";
+import { getPrompt, calculateStyleDistribution } from "../prompts/index.js";
 import {
   validateBatch,
   autoFixQuestion,
@@ -38,6 +38,7 @@ const METADATA_SUBJECTS = [
   "history",
   "science",
   "culture",
+  "international_relations",
 ] as const;
 
 const METADATA_SUBJECT_SET = new Set<string>(METADATA_SUBJECTS);
@@ -86,6 +87,21 @@ function getEffectiveSubjectKey(requestSubject: string, q: GeneratedQuestion): s
   return canonicalizeSubjectKey(requestSubject);
 }
 
+function resolveMetadataSubject(
+  requestSubject: string,
+  question: GeneratedQuestion
+): QuestionSubject {
+  const existingSubject = question.metadata?.subject;
+  if (existingSubject) return existingSubject;
+
+  const canonicalSubject = canonicalizeSubjectKey(requestSubject);
+  if (METADATA_SUBJECT_SET.has(canonicalSubject)) {
+    return canonicalSubject as QuestionSubject;
+  }
+
+  return "polity";
+}
+
 interface GenerateQuizParams {
   subject: string;
   theme?: string;
@@ -101,6 +117,7 @@ interface GenerateQuizParams {
   shuffleSeed?: number; // Seed for theme randomization
   temperatureOverride?: number; // Override temperature for this call (used for regen diversity)
   previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
+  forceStatic?: boolean; // Force pure-static generation only
 }
 
 export interface GenerateQuizMetrics {
@@ -482,33 +499,36 @@ async function generateQuizCall(
     regenerationIndex = 0,
     shuffleSeed,
     previousSearchQueries,
+    forceStatic = false,
   } = params;
 
   // Use primary generation model for all cases (including grounding)
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
 
-  // Distribute questions across styles for this call
-  const questionsPerStyle = Math.floor(count / styles.length);
-  const remainderQuestions = count % styles.length;
-
-  const styleDistribution: { style: QuestionStyle; count: number }[] = styles.map(
-    (style, index) => ({
-      style,
-      count: questionsPerStyle + (index < remainderQuestions ? 1 : 0),
-    })
-  );
+  const styleDistribution: { style: QuestionStyle; count: number }[] =
+    styles.length > 0
+      ? (() => {
+        const questionsPerStyle = Math.floor(count / styles.length);
+        const remainderQuestions = count % styles.length;
+        return styles.map((style, index) => ({
+          style,
+          count: questionsPerStyle + (index < remainderQuestions ? 1 : 0),
+        }));
+      })()
+      : calculateStyleDistribution(count);
 
   const prompt = getPrompt({
     subject,
     theme,
     styles: styleDistribution,
     totalCount: count,
-    enableCurrentAffairs,
+    enableCurrentAffairs: forceStatic ? false : enableCurrentAffairs,
     currentAffairsTheme,
     excludeTopics,
     regenerationIndex,
     shuffleSeed,
     previousSearchQueries,
+    forceStatic,
   });
 
   const promptChars = prompt.length;
@@ -522,7 +542,44 @@ async function generateQuizCall(
     timeZone: "UTC",
   });
 
-  const systemPrompt = `You are a UPSC Civil Services Preliminary Examination expert question generator with deep knowledge of the Indian civil services examination pattern, syllabus, and question standards.
+  const systemPrompt = forceStatic
+    ? `You are a UPSC Civil Services Preliminary Examination expert question generator with deep knowledge of the Indian civil services examination pattern, syllabus, and question standards.
+
+YOUR ROLE:
+- Generate questions that match the exact standard of actual UPSC Prelims questions
+- Ensure 100% factual accuracy - someone's career depends on this
+- Create elimination-proof questions that test genuine knowledge
+
+UPSC EXAM CONTEXT:
+- UPSC Prelims has 100 questions worth 200 marks (2 marks each)
+- Negative marking: 0.66 marks deducted per wrong answer
+- Cut-off typically ranges from 75-100 marks
+  - Target mix: ~40% direct factual questions, ~60% pattern-based (statement/match/assertion)
+  - Balance statement, match, and assertion styles within the 60%
+
+CRITICAL STATIC-ONLY REQUIREMENTS:
+1. Generate ONLY timeless, syllabus-grounded static questions.
+2. Do NOT use current affairs, recent events, or web search in topic selection or explanation.
+3. Do NOT use recent or ongoing developments as the reason to choose a topic. Historical or long-settled judgments, schemes, missions, committees, and institutions are allowed when treated as static syllabus content.
+4. Do NOT include URLs, sources, or [Relevance: ...] tags.
+5. TIME CONTEXT: Today's date is ${currentDateHuman} (UTC date: ${currentDateISO}). Use this only to avoid accidental recency references, not to select topics.
+
+OUTPUT REQUIREMENTS:
+- Generate exactly ${count} questions.
+- Each question must include: questionText, questionType, options, correctOption, explanation.
+- questionType must be one of: standard, statement, match, assertion.
+- options must be four choices labeled A) through D).
+- correctOption must be 0-3 (0=A, 1=B, 2=C, 3=D).
+- Do not add extra keys or markdown.
+
+QUESTION TYPE FORMATS:
+- STANDARD/FACTUAL: Direct one-line factual stem (no statements), e.g. "The irrigation device called 'Araghatta' was..."
+- STATEMENT: "Consider the following statements: 1. ... 2. ... 3. ... How many of the above statements is/are correct?" Options: A) Only one B) Only two C) All three D) None
+- ASSERTION-REASON: "Assertion (A): ... Reason (R): ... Which is correct?" Options must be the standard 4 A-R options.
+- MATCH: "Match List-I with List-II..." with proper table format and combination options like "A-1, B-2, C-3, D-4"
+
+Generate exactly ${count} questions now.`
+    : `You are a UPSC Civil Services Preliminary Examination expert question generator with deep knowledge of the Indian civil services examination pattern, syllabus, and question standards.
 
 YOUR ROLE:
 - Generate questions that match the exact standard of actual UPSC Prelims questions
@@ -614,8 +671,8 @@ Generate exactly ${count} questions now.`;
       maxOutputTokens: maxTokens,
       location: env.GOOGLE_VERTEX_LOCATION || "global",
       responseSchema: GENERATED_QUESTION_ARRAY_SCHEMA,
-      enableGrounding: enableCurrentAffairs,
-      thinkingLevel: enableCurrentAffairs ? undefined : "high",
+      enableGrounding: forceStatic ? false : enableCurrentAffairs,
+      thinkingLevel: forceStatic || !enableCurrentAffairs ? "high" : undefined,
       temperature: effectiveTemperature,
     });
 
@@ -802,13 +859,14 @@ export async function generateQuiz(
     enableDeduplication,
     enableCurrentAffairs,
     currentAffairsTheme,
+    forceStatic = false,
   } = params;
 
   // Use primary generation model
   const generationModel = env.GENERATION_MODEL || "gemini-3.0-pro";
   const factCheckModel = env.FACT_CHECK_MODEL || "gemini-3-flash-preview";
   const overallCallId = crypto.randomUUID();
-  const groundingEnabled = !!enableCurrentAffairs; // Force enable if requested (ignoring env var)
+  const groundingEnabled = forceStatic ? false : !!enableCurrentAffairs;
 
   const dedupHistoryLimit = clampNumber(parseIntEnv(env.DEDUP_HISTORY_LIMIT, 600), 0, 5000);
   const dedupClusterLimit = clampNumber(parseIntEnv(env.DEDUP_CLUSTER_LIMIT, 600), 0, 5000);
@@ -865,6 +923,7 @@ export async function generateQuiz(
           currentAffairsTheme,
           shuffleSeed,
           regenerationIndex: 0,
+          forceStatic,
         },
         overallCallId,
         0
@@ -1563,7 +1622,21 @@ export async function generateQuiz(
   }
 
   // Enrich questions with grounding metadata
-  if (groundingEnabled && finalQuestions.length > 0) {
+  if (forceStatic && finalQuestions.length > 0) {
+    finalQuestions = finalQuestions.map((question) => ({
+      ...question,
+      metadata: {
+        ...(question.metadata ?? {}),
+        category: "pure-static",
+        subject: resolveMetadataSubject(subject, question),
+        hasGrounding: false,
+        hasRelevanceTag: false,
+        hasSources: false,
+        groundingSources: undefined,
+        derivedFromTopic: undefined,
+      },
+    }));
+  } else if (groundingEnabled && finalQuestions.length > 0) {
     finalQuestions = enrichQuestionsWithGrounding(
       finalQuestions,
       singleResult.groundingMetadata

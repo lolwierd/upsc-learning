@@ -1,0 +1,2 @@
+ALTER TABLE quiz_set_items
+ADD COLUMN force_static INTEGER NOT NULL DEFAULT 0;

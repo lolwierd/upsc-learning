@@ -60,6 +60,7 @@ interface QuizSetItemRow {
   era: string | null;
   enable_current_affairs: number;
   current_affairs_theme: string | null;
+  force_static: number;
   created_at: number;
   updated_at: number;
 }
@@ -139,6 +140,7 @@ function mapQuizSetItemRowToResponse(row: QuizSetItemRow): QuizSetItem {
     questionCount: row.question_count,
     enableCurrentAffairs: row.enable_current_affairs === 1,
     currentAffairsTheme: row.current_affairs_theme || undefined,
+    forceStatic: row.force_static === 1,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -276,8 +278,8 @@ quizSets.post(
         const item = body.items[i];
         const itemId = nanoid();
         await c.env.DB.prepare(
-          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, force_static, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         )
           .bind(
             itemId,
@@ -288,8 +290,9 @@ quizSets.post(
             JSON.stringify(item.styles),
             item.questionCount,
             "current", // Always use current era
-            1, // ALWAYS enabled
-            item.currentAffairsTheme || null,
+            item.forceStatic ? 0 : 1,
+            item.forceStatic ? null : item.currentAffairsTheme || null,
+            item.forceStatic ? 1 : 0,
             now,
             now
           )
@@ -382,8 +385,8 @@ quizSets.post(
     for (const item of sourceItems.results) {
       batchStatements.push(
         c.env.DB.prepare(
-          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, force_static, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         ).bind(
           nanoid(),
           newSetId,
@@ -395,6 +398,7 @@ quizSets.post(
           item.era || "current",
           item.enable_current_affairs,
           item.current_affairs_theme || null,
+          item.force_static,
           now,
           now
         )
@@ -690,8 +694,8 @@ quizSets.post(
     const itemId = nanoid();
 
     await c.env.DB.prepare(
-      `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO quiz_set_items (id, quiz_set_id, sequence_number, subject, theme, styles, question_count, era, enable_current_affairs, current_affairs_theme, force_static, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         itemId,
@@ -702,8 +706,9 @@ quizSets.post(
         JSON.stringify(body.styles),
         body.questionCount,
         "current", // Always use current era
-        1, // ALWAYS enabled
-        body.currentAffairsTheme || null,
+        body.forceStatic ? 0 : 1,
+        body.forceStatic ? null : body.currentAffairsTheme || null,
+        body.forceStatic ? 1 : 0,
         now,
         now
       )
@@ -746,11 +751,11 @@ quizSets.patch(
 
     // Check ownership
     const existing = await c.env.DB.prepare(
-      `SELECT qsi.id FROM quiz_set_items qsi
+      `SELECT qsi.id, qsi.force_static FROM quiz_set_items qsi
        WHERE qsi.id = ? AND qsi.quiz_set_id = ?`
     )
       .bind(itemId, setId)
-      .first();
+      .first<{ id: string; force_static: number }>();
 
     if (!existing) {
       return c.json({ error: "Item not found" }, 404);
@@ -776,13 +781,29 @@ quizSets.patch(
       updates.push("question_count = ?");
       values.push(body.questionCount);
     }
-    if (body.enableCurrentAffairs !== undefined) {
+    const effectiveForceStatic = body.forceStatic ?? (existing.force_static === 1);
+
+    if (body.enableCurrentAffairs !== undefined && !effectiveForceStatic) {
       updates.push("enable_current_affairs = ?");
-      values.push(1); // ALWAYS force enabled
+      values.push(body.enableCurrentAffairs ? 1 : 0);
     }
-    if (body.currentAffairsTheme !== undefined) {
+    if (body.currentAffairsTheme !== undefined && !effectiveForceStatic) {
       updates.push("current_affairs_theme = ?");
       values.push(body.currentAffairsTheme || null);
+    }
+    if (body.forceStatic !== undefined) {
+      updates.push("force_static = ?");
+      values.push(body.forceStatic ? 1 : 0);
+    }
+
+    if (effectiveForceStatic) {
+      updates.push("enable_current_affairs = ?");
+      values.push(0);
+      updates.push("current_affairs_theme = ?");
+      values.push(null);
+    } else if (body.forceStatic === false && body.enableCurrentAffairs === undefined) {
+      updates.push("enable_current_affairs = ?");
+      values.push(1);
     }
 
     values.push(itemId);

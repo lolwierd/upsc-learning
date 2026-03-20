@@ -249,6 +249,7 @@ export const quizSetItemConfigSchema = z.object({
 
   enableCurrentAffairs: z.boolean().optional().default(true),
   currentAffairsTheme: z.string().max(200).optional(),
+  forceStatic: z.boolean().optional().default(false),
 });
 
 // Create quiz set request
@@ -306,6 +307,7 @@ export const quizSetItemSchema = z.object({
 
   enableCurrentAffairs: z.boolean().optional(),
   currentAffairsTheme: z.string().optional(),
+  forceStatic: z.boolean().optional(),
   createdAt: z.number(),
   updatedAt: z.number(),
 });

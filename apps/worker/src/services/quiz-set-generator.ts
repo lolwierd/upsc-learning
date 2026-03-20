@@ -16,6 +16,7 @@ interface QuizSetItemRow {
   era: string | null;
   enable_current_affairs: number;
   current_affairs_theme: string | null;
+  force_static: number;
 }
 
 interface GenerationContext {
@@ -86,7 +87,7 @@ export async function executeQuizSetGeneration(
 
   // Get run items
   const runItemsResult = await env.DB.prepare(
-    `SELECT ri.*, qsi.subject, qsi.theme, qsi.styles, qsi.question_count, qsi.era, qsi.enable_current_affairs, qsi.current_affairs_theme
+    `SELECT ri.*, qsi.subject, qsi.theme, qsi.styles, qsi.question_count, qsi.era, qsi.enable_current_affairs, qsi.current_affairs_theme, qsi.force_static
      FROM quiz_set_run_items ri
      JOIN quiz_set_items qsi ON qsi.id = ri.quiz_set_item_id
      WHERE ri.run_id = ?
@@ -106,6 +107,7 @@ export async function executeQuizSetGeneration(
       era: string | null;
       enable_current_affairs: number;
       current_affairs_theme: string | null;
+      force_static: number;
       started_at: number | null;
     }>();
 
@@ -207,7 +209,10 @@ export async function executeQuizSetGeneration(
         .run();
 
       // Generate quiz
-      const currentAffairsTheme = runItem.current_affairs_theme || runItem.theme || undefined;
+      const forceStatic = runItem.force_static === 1;
+      const currentAffairsTheme = forceStatic
+        ? undefined
+        : runItem.current_affairs_theme || runItem.theme || undefined;
       const { questions, metrics } = await generateQuiz(env, {
         subject: runItem.subject as Parameters<typeof generateQuiz>[1]["subject"],
         theme: runItem.theme || undefined,
@@ -215,8 +220,9 @@ export async function executeQuizSetGeneration(
         count: runItem.question_count,
         enableFactCheck: env.ENABLE_FACT_CHECK === "1",
         enableDeduplication: true,
-        enableCurrentAffairs: true, // Force enable current affairs for all quiz sets
+        enableCurrentAffairs: forceStatic ? false : runItem.enable_current_affairs === 1,
         currentAffairsTheme,
+        forceStatic,
       });
 
       // Insert questions

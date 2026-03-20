@@ -83,6 +83,7 @@ export function ItemReorderList({
                       </div>
                       <div className="text-xs text-gray-500 mt-0.5">
                         {item.questionCount} questions
+                        {item.forceStatic ? " · Static only" : ""}
                       </div>
                       <div className="text-xs text-gray-400 mt-0.5 truncate">
                         {item.styles.map((s) => QUESTION_STYLE_LABELS[s as keyof typeof QUESTION_STYLE_LABELS]).join(" · ")}

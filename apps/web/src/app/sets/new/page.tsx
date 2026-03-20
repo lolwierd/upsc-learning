@@ -64,7 +64,8 @@ export default function NewQuizSetPage() {
         description: description.trim() || undefined,
         items: items.map(({ tempId: _tempId, ...config }) => ({
           ...config,
-          enableCurrentAffairs: true,
+          enableCurrentAffairs: config.forceStatic ? false : (config.enableCurrentAffairs ?? true),
+          forceStatic: config.forceStatic ?? false,
         })),
       });
       router.push(`/sets/${result.id}`);
@@ -146,6 +147,7 @@ export default function NewQuizSetPage() {
                       </div>
                       <div className="text-xs text-gray-500 mt-0.5">
                         {item.questionCount} questions
+                        {item.forceStatic ? " · Static only" : ""}
                       </div>
                     </div>
                     <div className="flex items-center gap-1 ml-2">
