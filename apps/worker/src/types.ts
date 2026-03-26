@@ -42,4 +42,5 @@ export interface Env {
   DEDUP_INTRA_CONFIRM_THRESHOLD?: string; // default: 0.50
   DEDUP_INTRA_BATCH_TOPIC_THRESHOLD?: string; // default: 0.50 — topic-level similarity for within-quiz dedup
   DEDUP_HISTORY_CONFIRM_THRESHOLD?: string; // default: 0.50
+  DEDUP_HISTORY_TOPIC_THRESHOLD?: string; // default: same as intra-batch topic threshold
 }

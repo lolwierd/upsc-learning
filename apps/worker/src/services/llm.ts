@@ -423,24 +423,7 @@ async function saveClusters(
 // TOPIC EXTRACTION FOR EXCLUSION LIST
 // ============================================================================
 
-/**
- * Extract a short topic descriptor from a question for the exclusion list.
- * Prefers model-declared topicTag from metadata; falls back to regex extraction.
- */
-function extractTopicSummary(question: GeneratedQuestion): string {
-  // Prefer model-declared topicTag (from structured output schema)
-  const meta = question.metadata as { topicTag?: unknown; subtopicTag?: unknown } | undefined;
-  if (meta?.topicTag && typeof meta.topicTag === "string" && meta.topicTag.trim().length > 0) {
-    const tag = meta.topicTag.trim().slice(0, 80);
-    // Include subtopic for more specificity if available
-    if (meta.subtopicTag && typeof meta.subtopicTag === "string" && meta.subtopicTag.trim().length > 0) {
-      return `${tag} — ${meta.subtopicTag.trim().slice(0, 40)}`;
-    }
-    return tag;
-  }
-
-  // Fallback: regex extraction from question text
-  const text = question.questionText;
+function extractTopicSummaryFromText(text: string): string {
   const patterns = [
     /(?:with reference to|in (?:the )?context of|regarding|about)\s+(.+?)(?:,|\.|\?|consider|which)/i,
     /consider the following (?:statements?|pairs?)(?:\s+regarding|\s+about|\s+related to)?\s*(.+?)(?::|\.)/i,
@@ -460,6 +443,25 @@ function extractTopicSummary(question: GeneratedQuestion): string {
 }
 
 /**
+ * Extract a short topic descriptor from a question for the exclusion list.
+ * Prefers model-declared topicTag from metadata; falls back to regex extraction.
+ */
+function extractTopicSummary(question: GeneratedQuestion): string {
+  // Prefer model-declared topicTag (from structured output schema)
+  const meta = question.metadata as { topicTag?: unknown; subtopicTag?: unknown } | undefined;
+  if (meta?.topicTag && typeof meta.topicTag === "string" && meta.topicTag.trim().length > 0) {
+    const tag = meta.topicTag.trim().slice(0, 80);
+    // Include subtopic for more specificity if available
+    if (meta.subtopicTag && typeof meta.subtopicTag === "string" && meta.subtopicTag.trim().length > 0) {
+      return `${tag} — ${meta.subtopicTag.trim().slice(0, 40)}`;
+    }
+    return tag;
+  }
+
+  return extractTopicSummaryFromText(question.questionText);
+}
+
+/**
  * Build an exclusion list from already-accepted questions.
  */
 function buildExcludeTopics(questions: GeneratedQuestion[]): string[] {
@@ -467,6 +469,31 @@ function buildExcludeTopics(questions: GeneratedQuestion[]): string[] {
   for (const q of questions) {
     topics.add(extractTopicSummary(q));
   }
+  return [...topics];
+}
+
+/**
+ * Build a capped exclusion list from recent historical question previews so the
+ * very first generation call already avoids freshly used concepts.
+ */
+function buildHistoryExcludeTopics(
+  dedupHistory: Map<string, DedupHistoryBucket>,
+  maxTopics: number
+): string[] {
+  if (maxTopics <= 0) return [];
+
+  const topics = new Set<string>();
+  for (const bucket of dedupHistory.values()) {
+    for (const preview of bucket.previews) {
+      const topic = extractTopicSummaryFromText(preview);
+      if (!topic || !topic.trim()) continue;
+      topics.add(topic);
+      if (topics.size >= maxTopics) {
+        return [...topics];
+      }
+    }
+  }
+
   return [...topics];
 }
 
@@ -874,6 +901,11 @@ export async function generateQuiz(
   const dedupIntraConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_INTRA_CONFIRM_THRESHOLD, 0.50), 0, 1);
   const dedupHistoryConfirmThreshold = clampNumber(parseFloatEnv(env.DEDUP_HISTORY_CONFIRM_THRESHOLD, 0.50), 0, 1);
   const dedupIntraBatchTopicThreshold = clampNumber(parseFloatEnv(env.DEDUP_INTRA_BATCH_TOPIC_THRESHOLD, 0.50), 0, 1);
+  const dedupHistoryTopicThreshold = clampNumber(
+    parseFloatEnv(env.DEDUP_HISTORY_TOPIC_THRESHOLD, dedupIntraBatchTopicThreshold),
+    0,
+    1
+  );
 
   // Load history if deduplication is enabled.
   const dedupHistory = new Map<string, DedupHistoryBucket>();
@@ -888,6 +920,9 @@ export async function generateQuiz(
     const fpCount = [...dedupHistory.values()].reduce((s, b) => s + b.fingerprints.size, 0);
     console.log(`Loaded ${fpCount} existing fingerprints for dedupe (${subject})`);
   }
+  const initialExcludeTopics = enableDeduplication
+    ? buildHistoryExcludeTopics(dedupHistory, Math.min(Math.max(count, 6), 12))
+    : [];
 
   console.log(`Starting single-call generation for ${count} questions`);
   const overallStart = Date.now();
@@ -921,6 +956,9 @@ export async function generateQuiz(
           count,
           enableCurrentAffairs: groundingEnabled,
           currentAffairsTheme,
+          excludeTopics: initialExcludeTopics.length > 0
+            ? [...new Set([...(params.excludeTopics ?? []), ...initialExcludeTopics])]
+            : params.excludeTopics,
           shuffleSeed,
           regenerationIndex: 0,
           forceStatic,
@@ -1075,6 +1113,7 @@ export async function generateQuiz(
     intraConcept: 0,
     historyConcept: 0,
     historySimilarity: 0,
+    historyTopic: 0,
   };
   type DedupRejectReason = keyof typeof dedupReasonCounts;
 
@@ -1110,6 +1149,7 @@ export async function generateQuiz(
   const checkAndAccept = (question: GeneratedQuestion): { accepted: boolean; reason?: DedupRejectReason } => {
     const effectiveSubject = getEffectiveSubjectKey(subject, question);
     const bucket = getRuntimeBucket(effectiveSubject);
+    const questionText = question.questionText;
 
     const fingerprint = generateFingerprint(question);
     if (bucket.seenFingerprints.has(fingerprint)) {
@@ -1119,7 +1159,7 @@ export async function generateQuiz(
     const conceptKey = generateConceptKey(question);
     if (bucket.seenConceptKeys.has(conceptKey)) {
       const rep = bucket.conceptRepText.get(conceptKey);
-      if (rep && calculateTextSimilarity(question.questionText, rep) >= dedupIntraConfirmThreshold) {
+      if (rep && calculateTextSimilarity(questionText, rep) >= dedupIntraConfirmThreshold) {
         return { accepted: false, reason: "intraConcept" };
       }
     }
@@ -1129,19 +1169,22 @@ export async function generateQuiz(
     // composition" are correctly flagged as same-topic even though full-text Jaccard
     // would be low due to different statement details.
     for (const preview of bucket.intraBatchPreviews) {
-      if (calculateTopicSimilarity(question.questionText, preview) >= dedupIntraBatchTopicThreshold) {
+      if (calculateTopicSimilarity(questionText, preview) >= dedupIntraBatchTopicThreshold) {
         return { accepted: false, reason: "intraBatch" };
       }
     }
 
     const historyRep = bucket.historyClusters.get(conceptKey);
-    if (historyRep && calculateTextSimilarity(question.questionText, historyRep) >= dedupHistoryConfirmThreshold) {
+    if (historyRep && calculateTextSimilarity(questionText, historyRep) >= dedupHistoryConfirmThreshold) {
       return { accepted: false, reason: "historyConcept" };
     }
 
     for (const preview of bucket.historyPreviews) {
-      if (calculateTextSimilarity(question.questionText, preview) >= dedupHistorySimThreshold) {
+      if (calculateTextSimilarity(questionText, preview) >= dedupHistorySimThreshold) {
         return { accepted: false, reason: "historySimilarity" };
+      }
+      if (calculateTopicSimilarity(questionText, preview) >= dedupHistoryTopicThreshold) {
+        return { accepted: false, reason: "historyTopic" };
       }
     }
 
@@ -1149,9 +1192,9 @@ export async function generateQuiz(
     bucket.seenFingerprints.add(fingerprint);
     bucket.seenConceptKeys.add(conceptKey);
     if (!bucket.conceptRepText.has(conceptKey)) {
-      bucket.conceptRepText.set(conceptKey, question.questionText);
+      bucket.conceptRepText.set(conceptKey, questionText);
     }
-    bucket.intraBatchPreviews.push(question.questionText);
+    bucket.intraBatchPreviews.push(questionText);
     return { accepted: true };
   };
 
@@ -1232,7 +1275,8 @@ export async function generateQuiz(
     console.warn(
       `Deduplicated ${dedupFilteredCount} question(s) ` +
       `(fingerprint=${dedupReasonCounts.fingerprint}, intraBatch=${dedupReasonCounts.intraBatch}, intraConcept=${dedupReasonCounts.intraConcept}, ` +
-      `historyConcept=${dedupReasonCounts.historyConcept}, historySimilarity=${dedupReasonCounts.historySimilarity})`
+      `historyConcept=${dedupReasonCounts.historyConcept}, historySimilarity=${dedupReasonCounts.historySimilarity}, ` +
+      `historyTopic=${dedupReasonCounts.historyTopic})`
     );
   }
 
@@ -1273,6 +1317,7 @@ export async function generateQuiz(
 
       // Build exclusion list from accepted questions + rejected duplicates
       const currentExcludeTopics = [
+        ...initialExcludeTopics,
         ...buildExcludeTopics(finalQuestions),
         ...rejectedDuplicateTopics,
       ].filter((v, i, a) => a.indexOf(v) === i); // dedupe
@@ -1429,6 +1474,7 @@ export async function generateQuiz(
       const requestCount = Math.max(getMissingCount(), getMissingFactualCount());
       // Build exclusion list for emergency too (include rejected topics)
       const emergencyExcludeTopics = [
+        ...initialExcludeTopics,
         ...buildExcludeTopics(finalQuestions),
         ...rejectedDuplicateTopics,
       ].filter((v, i, a) => a.indexOf(v) === i);
