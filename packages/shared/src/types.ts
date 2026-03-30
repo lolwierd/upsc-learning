@@ -397,6 +397,7 @@ export interface PyqPaperListItem {
   note?: string;
   officialSource?: string;
   hasPdf: boolean;
+  hasAnswerKey: boolean;
   createdAt: number;
 }
 

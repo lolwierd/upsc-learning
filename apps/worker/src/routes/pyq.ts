@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Hono } from "hono";
 import type { Env } from "../types.js";
-import { resolvePyqRootDir } from "../services/pyq-sync.js";
+import { inferPyqAssetDir, resolvePyqRootDirForPaper } from "../services/pyq-sync.js";
 
 type PyqPaperRow = {
   id: string;
@@ -17,8 +17,10 @@ type PyqPaperSourceMeta = {
   paper?: string;
   set?: string;
   pdfFile?: string;
+  assetDir?: string;
   note?: string;
   officialSource?: string;
+  hasAnswerKey?: boolean;
   droppedCount?: number;
   attemptableCount?: number;
 };
@@ -47,7 +49,7 @@ pyq.get("/papers", async (c) => {
     .map((row) => {
       const sourceMeta = parseSourceMeta(row.source_meta);
       const year = sourceMeta.year || "";
-      const paper = sourceMeta.paper || "GS1";
+      const paper = sourceMeta.paper || "PYQ";
       const set = sourceMeta.set || "A";
       const droppedCount = sourceMeta.droppedCount || 0;
       const attemptableCount = sourceMeta.attemptableCount || Math.max(0, row.question_count - droppedCount);
@@ -64,10 +66,19 @@ pyq.get("/papers", async (c) => {
         note: sourceMeta.note,
         officialSource: sourceMeta.officialSource,
         hasPdf: Boolean(sourceMeta.pdfFile),
+        hasAnswerKey: sourceMeta.hasAnswerKey !== false,
         createdAt: row.created_at,
       };
     })
-    .sort((a, b) => Number(b.year) - Number(a.year));
+    .sort((a, b) => {
+      const yearDiff = Number(b.year) - Number(a.year);
+      if (yearDiff !== 0) return yearDiff;
+
+      const paperDiff = a.paper.localeCompare(b.paper);
+      if (paperDiff !== 0) return paperDiff;
+
+      return a.set.localeCompare(b.set);
+    });
 
   return c.json({ papers });
 });
@@ -90,7 +101,10 @@ pyq.get("/papers/:quizId/pdf", async (c) => {
     return c.json({ error: "PDF not configured for this paper" }, 404);
   }
 
-  const pyqRoot = resolvePyqRootDir(c.env);
+  const pyqRoot = resolvePyqRootDirForPaper(
+    c.env,
+    sourceMeta.assetDir || inferPyqAssetDir(sourceMeta.paper),
+  );
   if (!pyqRoot) {
     return c.json({ error: "PYQ assets directory is unavailable" }, 500);
   }

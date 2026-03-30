@@ -14,6 +14,23 @@ import { CategoryBadge } from "@/components/quiz/CategoryBadge";
 import { SubjectBadge } from "@/components/quiz/SubjectBadge";
 import { GroundingSourcesList } from "@/components/quiz/GroundingSourcesList";
 
+type PyqQuestionMetadata = QuestionMetadata & {
+  hasAnswerKey?: boolean;
+  passageSetId?: string;
+  passageLabel?: number;
+};
+
+interface PyqPassage {
+  label: number;
+  text: string;
+}
+
+interface PyqPassageSet {
+  id: string;
+  questionRange: [number, number];
+  passages: PyqPassage[];
+}
+
 interface LearnModeQuestion {
   id: string;
   sequenceNumber: number;
@@ -21,8 +38,10 @@ interface LearnModeQuestion {
   questionType: string;
   options: string[];
   explanation?: string;
-  metadata?: QuestionMetadata | null;
+  metadata?: PyqQuestionMetadata | null;
   correctOption?: number;
+  passageSetId?: string;
+  passageLabel?: number;
 }
 
 interface PyqSourceMeta {
@@ -30,8 +49,11 @@ interface PyqSourceMeta {
   paper?: string;
   set?: string;
   pdfFile?: string;
+  assetDir?: string;
   note?: string;
   officialSource?: string;
+  hasAnswerKey?: boolean;
+  passageSets?: PyqPassageSet[];
   droppedCount?: number;
   attemptableCount?: number;
 }
@@ -55,6 +77,29 @@ interface Answer {
   questionId: string;
   selectedOption: number | null;
   markedForReview: boolean;
+}
+
+const PYQ_STYLE_LABELS = {
+  ...QUESTION_STYLE_LABELS,
+  standard: "Standard MCQ",
+  comprehension: "Comprehension",
+  logical_reasoning: "Logical Reasoning",
+  math: "Maths & Numeracy",
+  data_interpretation: "Data Interpretation",
+  decision_making: "Decision Making",
+} as const;
+
+const CSAT_TYPE_BADGE_CLASSNAMES: Record<string, string> = {
+  comprehension: "bg-sky-100 text-sky-900 border-sky-200",
+  logical_reasoning: "bg-violet-100 text-violet-900 border-violet-200",
+  math: "bg-emerald-100 text-emerald-900 border-emerald-200",
+  data_interpretation: "bg-orange-100 text-orange-900 border-orange-200",
+  decision_making: "bg-rose-100 text-rose-900 border-rose-200",
+  standard: "bg-slate-100 text-slate-900 border-slate-200",
+};
+
+function isCsatPaper(paper?: string): boolean {
+  return /csat|gs2/i.test(paper || "");
 }
 
 export default function QuizPage() {
@@ -185,7 +230,8 @@ export default function QuizPage() {
           setStudiedQuestions(new Set());
 
           // Only start attempt if not in learn mode and haven't started yet
-          if (!quizData.learnMode && !attemptId) {
+          const isPracticeOnly = quizData.origin === "pyq" && quizData.sourceMeta?.hasAnswerKey === false;
+          if (!quizData.learnMode && !attemptId && !isPracticeOnly) {
             const { attemptId: id } = await startAttempt(quizId);
             setAttemptId(id);
           }
@@ -239,20 +285,24 @@ export default function QuizPage() {
   // Handle answer selection
   const handleAnswer = useCallback(
     async (questionId: string, option: number) => {
-      const isDroppedQuestion = quiz?.questions.find((q) => q.id === questionId)?.metadata?.isDropped;
+      const question = quiz?.questions.find((q) => q.id === questionId);
+      const isDroppedQuestion = question?.metadata?.isDropped;
       if (isDroppedQuestion) return;
 
+      const isPracticeOnly = quiz?.origin === "pyq" && quiz.sourceMeta?.hasAnswerKey === false;
+
       // In learn mode, just reveal the answer without saving to server
-      if (quiz?.learnMode) {
+      if (quiz?.learnMode || isPracticeOnly) {
         const newAnswer: Answer = {
           questionId,
           selectedOption: option,
           markedForReview: false,
         };
         setAnswers((prev) => new Map(prev).set(questionId, newAnswer));
-        setRevealedQuestions((prev) => new Set(prev).add(questionId));
-        // Mark as studied when option is clicked
-        setStudiedQuestions((prev) => new Set(prev).add(questionId));
+        if (quiz?.learnMode && typeof question?.correctOption === "number") {
+          setRevealedQuestions((prev) => new Set(prev).add(questionId));
+          setStudiedQuestions((prev) => new Set(prev).add(questionId));
+        }
         return;
       }
 
@@ -286,7 +336,7 @@ export default function QuizPage() {
       const isDroppedQuestion = quiz?.questions.find((q) => q.id === questionId)?.metadata?.isDropped;
       if (isDroppedQuestion) return;
 
-      if (!attemptId) return;
+      const isPracticeOnly = quiz?.origin === "pyq" && quiz.sourceMeta?.hasAnswerKey === false;
 
       const current = answers.get(questionId);
       const newAnswer: Answer = {
@@ -296,6 +346,12 @@ export default function QuizPage() {
       };
 
       setAnswers((prev) => new Map(prev).set(questionId, newAnswer));
+
+      if (isPracticeOnly) {
+        return;
+      }
+
+      if (!attemptId) return;
 
       try {
         await saveAnswer(attemptId, {
@@ -307,7 +363,7 @@ export default function QuizPage() {
         console.error("Failed to save review status:", err);
       }
     },
-    [attemptId, answers, quiz?.questions]
+    [attemptId, answers, quiz]
   );
 
   // Handle submit
@@ -419,10 +475,14 @@ export default function QuizPage() {
     (question) => !droppedQuestionIds.has(question.id),
   );
   const attemptableQuestionCount = attemptableQuestions.length;
+  const isPyq = quiz.origin === "pyq";
+  const isCsat = isPyq && isCsatPaper(quiz.sourceMeta?.paper);
+  const isPracticeOnly = isPyq && quiz.sourceMeta?.hasAnswerKey === false;
+  const canRevealAnswers = quiz.learnMode && !isPracticeOnly;
   const answeredCount = Array.from(answers.values()).filter(
     (a) => !droppedQuestionIds.has(a.questionId) && a.selectedOption !== null,
   ).length;
-  const progressCount = quiz.learnMode
+  const progressCount = canRevealAnswers
     ? Array.from(studiedQuestions).filter((id) => !droppedQuestionIds.has(id)).length
     : answeredCount;
   const markedCount = Array.from(answers.values()).filter(
@@ -446,13 +506,20 @@ export default function QuizPage() {
   const currentQuizIndex = orderedQuizIds.findIndex((id) => id === quizId);
   const nextQuizId =
     currentQuizIndex >= 0 ? orderedQuizIds[currentQuizIndex + 1] : null;
-  const isPyq = quiz.origin === "pyq";
   const pyqPdfUrl = isPyq ? getPyqPdfUrl(quiz.id) : null;
+  const passageSetsById = new Map((quiz.sourceMeta?.passageSets || []).map((set) => [set.id, set]));
   const displayStyleLabel = (() => {
-    const style = quiz.style || quiz.styles?.[0];
-    if (!style) return "Mixed";
-    return QUESTION_STYLE_LABELS[style as keyof typeof QUESTION_STYLE_LABELS] || "Mixed";
+    const labels = quiz.styles
+      .map((style) => PYQ_STYLE_LABELS[style as keyof typeof PYQ_STYLE_LABELS] || style.replace(/_/g, " "));
+
+    if (labels.length === 0) return "Mixed";
+    if (labels.length > 3) return isCsat ? "CSAT mixed format" : "Mixed PYQ format";
+
+    return labels.join(" • ");
   })();
+  const displayTitle = isPyq
+    ? (quiz.theme || `UPSC ${quiz.sourceMeta?.year || ""} ${quiz.sourceMeta?.paper || "PYQ"}`)
+    : `${SUBJECT_LABELS[quiz.subject as keyof typeof SUBJECT_LABELS]}${quiz.theme ? ` - ${quiz.theme}` : ""}`;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
@@ -461,10 +528,15 @@ export default function QuizPage() {
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <p className="text-sm font-semibold text-blue-900">
-                UPSC {quiz.sourceMeta?.year || ""} {quiz.sourceMeta?.paper || "GS1"} Set {quiz.sourceMeta?.set || "A"}
+                UPSC {quiz.sourceMeta?.year || ""} {quiz.sourceMeta?.paper || "PYQ"} Set {quiz.sourceMeta?.set || "A"}
               </p>
               {quiz.sourceMeta?.note && (
                 <p className="text-xs text-blue-800 mt-1 max-w-3xl">{quiz.sourceMeta.note}</p>
+              )}
+              {isPracticeOnly && (
+                <p className="text-xs font-medium text-amber-700 mt-2 max-w-3xl">
+                  Answer keys are not imported for this CSAT paper yet, so it runs in local practice mode without scoring.
+                </p>
               )}
             </div>
             {pyqPdfUrl && (
@@ -480,11 +552,8 @@ export default function QuizPage() {
       <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-gray-900">
-              {SUBJECT_LABELS[quiz.subject as keyof typeof SUBJECT_LABELS]}
-              {quiz.theme && ` - ${quiz.theme}`}
-            </h1>
-            {quiz.learnMode && (
+            <h1 className="text-xl font-semibold text-gray-900">{displayTitle}</h1>
+            {canRevealAnswers && (
               <button
                 onClick={() => setShowAnswers(!showAnswers)}
                 className={cn(
@@ -509,7 +578,7 @@ export default function QuizPage() {
             </span>
           )}
           <span className="text-gray-600">
-            {progressCount}/{attemptableQuestionCount} {quiz.learnMode ? "studied" : "answered"}
+            {progressCount}/{attemptableQuestionCount} {canRevealAnswers ? "studied" : "answered"}
           </span>
           {!quiz.learnMode && markedCount > 0 && (
             <span className="text-amber-600">{markedCount} marked</span>
@@ -529,8 +598,8 @@ export default function QuizPage() {
                 const isMarked = answer?.markedForReview;
                 const isCurrent = i === currentQuestion;
                 const isRevealed = revealedQuestions.has(q.id);
-                const isCorrect = quiz.learnMode && isRevealed && answer?.selectedOption === q.correctOption;
-                const isIncorrect = quiz.learnMode && isRevealed && answer?.selectedOption !== q.correctOption;
+                const isCorrect = canRevealAnswers && isRevealed && answer?.selectedOption === q.correctOption;
+                const isIncorrect = canRevealAnswers && isRevealed && answer?.selectedOption !== q.correctOption;
                 const isDropped = Boolean(q.metadata?.isDropped);
 
                 return (
@@ -547,7 +616,7 @@ export default function QuizPage() {
                       isCurrent && "ring-2 ring-primary-500",
                       isDropped
                         ? "border border-red-400 bg-red-100 text-red-700"
-                        : quiz.learnMode
+                        : canRevealAnswers
                         ? isCorrect
                           ? "bg-green-100 text-green-700"
                           : isIncorrect
@@ -566,7 +635,7 @@ export default function QuizPage() {
               })}
             </div>
             <div className="mt-4 space-y-1 text-xs text-gray-500">
-              {quiz.learnMode ? (
+              {canRevealAnswers ? (
                 <>
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-green-100 rounded" />
@@ -605,7 +674,7 @@ export default function QuizPage() {
           </Card>
 
           {/* Question Distribution Stats (Learn Mode Only) */}
-          {quiz.learnMode && quiz.questions.some(q => q.metadata?.category) && (
+          {canRevealAnswers && quiz.questions.some(q => q.metadata?.category) && (
             <QuizStats questions={quiz.questions.map(q => ({ metadata: q.metadata ?? undefined }))} />
           )}
         </div>
@@ -619,23 +688,55 @@ export default function QuizPage() {
             const selectedOption = answer?.selectedOption;
             const isCorrectAnswer = selectedOption === question.correctOption;
             const isDropped = Boolean(question.metadata?.isDropped);
+            const questionTypeLabel =
+              PYQ_STYLE_LABELS[question.questionType as keyof typeof PYQ_STYLE_LABELS]
+              || question.questionType.replace(/_/g, " ");
+            const passageSet = question.passageSetId ? passageSetsById.get(question.passageSetId) : undefined;
+            const isFirstInPassageSet = Boolean(question.passageSetId)
+              && quiz.questions.find((candidate) => candidate.passageSetId === question.passageSetId)?.id === question.id;
 
             return (
-              <Card
-                key={question.id}
-                id={`question-${i}`}
-                data-question-id={question.id}
-                className={cn(
-                  "scroll-mt-40",
-                  !quiz.learnMode && isMarked && "ring-2 ring-amber-400",
-                  isDropped && "border-red-400 bg-red-50/40",
+              <div key={question.id} className="space-y-4">
+                {isCsat && isFirstInPassageSet && passageSet && (
+                  <Card className="border-sky-200 bg-sky-50/50">
+                    <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                      <div>
+                        <p className="text-sm font-semibold text-sky-900">Reading Set</p>
+                        <p className="text-xs text-sky-700 mt-1">
+                          Questions {passageSet.questionRange[0]}-{passageSet.questionRange[1]}
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-sky-900 border border-sky-200">
+                        {passageSet.passages.length} passage{passageSet.passages.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                    <div className="space-y-4">
+                      {passageSet.passages.map((passage) => (
+                        <div key={`${passageSet.id}-${passage.label}`} className="rounded-xl border border-sky-200 bg-white/80 p-4">
+                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700 mb-2">
+                            Passage {passage.label}
+                          </p>
+                          <Markdown className="text-sm text-slate-800" text={passage.text} />
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
                 )}
-              >
+
+                <Card
+                  id={`question-${i}`}
+                  data-question-id={question.id}
+                  className={cn(
+                    "scroll-mt-40",
+                    !quiz.learnMode && isMarked && "ring-2 ring-amber-400",
+                    isDropped && "border-red-400 bg-red-50/40",
+                  )}
+                >
                 {/* Category and Subject Badges (Learn Mode Only) */}
-                {quiz.learnMode && question.metadata?.category && (
+                {canRevealAnswers && question.metadata?.category && (
                   <div className="mb-3 flex items-center gap-2 flex-wrap">
                     <CategoryBadge category={question.metadata.category as QuestionCategory} />
-                    {question.metadata.subject && (
+                    {!isCsat && question.metadata.subject && (
                       <SubjectBadge subject={question.metadata.subject} />
                     )}
                   </div>
@@ -647,6 +748,21 @@ export default function QuizPage() {
                       {i + 1}
                     </span>
                     <div>
+                      {isCsat && (
+                        <div className="mb-2 flex items-center gap-2 flex-wrap">
+                          <span className={cn(
+                            "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                            CSAT_TYPE_BADGE_CLASSNAMES[question.questionType] || CSAT_TYPE_BADGE_CLASSNAMES.standard,
+                          )}>
+                            {questionTypeLabel}
+                          </span>
+                          {typeof question.passageLabel === "number" && (
+                            <span className="inline-flex items-center rounded-full border border-sky-200 bg-sky-100 px-2 py-0.5 text-[11px] font-medium text-sky-900">
+                              Passage {question.passageLabel}
+                            </span>
+                          )}
+                        </div>
+                      )}
                       {isDropped && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300 mb-2">
                           Dropped
@@ -702,33 +818,22 @@ export default function QuizPage() {
                     const isSelected = selectedOption === optIndex;
                     const optionLabel = String.fromCharCode(65 + optIndex);
                     const isCorrectOption = optIndex === question.correctOption;
-                    const showCorrect = quiz.learnMode && isRevealed && isCorrectOption;
-                    const showIncorrect = quiz.learnMode && isRevealed && isSelected && !isCorrectOption;
+                    const showCorrect = canRevealAnswers && isRevealed && isCorrectOption;
+                    const showIncorrect = canRevealAnswers && isRevealed && isSelected && !isCorrectOption;
 
                     return (
                       <button
                         key={optIndex}
                         onClick={() => {
-                          if (isRevealed || isDropped) return;
-
-                          // Handle learn mode directly here with fresh state
-                          if (quiz.learnMode) {
-                            setAnswers((prev) => new Map(prev).set(question.id, {
-                              questionId: question.id,
-                              selectedOption: optIndex,
-                              markedForReview: false,
-                            }));
-                            setRevealedQuestions((prev) => new Set(prev).add(question.id));
-                          } else {
-                            handleAnswer(question.id, optIndex);
-                          }
+                          if ((canRevealAnswers && isRevealed) || isDropped) return;
+                          handleAnswer(question.id, optIndex);
                         }}
-                        disabled={isDropped || (quiz.learnMode && isRevealed)}
+                        disabled={isDropped || (canRevealAnswers && isRevealed)}
                         className={cn(
                           "w-full text-left p-3 rounded-lg border transition-colors flex items-start gap-3",
                           isDropped
                             ? "border-red-200 bg-red-100/70 text-red-700 cursor-not-allowed"
-                            : quiz.learnMode && isRevealed
+                            : canRevealAnswers && isRevealed
                             ? showCorrect
                               ? "border-green-500 bg-green-50"
                               : showIncorrect
@@ -746,7 +851,7 @@ export default function QuizPage() {
                             "flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-medium",
                             isDropped
                               ? "border-red-300 text-red-600"
-                              : quiz.learnMode && isRevealed
+                              : canRevealAnswers && isRevealed
                               ? showCorrect
                                 ? "border-green-500 bg-green-500 text-white"
                                 : showIncorrect
@@ -766,7 +871,7 @@ export default function QuizPage() {
                             "text-sm",
                             isDropped
                               ? "text-red-700"
-                              : quiz.learnMode && isRevealed
+                              : canRevealAnswers && isRevealed
                               ? showCorrect
                                 ? "text-green-700"
                                 : showIncorrect
@@ -794,7 +899,7 @@ export default function QuizPage() {
                 )}
 
                 {/* Learn Mode: Answer Section */}
-                {quiz.learnMode && showAnswers && !isDropped && (
+                {canRevealAnswers && showAnswers && !isDropped && typeof question.correctOption === "number" && (
                   <div
                     className={cn(
                       "mt-4 ml-11 space-y-3 transition-all duration-200",
@@ -871,16 +976,21 @@ export default function QuizPage() {
                     )}
                   </div>
                 )}
-              </Card>
+                </Card>
+              </div>
             );
           })}
 
           {/* Submit Button / Learn Mode Actions */}
           <Card className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {progressCount}/{attemptableQuestionCount} questions {quiz.learnMode ? "studied" : "answered"}
+              {progressCount}/{attemptableQuestionCount} questions {canRevealAnswers ? "studied" : "answered"}
             </p>
-            {quiz.learnMode ? (
+            {isPracticeOnly ? (
+              <Button onClick={() => router.push("/pyqs")} size="lg">
+                Finish Practice
+              </Button>
+            ) : quiz.learnMode ? (
               setId && runId && orderedQuizIds.length > 0 && currentQuizIndex >= 0 ? (
                 nextQuizId ? (
                   <Button
@@ -926,7 +1036,7 @@ export default function QuizPage() {
             <span className="text-sm text-gray-600">
               {currentQuestion + 1} / {quiz.questions.length}
             </span>
-            {quiz.learnMode && (
+            {canRevealAnswers && (
               <span className="block text-xs text-blue-600">
                 {progressCount} studied
               </span>

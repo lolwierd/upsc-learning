@@ -304,6 +304,7 @@ quiz.get("/:id", async (c) => {
   const questions = questionsResult.results.map((q) => {
     const parsedMetadata = q.metadata ? (JSON.parse(q.metadata) as Record<string, unknown>) : null;
     const isDropped = parsedMetadata?.isDropped === true;
+    const hasAnswerKey = parsedMetadata?.hasAnswerKey !== false && q.correct_option >= 0;
 
     return {
       id: q.id,
@@ -312,13 +313,19 @@ quiz.get("/:id", async (c) => {
       questionType: q.question_type,
       options: JSON.parse(q.options),
       metadata: parsedMetadata,
+      ...(typeof parsedMetadata?.passageSetId === "string" && {
+        passageSetId: parsedMetadata.passageSetId,
+      }),
+      ...(typeof parsedMetadata?.passageLabel === "number" && {
+        passageLabel: parsedMetadata.passageLabel,
+      }),
       // Include correct answer and explanation in learn mode.
-      ...(includeAnswers && {
+      ...(includeAnswers && hasAnswerKey && {
         correctOption: q.correct_option,
         explanation: q.explanation,
       }),
       // Always include explanation for dropped questions so users can see why it was dropped.
-      ...(!includeAnswers && isDropped && {
+      ...(isDropped && {
         explanation: q.explanation,
       }),
     };

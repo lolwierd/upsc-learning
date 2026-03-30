@@ -13,6 +13,19 @@ type PyqRawQuestion = {
   explanation: string;
   metadata?: Record<string, unknown>;
   isDropped?: boolean;
+  passageSetId?: string;
+  passageLabel?: number;
+};
+
+type PyqRawPassage = {
+  label: number;
+  text: string;
+};
+
+type PyqRawPassageSet = {
+  id: string;
+  questionRange: [number, number];
+  passages: PyqRawPassage[];
 };
 
 type PyqRawPaper = {
@@ -23,8 +36,12 @@ type PyqRawPaper = {
   createdAt?: number;
   year: string;
   paper: string;
+  set?: string;
+  pdfFile?: string;
   note?: string;
+  officialSourceNote?: string;
   officialSource?: string;
+  passageSets?: PyqRawPassageSet[];
   questions: PyqRawQuestion[];
 };
 
@@ -33,8 +50,11 @@ type PyqSourceMeta = {
   paper: string;
   set: string;
   pdfFile: string;
+  assetDir?: string;
   note?: string;
   officialSource?: string;
+  hasAnswerKey: boolean;
+  passageSets?: PyqRawPassageSet[];
   droppedCount: number;
   attemptableCount: number;
 };
@@ -45,6 +65,11 @@ const QUESTION_STYLES = new Set([
   "statement",
   "match",
   "assertion",
+  "comprehension",
+  "logical_reasoning",
+  "math",
+  "data_interpretation",
+  "decision_making",
 ]);
 
 const QUESTION_TYPES = new Set([
@@ -52,6 +77,11 @@ const QUESTION_TYPES = new Set([
   "statement",
   "match",
   "assertion",
+  "comprehension",
+  "logical_reasoning",
+  "math",
+  "data_interpretation",
+  "decision_making",
 ]);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -64,6 +94,11 @@ function getPyqRootCandidates(env?: Pick<Env, "PYQ_ROOT">): string[] {
   return [
     envRoot,
     processRoot,
+    path.resolve(__dirname, "../../pyqs"),
+    path.resolve(__dirname, "../../../apps/worker/pyqs"),
+    path.resolve(process.cwd(), "apps/worker/pyqs"),
+    path.resolve(process.cwd(), "pyqs"),
+    // Legacy single-paper roots still work when users point PYQ_ROOT directly at GS.
     path.resolve(__dirname, "../../pyqs/GS"),
     path.resolve(__dirname, "../../../apps/worker/pyqs/GS"),
     path.resolve(process.cwd(), "apps/worker/pyqs/GS"),
@@ -71,14 +106,98 @@ function getPyqRootCandidates(env?: Pick<Env, "PYQ_ROOT">): string[] {
   ].filter((candidate): candidate is string => Boolean(candidate));
 }
 
-export function resolvePyqRootDir(env?: Pick<Env, "PYQ_ROOT">): string | null {
-  const candidates = getPyqRootCandidates(env);
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
-      return candidate;
+function isPyqAssetRoot(candidate: string): boolean {
+  try {
+    const parsedDir = path.join(candidate, "parsed");
+    return fs.existsSync(parsedDir) && fs.statSync(parsedDir).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+export function resolvePyqRootDirs(env?: Pick<Env, "PYQ_ROOT">): string[] {
+  const seen = new Set<string>();
+  const seenAssetDirs = new Set<string>();
+  const roots: string[] = [];
+
+  for (const candidate of getPyqRootCandidates(env)) {
+    if (!fs.existsSync(candidate)) {
+      continue;
+    }
+
+    const resolvedCandidate = path.resolve(candidate);
+    if (isPyqAssetRoot(resolvedCandidate)) {
+      const assetDir = path.basename(resolvedCandidate);
+      if (!seen.has(resolvedCandidate) && !seenAssetDirs.has(assetDir)) {
+        seen.add(resolvedCandidate);
+        seenAssetDirs.add(assetDir);
+        roots.push(resolvedCandidate);
+      }
+      continue;
+    }
+
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(resolvedCandidate);
+    } catch {
+      continue;
+    }
+
+    if (!stat.isDirectory()) {
+      continue;
+    }
+
+    const childRoots = fs.readdirSync(resolvedCandidate, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => path.join(resolvedCandidate, entry.name))
+      .filter((childDir) => isPyqAssetRoot(childDir))
+      .sort();
+
+    for (const childRoot of childRoots) {
+      const resolvedChildRoot = path.resolve(childRoot);
+      const assetDir = path.basename(resolvedChildRoot);
+      if (!seen.has(resolvedChildRoot) && !seenAssetDirs.has(assetDir)) {
+        seen.add(resolvedChildRoot);
+        seenAssetDirs.add(assetDir);
+        roots.push(resolvedChildRoot);
+      }
     }
   }
-  return null;
+
+  return roots;
+}
+
+export function resolvePyqRootDir(env?: Pick<Env, "PYQ_ROOT">): string | null {
+  return resolvePyqRootDirs(env)[0] || null;
+}
+
+export function resolvePyqRootDirForPaper(
+  env: Pick<Env, "PYQ_ROOT">,
+  assetDir?: string,
+): string | null {
+  const roots = resolvePyqRootDirs(env);
+  if (!assetDir) {
+    return roots[0] || null;
+  }
+
+  return roots.find((rootDir) => path.basename(rootDir) === assetDir) || null;
+}
+
+export function inferPyqAssetDir(paper: string | undefined): string | undefined {
+  const normalized = paper?.trim().toUpperCase();
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (normalized.includes("CSAT") || normalized === "GS2") {
+    return "CSAT";
+  }
+
+  if (normalized.startsWith("GS")) {
+    return "GS";
+  }
+
+  return undefined;
 }
 
 function normalizeQuestionType(rawType: string | undefined, questionText: string): string {
@@ -126,6 +245,11 @@ function normalizeStyles(styles: string[] | undefined): string[] {
       if (style.includes("match")) return "match";
       if (style.includes("assert")) return "assertion";
       if (style.includes("concept")) return "conceptual";
+      if (style.includes("comprehension")) return "comprehension";
+      if (style.includes("logical")) return "logical_reasoning";
+      if (style.includes("math")) return "math";
+      if (style.includes("data")) return "data_interpretation";
+      if (style.includes("decision")) return "decision_making";
       return "factual";
     });
 
@@ -134,7 +258,17 @@ function normalizeStyles(styles: string[] | undefined): string[] {
 
 function normalizeMetadata(
   metadata: Record<string, unknown> | undefined,
-  isDropped: boolean,
+  {
+    hasAnswerKey,
+    isDropped,
+    passageLabel,
+    passageSetId,
+  }: {
+    hasAnswerKey: boolean;
+    isDropped: boolean;
+    passageLabel?: number;
+    passageSetId?: string;
+  },
 ): Record<string, unknown> {
   const next: Record<string, unknown> = {
     ...(metadata || {}),
@@ -148,11 +282,35 @@ function normalizeMetadata(
     next.isDropped = true;
   }
 
+  if (!hasAnswerKey && !isDropped) {
+    next.hasAnswerKey = false;
+  }
+
+  if (passageSetId) {
+    next.passageSetId = passageSetId;
+  }
+
+  if (typeof passageLabel === "number") {
+    next.passageLabel = passageLabel;
+  }
+
   return next;
 }
 
-function getPdfFileName(year: string, paper: string): string {
-  return `${year}-${paper}-Set A.pdf`;
+function hasValidCorrectOption(question: PyqRawQuestion): boolean {
+  return Number.isInteger(question.correctOption) && question.correctOption >= 0 && question.correctOption < question.options.length;
+}
+
+function isDroppedQuestion(question: PyqRawQuestion): boolean {
+  return Boolean(question.isDropped) || question.metadata?.isDropped === true;
+}
+
+function getPdfFileName(year: string, paper: string, set: string, assetDir: string): string {
+  if (assetDir === "CSAT" || /^(CSAT|GS2)$/i.test(paper)) {
+    return `${year}-GS2-CSAT-Set ${set}.pdf`;
+  }
+
+  return `${year}-${paper}-Set ${set}.pdf`;
 }
 
 async function deleteRemovedQuestions(
@@ -182,19 +340,27 @@ async function upsertPaper(env: Env, rootDir: string, fileName: string): Promise
     throw new Error(`Invalid PYQ schema in ${fileName}`);
   }
 
+  const assetDir = path.basename(rootDir);
   const droppedCount = paper.questions.filter(
-    (question) => Boolean(question.isDropped) || question.correctOption < 0,
+    (question) => isDroppedQuestion(question),
   ).length;
   const attemptableCount = paper.questions.length - droppedCount;
+  const hasAnswerKey = paper.questions.every(
+    (question) => isDroppedQuestion(question) || hasValidCorrectOption(question),
+  );
   const now = Math.floor(Date.now() / 1000);
+  const paperSet = paper.set || "A";
 
   const sourceMeta: PyqSourceMeta = {
     year: paper.year,
     paper: paper.paper,
-    set: "A",
-    pdfFile: getPdfFileName(paper.year, paper.paper),
-    note: paper.note,
+    set: paperSet,
+    pdfFile: paper.pdfFile || getPdfFileName(paper.year, paper.paper, paperSet, assetDir),
+    assetDir,
+    note: paper.note || paper.officialSourceNote,
     officialSource: paper.officialSource,
+    hasAnswerKey,
+    passageSets: paper.passageSets,
     droppedCount,
     attemptableCount,
   };
@@ -247,8 +413,14 @@ async function upsertPaper(env: Env, rootDir: string, fileName: string): Promise
   const retainedQuestionIds: string[] = [];
 
   for (const question of paper.questions) {
-    const isDropped = Boolean(question.isDropped) || question.correctOption < 0;
-    const metadata = normalizeMetadata(question.metadata, isDropped);
+    const isDropped = isDroppedQuestion(question);
+    const answerKeyAvailable = hasValidCorrectOption(question);
+    const metadata = normalizeMetadata(question.metadata, {
+      hasAnswerKey: answerKeyAvailable,
+      isDropped,
+      passageLabel: question.passageLabel,
+      passageSetId: question.passageSetId,
+    });
     const normalizedType = normalizeQuestionType(question.questionType, question.questionText);
 
     retainedQuestionIds.push(question.id);
@@ -283,7 +455,7 @@ async function upsertPaper(env: Env, rootDir: string, fileName: string): Promise
         question.questionText,
         normalizedType,
         JSON.stringify(question.options),
-        question.correctOption,
+        answerKeyAvailable ? question.correctOption : -1,
         question.explanation,
         JSON.stringify(metadata),
         now,
@@ -295,25 +467,31 @@ async function upsertPaper(env: Env, rootDir: string, fileName: string): Promise
 }
 
 export async function syncPyqData(env: Env): Promise<void> {
-  const rootDir = resolvePyqRootDir(env);
-  if (!rootDir) {
+  const rootDirs = resolvePyqRootDirs(env);
+  if (rootDirs.length === 0) {
     console.warn("PYQ sync skipped: no PYQ root directory found.");
     return;
   }
 
-  const parsedDir = path.join(rootDir, "parsed");
-  if (!fs.existsSync(parsedDir)) {
-    console.warn(`PYQ sync skipped: parsed directory missing at ${parsedDir}`);
-    return;
+  let importedPaperCount = 0;
+
+  for (const rootDir of rootDirs) {
+    const parsedDir = path.join(rootDir, "parsed");
+    if (!fs.existsSync(parsedDir)) {
+      console.warn(`PYQ sync skipped: parsed directory missing at ${parsedDir}`);
+      continue;
+    }
+
+    const parsedFiles = (await fs.promises.readdir(parsedDir))
+      .filter((file) => file.endsWith(".json"))
+      .sort();
+
+    for (const fileName of parsedFiles) {
+      await upsertPaper(env, rootDir, fileName);
+    }
+
+    importedPaperCount += parsedFiles.length;
   }
 
-  const parsedFiles = (await fs.promises.readdir(parsedDir))
-    .filter((file) => file.endsWith(".json"))
-    .sort();
-
-  for (const fileName of parsedFiles) {
-    await upsertPaper(env, rootDir, fileName);
-  }
-
-  console.log(`✅ PYQ sync complete: ${parsedFiles.length} paper(s) imported from ${parsedDir}`);
+  console.log(`✅ PYQ sync complete: ${importedPaperCount} paper(s) imported from ${rootDirs.length} asset director${rootDirs.length === 1 ? "y" : "ies"}`);
 }

@@ -1,0 +1,2208 @@
+{
+  "id": "pyq_2024_csat",
+  "subject": "random",
+  "theme": "UPSC 2024 CSAT Paper II - Previous Year Questions",
+  "styles": [
+    "comprehension",
+    "logical_reasoning",
+    "math",
+    "data_interpretation",
+    "decision_making"
+  ],
+  "questionCount": 80,
+  "createdAt": 0,
+  "year": "2024",
+  "paper": "CSAT",
+  "passageSets": [
+    {
+      "id": "set_1",
+      "questionRange": [
+        1,
+        4
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "According to the Food and Agriculture Organization, one-third of food produced for human consumption is lost or wasted globally. Food is lost or wasted throughout the supply chain, from initial agricultural production to final household consumption. The increasing wastage also results in land degradation by about 45%, mainly due to deforestation, unsustainable agricultural practices, and excessive groundwater extraction. The energy spent over wasted food results in about 3·5 billion tonnes of carbon dioxide production every year. Decay also leads to harmful emissions of other gases in the atmosphere. Addressing the loss and wastage of food in all forms is critical to complete the cycle of food sufficiency and food sustainability."
+        },
+        {
+          "label": 2,
+          "text": "As inflation rises, even governments previously committed to budget discipline are spending freely to help households. Higher interest rates announced by central banks are supposed to help produce modest fiscal austerity, because to maintain stable debts while paying more to borrow, governments must cut spending or raise taxes. Without the fiscal backup, monetary policy eventually loses traction. Higher interest rates become inflationary, not disinflationary, because they simply lead governments to borrow more to pay rising debt-service costs. The risk of monetary unmooring is greater when public debt rises, because interest rates become more important to budget deficits."
+        }
+      ]
+    },
+    {
+      "id": "set_2",
+      "questionRange": [
+        11,
+        14
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "Today, if we consider cities such as New York, London and Paris as some of the most iconic cities in the world, it is because plans carrying a heavy systems approach were imposed on their precincts. The backbone of the systems theory is the process of translating social, spatial and cultural desirables into mathematical models using computing, statistics, optimization and an algorithmic way of formulating and solving problems. The early universities of the West which began to train professionals in planning, spawned some of the most ingenious planners, who were experts in these domains. This was because these very subjects were absorbed into the planning curriculum that had its roots in the social sciences, geography and architecture. Planning in India, and its education differ from the West."
+        },
+        {
+          "label": 2,
+          "text": "Not every voice on the internet commands the same kind of audience. When anonymous private entities with high capital can pay for more space for their opinions, they are effectively buying a louder voice. If political discourse in the digital sphere is a matter of outshining one's opponent till the election is won, then the quality of politics suffers. The focus of social media is restricted to the promotion of content that generates more user engagement, regardless of how inflammatory the content may be."
+        }
+      ]
+    },
+    {
+      "id": "set_3",
+      "questionRange": [
+        21,
+        22
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "By the time children reach class 8, the bulk of them tend to be in the age range of 13 years to 15 years. But in our country, about a quarter of all children in class 8 struggle with reading simple texts and more than half are still unable to do basic arithmetic operations like division. Every year about 25 million young boys and girls from elementary school move into the life that lies for them beyond compulsory schooling. They cannot enter the workforce at least in the organized sector till they are 18. For many families, these children are the first from their families ever to get this far in school. Parents and children expect that such 'graduates' from school will go on to high school and college. Hardly anyone wants to go back to agriculture. On the other hand, abilities in terms of academic competencies are far lower than they should be even based on curricular expectations of class 8."
+        }
+      ]
+    },
+    {
+      "id": "set_4",
+      "questionRange": [
+        31,
+        34
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "“The history of science is the real history of mankind.” In this striking epigram, a nineteenth-century writer links science with its background. Like most epigrams, its power lies in emphasizing by contrast an aspect of truth which may be easily overlooked. In this case, it is easy to overlook the relations between science and mankind, and to treat the former as some abstract third party, which can sometimes be praised for its beneficial influences, but frequently and conveniently blamed for the horrors of war. Science and mankind cannot be divorced from time to time at men’s convenience. Yet we have seen that, in spite of countless opportunities of improvement, the opening years of the present period of civilization have been dominated by international conflict. Is this the inevitable result of the progress of science or does the fault lie elsewhere?"
+        },
+        {
+          "label": 2,
+          "text": "Only with long experience and opening of his wares on many a beach where his language is not spoken, will the merchant come to know the worth of what he carries, and what is parochial and what is universal in his choice. Such delicate goods as justice, love and honour, courtesy, and indeed all the things we care for, are valid everywhere but they are variously moulded and often differently handled, and sometimes nearly unrecognizable if you meet them in a foreign land, and the art of learning fundamental common values is perhaps the greatest gain of travel to those who wish to live at ease among their fellows."
+        }
+      ]
+    },
+    {
+      "id": "set_5",
+      "questionRange": [
+        41,
+        44
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "Conventional classrooms, by emphasizing fixed duration over learning effectiveness, resign themselves to variable outcomes. The tyranny of the classroom is that every learner is subjected to the same set of lectures in the same way for the same duration. In the end, a few learners shine, some survive, and the rest are left behind. After the fixed duration, the classroom model moves on, with not a thought spared for those left behind. This is how we end up with 10 percent employability in our graduates after a decade and half of formal education. Repeating the same ineffectual script in the realm of skill education will not produce different results."
+        },
+        {
+          "label": 2,
+          "text": "When a child reaches adolescence, there is apt to be a conflict between the parents and the child, since the latter considers himself to be by now quite capable of managing his own affairs, while the former are filled with parental solicitude, which is often a disguise for love of power. Parents consider, usually, that the various moral problems which arise in adolescence are peculiarly their province. The options they express, however, are so dogmatic that the young seldom confide in them, and usually go their own way in secret."
+        }
+      ]
+    },
+    {
+      "id": "set_6",
+      "questionRange": [
+        51,
+        53
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "When an international team of scientists pumped a carbon dioxide and water mix into underground basalt rocks, basic chemistry took over. The acidic mixture dissolved rocks' calcium and magnesium and formed limestone. Basically carbon dioxide is converted into stone, exclaimed the scientists."
+        },
+        {
+          "label": 2,
+          "text": "Geographers analyzed 175 satellite images of ocean colour, which is an indicator of phytoplankton productivity at the ocean's surface, and found that giant icebergs are responsible for storing up to 20 percent of carbon in the Southern Ocean. The researchers discovered that melting water from giant icebergs which contains iron and other nutrients, supports hitherto unexpectedly high levels of phytoplankton growth."
+        },
+        {
+          "label": 3,
+          "text": "Evolution has endowed caterpillars that feed on corn with a unique ability, they can induce the plant to turn off its defence against insect predators. This helps caterpillars to eat more and grow faster. The agent that causes this effect is the caterpillar's faeces or frass. The find could throw new light on compounds associated with plant response to pathogens like fungi or bacteria."
+        }
+      ]
+    },
+    {
+      "id": "set_7",
+      "questionRange": [
+        61,
+        63
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "In a robust democracy, reality, howsoever inconvenient it may be, finds its expression both in the speech of political leaders and the other social forms of assertion. The existence of the real has to be transparent, both through its circulation in and by the media as well as its argumentative articulation in deliberative democracy. A normatively responsible media through its communication effect has the responsibility to circulate the content of reality without distortion."
+        },
+        {
+          "label": 2,
+          "text": "Now-a-days there is a growing trend to use interconnected home devices. As consumers increasingly network their homes, the connected home device manufacturers and service providers will seek to overcome \"thin profit margins by gathering more of our personal data—with or without our agreement—turning the home into a corporate storefront\". Corporate marketers will have powerful incentives to observe consumer behaviour to understand the buying needs and preferences of the device owners."
+        }
+      ]
+    },
+    {
+      "id": "set_8",
+      "questionRange": [
+        71,
+        72
+      ],
+      "passages": [
+        {
+          "label": 1,
+          "text": "Unlike religion and science, poetry does not posit or expect any belief in absolute truths. Those forces or individuals who claim to have absolute truths in their grasp tend to turn dictatorial and tyrannical. Truth usually does not admit any contradictions or imperfections. It is unitarian. It is, therefore, not of much use for poetry. Poetry abides by the plurality of life and existence. Perhaps poetry follows reality which is plural, anachronistic, full of contradictions. Against the tyranny of truth, poetry remains a partisan of democratic reality. Against the arrogance of power, wealth and hierarchy, poetry proposes both humility and defiance."
+        },
+        {
+          "label": 2,
+          "text": "The flower was not invented to please us. It flaunted its petals and spread its perfume to attract an insect. The insect carries the pollen from flower to flower so that pollen is not carried away by wind and thus not wasted. What we call a flower's beauty is merely a by-product and a human invention. The perfume is not there to please us, it pleases us because it is there and we have been conditioned to it."
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "pyq_2024_csat_q1",
+      "sequenceNumber": 1,
+      "questionText": "Which of the following statements best reflect the most logical and rational inferences that can be made from the passage?\\n1. The current methods of food distribution are solely responsible for the loss and wastage of food.\\n2. Land productivity is adversely affected by the prevailing trend of food loss and wastage.\\n3. Reduction in the loss and wastage of food results in lesser carbon footprint.\\n4. Post-harvest technologies to prevent or reduce the loss and wastage of food are not available.\\nSelect the correct answer using the code given below.",
+      "questionType": "comprehension",
+      "options": [
+        "1, 2 and 3",
+        "2 and 3 only",
+        "1, 3 and 4",
+        "1, 2 and 4"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 1
+      },
+      "passageSetId": "set_1",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q2",
+      "sequenceNumber": 2,
+      "questionText": "Based on the above passage, the following assumptions have been made :\\n1. The food distribution mechanism needs to be reimagined and made effective to reduce the loss and wastage of food.\\n2. Ensuring the reduction of wastage and loss of food is a social and moral responsibility of all citizens.\\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 2
+      },
+      "passageSetId": "set_1",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q3",
+      "sequenceNumber": 3,
+      "questionText": "Which of the following statements best reflects/reflect the most logical and rational inference/inferences that can be made from the passage?\\n1. Central banks cannot bring down inflation without budgetary backing.\\n2. The effects of monetary policy depend on the fiscal policies pursued by the government.\\nSelect the correct answer using the code given below.",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 3
+      },
+      "passageSetId": "set_1",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q4",
+      "sequenceNumber": 4,
+      "questionText": "Based on the above passage, the following assumptions have been made :\\n1. Fiscal policies of governments are solely responsible for higher prices.\\n2. Higher prices do not affect the long-term government bonds.\\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 4
+      },
+      "passageSetId": "set_1",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q5",
+      "sequenceNumber": 5,
+      "questionText": "What is the least possible number of cuts required to cut a cube into 64 identical pieces?",
+      "questionType": "math",
+      "options": [
+        "8",
+        "9",
+        "12",
+        "16"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 5
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q6",
+      "sequenceNumber": 6,
+      "questionText": "In the expression 5 * 4 * 3 * 2 * 1, * is chosen from +, -, x each at most two times. What is the smallest non-negative value of the expression?",
+      "questionType": "math",
+      "options": [
+        "3",
+        "2",
+        "1",
+        "0"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 6
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q7",
+      "sequenceNumber": 7,
+      "questionText": "A certain number of men can complete a piece of work in 6k days, where k is a natural number. By what percent should the number of men be increased so that the work can be completed in 5k days?",
+      "questionType": "math",
+      "options": [
+        "10%",
+        "(50/3)%",
+        "20%",
+        "25%"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 7
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q8",
+      "sequenceNumber": 8,
+      "questionText": "X, Y and Z can complete a piece of work individually in 6 hours, 8 hours and 8 hours respectively. However, only one person at a time can work in each hour and nobody can work for two consecutive hours. All are engaged to finish the work. What is the minimum amount of time that they will take to finish the work?",
+      "questionType": "math",
+      "options": [
+        "6 hours 15 minutes",
+        "6 hours 30 minutes",
+        "6 hours 45 minutes",
+        "7 hours"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 8
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q9",
+      "sequenceNumber": 9,
+      "questionText": "How many consecutive zeros are there at the end of the integer obtained in the product 1^2 x 2^4 x 3^6 x 4^8 x ... x 25^50?",
+      "questionType": "math",
+      "options": [
+        "50",
+        "55",
+        "100",
+        "200"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 9
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q10",
+      "sequenceNumber": 10,
+      "questionText": "On January 1st, 2023, a person saved ₹ 1. On January 2nd, 2023, he saved ₹ 2 more than that on the previous day. On January 3rd, 2023, he saved ₹ 2 more than that on the previous day and so on. At the end of which date was his total savings a perfect square as well a perfect cube?",
+      "questionType": "math",
+      "options": [
+        "7th January, 2023",
+        "8th January, 2023",
+        "9th January, 2023",
+        "Not possible"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 10
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q11",
+      "sequenceNumber": 11,
+      "questionText": "Which one of the following statements best reflects the most logical and rational inference that can be made from the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Curriculum for urban planning courses should have diverse and interdisciplinary approach.",
+        "In India, city administration is under bureaucracy which lacks formal training in urban planning and management.",
+        "In India, the management of urban areas is a local affair with a chronic problem of insufficient funds.",
+        "With high density of population and widespread poverty in our urban areas, planned development in them is very difficult."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 11
+      },
+      "passageSetId": "set_2",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q12",
+      "sequenceNumber": 12,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. India needs a new generation of urban professionals with knowledge relevant to modern urban practice.\n2. Indian universities at present have no capacity or potential to impart training in systems approach.\nWhich of the assumptions given above is/are correct?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 12
+      },
+      "passageSetId": "set_2",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q13",
+      "sequenceNumber": 13,
+      "questionText": "Which one of the following statements best reflects the central idea of the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Constructed as a marketplace of views, social media ensures instant access to information.",
+        "Social media are not ideal or moral institutions but the products built by companies to make profits.",
+        "Social media have been created to strengthen democracies.",
+        "In today's world, social media are inevitable for well-informed social life."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 13
+      },
+      "passageSetId": "set_2",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q14",
+      "sequenceNumber": 14,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. Internet is not inclusive enough.\n2. Internet can adversely affect the quality of politics in a country.\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 14
+      },
+      "passageSetId": "set_2",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q15",
+      "sequenceNumber": 15,
+      "questionText": "222^333 + 333^222 is divisible by which of the following numbers?",
+      "questionType": "math",
+      "options": [
+        "2 and 3 but not 37",
+        "3 and 37 but not 2",
+        "2 and 37 but not 3",
+        "2, 3 and 37"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 15
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q16",
+      "sequenceNumber": 16,
+      "questionText": "What percent of water must be mixed with honey so as to gain 20% by selling the mixture at the cost price of honey?",
+      "questionType": "math",
+      "options": [
+        "20%",
+        "10%",
+        "5%",
+        "4%"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 16
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q17",
+      "sequenceNumber": 17,
+      "questionText": "What is the rightmost digit preceding the zeros in the value of 30^30?",
+      "questionType": "math",
+      "options": [
+        "1",
+        "3",
+        "7",
+        "9"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 17
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q18",
+      "sequenceNumber": 18,
+      "questionText": "421 and 427, when divided by the same number, leave the same remainder 1. How many numbers can be used as the divisor in order to get the same remainder 1?",
+      "questionType": "math",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 18
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q19",
+      "sequenceNumber": 19,
+      "questionText": "A can X contains 399 litres of petrol and a can Y contains 532 litres of diesel. They are to be bottled in bottles of equal size so that whole of petrol and diesel would be separately bottled. The bottle capacity in terms of litres is an integer. How many different bottle sizes are possible?",
+      "questionType": "math",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 19
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q20",
+      "sequenceNumber": 20,
+      "questionText": "Consider the following statements in respect of the sum S = x + y + z, where x, y and z are distinct prime numbers each less than 10 :\n1. The unit digit of S can be 0.\n2. The unit digit of S can be 9.\n3. The unit digit of S can be 5.\nWhich of the statements given above are correct?",
+      "questionType": "math",
+      "options": [
+        "1 and 2 only",
+        "2 and 3 only",
+        "1 and 3 only",
+        "1, 2 and 3"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 20
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q21",
+      "sequenceNumber": 21,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. For effective school education, parents have greater role than the governments.\n2. School curriculum that conforms to today's requirements and is uniform for the entire country may address the issues brought out.\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 21
+      },
+      "passageSetId": "set_3",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q22",
+      "sequenceNumber": 22,
+      "questionText": "Which one of the following statements best reflects the central idea conveyed by the passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Total eradication of poverty in the country will resolve the issue of under-performance of our school-children.",
+        "Monetary incentives to parents and teachers is a strategy to improve the children's academic performance.",
+        "Public policy should ensure that competencies and achievements of young people are aligned with their expectations.",
+        "India is not going to take advantage of the demographic dividend unless some school pass-outs go back to agriculture."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 22
+      },
+      "passageSetId": "set_3",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q23",
+      "sequenceNumber": 23,
+      "questionText": "Which one of the following statements best reflects the thinking of the author about the science?",
+      "questionType": "standard",
+      "options": [
+        "Science must value the commitment of the scientists.",
+        "Science is a product of civilized society and must be used for the promotion of scientific awareness in people.",
+        "Industrial revolution was made possible by the advancements in science.",
+        "Science must pursue truth but be responsible for social welfare."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 23
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q24",
+      "sequenceNumber": 24,
+      "questionText": "Consider the sequence\\nA _ BCD _ BBCDABC _ DABC _ D\\nthat follows a certain pattern. Which one of the following completes the sequence?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "B, A, D, C",
+        "B, A, C, D",
+        "A, A, C, D",
+        "A, A, D, C"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 24
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q25",
+      "sequenceNumber": 25,
+      "questionText": "Two persons P and Q enter into a business. P puts ₹ 14,000 more than Q, but P has invested for 8 months and Q has invested for 10 months. If P's share is ₹ 400 more than Q's share out of the total profit of ₹ 2,000, what is the capital contributed by P?",
+      "questionType": "math",
+      "options": [
+        "₹ 30,000",
+        "₹ 26,000",
+        "₹ 24,000",
+        "₹ 20,000"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 25
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q26",
+      "sequenceNumber": 26,
+      "questionText": "P's salary is 20% lower than Q's salary which is 20% lower than R's salary. By how much percent is R's salary more than P's salary?",
+      "questionType": "math",
+      "options": [
+        "48.75%",
+        "56.25%",
+        "60.50%",
+        "62.25%"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 26
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q27",
+      "sequenceNumber": 27,
+      "questionText": "A number is mistakenly divided by 4 instead of multiplying by 4. What is the percentage change in the result due to this mistake?",
+      "questionType": "math",
+      "options": [
+        "25%",
+        "50%",
+        "72.75%",
+        "93.75%"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 27
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q28",
+      "sequenceNumber": 28,
+      "questionText": "In an examination, 80% of students passed in English, 70% of students passed in Hindi and 15% failed in both the subjects. What is the percentage of students who failed in only one subject?",
+      "questionType": "math",
+      "options": [
+        "15%",
+        "20%",
+        "25%",
+        "35%"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 28
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q29",
+      "sequenceNumber": 29,
+      "questionText": "A father said to his son, \"n years back I was as old as you are now. My present age is four times your age n years back\". If the sum of the present ages of the father and the son is 130 years, what is the difference of their ages?",
+      "questionType": "math",
+      "options": [
+        "30 years",
+        "32 years",
+        "34 years",
+        "36 years"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 29
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q30",
+      "sequenceNumber": 30,
+      "questionText": "Consider the following :\\n1. 1000 litres = 1 m³\\n2. 1 metric ton = 1000 kg\\n3. 1 hectare = 10000 m²\\nWhich of the above are correct?",
+      "questionType": "math",
+      "options": [
+        "1 and 2 only",
+        "2 and 3 only",
+        "1 and 3 only",
+        "1, 2 and 3"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 30
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q31",
+      "sequenceNumber": 31,
+      "questionText": "Which of the following is/are emphatically conveyed by the author of the passage?\\n1. Without science, mankind could not have continued to exist till today.\\n2. It is the science that will ultimately determine the destiny of mankind.\\nSelect the correct answer using the code given below.",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 31
+      },
+      "passageSetId": "set_4",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q32",
+      "sequenceNumber": 32,
+      "questionText": "Based on the above passage, the following assumptions have been made :\\n1. The horrors of modern life are the inevitable result of the progress of science.\\n2. The aspect of truth likely to be overlooked is that science is what man has made it.\\nWhich of the assumptions given above is/are correct?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 32
+      },
+      "passageSetId": "set_4",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q33",
+      "sequenceNumber": 33,
+      "questionText": "When we meet other people while we travel, we learn to differentiate between",
+      "questionType": "comprehension",
+      "options": [
+        "imagination and understanding",
+        "communities and nationalities",
+        "local values and universal values",
+        "friends and foes"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 33
+      },
+      "passageSetId": "set_4",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q34",
+      "sequenceNumber": 34,
+      "questionText": "With reference to the above passage, the following assumptions have been made :\\n1. Travel leads to an understanding of humans.\\n2. Travel helps those who wish to learn fundamental common values.\\n3. A person with long experience in travel can resolve differences amongst people.\\nWhich of the assumptions given above are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 and 2 only",
+        "2 and 3 only",
+        "1 and 3 only",
+        "1, 2 and 3"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 34
+      },
+      "passageSetId": "set_4",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q35",
+      "sequenceNumber": 35,
+      "questionText": "Let X be a two-digit number and Y be another two-digit number formed by interchanging the digits of X. If (X + Y) is the greatest two-digit number, then what is the number of possible values of X?",
+      "questionType": "math",
+      "options": [
+        "2",
+        "4",
+        "6",
+        "8"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 35
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q36",
+      "sequenceNumber": 36,
+      "questionText": "Consider the following :\\nWeight of 6 boys = Weight of 7 girls = Weight of 3 men = Weight of 4 women\\nIf the average weight of the women is 63 kg, then what is the average weight of the boys?",
+      "questionType": "math",
+      "options": [
+        "40 kg",
+        "42 kg",
+        "45 kg",
+        "63 kg"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 36
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q37",
+      "sequenceNumber": 37,
+      "questionText": "How many times the hour hand and the minute hand coincide in a clock between 10:00 a.m. and 2:00 p.m. (same day)?",
+      "questionType": "math",
+      "options": [
+        "3 times",
+        "4 times",
+        "5 times",
+        "6 times"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 37
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q38",
+      "sequenceNumber": 38,
+      "questionText": "The calendar for the year 2025 is same for",
+      "questionType": "math",
+      "options": [
+        "2029",
+        "2030",
+        "2031",
+        "2033"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 38
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q39",
+      "sequenceNumber": 39,
+      "questionText": "Let p, q, r and s be distinct positive integers. Let p, q be odd and r, s be even. Consider the following statements :\\n1. (p - r)²(qs) is even.\\n2. (q - s)q²s is even.\\n3. (q + r)²(p + s) is odd.\\nWhich of the statements given above are correct?",
+      "questionType": "math",
+      "options": [
+        "1 and 2 only",
+        "2 and 3 only",
+        "1 and 3 only",
+        "1, 2 and 3"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 39
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q40",
+      "sequenceNumber": 40,
+      "questionText": "What is the angle between the minute hand and hour hand when the clock shows 4:25 hours?",
+      "questionType": "math",
+      "options": [
+        "12.5°",
+        "15°",
+        "17.5°",
+        "20°"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 40
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q41",
+      "sequenceNumber": 41,
+      "questionText": "Which of the following statements best reflects/reflect the most logical and rational inference/inferences that can be made from the passage?\n\n1. In conventional classroom learning, the central goal is duration of learning rather than attainment of competency.\n2. Conventional classrooms encourage one-size-fits-all approach and stamp out all differentiation.\n\nSelect the correct answer using the code given below.",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 41
+      },
+      "passageSetId": "set_5",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q42",
+      "sequenceNumber": 42,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. As a large number of workers in our country are employed in unorganized sector, India does not need to change its present conventional classroom system of education.\n2. Even with its present conventional classroom system of education, India produces sufficient number of skilled workers to fully realize the benefits of demographic dividend.\n\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 42
+      },
+      "passageSetId": "set_5",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q43",
+      "sequenceNumber": 43,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. The adolescent does not feel comfortable with his parents because they tend to be dominating and assertive.\n2. The adolescent of modern times does not have much respect for parents.\n\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 43
+      },
+      "passageSetId": "set_5",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q44",
+      "sequenceNumber": 44,
+      "questionText": "Which one of the following statements best reflects the central idea of the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Parents in general may not be of much help when children are on their way to becoming adults.",
+        "When children reach adolescence, involvement of parents in their lives is unnecessary.",
+        "Modern-day nuclear families are not capable of bringing up children properly.",
+        "In modern societies, adolescents tend to be stubborn, disobedient and careless."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 44
+      },
+      "passageSetId": "set_5",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q45",
+      "sequenceNumber": 45,
+      "questionText": "What is the number of fives used in numbering a 260-page book?",
+      "questionType": "math",
+      "options": [
+        "55",
+        "56",
+        "57",
+        "60"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 45
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q46",
+      "sequenceNumber": 46,
+      "questionText": "What is the sum of the first 28 terms in the following sequence?\n1, 1, 2, 1, 3, 2, 1, 4, 3, 2, 1, 5, 4, 3, 2, ...",
+      "questionType": "math",
+      "options": [
+        "83",
+        "84",
+        "85",
+        "86"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 46
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q47",
+      "sequenceNumber": 47,
+      "questionText": "A person buys three articles P, Q and R for ₹ 3,330. If P costs 25% more than R and R costs 20% more than Q, then what is the cost of P?",
+      "questionType": "math",
+      "options": [
+        "₹ 1,000",
+        "₹ 1,200",
+        "₹ 1,250",
+        "₹ 1,350"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 47
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q48",
+      "sequenceNumber": 48,
+      "questionText": "If the sum of the two-digit numbers AB and CD is the three-digit number 1CE, where the letters A, B, C, D, E denote distinct digits, then what is the value of A?",
+      "questionType": "math",
+      "options": [
+        "9",
+        "8",
+        "7",
+        "Cannot be determined due to insufficient data"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 48
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q49",
+      "sequenceNumber": 49,
+      "questionText": "Three numbers x, y, z are selected from the set of the first seven natural numbers such that x > 2y > 3z. How many such distinct triplets (x, y, z) are possible?",
+      "questionType": "math",
+      "options": [
+        "One triplet",
+        "Two triplets",
+        "Three triplets",
+        "Four triplets"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 49
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q50",
+      "sequenceNumber": 50,
+      "questionText": "The total cost of 4 oranges, 6 mangoes and 8 apples is equal to twice the total cost of 1 orange, 2 mangoes and 5 apples. Consider the following statements :\n1. The total cost of 3 oranges, 5 mangoes and 9 apples is equal to the total cost of 4 oranges, 6 mangoes and 8 apples.\n2. The total cost of one orange and one mango is equal to the cost of one apple.\n\nWhich of the statements given above is/are correct?",
+      "questionType": "math",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 50
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q51",
+      "sequenceNumber": 51,
+      "questionText": "Which one of the following statements best reflects the most logical, rational and practical suggestion implied by the passage?",
+      "questionType": "comprehension",
+      "options": [
+        "It is a cheap and practical method to produce limestone at commercial level for building purposes.",
+        "This can be used as one of the methods of carbon sequestration.",
+        "Basalt rock can be made a good source of calcium and magnesium minerals by this method.",
+        "Good rock-dissolving acid can be produced by mixing carbon dioxide and water."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 51
+      },
+      "passageSetId": "set_6",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q52",
+      "sequenceNumber": 52,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n1. Giant icebergs have a bearing on primary productivity and food chains of the Southern Ocean.\n2. Melting of giant icebergs can produce climate change effects and impact world fisheries.\n\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 52
+      },
+      "passageSetId": "set_6",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q53",
+      "sequenceNumber": 53,
+      "questionText": "Which one of the following statements best reflects the most logical, rational and practical message conveyed by the passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Farmers can use caterpillars to feed on weeds in their crop fields/ plantations.",
+        "This finding can help in the development of clinically useful antimicrobial compounds.",
+        "This finding can help in the development of organic, ecologically sustainable pesticides.",
+        "Caterpillars can be genetically modified to be predators of the other plant pests."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 53
+      },
+      "passageSetId": "set_6",
+      "passageLabel": 3
+    },
+    {
+      "id": "pyq_2024_csat_q54",
+      "sequenceNumber": 54,
+      "questionText": "3^25 + 2^27 is divisible by",
+      "questionType": "math",
+      "options": [
+        "3",
+        "7",
+        "10",
+        "11"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 54
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q55",
+      "sequenceNumber": 55,
+      "questionText": "Let p and q be positive integers satisfying p < q and p + q = k. What is the smallest value of k that does not determine p and q uniquely?",
+      "questionType": "math",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 55
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q56",
+      "sequenceNumber": 56,
+      "questionText": "A person walks 100 m straight from his house, turns left and walks 100 m, again turns left and walks 300 m, then turns right and walks 100 m to reach his office. In which direction does he walk initially from his house if his office is exactly in the North-East direction?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "North-West",
+        "West",
+        "South",
+        "South-West"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 56
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q57",
+      "sequenceNumber": 57,
+      "questionText": "A person walks 100 m Westward, then turns left and walks 100 m. He then takes 225° turn clockwise. In which direction is he walking now?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "South-West",
+        "South-East",
+        "North-West",
+        "North-East"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 57
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q58",
+      "sequenceNumber": 58,
+      "questionText": "A Statement is given followed by two Conclusions numbered I and II. Consider the Statement and the Conclusions.\\nStatement :\\nIndia is the world's largest producer of milk.\\nConclusion-I :\\nIndia is the world's largest exporter of milk.\\nConclusion-II :\\nIndia does not import milk.\\nWhich one of the following is correct?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "Only Conclusion-I follows",
+        "Only Conclusion-II follows",
+        "Both Conclusion-I and Conclusion-II follow",
+        "Neither Conclusion-I nor Conclusion-II follows"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 58
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q59",
+      "sequenceNumber": 59,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nQuestion :\\nWhat are the values of m and n, where m and n are natural numbers?\\nStatement-I :\\nm + n > mn and m > n.\\nStatement-II :\\nThe product of m and n is 24.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 59
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q60",
+      "sequenceNumber": 60,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nQuestion :\\nWhat is the time required to download the software?\\nStatement-I :\\nThe size of the software is 12 megabytes.\\nStatement-II :\\nThe transfer rate is 2.4 kilobytes per second.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 60
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q61",
+      "sequenceNumber": 61,
+      "questionText": "Which one of the following statements best reflects the crux of the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Responsible media should not distort the real in an ideal democracy.",
+        "Fake news seems inherent in the life of an ideal democracy.",
+        "There should not be any kind of restrictions on the freedom of expression in an ideal democracy.",
+        "Irresponsible media and political leaders cannot be effectively controlled in an ideal democracy."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 61
+      },
+      "passageSetId": "set_7",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q62",
+      "sequenceNumber": 62,
+      "questionText": "Which one of the following statements best reflects the most logical, rational and practical message implied by the passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Knowledge of consumer behaviour leads to more capital expenditure in manufacturing sector.",
+        "Knowledge of consumer behaviour stimulates the growth of commerce and trade and thus helps in the overall economic development of the country.",
+        "Interconnected devices give a lot of comfort to home users and improve the overall quality of life.",
+        "Interconnected devices can be at security risk and home users may have privacy risk."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 62
+      },
+      "passageSetId": "set_7",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q63",
+      "sequenceNumber": 63,
+      "questionText": "Which one of the following statements best reflects the crux of the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "Environmental sustainability is inimical to our objective of achieving a high rate of GDP growth.",
+        "Poverty eradication is not possible without a rapid economic growth and the consequent environmental degradation.",
+        "Maintaining high environmental standards is now a prerequisite for achieving a steady, sufficient and inclusive growth.",
+        "With large populations, rampant poverty and limited resources of today's world, environmental degradation cannot be prevented and inequalities are inevitable."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 63
+      },
+      "passageSetId": "set_7",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q64",
+      "sequenceNumber": 64,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nQuestion :\\nWhat are the unique values of x and y, where x, y are distinct natural numbers?\\nStatement-I : x / y is odd.\\nStatement-II : xy = 12\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 64
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q65",
+      "sequenceNumber": 65,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nA certain amount was distributed among X, Y and Z.\\nQuestion :\\nWho received the least amount?\\nStatement-I :\\nX received 4/5 of what Y and Z together received.\\nStatement-II :\\nY received 2/7 of what X and Z together received.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 65
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q66",
+      "sequenceNumber": 66,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nQuestion :\\nIf the average marks in a class are 60, then what is the number of students in the class?\\nStatement-I :\\nThe highest marks in the class are 70 and the lowest marks are 50.\\nStatement-II :\\nExclusion of highest and lowest marks from the class does not change the average.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 66
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q67",
+      "sequenceNumber": 67,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nThere are three distinct prime numbers whose sum is a prime number.\\nQuestion :\\nWhat are those three numbers?\\nStatement-I : Their sum is less than 23.\\nStatement-II : One of the numbers is 5.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 67
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q68",
+      "sequenceNumber": 68,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nQuestion : Is (x + y) an integer?\\nStatement-I : (2x + y) is an integer.\\nStatement-II : (x + 2y) is an integer.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 68
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q69",
+      "sequenceNumber": 69,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nA person buys three articles p, q and r for ₹ 50. The price of the article q is ₹ 16 which is the least.\\nQuestion :\\nWhat is the price of the article p?\\nStatement-I :\\nThe cost of p is not more than that of r.\\nStatement-II :\\nThe cost of r is not more than that of p.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 69
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q70",
+      "sequenceNumber": 70,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\\nP, Q, R and S appeared in a test.\\nQuestion :\\nHas P scored more marks than Q?\\nStatement-I :\\nThe sum of the marks scored by P and Q is equal to the sum of the marks scored by R and S.\\nStatement-II :\\nThe sum of the marks scored by P and S is more than the sum of the marks scored by Q and R.\\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "math",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 70
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q71",
+      "sequenceNumber": 71,
+      "questionText": "Which one of the following statements best reflects the most logical and rational message conveyed by the above passage?",
+      "questionType": "comprehension",
+      "options": [
+        "It is the poetry, not science or religion, which recognizes and accepts imperfections in humans.",
+        "Truth is revealed through science or religion and poetry is anathema to truth.",
+        "Poetry is romantic, imaginary and is about feeling whereas science and religion are about truth.",
+        "In a world of violence, tyranny and bigotry, poetry is a form of dynamic resistance."
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 71
+      },
+      "passageSetId": "set_8",
+      "passageLabel": 1
+    },
+    {
+      "id": "pyq_2024_csat_q72",
+      "sequenceNumber": 72,
+      "questionText": "Based on the above passage, the following assumptions have been made :\n\n1. The author of the passage believes that flowers are creations of Nature's luxury.\n2. The author of the passage does not believe in the usefulness of flowers except as things of beauty.\n\nWhich of the assumptions given above is/are valid?",
+      "questionType": "comprehension",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "comprehension",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 72
+      },
+      "passageSetId": "set_8",
+      "passageLabel": 2
+    },
+    {
+      "id": "pyq_2024_csat_q73",
+      "sequenceNumber": 73,
+      "questionText": "A Question is given followed by two Statements I and II. Consider the Question and the Statements.\n\nAge of each of P and Q is less than 100 years but more than 10 years. If you interchange the digits of the age of P, the number represents the age of Q.\n\nQuestion :\nWhat is the difference of their ages?\n\nStatement-I :\nThe age of P is greater than the age of Q.\n\nStatement-II :\nThe sum of their ages is 11/6 times their difference.\n\nWhich one of the following is correct in respect of the above Question and the Statements?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "The Question can be answered by using one of the Statements alone, but cannot be answered using the other Statement alone",
+        "The Question can be answered by using either Statement alone",
+        "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone",
+        "The Question cannot be answered even by using both the Statements together"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 73
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q74",
+      "sequenceNumber": 74,
+      "questionText": "A Main Statement is followed by four Statements labelled P, Q, R and S. Choose the ordered pair of the Statements where the first Statement implies the second, and the two Statements are logically consistent with the Main Statement.\n\nMain Statement :\nPradeep becomes either a Director or a Producer.\n\nStatement P : Pradeep is a Director.\nStatement Q : Pradeep is a Producer.\nStatement R : Pradeep is not a Director.\nStatement S : Pradeep is not a Producer.\n\nSelect the correct answer.",
+      "questionType": "logical_reasoning",
+      "options": [
+        "SP only",
+        "RQ only",
+        "Both SP and RQ",
+        "Neither SP nor RQ"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 74
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q75",
+      "sequenceNumber": 75,
+      "questionText": "If a + b means a - b; a - b means a x b; a x b means a ÷ b; a ÷ b means a + b, then what is the value of 10 + 30 - 100 x 50 ÷ 25? (Operations are to be replaced simultaneously)",
+      "questionType": "math",
+      "options": [
+        "15",
+        "0",
+        "-15",
+        "-25"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 75
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q76",
+      "sequenceNumber": 76,
+      "questionText": "If P means 'greater than (>)'; Q means 'less than (<)'; R means 'not greater than (≯)'; S means 'not less than (≮)' and T means 'equal to (=)', then consider the following statements :\n\n1. If 2x(S)3y and 3x(T)4z, then 9y(P)8z.\n2. If x(Q)2y and y(R)z, then x(R)z.\n\nWhich of the statements given above is/are correct?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "1 only",
+        "2 only",
+        "Both 1 and 2",
+        "Neither 1 nor 2"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 76
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q77",
+      "sequenceNumber": 77,
+      "questionText": "If in a certain code, 'ABCD' is written as 24 and 'EFGH' is written as 1680, then how is 'IJKL' written in that code?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "11880",
+        "11240",
+        "7920",
+        "5940"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 77
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q78",
+      "sequenceNumber": 78,
+      "questionText": "If in a certain code, 'POT' is written as ATOP and 'TRAP' is written as APART, then how is 'ARENA' written in that code?",
+      "questionType": "logical_reasoning",
+      "options": [
+        "AARENA",
+        "AANREA",
+        "AANEAR",
+        "AANERA"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "logical_reasoning",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 78
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q79",
+      "sequenceNumber": 79,
+      "questionText": "What will come in place of * in the sequence 3, 14, 39, 84, *, 258?",
+      "questionType": "math",
+      "options": [
+        "150",
+        "155",
+        "160",
+        "176"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 79
+      }
+    },
+    {
+      "id": "pyq_2024_csat_q80",
+      "sequenceNumber": 80,
+      "questionText": "In some code, letters P, Q, R, S, T represent numbers 4, 5, 10, 12, 15. It is not known which letter represents which number. If Q - S = 2S and T = R + S + 3, then what is the value of P + R - T?",
+      "questionType": "math",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "Cannot be determined due to insufficient data"
+      ],
+      "correctOption": -1,
+      "explanation": "",
+      "metadata": {
+        "category": "pure-static",
+        "subject": "math",
+        "hasGrounding": false,
+        "hasRelevanceTag": false,
+        "hasSources": false,
+        "source": "upsc-pyq",
+        "year": "2024",
+        "paper": "CSAT",
+        "questionNumber": 80
+      }
+    }
+  ]
+}

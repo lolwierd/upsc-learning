@@ -8,6 +8,7 @@ type Block =
   | { type: "code"; lang?: string; content: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
+  | { type: "table"; header: string[]; rows: string[][] }
   | { type: "blockquote"; content: string }
   | { type: "hr" };
 
@@ -37,6 +38,25 @@ function sanitizeUrl(href: string): string | null {
 function stripTrailingUrlPunct(url: string): string {
   // Common punctuation that often trails URLs in prose.
   return url.replace(/[)\],.;:!?]+$/g, "");
+}
+
+function isTableRow(line: string): boolean {
+  return /^\s*\|.*\|\s*$/.test(line);
+}
+
+function parseTableCells(line: string): string[] {
+  return line
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/\|$/, "")
+    .split("|")
+    .map((cell) => cell.trim());
+}
+
+function isTableDivider(line: string): boolean {
+  if (!isTableRow(line)) return false;
+
+  return parseTableCells(line).every((cell) => /^:?-{3,}:?$/.test(cell));
 }
 
 function parseBlocks(src: string): Block[] {
@@ -128,6 +148,21 @@ function parseBlocks(src: string): Block[] {
         i += 1;
       }
       blocks.push({ type: "ol", items });
+      continue;
+    }
+
+    if (isTableRow(line) && i + 1 < lines.length && isTableDivider(lines[i + 1] ?? "")) {
+      flushPara();
+      const header = parseTableCells(line);
+      i += 2;
+
+      const rows: string[][] = [];
+      while (i < lines.length && isTableRow(lines[i] ?? "")) {
+        rows.push(parseTableCells(lines[i] ?? ""));
+        i += 1;
+      }
+
+      blocks.push({ type: "table", header, rows });
       continue;
     }
 
@@ -366,6 +401,35 @@ function renderBlocks(blocks: Block[], keyPrefix: string): ReactNode[] {
       );
     }
 
+    if (b.type === "table") {
+      return (
+        <div key={k} className="overflow-x-auto rounded-xl border border-black/10 bg-white">
+          <table className="min-w-full border-collapse text-sm">
+            <thead className="bg-slate-100 text-slate-900">
+              <tr>
+                {b.header.map((cell, j) => (
+                  <th key={`${k}-th-${j}`} className="border-b border-black/10 px-3 py-2 text-left font-semibold">
+                    {renderInlineWithBreaks(cell, `${k}-th-${j}`)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {b.rows.map((row, rowIndex) => (
+                <tr key={`${k}-row-${rowIndex}`} className="odd:bg-white even:bg-slate-50/70">
+                  {row.map((cell, cellIndex) => (
+                    <td key={`${k}-td-${rowIndex}-${cellIndex}`} className="border-t border-black/5 px-3 py-2 align-top text-slate-700">
+                      {renderInlineWithBreaks(cell, `${k}-td-${rowIndex}-${cellIndex}`)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
     if (b.type === "blockquote") {
       const inner = parseBlocks(b.content);
       return (
@@ -406,4 +470,3 @@ export function Markdown({
   const blocks = parseBlocks(value);
   return <div className={cn("space-y-2", className)}>{renderBlocks(blocks, "md")}</div>;
 }
-

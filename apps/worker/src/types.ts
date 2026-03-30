@@ -30,7 +30,7 @@ export interface Env {
   REGENERATION_MAX_ATTEMPTS?: string; // Max regeneration cycles to recover filtered shortfalls
   REGENERATION_EMERGENCY_ATTEMPTS?: string; // Additional no-dedupe regeneration attempts
   REGENERATION_TEMPERATURE?: string; // Temperature override for regeneration calls (0-2, default: unset)
-  PYQ_ROOT?: string; // Filesystem path to PYQ assets root (contains parsed/ and PDFs)
+  PYQ_ROOT?: string; // Filesystem path to the PYQ asset root (for example apps/worker/pyqs) or a single paper directory like pyqs/GS
   NOTIFICATION_WEB_BASE_URL?: string; // Public web URL used in notifier links
   NOTIFICATION_API_BASE_URL?: string; // Public API URL used in notifier links
   NOTIFICATION_DISCORD_USERNAME?: string; // Optional Discord webhook username override
