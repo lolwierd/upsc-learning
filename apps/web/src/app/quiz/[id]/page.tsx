@@ -692,35 +692,30 @@ export default function QuizPage() {
               PYQ_STYLE_LABELS[question.questionType as keyof typeof PYQ_STYLE_LABELS]
               || question.questionType.replace(/_/g, " ");
             const passageSet = question.passageSetId ? passageSetsById.get(question.passageSetId) : undefined;
-            const isFirstInPassageSet = Boolean(question.passageSetId)
-              && quiz.questions.find((candidate) => candidate.passageSetId === question.passageSetId)?.id === question.id;
+            const inlinePassage = (isCsat && passageSet && typeof question.passageLabel === "number")
+              ? (() => {
+                  const firstWithThisPassage = quiz.questions.find(
+                    (q) => q.passageSetId === question.passageSetId && q.passageLabel === question.passageLabel,
+                  );
+                  if (firstWithThisPassage?.id !== question.id) return null;
+                  return passageSet.passages.find((p) => p.label === question.passageLabel) ?? null;
+                })()
+              : null;
 
             return (
-              <div key={question.id} className="space-y-4">
-                {isCsat && isFirstInPassageSet && passageSet && (
-                  <Card className="border-sky-200 bg-sky-50/50">
-                    <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-                      <div>
-                        <p className="text-sm font-semibold text-sky-900">Reading Set</p>
-                        <p className="text-xs text-sky-700 mt-1">
-                          Questions {passageSet.questionRange[0]}-{passageSet.questionRange[1]}
-                        </p>
-                      </div>
-                      <span className="rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-sky-900 border border-sky-200">
-                        {passageSet.passages.length} passage{passageSet.passages.length === 1 ? "" : "s"}
-                      </span>
-                    </div>
-                    <div className="space-y-4">
-                      {passageSet.passages.map((passage) => (
-                        <div key={`${passageSet.id}-${passage.label}`} className="rounded-xl border border-sky-200 bg-white/80 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700 mb-2">
-                            Passage {passage.label}
-                          </p>
-                          <Markdown className="text-sm text-slate-800" text={passage.text} />
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
+              <div key={question.id} className="space-y-3">
+                {inlinePassage && (
+                  <div className="rounded-2xl border border-sky-200 bg-sky-50/60 px-5 py-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-600 mb-3">
+                      Passage {inlinePassage.label}
+                      {passageSet && passageSet.passages.length > 1 && (
+                        <span className="ml-2 normal-case tracking-normal font-normal text-sky-500">
+                          · Questions {passageSet.questionRange[0]}–{passageSet.questionRange[1]}
+                        </span>
+                      )}
+                    </p>
+                    <Markdown className="text-sm text-slate-800 leading-relaxed" text={inlinePassage.text} />
+                  </div>
                 )}
 
                 <Card

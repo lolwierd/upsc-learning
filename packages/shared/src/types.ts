@@ -117,8 +117,15 @@ export interface Quiz {
     paper?: string;
     set?: string;
     pdfFile?: string;
+    assetDir?: string;
     note?: string;
     officialSource?: string;
+    hasAnswerKey?: boolean;
+    passageSets?: Array<{
+      id: string;
+      questionRange: [number, number];
+      passages: Array<{ label: number; text: string }>;
+    }>;
     droppedCount?: number;
     attemptableCount?: number;
   };
