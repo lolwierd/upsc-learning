@@ -410,6 +410,7 @@ export default function ResultsPage() {
                   
                   {/* Grounding Sources for Current Affairs questions */}
                   {(() => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const meta: any = answer.metadata;
                     return meta?.groundingSources && meta.groundingSources.length > 0 && (
                       <GroundingSourcesList sources={meta.groundingSources} />
@@ -418,6 +419,7 @@ export default function ResultsPage() {
                   
                   {/* Derived From Topic for trending topics */}
                   {(() => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const meta: any = answer.metadata;
                     return meta?.derivedFromTopic && (
                       <div className="mt-2 p-2 bg-purple-50 rounded border border-purple-200">
