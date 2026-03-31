@@ -151,13 +151,14 @@ export default function ReviewPage() {
 
                 {/* Gemini Mismatch Warning */}
                 {(() => {
-                  const meta: any = (answer as any).metadata;
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const meta = (answer as any).metadata as Record<string, any>;
                   if (typeof meta?.geminiPredictedOption === "number" && meta.upscCorrectOption !== meta.geminiPredictedOption) {
                     return (
                       <div className="mt-4 ml-11 flex items-start gap-2 text-sm text-amber-800 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
                         <span className="text-base leading-none mt-0.5">🤖</span>
                         <p>
-                          <span className="font-semibold block mb-0.5">Gemini's Analysis Mismatch</span>
+                          <span className="font-semibold block mb-0.5">Gemini&apos;s Analysis Mismatch</span>
                           The official UPSC answer is <strong>Option {String.fromCharCode(65 + (correctOption ?? 0))}</strong>, but Gemini originally predicted <strong>Option {String.fromCharCode(65 + meta.geminiPredictedOption)}</strong>. The explanation below corresponds to its incorrect prediction.
                         </p>
                       </div>
