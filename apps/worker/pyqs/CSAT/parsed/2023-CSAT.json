@@ -199,8 +199,8 @@
         "Water channels between regions of water surplus and regions of water deficit should be created.",
         "To mitigate water crisis, water demand of sectors such as agriculture and industry should be reduced."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights the growing water stress and conflicts among States over river waters. It points out that while water is a State subject, the Union can regulate inter-State rivers. To resolve these conflicts and ensure a fair balance between competing demands, the passage explicitly advocates for a 'basin-based approach to allocate water' using 'objective criteria' (such as population size, existing use, efficiency, and environmental needs). Option 0 perfectly encapsulates this by calling for a 'national, pragmatic, legal and policy framework for water allocation', which would operationalize the basin-based approach and objective criteria mentioned in the text. Options 1 and 2 suggest physical engineering solutions (linking rivers, creating channels) that are never mentioned in the passage. Option 3 suggests reducing demand in agriculture and industry, which contradicts the passage's acknowledgment of the 'need for agriculture to keep pace' and the realities of urbanization and industrialization.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -226,8 +226,8 @@
         "For economic development, health and nutrition of only skilled workers needs special attention.",
         "For rapid economic growth as envisaged by us, attention should be paid to health and nutrition of the people."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights how poor health (anaemia and tuberculosis) leads to lost productivity in the current workforce, and how malnutrition in children leads to lower cognitive abilities, threatening the future potential of an economy that will rely on highly skilled workers. Therefore, the central implication is that to ensure economic growth and harness India's demographic dividend, significant attention must be paid to improving the health and nutrition of the population. Option 3 perfectly captures this core message. Option 0 is incorrect as the passage does not discuss the rural education system. Option 1 misses the root cause discussed in the passage, which is health and nutrition, not just skill development. Option 2 is incorrect because it restricts the focus 'only' to skilled workers, whereas the passage emphasizes the health and nutrition of the general working-age population and children.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -253,8 +253,8 @@
         "Risk perceptions of farmers are important for motivating them for taking adaptation decisions.",
         "Since mitigation is not possible, governments should come up with policies for quick response to climate change."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage explicitly emphasizes the role of farmers' perceptions in the adaptation process. It states, 'Perception is a necessary pre-requisite for adaptation,' and concludes by highlighting that 'It is important how a farmer perceives the risks associated with climate change.' This directly supports Option 2, which identifies risk perception as an important motivator for farmers to make adaptation decisions. Option 0 is incorrect because while the government plays a role in policy-driven adaptation, the passage does not state that adaptation and mitigation are solely the government's responsibility; farmer perception and action are crucial. Option 1 is incorrect as 'land use patterns' are never mentioned in the text. Option 3 is incorrect because the passage explicitly calls for a 'fast mitigation response,' contradicting the claim that mitigation is not possible.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -280,8 +280,8 @@
         "44",
         "45"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the maximum number of attempts Raj has to make to guarantee getting a red pair of shoes, we must consider the worst-case scenario (the most unlucky sequence of draws).\n\n1. First, let's calculate the total number of shoes in the box:\n   - Red shoes = 10 pairs = 20 shoes (10 left, 10 right)\n   - White shoes = 9 pairs = 18 shoes\n   - Black shoes = 8 pairs = 16 shoes\n\n2. Raj wants a \"red pair of shoes to wear\", which means he specifically needs one left red shoe and one right red shoe.\n\n3. In the worst-case scenario, Raj will pick every single shoe that does NOT complete a red pair before he finally gets one. \n   - First, he might pick all the white shoes: 18 attempts.\n   - Next, he might pick all the black shoes: 16 attempts.\n   (Total attempts so far = 18 + 16 = 34. He still has no red shoes).\n\n4. Now, only the 20 red shoes remain in the box. To continue the worst-case scenario, he picks shoes such that they still do not form a pair. This happens if he picks all the left red shoes (or all the right red shoes) first.\n   - He picks all 10 left red shoes: 10 attempts.\n   (Total attempts so far = 34 + 10 = 44. He has 10 left red shoes but no right red shoe, so still no pair to wear).\n\n5. At this point, the box contains exactly 10 right red shoes. The very next shoe he picks is absolutely guaranteed to be a right red shoe, which will finally complete a red pair.\n   - He picks 1 right red shoe: 1 attempt.\n\n6. Total maximum attempts = 18 (white) + 16 (black) + 10 (left red) + 1 (right red) = 45 attempts.\n\nTherefore, Raj has to make a maximum of 45 attempts to be absolutely certain he has a red pair of shoes to wear.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -305,8 +305,8 @@
         "20",
         "21"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let the number of singles (1 run), fours (4 runs), and sixes (6 runs) scored by the batsman be x, y, and z respectively.\n\nAccording to the problem, the total runs scored is 25. Since the sequence of shots does not matter, we need to find the number of non-negative integer solutions to the equation:\n1x + 4y + 6z = 25\n\nThis can be rewritten as:\nx = 25 - 4y - 6z\n\nFor x to be a non-negative integer (x ≥ 0), we must have:\n4y + 6z ≤ 25\n\nNow, we can find the possible non-negative integer values for y and z by taking different possible values for z (number of sixes):\n\nCase 1: z = 0\n4y + 0 ≤ 25 ⇒ 4y ≤ 25\nPossible values for y are 0, 1, 2, 3, 4, 5, 6.\n(This gives 7 possible combinations)\n\nCase 2: z = 1\n4y + 6(1) ≤ 25 ⇒ 4y ≤ 19\nPossible values for y are 0, 1, 2, 3, 4.\n(This gives 5 possible combinations)\n\nCase 3: z = 2\n4y + 6(2) ≤ 25 ⇒ 4y ≤ 13\nPossible values for y are 0, 1, 2, 3.\n(This gives 4 possible combinations)\n\nCase 4: z = 3\n4y + 6(3) ≤ 25 ⇒ 4y ≤ 7\nPossible values for y are 0, 1.\n(This gives 2 possible combinations)\n\nCase 5: z = 4\n4y + 6(4) ≤ 25 ⇒ 4y ≤ 1\nPossible value for y is 0.\n(This gives 1 possible combination)\n\nTotal number of ways = 7 + 5 + 4 + 2 + 1 = 19 ways.\n\nTherefore, there are exactly 19 ways the batsman can score 25 runs.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -330,8 +330,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's analyze the statements one by one.\n\nStatement 1: 'It is possible that exactly one letter goes into an incorrect envelope.'\nIf exactly one letter goes into an incorrect envelope, it means the other 3 letters must have gone into their correct envelopes. However, if 3 letters are placed correctly, the remaining 1 letter is left with exactly 1 envelope, which must be its own correct envelope. Therefore, it is impossible for exactly one letter to be placed incorrectly. Either 0, 2, 3, or 4 letters can be placed incorrectly. Thus, Statement 1 is incorrect.\n\nStatement 2: 'There are only six ways in which only two letters can go into the correct envelopes.'\nTo find the number of ways exactly two letters go into the correct envelopes, we first select which 2 letters are placed correctly. The number of ways to choose 2 letters out of 4 is given by 4C2 = (4 × 3) / (2 × 1) = 6 ways. \nThe remaining 2 letters must go into the incorrect envelopes. Since there are only 2 letters and 2 envelopes left, there is only 1 way to place them such that both are in the wrong envelopes (they simply swap their envelopes). \nSo, the total number of ways exactly two letters go into the correct envelopes is 6 × 1 = 6 ways. Thus, Statement 2 is correct.\n\nSince only Statement 2 is correct, the correct option is '2 only'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -355,8 +355,8 @@
         "2",
         "4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the remainder when the product 85 × 87 × 89 × 91 × 95 × 96 is divided by 100, we can check if the product is perfectly divisible by 100.\n\n1. The prime factorization of 100 is 25 × 4 (or 5² × 2²).\n2. Let's look for multiples of 5 and 4 in the given product.\n3. The number 85 is a multiple of 5 (85 = 5 × 17).\n4. The number 95 is also a multiple of 5 (95 = 5 × 19).\n5. Multiplying these together, the product contains 5 × 5 = 25 as a factor.\n6. The number 96 is a multiple of 4 (96 = 4 × 24).\n7. Since the product contains both 25 and 4 as factors, the entire product is a multiple of 25 × 4 = 100.\n\nBecause the product is perfectly divisible by 100, the remainder is 0.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -380,8 +380,8 @@
         "6",
         "8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. The unit digit of the expression (57242)^(9 × 7 × 5 × 3 × 1) depends only on the unit digit of its base, which is 2.\n2. The unit digits of powers of 2 follow a cyclicity of 4. The pattern of unit digits for 2^n is: 2^1 = 2, 2^2 = 4, 2^3 = 8, 2^4 = 6, and then it repeats.\n3. To find the unit digit, we need to determine the remainder when the exponent is divided by 4.\n4. The exponent is P = 9 × 7 × 5 × 3 × 1 = 945.\n5. Now, divide the exponent 945 by 4 to find the remainder: 945 ÷ 4 = 236 with a remainder of 1 (since 945 = 236 × 4 + 1).\n6. Because the remainder is 1, the unit digit of the expansion will be the same as the unit digit of 2^1.\n7. 2^1 = 2. Therefore, the unit digit is 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -405,8 +405,8 @@
         "30",
         "31"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. The given equation is ABC + DEF = 1111, where A, B, C, D, E, and F are distinct non-zero digits.\n2. We can write this as a column addition:\n    A B C\n  + D E F\n  -------\n  1 1 1 1\n3. Starting from the units column: C + F must result in a number ending in 1. Since C and F are distinct non-zero digits, their maximum possible sum is 9 + 8 = 17. Therefore, C + F must be exactly 11. This leaves a 1 in the units place and carries over 1 to the tens column.\n4. In the tens column: B + E + 1 (carry) must result in a number ending in 1. This means B + E must end in 0. Since B and E are distinct non-zero digits, their maximum sum is 17. Thus, B + E must be exactly 10. This leaves a 1 in the tens place and carries over 1 to the hundreds column.\n5. In the hundreds column: A + D + 1 (carry) must equal 11. This means A + D must be exactly 10.\n6. We are asked to find the value of A + B + C + D + E + F.\n7. Grouping the terms, we get (A + D) + (B + E) + (C + F).\n8. Substituting the sums we found: 10 + 10 + 11 = 31.\n9. To verify, we can assign distinct digits to these pairs. For example, let (A, D) = (2, 8), (B, E) = (1, 9), and (C, F) = (4, 7). The digits used are 1, 2, 4, 7, 8, and 9, which are all distinct and non-zero. The addition becomes 214 + 897 = 1111. The sum of the digits is 2 + 1 + 4 + 8 + 9 + 7 = 31.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -430,8 +430,8 @@
         "8",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Let the 3-digit number be $D = 100x + 10y + z$, where the hundred's digit $x \\in \\{1, 2, \\dots, 9\\}$ and the ten's and unit's digits $y, z \\in \\{0, 1, \\dots, 9\\}$.\n2. The sum of its digits is $S = x + y + z$.\n3. The ratio of the number to the sum of its digits is $R = \\frac{100x + 10y + z}{x + y + z}$.\n4. We can rewrite this ratio as:\n   $R = \\frac{(x + y + z) + 99x + 9y}{x + y + z} = 1 + \\frac{99x + 9y}{x + y + z}$\n5. To minimize $R$, we need to minimize the fraction $\\frac{99x + 9y}{x + y + z}$.\n6. Factoring out 9, we get $9 \\times \\frac{11x + y}{x + y + z}$. To make this as small as possible, we should maximize the denominator by setting $z = 9$.\n7. Substituting $z = 9$, the expression becomes:\n   $9 \\times \\frac{11x + y}{x + y + 9} = 9 \\times \\frac{(x + y + 9) + 10x - 9}{x + y + 9} = 9 \\times \\left(1 + \\frac{10x - 9}{x + y + 9}\\right)$\n8. To minimize this, we must minimize the fraction $\\frac{10x - 9}{x + y + 9}$.\n9. Since $x \\ge 1$, the numerator $10x - 9$ is always positive. To minimize the fraction, we need the smallest possible numerator and the largest possible denominator.\n10. The smallest possible numerator is obtained by setting $x = 1$ (which gives $10(1) - 9 = 1$).\n11. The largest possible denominator is obtained by setting $y = 9$ (which gives $1 + 9 + 9 = 19$).\n12. Therefore, the minimum ratio is achieved when $x = 1$, $y = 9$, and $z = 9$. The number is $D = 199$.\n13. The digit at the hundred's place is 1, and the digit at the unit's place is 9.\n14. The difference between the digit at the hundred's place and the digit at the unit's place is $|1 - 9| = 8$.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -455,8 +455,8 @@
         "Waiting to deal with carbon emissions until technology improves is not a wise strategy.",
         "Since future technological change is uncertain, new industries should be based on renewable energy sources."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights that future technological advancements might or might not make the transition away from fossil fuels cheap. It compares relying on this uncertain future to a business failing because it did not hedge against uncertain outcomes, calling such an approach 'recklessness'. Therefore, the crucial message is that we should not recklessly wait for technology to improve before dealing with carbon emissions; instead, we must take action now to hedge against the uncertain future. Option 2 perfectly captures this central theme.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -482,8 +482,8 @@
         "Health can be protected even if environmental problems go on unattended.",
         "Loss of traditional lifestyle and the influence of western values led to some unhealthy ways of living."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights that although lifestyle changes can prevent environmental and health problems, people are highly reluctant to adopt them due to 'collective lethargy' and 'inertia'. Since individuals are not taking preventive measures (making better lifestyle choices) to protect their health or the environment, it logically follows that health problems will inevitably occur, necessitating treatment or 'cure'. Therefore, the most rational assumption is that society will end up spending more money on curing diseases rather than preventing them. Option 1 introduces the 'government', which is not discussed. Option 2 contradicts the first line of the passage ('Environmental problems cause health problems'). Option 3 introduces 'traditional lifestyle' and 'western values', which are entirely outside the scope of the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -509,8 +509,8 @@
         "Nutritional status of food should be improved by creating appropriate genetically modified crops.",
         "Using modern food processing technologies, we must fortify food items with required nutrient elements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage highlights the severe consequences of poor dietary choices and lack of access to nutritious food, including the rise of non-communicable diseases and the resulting economic burden. It concludes by stating that 'our food systems are not properly responding to nutritional needs' and that 'serious detours' are taking place from farm to fork. This indicates that the central issue (or crux) is the failure of our current food systems to provide proper nutrition, implying that food-based nutrition needs to be prioritized and placed at the centre of policy debates to fix these systemic issues. Options 0, 2, and 3 introduce specific concepts (Universal Basic Income, genetically modified crops, and food fortification) that are never mentioned or implied in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -536,8 +536,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Step 1: Understand the basic rules of parity (even/odd numbers). Addition and subtraction have the exact same effect on parity. Also, multiplying any integer by an even number (like 2) always results in an even number.\n\nStep 2: Analyze Statement 1, which is 'p + q + r - s - t'. In terms of parity, this expression is equivalent to 'p + q + r + s + t'. We are given that exactly three of these integers are even and two are odd. \nSum of 3 even integers = Even\nSum of 2 odd integers = Even\nTotal sum = Even + Even = Even.\nTherefore, 'p + q + r - s - t' is definitely even. Statement 1 is correct.\n\nStep 3: Analyze Statement 2, which is '2p + q + 2r - 2s + t'. The terms 2p, 2r, and -2s are all multiplied by 2, meaning they are definitely even regardless of whether p, r, and s are even or odd. \n\nStep 4: The parity of the entire expression '2p + q + 2r - 2s + t' therefore depends entirely on the remaining terms, which is the sum 'q + t'.\n\nStep 5: Since we do not know the specific even/odd assignments of the variables, q and t could be:\n- Both even (since there are 3 even numbers available), making 'q + t' even.\n- Both odd (since there are 2 odd numbers available), making 'q + t' even.\n- One even and one odd, making 'q + t' odd.\n\nStep 6: Because 'q + t' can be either even or odd, the expression '2p + q + 2r - 2s + t' is not definitely odd. Statement 2 is incorrect.\n\nConclusion: Only Statement 1 is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -561,8 +561,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's evaluate each statement one by one by finding suitable examples for a prime number (p) and a composite number (c).\n\n**Statement 1: (p + c) / (p - c) can be even.**\nLet's test if we can find a prime number p and a composite number c that satisfy this.\nLet p = 11 (which is prime) and c = 9 (which is composite, as it is divisible by 1, 3, and 9).\nSubstitute these values into the expression:\n(11 + 9) / (11 - 9) = 20 / 2 = 10.\nSince 10 is an even integer, Statement 1 is correct.\n\n**Statement 2: 2p + c can be odd.**\nFor the sum to be odd, since 2p is always even (any integer multiplied by 2 is even), the composite number c must be odd.\nLet p = 2 (prime) and c = 9 (an odd composite number).\nSubstitute these values into the expression:\n2(2) + 9 = 4 + 9 = 13.\nSince 13 is an odd number, Statement 2 is correct.\n\n**Statement 3: pc can be odd.**\nThe product of two numbers is odd if and only if both numbers are odd. Therefore, we need an odd prime number and an odd composite number.\nLet p = 3 (an odd prime) and c = 9 (an odd composite).\nSubstitute these values into the expression:\n3 * 9 = 27.\nSince 27 is an odd number, Statement 3 is correct.\n\nSince all three statements are correct, the correct option is '1, 2 and 3'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -586,8 +586,8 @@
         "15",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Given the equation: ABC × D = 37DD, where A, B, C, and D are different non-zero digits.\n\nWe can rewrite 37DD as 3700 + 11 × D.\nTherefore, ABC = (3700 + 11 × D) / D = (3700 / D) + 11.\n\nFor ABC to be an integer, 3700 must be perfectly divisible by D. Since D is a non-zero single digit (1 to 9), the possible values for D that divide 3700 evenly are 1, 2, 4, and 5.\n\nLet's test these possible values for D:\n1. If D = 1: ABC = 3700 / 1 + 11 = 3711. This is a 4-digit number, but ABC must be a 3-digit number. So, D ≠ 1.\n2. If D = 2: ABC = 3700 / 2 + 11 = 1861. This is also a 4-digit number. So, D ≠ 2.\n3. If D = 4: ABC = 3700 / 4 + 11 = 925 + 11 = 936. This is a 3-digit number. Here, A = 9, B = 3, C = 6, and D = 4. All digits (9, 3, 6, 4) are different and non-zero. This is a valid solution.\n4. If D = 5: ABC = 3700 / 5 + 11 = 740 + 11 = 751. Here, A = 7, B = 5, C = 1, and D = 5. However, B and D are both 5, which violates the condition that A, B, C, and D must be different digits. So, D ≠ 5.\n\nThus, the only valid values are A = 9, B = 3, C = 6, and D = 4.\n\nWe need to find the value of A + B + C:\nA + B + C = 9 + 3 + 6 = 18.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -611,8 +611,8 @@
         "7 and 13 only",
         "7, 11 and 13"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the 6-digit number be represented as XYZXYZ. We can expand this number using its place values:\n\nXYZXYZ = 100000X + 10000Y + 1000Z + 100X + 10Y + Z\n\nGrouping the terms with the same variables together:\n= X(100000 + 100) + Y(10000 + 10) + Z(1000 + 1)\n= 100100X + 10010Y + 1001Z\n\nTaking 1001 as a common factor:\n= 1001(100X + 10Y + Z)\n\nNotice that (100X + 10Y + Z) is simply the 3-digit number XYZ. Therefore, any 6-digit number of the form XYZXYZ can be written as:\nXYZXYZ = XYZ × 1001\n\nNow, we find the prime factorization of 1001:\n- Dividing 1001 by 7 gives 143 (1001 = 7 × 143)\n- Dividing 143 by 11 gives 13 (143 = 11 × 13)\n\nSo, the prime factorization of 1001 is 7 × 11 × 13.\n\nSince 1001 is always a factor of any number of the form XYZXYZ, the number will always be exactly divisible by 7, 11, and 13.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -636,8 +636,8 @@
         "21",
         "18"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. The total number of identical cubes is 125, which are arranged to form a larger cubical block.\n2. Let the side of the larger cube be 'n' cubes long. Then, the total number of cubes is n^3 = 125, which gives n = 5. So, the block is a 5 x 5 x 5 cube.\n3. The cubes that are surrounded by other cubes from all sides are the inner cubes that do not touch any of the outer faces of the larger cube.\n4. If we remove the outer layer of cubes from all 6 faces of the 5 x 5 x 5 block, the dimensions of the remaining inner block will be (n-2) x (n-2) x (n-2).\n5. Substituting n = 5, the dimensions of the inner block are (5-2) x (5-2) x (5-2) = 3 x 3 x 3.\n6. The number of such inner cubes is 3^3 = 27.\n7. Therefore, 27 cubes are completely surrounded by other cubes from each side.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -661,8 +661,8 @@
         "36",
         "72"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of distinct 8-digit numbers that can be formed, we need to arrange the given digits according to the specified conditions.\n\nThe given number is 11223344.\nIt consists of:\n- Odd digits: 1, 1, 3, 3 (Total 4 odd digits)\n- Even digits: 2, 2, 4, 4 (Total 4 even digits)\n\nAn 8-digit number has 8 positions: 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, and 8th.\n- Odd positions: 1st, 3rd, 5th, 7th (Total 4 positions)\n- Even positions: 2nd, 4th, 6th, 8th (Total 4 positions)\n\nCondition 1: Odd digits must occupy odd positions.\nWe need to arrange the 4 odd digits (1, 1, 3, 3) in the 4 odd positions. Since the digit '1' repeats twice and the digit '3' repeats twice, the number of distinct arrangements is given by the permutation formula for identical items: n! / (p! * q!).\nNumber of ways = 4! / (2! * 2!) = (4 × 3 × 2 × 1) / ((2 × 1) × (2 × 1)) = 24 / 4 = 6 ways.\n\nCondition 2: Even digits must occupy even positions.\nSimilarly, we need to arrange the 4 even digits (2, 2, 4, 4) in the 4 even positions. The digit '2' repeats twice and the digit '4' repeats twice.\nNumber of ways = 4! / (2! * 2!) = 24 / 4 = 6 ways.\n\nTotal number of distinct 8-digit numbers:\nSince the arrangement of odd digits and even digits are independent events, we multiply the number of ways they can be arranged.\nTotal ways = (Number of ways for odd digits) × (Number of ways for even digits)\nTotal ways = 6 × 6 = 36.\n\nTherefore, 36 distinct 8-digit numbers can be formed.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -686,8 +686,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let's find the total amount of work by taking the Least Common Multiple (LCM) of the days taken by A, B, and C to complete the work individually.\nLCM of 8, 16, and 12 is 48 units. Let the total work be 48 units.\n\nNow, we calculate the work done by each person in 1 day:\n- A's 1-day work = 48 / 8 = 6 units\n- B's 1-day work = 48 / 16 = 3 units\n- C's 1-day work = 48 / 12 = 4 units\n\nThey work in a cycle of 3 days (A on the 1st day, B on the 2nd day, C on the 3rd day):\nWork done in 1 cycle (3 days) = 6 + 3 + 4 = 13 units.\n\nWe need to complete 48 units of work. Let's see how many full cycles are required:\n- 3 cycles (9 days) will complete = 13 * 3 = 39 units of work.\n- Remaining work after 9 days = 48 - 39 = 9 units.\n\nNow, let's look at the schedule for the remaining work:\n- Day 10: It is A's turn. A will do 6 units of work. \n  Remaining work = 9 - 6 = 3 units.\n- Day 11: It is B's turn. B will do exactly 3 units of work.\n  Remaining work = 3 - 3 = 0 units.\n\nThe work is completely finished in exactly 11 days. Therefore, Statement 2 (\"The work will be finished in 10 days\") is incorrect.\n\nNow let's determine the day of the week the work finishes on:\n- Day 1 is Monday.\n- Since a week has 7 days, Day 8 will also be a Monday.\n- Day 9 will be Tuesday.\n- Day 10 will be Wednesday.\n- Day 11 will be Thursday.\n\nThe work finishes on Thursday. Therefore, Statement 1 is correct.\n\nSince only Statement 1 is correct, the right choice is '1 only'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -711,8 +711,8 @@
         "A heavy penalty should be enforced on those driving without periodic pollution tests.",
         "In the absence of laws to deal with the problems of pollution, the administration tends to make arbitrary decisions."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage criticizes the use of 'drastic actions' and 'arbitrary bans' (which can be understood as knee-jerk reactions) to tackle pollution, noting that despite these measures, 'the air is not clean.' It concludes by emphasizing that 'what is needed is the scientific and reliable information about the source of pollutants... and the technologies that will work to reduce pollution,' which directly translates to an evidence-based approach. Therefore, Option 1 best reflects the most logical and rational implication conveyed by the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -738,8 +738,8 @@
         "International capital markets ensure that the firms maintain good corporate governance.",
         "Good corporate governance paves the way for robust supply chains."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage states that good corporate governance provides 'accountability and control' and involves meeting standards of 'disclosure', 'timely and accurate financial reporting', and 'equal treatment to all stakeholders'. These factors collectively build and enhance a firm's trustworthiness and reliability in the eyes of investors, which is the very definition of 'credibility'. Option 1 logically infers this by summarizing that good corporate governance improves the credibility of firms. Option 0 misstates the agenda mentioned in the passage; Option 2 incorrectly claims that capital markets 'ensure' good governance, whereas the passage only says their growth has put governance on the agenda; Option 3 introduces 'supply chains', which are never mentioned in the text.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -765,8 +765,8 @@
         "Rich biodiversity cannot be maintained in the forests without the presence of elephants.",
         "Elephants are capable of regenerating forests with species as per their requirement."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage details the numerous ways elephants positively impact their ecosystem: they create clearings, prevent overgrowth, aid in plant regeneration, provide sustenance for other herbivores, disperse seeds, nourish plants and insects through their dung, and dig for water during droughts. These actions describe a 'keystone species'—a species that has a disproportionately large effect on its natural environment and benefits overall biodiversity. Option 0 is incorrect because the passage does not discuss the size of their home range. Option 2 is too extreme in claiming that rich biodiversity 'cannot' be maintained without them. Option 3 is incorrect because the passage does not state that elephants regenerate forests specifically 'as per their requirement'. Thus, Option 1 is the most logical and rational inference.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -792,8 +792,8 @@
         "13",
         "15"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the pattern, let's analyze the given equations by adding the three numbers in each expression and observing the result:\n\n1) For 7 ⊕ 9 ⊕ 10 = 8:\nSum of the numbers = 7 + 9 + 10 = 26.\nThe sum of the digits of 26 is 2 + 6 = 8.\n\n2) For 9 ⊕ 11 ⊕ 30 = 5:\nSum of the numbers = 9 + 11 + 30 = 50.\nThe sum of the digits of 50 is 5 + 0 = 5.\n\n3) For 11 ⊕ 17 ⊕ 21 = 13:\nSum of the numbers = 11 + 17 + 21 = 49.\nThe sum of the digits of 49 is 4 + 9 = 13.\n\nThe pattern is consistent across all the given examples: Add the three numbers together, and then find the sum of the digits of that total.\n\nNow, apply this same logic to the target expression, 23 ⊕ 4 ⊕ 15:\nStep 1: Add the numbers together.\n23 + 4 + 15 = 42\n\nStep 2: Find the sum of the digits of the result.\n4 + 2 = 6\n\nTherefore, the value of 23 ⊕ 4 ⊕ 15 is 6.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -817,8 +817,8 @@
         "12",
         "Infinitely many"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of possible values for x, we are given that (7x + 96) is divisible by x. \n\nWe can write this mathematically as:\n(7x + 96) / x = (7x / x) + (96 / x) = 7 + (96 / x)\n\nFor the result to be an integer, the term (96 / x) must also be an integer. Since x is a positive integer, x must be a positive factor (or divisor) of 96.\n\nTo find the number of positive divisors of 96, we first find its prime factorization:\n96 = 32 × 3 = 2^5 × 3^1\n\nThe formula for the number of divisors of a number N = p^a × q^b (where p and q are prime numbers) is (a + 1)(b + 1).\n\nApplying this formula to 96:\nNumber of divisors = (5 + 1) × (1 + 1) = 6 × 2 = 12.\n\nThe 12 possible values for x are 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, and 96. Therefore, there are 12 possible values of x.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -842,8 +842,8 @@
         "224",
         "221"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. The question asks for the greatest value of the product (p + q)(r + s), where p, q, r, and s are distinct single-digit positive numbers.\n2. The set of single-digit positive numbers is {1, 2, 3, 4, 5, 6, 7, 8, 9}.\n3. To maximize the product, we must choose the four largest distinct numbers from this set, which are 9, 8, 7, and 6.\n4. The sum of these four numbers is 9 + 8 + 7 + 6 = 30.\n5. We need to group these four numbers into two pairs, (p, q) and (r, s). Let A = (p + q) and B = (r + s). We know that A + B = 30.\n6. According to the mathematical principle of optimization, the product of two numbers with a constant sum is maximized when the two numbers are as close to each other as possible (ideally equal).\n7. Therefore, we want A and B to be as close to 30 / 2 = 15 as possible.\n8. Let's see if we can form two pairs that both sum to 15:\n   - Pair 1: 9 + 6 = 15\n   - Pair 2: 8 + 7 = 15\n9. Since we can make both sums exactly 15, the maximum possible product is 15 * 15 = 225.\n10. (For verification, other pairings would be (9+8)*(7+6) = 17 * 13 = 221, and (9+7)*(8+6) = 16 * 14 = 224. Both are smaller than 225).\n11. Matching this with the given options, 225 is Option 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -867,8 +867,8 @@
         "7",
         "1"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the remainder when a number formed by repeating a single digit is divided by 13, we can use the divisibility rule for 13.\n\nStep 1: Understand the divisibility rule for 13.\nAny single digit repeated 6 times (e.g., 111111, 222222, ..., 999999) is always exactly divisible by 7, 11, and 13. This is because 999999 = 9 × 111111 = 9 × 111 × 1001, and 1001 = 7 × 11 × 13.\n\nStep 2: Group the digits of N.\nThe number N consists of the digit '9' written 99 times. We can group these 99 digits into blocks of 6.\nNumber of blocks = 99 ÷ 6 = 16 blocks of '999999' with a remainder of 3 digits.\n\nStep 3: Simplify the number N.\nN can be written as:\nN = 999999... (96 times) × 1000 + 999\nSince the block of 96 nines is made up of 16 perfect blocks of 6 nines, that entire part is completely divisible by 13 (leaving a remainder of 0).\n\nStep 4: Find the remainder of the remaining part.\nThe remainder of N when divided by 13 will simply be the remainder when the leftover 3 digits ('999') are divided by 13.\nLet's divide 999 by 13:\n999 = 13 × 76 + 11\n\nTherefore, the remainder when N is divided by 13 is 11.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -892,8 +892,8 @@
         "81",
         "100"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Identify the number given in the problem. The number is a 9-digit number where each digit is 1, which is 111,111,111.\n\nStep 2: We need to find the sum of the digits of the square of this number (111,111,111 × 111,111,111). Let's observe the pattern of squaring numbers consisting entirely of 1s (repunits):\n- 1² = 1 → Sum of digits = 1 = 1²\n- 11² = 121 → Sum of digits = 1 + 2 + 1 = 4 = 2²\n- 111² = 12321 → Sum of digits = 1 + 2 + 3 + 2 + 1 = 9 = 3²\n- 1111² = 1234321 → Sum of digits = 1 + 2 + 3 + 4 + 3 + 2 + 1 = 16 = 4²\n\nStep 3: Following this pattern, when we square a number with 'n' ones (for n ≤ 9), the result counts up to 'n' and then back down to 1. The sum of the digits of the resulting number is always n².\n\nStep 4: Apply this to our 9-digit number (n = 9).\n111,111,111² = 12345678987654321\n\nStep 5: Calculate the sum of the digits.\nSum = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1\nSum = 2 × (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8) + 9\nSum = 2 × (36) + 9\nSum = 72 + 9 = 81\n\nAlternatively, using the formula n², the sum is simply 9² = 81.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -917,8 +917,8 @@
         "910",
         "911"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the sum of all digits that appear in the integers from 10 to 100, we can first find the sum of the digits of all numbers from 0 to 99, and then make the necessary adjustments.\n\nStep 1: Consider all numbers from 00 to 99.\nThere are 100 numbers in total. If we pad the single-digit numbers with a leading zero (00, 01, 02, ..., 99), there are exactly 100 tens digits and 100 units digits.\nIn the units place, each digit from 0 to 9 appears exactly 10 times (e.g., 0, 10, 20, ..., 90).\nIn the tens place, each digit from 0 to 9 also appears exactly 10 times (e.g., 00-09, 10-19, ..., 90-99).\nThus, every digit from 0 to 9 appears a total of 20 times (10 times in the units place + 10 times in the tens place).\n\nStep 2: Calculate the sum of all digits from 00 to 99.\nThe sum of the digits from 0 to 9 is: 0 + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 = 45.\nSince each digit appears 20 times, the total sum of all digits from 00 to 99 is:\n20 × 45 = 900.\n\nStep 3: Subtract the sum of digits of numbers from 0 to 9.\nThe question asks for the sum starting from 10. Therefore, we must subtract the sum of the digits of the numbers 0 through 9.\nThe sum of digits from 0 to 9 is 45.\nSum of digits from 10 to 99 = 900 - 45 = 855.\n\nStep 4: Add the sum of the digits of the number 100.\nThe number 100 consists of the digits 1, 0, and 0.\nThe sum of its digits is: 1 + 0 + 0 = 1.\n\nStep 5: Calculate the final total.\nTotal sum of digits from 10 to 100 = 855 + 1 = 856.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -942,8 +942,8 @@
         "20",
         "24"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. The total number of points chosen on the sides of the square is 1 (on AB) + 1 (on CD) + 2 (on BC) + 2 (on DA) = 6 distinct points.\n2. To form a triangle, we need to select any 3 points out of these 6 points.\n3. The total number of ways to choose 3 points out of 6 is given by the combination formula nCr = n! / (r! * (n - r)!).\n4. Substituting n = 6 and r = 3, we get 6C3 = 6! / (3! * 3!) = (6 × 5 × 4) / (3 × 2 × 1) = 20 ways.\n5. A triangle cannot be formed if the 3 chosen points are collinear (i.e., they lie on the same straight line). \n6. Because the points lie on the perimeter of a square (a convex polygon), any straight line can intersect the perimeter at a maximum of two points, unless the line completely coincides with one of the sides.\n7. The maximum number of points on any single side of the square is 2 (on BC and DA). Therefore, it is impossible to pick 3 points that lie on the same side.\n8. Consequently, no 3 points out of the 6 chosen points can be collinear.\n9. Thus, every combination of 3 points will successfully form a distinct triangle, resulting in exactly 20 triangles.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -967,8 +967,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption 1 is incorrect because the passage merely describes the current state of municipal waste management (e.g., recycling is mostly with the informal sector, and municipal budgets are spent mostly on collection and transportation). It does not make any normative claim that these processes 'should' be handled exclusively by government agencies. Assumption 2 is also incorrect because the passage does not mention 'private sector enterprises' at all, nor does it imply that they are best suited to handle resource recovery and recycling. Therefore, neither assumption is supported by the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -994,8 +994,8 @@
         "Segregation of municipal solid waste is the first step in ensuring the success of waste-to-energy plants.",
         "The biodegradable component of India's municipal solid waste is not adequate to provide energy from waste efficiently/effectively."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights that in India, the segregation of municipal waste at source is rare. It then explains that waste-to-energy ideally fits into the waste management chain 'after segregation'. Furthermore, the choice of appropriate waste-to-energy technology depends on the specific components of the waste (biodegradable vs. non-biodegradable) and its calorific value, which can only be determined and processed effectively if the waste is segregated first. Therefore, segregation is the fundamental prerequisite or the 'first step' for the success of waste-to-energy plants. Option 0 is incorrect as the cost of energy generation is not mentioned. Option 1 is incorrect because biomethanation is only suggested for the biodegradable component, not as the universal ideal for all waste. Option 3 contradicts the passage, which states that the biodegradable component is over 50 percent and offers a 'major solution', implying it is indeed adequate.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1021,8 +1021,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Assumption 1 is incorrect because the passage does not state that organic farming is 'inherently' (naturally or permanently) unsafe. Instead, it explains that the current risks exist because the industry is 'young and not well-regulated,' and because products are used incorrectly. The unsafety is conditional, not inherent.\n\nAssumption 2 is correct. The passage explicitly states that farmers and consumers are 'confused about what products are best for them' and 'sometimes use products in ways that could harm them.' This highlights a clear lack of knowledge and awareness, logically implying that there is a need to educate both farmers and consumers about organic (eco-friendly) food and safe farming practices.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1048,8 +1048,8 @@
         "In India, farmers need to be guided and helped to make their organic farming sustainable.",
         "The aim of organic farming should not be to generate huge profits as there is still no global market for its products."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights that the organic farming industry in India is young, unregulated, and under-researched. Because of this, farmers are confused and often use organic products (like farmyard manure or Datura spray) incorrectly, which can be harmful to both crops and consumers. The author points out the lack of knowledge regarding 'how much and when to use' these products. Therefore, the most logical and practical message is that farmers need proper guidance, research-backed information, and regulatory help to practice organic farming safely and sustainably. Option 0 is too extreme, Option 1 is incorrect because the passage says organic fertilizers are 'difficult to obtain on a large scale', not that they don't exist, and Option 3 introduces out-of-context ideas like global markets and profits.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1075,8 +1075,8 @@
         "3 and 4 only",
         "1, 2, 3 and 4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let us evaluate the given assumptions based on the passage:\n\n1. Assumption 1 states that monoculture agriculture practices are inevitable to achieve zero-hunger. This contradicts the passage, which explicitly criticizes monoculture practices for perpetuating food and nutrition insecurity and degrading land and water. Thus, Assumption 1 is invalid.\n2. Assumption 2 states that dependence on a few crops has negative consequences for human health and the ecosystem. The passage supports this by stating that focusing on staples (a few crops) has impacted food and nutrition security (human health) and that monoculture degrades the quality of land and water (ecosystem). Thus, Assumption 2 is valid.\n3. Assumption 3 states that government policies regarding food planning need to incorporate nutritional security. The passage highlights that merely increasing food grain production has not addressed malnutrition and that the historical focus on staples has compromised nutrition. This logically implies that future planning must incorporate nutritional security. Thus, Assumption 3 is valid.\n4. Assumption 4 talks about farmers receiving subsidies and remunerative prices for grains. While this may be true in the real world, there is absolutely no mention of subsidies or pricing mechanisms in the passage. Thus, Assumption 4 cannot be logically derived from the text and is invalid.\n\nSince only assumptions 2 and 3 are valid, the correct option is 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1102,8 +1102,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To determine the validity of both statements, we use the concept of the worst-case scenario (Pigeonhole Principle).\n\nFirst, let's find the total number of balls in the box:\nTotal balls = 14 (black) + 20 (blue) + 26 (green) + 28 (yellow) + 38 (red) + 54 (white) = 180 balls.\n\n**Evaluating Statement 1:**\nWe need to find the smallest number 'n' such that we are guaranteed to have drawn at least one completely full group of a single colour. \nThe worst-case scenario for *not* completing any group is drawing exactly one ball less than the total for every single colour. \nMaximum balls drawn without completing any group:\n= (14 - 1) + (20 - 1) + (26 - 1) + (28 - 1) + (38 - 1) + (54 - 1)\n= 13 + 19 + 25 + 27 + 37 + 53 \n= 174 balls.\nIf we draw one more ball (174 + 1 = 175 balls), it must belong to one of the colours, thereby completing that colour's group. \nThus, n = 175. Statement 1 is correct.\n\n**Evaluating Statement 2:**\nWe need to find the smallest number 'm' such that we are guaranteed to have drawn at least one ball of every colour.\nThe worst-case scenario for *not* getting at least one ball of each colour is drawing all the balls of every colour except the colour with the fewest balls (which is black, with 14 balls). \nMaximum balls drawn without getting a black ball:\n= 20 (blue) + 26 (green) + 28 (yellow) + 38 (red) + 54 (white)\n= 166 balls.\nIf we draw one more ball (166 + 1 = 167 balls), it is guaranteed to be a black ball, meaning we now have at least one ball of every colour.\nThus, m = 167. Statement 2 is also correct.\n\nSince both statements are correct, the correct option is 'Both 1 and 2'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1127,8 +1127,8 @@
         "SODBHT",
         "SODBHU"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the pattern, let's analyze the alphabetical positions of the letters in the word 'ZERO' and its code 'CHUR':\nZ (26) + 3 = C (3, since 26+3=29 and 29-26=3)\nE (5) + 3 = H (8)\nR (18) + 3 = U (21)\nO (15) + 3 = R (18)\n\nThe pattern is that each letter is shifted forward by 3 positions in the English alphabet.\n\nNow, applying the same +3 shift to the word 'PLAYER':\nP (16) + 3 = S (19)\nL (12) + 3 = O (15)\nA (1) + 3 = D (4)\nY (25) + 3 = B (2, since 25+3=28 and 28-26=2)\nE (5) + 3 = H (8)\nR (18) + 3 = U (21)\n\nTherefore, 'PLAYER' is written as 'SODBHU'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1152,8 +1152,8 @@
         "Only four",
         "All five"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine the oldest person(s) among the six individuals (A, B, C, D, E, F), we must establish a relationship that eliminates all others from being the oldest.\n\nLet's analyze the statements:\n1. A > B (This tells us B is not the oldest)\n2. C = D (This tells us C and D are of the same age)\n3. E is the youngest (This tells us E is not the oldest)\n4. D > F (This tells us F is not the oldest)\n5. F > A (This tells us A is not the oldest)\n\nCombining all the statements, we get the age order: C = D > F > A > B > E. \nThis clearly shows that C and D are the oldest.\n\nNow, let's see if we can drop any statement:\n- If we drop Statement 1, we wouldn't know B's maximum age, meaning B could potentially be older than C and D.\n- If we drop Statement 2, we wouldn't know the relationship between C and D. C could be older than D, or vice versa.\n- If we drop Statement 3, we wouldn't know E's age, meaning E could potentially be the oldest.\n- If we drop Statement 4, we wouldn't know the relationship between D and F, meaning F could be the oldest.\n- If we drop Statement 5, we wouldn't know the relationship between F and A, meaning A could be the oldest.\n\nSince omitting even a single statement leaves the possibility of another person being the oldest, all five statements are strictly required to determine the oldest persons.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1177,8 +1177,8 @@
         "All four statements together are sufficient to answer the Question.",
         "All four statements are not sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the relation of E to B, we need to establish a connection between them using the given statements.\n\n1. From Statement-4, A and C are sisters. This means A and C are female siblings.\n2. From Statement-2, D is the father of C. Since A and C are sisters, D is also the father of A.\n3. From Statement-3, E is D's son. Since D is the father of A, C, and E, it means E is the brother of A and C.\n4. From Statement-1, A and B are a married couple. Since A is female (from Statement-4), B is her husband.\n\nCombining all these facts: E is the brother of A, and A is the wife of B. Therefore, E is the brother-in-law of B.\n\nIf we remove any single statement, the chain of relationships breaks:\n- Without Statement-1, B is disconnected from the rest of the family.\n- Without Statement-2, we cannot connect C (and A) to D.\n- Without Statement-3, E is disconnected from the rest of the family.\n- Without Statement-4, A is disconnected from C, D, and E.\n\nThus, all four statements together are necessary and sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1202,8 +1202,8 @@
         "71, 73, 79, 83",
         "83, 89, 91, 97"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the odd group out, we can analyze the properties of the numbers in each option. \n\n- In Option 0 (17, 37, 47, 97), all the numbers are prime numbers.\n- In Option 1 (31, 41, 53, 67), all the numbers are prime numbers.\n- In Option 2 (71, 73, 79, 83), all the numbers are prime numbers.\n- In Option 3 (83, 89, 91, 97), the number 91 is NOT a prime number (since 91 = 7 × 13). The rest are prime.\n\nSince Option 3 is the only group that contains a composite number, it is different from the others.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1227,8 +1227,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. Assumption 1 is incorrect: The passage states that warmer winters cause the ice to melt earlier, but this does not mean 'spring' (as defined by springtime ecological events) is coming early. Instead, because the birds do not return earlier, there is a 'delay' and a 'longer lag time between spring events.' The transition period (vernal window) is protracted, but the actual spring events are delayed, not early. Additionally, the passage mentions 'warmer winters' but does not explicitly attribute this to 'global warming,' making it an unsupported assumption.\n\n2. Assumption 2 is incorrect: The passage mentions that 'birds don't return' when the ice melts earlier, which causes a delay in springtime ecological events. However, it never states or implies that this delay or the longer vernal window is harmful or 'not good' for the bird populations themselves. \n\nSince neither assumption can be logically derived or supported by the passage, 'Neither 1 nor 2' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1238,7 +1238,9 @@
         "source": "upsc-pyq",
         "year": "2023",
         "paper": "CSAT",
-        "questionNumber": 41
+        "questionNumber": 41,
+        "upscCorrectOption": 0,
+        "geminiPredictedOption": 3
       },
       "passageSetId": "set_5",
       "passageLabel": 1
@@ -1254,8 +1256,8 @@
         "Alternatives to crops that require excess of nitrogen should be identified and cultivated.",
         "Conventional agriculture using synthetic fertilizers should be replaced with agroforestry, agroecosystems and organic farming."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights two main points: first, that synthetic nitrogen fertilizers are essential for high crop yields and currently nourish more than half of the world's population (food production); second, that the current nitrogen use efficiency is low (0.4), meaning 60% of the nitrogen is lost to the environment, causing severe pollution and greenhouse gas emissions (environment). Therefore, the most logical and crucial message is that we must enhance the efficiency of nitrogen use to sustain food production while mitigating environmental damage. Options 1, 2, and 3 either ignore the environmental aspect, suggest unmentioned crop alternatives, or propose farming methods not discussed in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1281,8 +1283,8 @@
         "There is an impending issue of dealing with a huge number of climate change victims/climate refugees.",
         "Climate change in all its connotations is mostly due to developed countries and therefore their share of burden should be more."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage revolves around the concept of 'climate justice,' highlighting that it is a significant principle that has so far 'eluded consensus' in climate change summits and compacts. It emphasizes that the 'crucial question' for the future is how resources, technologies, and regulations will be used to support victims, and it broadens the definition of climate justice to include mitigation, adaptation, and compensation. Because the passage points out the current lack of consensus in agreements and details what climate justice must entail moving forward, the most logical and crucial message is that climate justice needs to be comprehensively ingrained in the rules of new climate compacts and agreements. Options 1, 2, and 3 introduce external concepts not discussed in the text, such as the uneven distribution of resources, climate refugees, and the specific burden of developed countries.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1308,8 +1310,8 @@
         "R < S",
         "R ≤ S"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's use the formula for Compound Interest: Amount = P(1 + r/n)^(nt), where P is the principal, r is the annual interest rate, n is the number of times interest is compounded per year, and t is the time in years.\n\nCase 1: Principal P becomes Q in 1 year compounded half-yearly at R% annual rate.\nHere, n = 2, r = R/100, t = 1.\nQ = P(1 + R/200)^2\n\nCase 2: Principal P becomes Q in 1 year compounded annually at S% annual rate.\nHere, n = 1, r = S/100, t = 1.\nQ = P(1 + S/100)^1\n\nSince the principal P and the final amount Q are the same in both cases, we can equate the two expressions:\nP(1 + R/200)^2 = P(1 + S/100)\n\nDividing both sides by P:\n(1 + R/200)^2 = 1 + S/100\n\nExpanding the left side using the identity (a + b)^2 = a^2 + 2ab + b^2:\n1 + 2(R/200) + (R/200)^2 = 1 + S/100\n1 + R/100 + R^2/40000 = 1 + S/100\n\nSubtracting 1 from both sides:\nR/100 + R^2/40000 = S/100\n\nMultiplying the entire equation by 100 to isolate S:\nR + R^2/400 = S\n\nSince the rate of interest R is a positive value (R > 0), the term R^2/400 will always be strictly greater than 0.\nTherefore, S is equal to R plus some positive value, which means S > R, or conversely, R < S.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1333,8 +1335,8 @@
         "8",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. Let the required natural number be $n$. According to the problem, when 1186 is divided by $n$, the remainder is 31.\n2. This relationship can be expressed using the division algorithm as: $1186 = k \\cdot n + 31$, where $k$ is the quotient. A fundamental rule of division is that the divisor must be strictly greater than the remainder, so $n > 31$.\n3. Rearranging the equation gives: $k \\cdot n = 1186 - 31 = 1155$.\n4. This implies that $n$ must be a divisor (or factor) of 1155, and we are looking for all such divisors that are greater than 31.\n5. Let's find the prime factorization of 1155:\n   $1155 = 5 \\times 231$\n   $231 = 3 \\times 77$\n   $77 = 7 \\times 11$\n   So, $1155 = 3^1 \\times 5^1 \\times 7^1 \\times 11^1$.\n6. The total number of divisors of a number with prime factorization $p_1^a \\times p_2^b \\times p_3^c \\dots$ is given by the formula $(a+1)(b+1)(c+1)\\dots$\n   Total divisors of 1155 = $(1+1)(1+1)(1+1)(1+1) = 2 \\times 2 \\times 2 \\times 2 = 16$.\n7. Let's list all 16 divisors of 1155 by finding all combinations of its prime factors:\n   1, 3, 5, 7, 11, 15, 21, 33, 35, 55, 77, 105, 165, 231, 385, 1155.\n8. We need the divisors that are strictly greater than 31. Let's count the divisors that are less than or equal to 31:\n   1, 3, 5, 7, 11, 15, and 21. \n   There are exactly 7 such divisors.\n9. Subtracting these from the total number of divisors gives the number of valid natural numbers:\n   $16 - 7 = 9$.\n10. The 9 natural numbers are 33, 35, 55, 77, 105, 165, 231, 385, and 1155.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1358,8 +1360,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. The terms $pp$, $qq$, and $rr$ represent 2-digit numbers where both digits are the same. Therefore, they can be written mathematically as $11p$, $11q$, and $11r$, where $p$, $q$, and $r$ are distinct digits from 1 to 9 (since $p < q < r$).  2. The sum of these numbers is given as $tt0$, which is a 3-digit number ending in zero. This can be written as $110t$, where $t$ is a digit from 1 to 9.  3. Setting up the equation:    $11p + 11q + 11r = 110t$    $11(p + q + r) = 110t$    $p + q + r = 10t$  4. Since $p$, $q$, and $r$ are distinct digits from 1 to 9, their maximum possible sum is $7 + 8 + 9 = 24$. Therefore, $10t$ can only be 10 or 20 (which means $t$ can be 1 or 2).  5. Let's find the possible triplets $(p, q, r)$ such that $p < q < r$:     Case 1: $p + q + r = 10$    - If $p = 1$, $q + r = 9 \\Rightarrow (q, r)$ can be $(2, 7), (3, 6), (4, 5)$    - If $p = 2$, $q + r = 8 \\Rightarrow (q, r)$ can be $(3, 5)$    - If $p = 3$, $q + r = 7 \\Rightarrow$ no valid $(q, r)$ since $q > p$.    Triplets for sum 10: $(1, 2, 7), (1, 3, 6), (1, 4, 5), (2, 3, 5)$     Case 2: $p + q + r = 20$    - If $p = 3$, $q + r = 17 \\Rightarrow (q, r)$ can be $(8, 9)$    - If $p = 4$, $q + r = 16 \\Rightarrow (q, r)$ can be $(7, 9)$    - If $p = ",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1383,8 +1385,8 @@
         "8878",
         "9238"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Step 1: Understand the conditions given in the problem.\n- The numbers must be 4-digit numbers.\n- They must be formed using the digits 1, 2, 3, and 4.\n- No digit can be repeated.\n- The numbers must be less than 2000.\n\nStep 2: Determine the thousands digit.\nFor a 4-digit number formed by 1, 2, 3, and 4 to be less than 2000, its first digit (thousands place) must strictly be 1.\n\nStep 3: Find the possible combinations for the remaining digits.\nThe remaining digits are 2, 3, and 4. These 3 digits will occupy the hundreds, tens, and units places. \nThe number of ways to arrange these 3 digits is 3! (3 factorial) = 3 × 2 × 1 = 6 ways.\n\nStep 4: List all the possible numbers.\nThe 6 numbers are:\n1234\n1243\n1324\n1342\n1423\n1432\n\nStep 5: Calculate the sum of these numbers.\nWe can sum them up using their place values:\n- Thousands place: The digit '1' appears 6 times. Sum = 6 × 1000 = 6000.\n- Hundreds place: The digits 2, 3, and 4 each appear exactly twice. Sum = 2 × (2 + 3 + 4) × 100 = 2 × 9 × 100 = 1800.\n- Tens place: The digits 2, 3, and 4 each appear exactly twice. Sum = 2 × (2 + 3 + 4) × 10 = 2 × 9 × 10 = 180.\n- Units place: The digits 2, 3, and 4 each appear exactly twice. Sum = 2 × (2 + 3 + 4) × 1 = 2 × 9 × 1 = 18.\n\nTotal Sum = 6000 + 1800 + 180 + 18 = 7998.\n\nAlternatively, adding them directly:\n1234 + 1243 + 1324 + 1342 + 1423 + 1432 = 7998.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1408,8 +1410,8 @@
         "12",
         "66"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of selections of 10 consecutive things out of 12 things arranged in a circle in the clockwise direction, we can think about the starting point of each selection.\n\n1. Let the 12 things be numbered 1, 2, 3, ..., 12 in a clockwise order.\n2. A selection of 10 consecutive things is uniquely determined by its starting item. \n3. For example, starting at 1 gives the selection {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}. Starting at 2 gives {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}, and so on, up to starting at 12 which gives {12, 1, 2, 3, 4, 5, 6, 7, 8, 9}.\n4. Since there are 12 items in the circle, there are exactly 12 possible starting points.\n\nAlternatively, selecting 10 consecutive things out of 12 is equivalent to leaving out exactly 2 consecutive things. In a circle of 12 items, there are exactly 12 pairs of adjacent items (1-2, 2-3, 3-4, ..., 11-12, 12-1). Thus, there are 12 ways to leave out 2 consecutive items, which corresponds to 12 ways to select 10 consecutive items.\n\nTherefore, the number of selections is 12.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1433,8 +1435,8 @@
         "Friday",
         "Saturday"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the day of the week on the $10^{10}$th day, we need to determine the number of \"odd days\" (the remainder when the total number of days is divided by 7). \n\n**Step 1: Understand the language of the question**\nWhen a question asks for the day **\"on the $n$-th day\"**, today is counted as the 1st day. \n* For example, the 1st day is today (Sunday), the 2nd day is tomorrow (Monday, which is +1 day), and the 3rd day is Tuesday (+2 days).\n* Therefore, the $n$-th day will be exactly **$(n - 1)$ days** from today. \n* We need to find the day exactly $(10^{10} - 1)$ days after Sunday.\n\n**Step 2: Find the remainder of $10^{10}$ divided by 7**\nTo find $10^{10} \\pmod 7$, we can look at the cyclicity of the remainders when powers of 10 are divided by 7:\n* $10^1 \\div 7$ leaves remainder **3**\n* $10^2 \\div 7$ leaves remainder **2** $(3 \\times 10 = 30 \\div 7)$\n* $10^3 \\div 7$ leaves remainder **6** $(2 \\times 10 = 20 \\div 7)$\n* $10^4 \\div 7$ leaves remainder **4** $(6 \\times 10 = 60 \\div 7)$\n* $10^5 \\div 7$ leaves remainder **5** $(4 \\times 10 = 40 \\div 7)$\n* $10^6 \\div 7$ leaves remainder **1** $(5 \\times 10 = 50 \\div 7)$\n\nThe remainders repeat in a cycle of 6: **(3, 2, 6, 4, 5, 1)**. \nTo find the remainder for $10^{10}$, we divide the power (10) by the cycle length (6):\n* $10 \\div 6$ gives a remainder of **4**.\n\nThis means $10^{10}$ will have the same remainder as the 4th term in our cycle ($10^4$). \nThus, $10^{10} \\div 7$ leaves a remainder of **4**.\n\n**Step 3: Calculate the odd days to add**\nSince the $10^{10}$th day is $(10^{10} - 1)$ days from today, we subtract 1 from our remainder:\n* Odd days = $4 - 1 = 3$\n\n**Step 4: Determine the final day**\nNow, we simply add the 3 odd days to the current day (Sunday):\n* Sunday + 1 day = Monday\n* Sunday + 2 days = Tuesday\n* Sunday + 3 days = **Wednesday**\n\nThe $10^{10}$th day is a Wednesday.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1458,8 +1460,8 @@
         "4:20 p.m.",
         "4:30 p.m."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the next time the three traffic signals will turn green simultaneously, we first need to determine the total cycle length for each signal.\n\n1. **Calculate the cycle length of each signal:**\n   The problem states that the time taken to change from green to red is the duration of the green light, and the duration for green and red colors are the same. Therefore, the total cycle length (from turning green to turning green again) is the sum of the green and red durations.\n   - First signal: 25 seconds (green) + 25 seconds (red) = 50 seconds.\n   - Second signal: 39 seconds (green) + 39 seconds (red) = 78 seconds.\n   - Third signal: 60 seconds (green) + 60 seconds (red) = 120 seconds.\n\n2. **Find the Least Common Multiple (LCM) of the cycle lengths:**\n   The signals will turn green simultaneously again after a time interval that is the LCM of their individual cycle lengths (50, 78, and 120).\n   - Prime factorization of 50 = 2 × 5²\n   - Prime factorization of 78 = 2 × 3 × 13\n   - Prime factorization of 120 = 2³ × 3 × 5\n\n   LCM = 2³ × 3 × 5² × 13\n   LCM = 8 × 3 × 25 × 13 = 7800 seconds.\n\n3. **Convert the LCM into minutes and hours:**\n   - 7800 seconds / 60 seconds/minute = 130 minutes.\n   - 130 minutes is equal to 2 hours and 10 minutes.\n\n4. **Calculate the next simultaneous time:**\n   - The signals turned green together at 2:00 p.m.\n   - Adding 2 hours and 10 minutes to 2:00 p.m. gives 4:10 p.m.\n\nTherefore, the signals will change to green next, simultaneously, at 4:10 p.m.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1483,8 +1485,8 @@
         "Wastelands and degraded areas in India should be converted into agroforestry systems to help the poor.",
         "Agroecosystems should be developed in addition to or along with conventional agriculture."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage emphasizes the importance of a 'systemic approach' to food consumption by sourcing food from uncultivated systems (like forests, wetlands, and pastures) 'in addition to agricultural lands.' This helps communities survive natural disasters, seasonal shortfalls, and crop failures. \n\nLet's evaluate the options:\n- Option 0 is incorrect because the passage never suggests replacing existing trees with food-yielding trees.\n- Option 1 is an extreme statement. The passage does not claim that conventional agriculture 'cannot' ensure food security, but rather that supplementing it with uncultivated systems provides a necessary safety net.\n- Option 2 is incorrect because the passage makes no mention of 'wastelands and degraded areas' or converting them.\n- Option 3 is the most logical and rational message. It perfectly captures the core theme of the passage: integrating broader ecological systems (agroecosystems/uncultivated systems) 'in addition to or along with conventional agriculture' to create a resilient and systemic approach to food security.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1510,8 +1512,8 @@
         "Spread of drug-resistant bacteria cannot be done away with, as it is inherent in modern medical care.",
         "Pharma-manufacturing companies should be set up in remote rural areas, away from crowded towns and cities."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights a critical but often ignored issue: the environmental impact of antibiotics-manufacturing companies failing to treat their waste, which leads to pollution and the rise of drug-resistant bacteria around these plants. The most logical and practical message derived from this is the need to address the root cause of this specific pollution. Therefore, putting proper effluent (waste) treatment protocols in place for these manufacturing companies is the direct and practical solution to the problem discussed. The other options either miss the specific focus on factory waste (Option 1), present a fatalistic view not supported by the text (Option 2), or suggest an impractical and ineffective relocation of the problem rather than solving it (Option 3).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1537,8 +1539,8 @@
         "Our education system should focus more on imparting skills during higher education.",
         "Parents of many school children are illiterate and are unaware of the benefits of quality education."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage emphasizes the critical importance of foundational skills and good quality primary education. It states that without this strong foundation, there can be no improvement in higher education or skill development, and an uneducated workforce will lead to an 'inability to keep pace with the global economy.' Option 0 best captures this central message by highlighting that investing in quality education is essential to compete globally (become a global power). Option 1 is incorrect because the passage does not claim India is ignoring the knowledge economy, but rather warns of the consequences of an uneducated workforce. Option 2 contradicts the passage, which stresses primary education as the prerequisite for higher education skills. Option 3 introduces outside information about parents' literacy, which is not mentioned in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1564,8 +1566,8 @@
         "16",
         "17"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. The children are standing in a circle, numbered 1 to 40. The ring starts with Child-1. 2. Let's observe the pattern of the ring's movement:    - 1st change: Child-1 passes to Child-2 (moves 1 position)    - 2nd change: Child-2 passes to Child-4 (moves 2 positions)    - 3rd change: Child-4 passes to Child-7 (moves 3 positions)    - In general, during the n-th change, the ring moves n positions. 3. The total number of positions the ring has moved after n changes is the sum of the first n natural numbers:    Total positions moved = 1 + 2 + 3 + ... + n = n(n+1)/2 4. For the ring to return to Child-1, the total number of positions moved must be an exact multiple of 40 (since there are 40 children in the circle). 5. Therefore, we need n(n+1)/2 to be a multiple of 40:    n(n+1)/2 = 40k (where k is a positive integer)    n(n+1) = 80k 6. We need to find the smallest positive integer n such that the product of two consecutive integers, n and (n+1), is divisible by 80. 7. Since n and (n+1) are consecutive, they are coprime (one is odd, the other is even). To be divisible by 80 (which is 16 \\u00d7 5), one of the numbers must be a multiple of 16 and the other a multiple of 5. 8. Let's test multiples of 16:    - If",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1589,8 +1591,8 @@
         "J",
         "M"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's analyze the pattern of the given sequence:\n- 'Z' appears 2 times.\n- 'Y' appears 3 times.\n- 'X' appears 4 times.\n- 'W' appears 5 times.\nFollowing this pattern, the number of times each letter appears is 1 more than its position from the end of the alphabet. Since there are 26 letters in the English alphabet, 'A' (the 26th letter from the end) will appear 26 + 1 = 27 times.\n\nFirst, we find the total number of terms in the sequence by summing the frequencies of all letters:\nTotal terms = 2 + 3 + 4 + 5 + ... + 27\nThis is an arithmetic progression. The sum of the first 'n' natural numbers is n(n+1)/2. \nThe sum from 2 to 27 is the sum of the first 27 natural numbers minus 1:\nTotal terms = [27 * (27 + 1) / 2] - 1 = (27 * 28 / 2) - 1 = 378 - 1 = 377.\n\nSince there are 377 terms in total, the middle term will be at the position:\nMiddle position = (377 + 1) / 2 = 378 / 2 = 189th term.\n\nNow, we need to find which letter falls on the 189th position. We do this by keeping a running total of the frequencies of the letters starting from Z:\nSum of frequencies of the first 'k' letters from the end = (k * (k + 3)) / 2.\nLet's test for k = 18 (the 18th letter from the end):\nSum = 18 * (18 + 3) / 2 = 18 * 21 / 2 = 9 * 21 = 189.\n\nThis means the 189th term is exactly the last occurrence of the 18th letter from the end of the alphabet.\nTo find the 18th letter from the end, we can calculate its position from the beginning of the alphabet:\nPosition from start = 26 - 18 + 1 = 9th letter.\n\nThe 9th letter of the English alphabet is 'I'. Therefore, the middle term of the sequence is 'I'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1614,8 +1616,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even by using both the Statements together."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine if p > q, let's analyze the given statements.\n\nStatement-1: p × q > 0. \nThis implies that p and q have the same sign (either both are positive or both are negative). For example, if p = 2 and q = 1, then p > q. But if p = 1 and q = 2, then p < q. Thus, Statement-1 alone is not sufficient.\n\nStatement-2: p² > q². \nThis implies that the absolute value of p is greater than the absolute value of q (|p| > |q|). For example, if p = 2 and q = 1, then p > q. But if p = -2 and q = 1, then p < q. Thus, Statement-2 alone is not sufficient.\n\nCombining Statement-1 and Statement-2:\nWe know that p and q have the same sign, and |p| > |q|.\n- Case 1: Let both p and q be positive. If p = 3 and q = 2, then p × q = 6 > 0 and p² (9) > q² (4). Here, p > q is True.\n- Case 2: Let both p and q be negative. If p = -3 and q = -2, then p × q = 6 > 0 and p² (9) > q² (4). However, here p > q is False (since -3 is less than -2).\n\nSince we get different answers (both Yes and No) even after combining both statements, the question cannot be answered using both statements together.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1639,8 +1641,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even by using both the Statements together."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. First, let's simplify the inequality given in the question: Is (p + q - r) > (p - q + r)? \nSubtracting p from both sides gives: q - r > -q + r. \nAdding q and subtracting r from both sides gives: 2q > 2r. \nDividing by 2 gives: q > r. \nSo, the question is essentially asking: 'Is q > r?'\n\n2. Analyze Statement-1: '(p - q) is positive' means p - q > 0, which implies p > q. This statement gives no information about r, so it cannot answer the question alone.\n\n3. Analyze Statement-2: '(p - r) is negative' means p - r < 0, which implies p < r. This statement gives no information about q, so it cannot answer the question alone.\n\n4. Combine both statements: From Statement-1, we know q < p. From Statement-2, we know p < r. Combining these inequalities yields q < p < r, which strictly implies that q < r.\n\n5. Since we can definitively conclude that q is less than r, the answer to the question 'Is q > r?' is a definite 'No'. Because we are able to arrive at a definitive answer using both statements together (but neither alone), Option 2 is the correct choice.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1664,8 +1666,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even by using both the Statements together."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let's analyze the given information using set theory.\nLet T be the set of persons who took tea, C be the set of persons who took coffee, and M be the set of persons who took milk.\nGiven:\n- n(T) = 75\n- n(C) = 60\n- n(T ∩ C) = 15\n- No one taking milk takes tea, so n(T ∩ M) = 0.\n- Everyone takes at least one drink, so the total number of persons is n(T ∪ C ∪ M).\n\nFirst, let's find the number of persons who took either tea or coffee:\nn(T ∪ C) = n(T) + n(C) - n(T ∩ C) = 75 + 60 - 15 = 120.\n\nThe total number of persons at the party includes those who took tea or coffee, plus those who took ONLY milk. \nLet x be the number of persons who took milk only.\nTotal persons = n(T ∪ C) + x = 120 + x.\n\nNow let's evaluate the statements:\n\nStatement-1: 50 persons took milk.\nThis means the total number of people who took milk is 50. This includes people who took milk only (x) and people who took both milk and coffee. Since we don't know how many took both milk and coffee, we cannot determine x. Thus, Statement-1 alone is not sufficient.\n\nStatement-2: Number of persons who attended the party is five times the number of persons who took milk only.\nThis gives us the equation: Total persons = 5x.\nWe already know that Total persons = 120 + x.\nEquating the two: 120 + x = 5x\n=> 4x = 120\n=> x = 30.\nNow we can find the total number of persons: 120 + 30 = 150.\nThus, Statement-2 alone is sufficient to answer the question.\n\nSince the question can be answered by Statement-2 alone but not by Statement-1 alone, the correct choice is that it can be answered by one of the statements alone, but not the other.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1689,8 +1691,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even by using both the Statements together."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the 3-digit number be represented as 'abc', where a, b, and c are its digits (a ≠ 0).\n\nFrom Statement-1: The sum of the digits equals the product of the digits.\nMathematically, a + b + c = a × b × c.\nSince none of the digits can be 0 (otherwise the product would be 0, meaning the sum must also be 0, which is impossible for a 3-digit number), we look for positive single-digit integers satisfying this. The only set of digits that satisfies this condition is {1, 2, 3} because 1 + 2 + 3 = 6 and 1 × 2 × 3 = 6.\nThe possible 3-digit numbers formed by these digits are the permutations: 123, 132, 213, 231, 312, and 321. \nSince there are 6 possible numbers, Statement-1 alone is not sufficient.\n\nFrom Statement-2: The number is divisible by the sum of its digits.\nThere are many 3-digit numbers divisible by the sum of their digits (e.g., 111, 112, 120), so Statement-2 alone is not sufficient.\n\nCombining both statements:\nFrom Statement-1, the sum of the digits is always 6 (1 + 2 + 3 = 6). \nFrom Statement-2, the number must be divisible by 6. For a number to be divisible by 6, it must be even (divisible by 2) and divisible by 3. \nAll the permutations (123, 132, 213, 231, 312, 321) are divisible by 3 because their digit sum is 6. However, to be divisible by 2, the number must end in an even digit. \nThe even numbers in our set are 132 and 312.\nLet's check them:\n- 132 ÷ 6 = 22\n- 312 ÷ 6 = 52\n\nBoth 132 and 312 perfectly satisfy the conditions of both Statement-1 and Statement-2. Because we are left with two possible numbers instead of a single unique number, the question 'What is the number?' cannot be answered definitively.\n\nThus, the question cannot be answered even by using both statements together.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1714,8 +1716,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even by using both the Statements together."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let the age of the youngest child be 'a'. Since any two successive ages differ by 2 years, the ages of the five children can be represented as: a, a+2, a+4, a+6, and a+8. \n\nEvaluating Statement-1: The age of the eldest is 3 times the youngest.\nThis gives the equation: a + 8 = 3a.\nSolving for 'a', we get 2a = 8, which means a = 4. \nThus, Statement-1 alone is sufficient to answer the question.\n\nEvaluating Statement-2: The average age of the children is 8 years.\nThe average of their ages is the middle value (since they are in an arithmetic progression), which is a + 4.\nThis gives the equation: a + 4 = 8.\nSolving for 'a', we get a = 4.\nThus, Statement-2 alone is also sufficient to answer the question.\n\nSince the question can be answered using either Statement-1 alone or Statement-2 alone, the correct choice is Option 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1739,8 +1741,8 @@
         "We are influenced by the opinion of others and have no courage to follow our own convictions.",
         "In our lives, having too few choices may not be a good thing, but having too many can be equally as difficult."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage revolves around the 'paradox of choice,' illustrating how an abundance of equally attractive options can lead to indecision, anxiety, and unhappiness (as seen in the story of Buridan's ass and the modern glut of choices exacerbated by technology). Option 3 perfectly captures this central theme by highlighting that while having choices is generally seen as positive, having too many choices can be overwhelming and equally difficult to navigate.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1766,8 +1768,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Statement 1 is implied by the passage: the author identifies 'onerous bureaucracy' and the difficulty of making a 'transition between them [services/providers]' as hurdles, which implies that a more flexible, less rigid environment is needed to encourage financialization. Statement 2 is also implied: the passage points out a lack of information regarding which service or provider is 'best for each family', indicating that financial needs vary by household and therefore require customized solutions. Statement 3 is not implied: there is no mention or hint of 'financial technology' (fintech) or technological innovations in the passage. Therefore, only statements 1 and 2 reflect the implied solutions.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1777,7 +1779,9 @@
         "source": "upsc-pyq",
         "year": "2023",
         "paper": "CSAT",
-        "questionNumber": 62
+        "questionNumber": 62,
+        "upscCorrectOption": 3,
+        "geminiPredictedOption": 0
       },
       "passageSetId": "set_7",
       "passageLabel": 2
@@ -1793,8 +1797,8 @@
         "3 and 4",
         "2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Assumption 1 is valid because the passage explicitly states that patented medicines 'could be unaffordable to the public' and come at a 'cost, in the nature of higher prices,' which directly implies a burden on the public's purchasing power. Assumption 2 is invalid as the passage makes no mention of developing countries, poor countries, or international dependence for pharmaceutical products. Assumption 3 is invalid because the passage does not discuss public health policy design or its specific goals across different countries. Assumption 4 is valid because the passage highlights the inherent tension between the patentee's need for a 'legitimate mechanism to get returns' on R&D (rights of patentees) and the public's need for affordable medicines (requirements of the patients). The discussion of these competing interests implies that the patent regime (governed by the state) must find an appropriate balance between them. Therefore, assumptions 1 and 4 are logically supported.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1820,8 +1824,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Assumption 1 is valid because the passage explicitly connects the 'growth of the digital economy' with keeping 'personal data of citizens secure and protected', and mentions that individuals should be able to 'monetise' their data, implying that privacy protection holds economic value. Assumption 2 is valid because the passage explicitly states, 'No one will innovate in a surveillance-oriented environment or in a place where an individual's personal information is compromised,' directly establishing a fundamental link between privacy and innovation. Therefore, both assumptions are logically derived from the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1847,8 +1851,8 @@
         "23",
         "35"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. The examination consists of 4 papers (P, Q, R, S), each with a maximum of 100 marks. Therefore, the total maximum marks = 4 × 100 = 400.\n2. The student scores 99% overall. Total marks scored = 99% of 400 = (99 / 100) × 400 = 396.\n3. This means the student lost a total of 400 - 396 = 4 marks across the four papers.\n4. Let the marks lost in papers P, Q, R, and S be p, q, r, and s respectively. We need to find the number of non-negative integer solutions to the equation: p + q + r + s = 4.\n5. The number of ways to distribute 'n' identical items among 'r' distinct groups is given by the combinations formula (Stars and Bars method): C(n + r - 1, r - 1).\n6. Here, n = 4 (marks lost) and r = 4 (papers). \n7. Applying the formula: C(4 + 4 - 1, 4 - 1) = C(7, 3).\n8. Calculating C(7, 3) = 7! / (3! × (7 - 3)!) = (7 × 6 × 5) / (3 × 2 × 1) = 35.\n9. Alternatively, we can list the permutations of the lost marks:\n   - 4 marks lost in one paper (4,0,0,0): 4 ways\n   - 3 marks in one, 1 in another (3,1,0,0): 4! / 2! = 12 ways\n   - 2 marks in two papers (2,2,0,0): 4! / (2! × 2!) = 6 ways\n   - 2 marks in one, 1 in two papers (2,1,1,0): 4! / 2! = 12 ways\n   - 1 mark in each paper (1,1,1,1): 1 way\n   Total ways = 4 + 12 + 6 + 12 + 1 = 35.\n\nTherefore, the student can score 99% in 35 different ways.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1872,8 +1876,8 @@
         "24",
         "36"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To design the flag with 4 horizontal stripes such that no two adjacent stripes have the same color, we can determine the number of choices for each stripe step-by-step:\n\n1. **First Stripe (Top):** We can choose any of the 3 available colors (Red, Green, or Yellow). So, there are 3 choices.\n2. **Second Stripe:** This stripe cannot have the same color as the first stripe. Therefore, out of the 3 colors, 1 is restricted, leaving 2 choices.\n3. **Third Stripe:** This stripe cannot have the same color as the second stripe. It can, however, be the same color as the first stripe. Thus, there are 2 choices.\n4. **Fourth Stripe (Bottom):** Similarly, this stripe cannot have the same color as the third stripe, leaving 2 choices.\n\nThe total number of different ways to color the flag is the product of the number of choices for each stripe:\nTotal ways = 3 × 2 × 2 × 2 = 24.\n\nThe phrase \"using some or all of the colours\" confirms that designs using only 2 colors (e.g., Red-Green-Red-Green) are perfectly valid and should be included in our total count. \n\nTherefore, there are 24 different ways to design the flag.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1897,8 +1901,8 @@
         "8",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "**Step 1: Analyze the Dimensions and Areas**\n*   **Floor Dimensions:** $4$ m by $2.2$ m = $400$ cm by $220$ cm.\n*   **Floor Area:** $400 \\times 220 = 88,000 \\text{ cm}^2$.\n*   **Tile Dimensions:** $140$ cm by $60$ cm.\n*   **Tile Area:** $140 \\times 60 = 8,400 \\text{ cm}^2$.\n\nTo find the theoretical maximum number of tiles that could possibly fit based purely on area:\n$$\\text{Maximum tiles} = \\frac{88,000}{8,400} \\approx 10.47$$\nThis means the floor can hold *at most* 10 tiles. However, because we cannot cut the tiles and they must be placed parallel to the edges, the actual number might be lower. Since the highest number in the given options is **9**, we just need to determine if a valid arrangement for 9 tiles exists.\n\n**Step 2: Constructing a Valid Arrangement for 9 Tiles**\nLet's map the floor on a coordinate system where the length is the X-axis ($0$ to $400$) and the breadth is the Y-axis ($0$ to $220$). \nTiles can be placed in two orientations:\n*   **Horizontal (H):** $140$ cm wide (X) and $60$ cm high (Y).\n*   **Vertical (V):** $60$ cm wide (X) and $140$ cm high (Y).\n\nWe can perfectly pack 9 tiles using the following non-overlapping layout:\n\n**Left Section (3 Horizontal Tiles):**\n*   **Tile 1 (H):** $X$ from $0$ to $140$, $Y$ from $0$ to $60$\n*   **Tile 2 (H):** $X$ from $0$ to $140$, $Y$ from $80$ to $140$\n*   **Tile 3 (H):** $X$ from $0$ to $140$, $Y$ from $160$ to $220$\n*(Note: These 3 tiles are stacked on the left side, leaving two $20$ cm horizontal gaps between them).*\n\n**Middle Section (2 Vertical, 1 Horizontal):**\n*   **Tile 4 (V):** $X$ from $140$ to $200$, $Y$ from $0$ to $140$\n*   **Tile 5 (V):** $X$ from $200$ to $260$, $Y$ from $0$ to $140$\n*   **Tile 6 (H):** $X$ from $140$ to $280$, $Y$ from $160$ to $220$\n*(Note: Tiles 4 and 5 are placed vertically side-by-side. Tile 6 is placed horizontally above them. The Y-gap between the vertical tiles ending at $140$ and the horizontal tile starting at $160$ is $20$ cm).*\n\n**Right Section (2 Vertical, 1 Horizontal):**\n*   **Tile 7 (V):** $X$ from $280$ to $340$, $Y$ from $80$ to $220$\n*   **Tile 8 (V):** $X$ from $340$ to $400$, $Y$ from $80$ to $220$\n*   **Tile 9 (H):** $X$ from $260$ to $400$, $Y$ from $0$ to $60$\n*(Note: Tile 9 is placed horizontally at the bottom right. Tiles 7 and 8 are placed vertically above it. The Y-gap between Tile 9 ending at $60$ and Tiles 7 & 8 starting at $80$ is $20$ cm. Tile 6 and Tile 7 touch perfectly at $X = 280$ without overlapping).*\n\n**Step 3: Verification**\n*   **Boundaries:** The maximum X used is $400$ (Tiles 8 & 9) and the maximum Y used is $220$ (Tiles 3, 6, 7, 8). All tiles fit strictly within the $400 \\times 220$ floor.\n*   **Overlaps:** By checking the coordinates, no two tiles share the same space. The strategic $20$ cm gaps ensure that the mixed orientations interlock perfectly without crossing boundaries.\n\nSince we have successfully accommodated 9 tiles and it is the highest value among the given options, it is the maximum possible number.\n\n**Correct Answer: Option D**",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1922,8 +1926,8 @@
         "18",
         "24"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the five tasks be Task-1, Task-2, Task-3, Task-4, and Task-5. We need to assign these 5 tasks to the 5 persons (P, Q, R, S, T) such that each person gets exactly one task. This is equivalent to finding the number of valid arrangements of the persons for the tasks.\n\nStep 1: Assign Task-2\nThe problem states that Task-2 must be assigned to either R or S. \nSo, there are 2 choices for Task-2.\n\nStep 2: Assign Task-1\nThe problem states that neither P nor Q can be assigned Task-1. \n- Case A: If Task-2 is assigned to R, the remaining persons are P, Q, S, and T. Since P and Q cannot be assigned Task-1, the only available choices for Task-1 are S and T (2 choices).\n- Case B: If Task-2 is assigned to S, the remaining persons are P, Q, R, and T. Since P and Q cannot be assigned Task-1, the only available choices for Task-1 are R and T (2 choices).\nIn either case, there are exactly 2 valid choices for Task-1.\n\nStep 3: Assign the remaining tasks\nAfter successfully assigning Task-1 and Task-2, there are 3 tasks left (Task-3, Task-4, Task-5) and 3 persons remaining. Since there are no further restrictions, these 3 persons can be assigned to the 3 tasks in 3! (3 factorial) ways.\n3! = 3 × 2 × 1 = 6 ways.\n\nStep 4: Calculate the total number of ways\nTotal number of ways = (Choices for Task-2) × (Choices for Task-1) × (Choices for remaining tasks)\nTotal ways = 2 × 2 × 6 = 24 ways.\n\nThus, the assignment can be done in 24 ways.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1947,8 +1951,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze both statements step by step.  **Statement 1: To buy 78 gm of coins one must buy at least 7 coins.** When buying coins, we must find a combination of coins that exactly sums to 78 gm using the available denominations: 2 gm, 5 gm, 10 gm, 25 gm, and 50 gm. Let's try to make 78 gm using the minimum number of coins: - If we use one 50 gm coin, we need 28 gm from the remaining coins. - To make 28 gm, we cannot",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1972,8 +1976,8 @@
         "Both Conclusion-1 and Conclusion-2 follow from the Statement.",
         "Neither Conclusion-1 nor Conclusion-2 follows from the Statement."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "First, let's decode the symbols based on the given rules:\nI. A + B means A is neither smaller nor equal to B. Therefore, A > B.\nII. A - B means A is not greater than B. Therefore, A ≤ B.\nIII. A x B means A is not smaller than B. Therefore, A ≥ B.\nIV. A ÷ B means A is neither greater nor equal to B. Therefore, A < B.\nV. A ± B means A is neither smaller nor greater than B. Therefore, A = B.\n\nNow, let's decode the given Statement:\n1. P x Q  =>  P ≥ Q\n2. P - T  =>  P ≤ T\n3. T ÷ R  =>  T < R\n4. R ± S  =>  R = S\n\nCombining these relationships into a single chain of inequalities, we get:\nQ ≤ P ≤ T < R = S\n\nNow, let's evaluate the Conclusions:\nConclusion-1: Q ± T  =>  Q = T\nFrom our chain, we know that Q ≤ T. While it is possible for Q to equal T (if Q = P = T), it is not a definite certainty (Q could be less than T). Thus, Conclusion-1 does not necessarily follow.\n\nConclusion-2: S + Q  =>  S > Q\nFrom our chain, we can see that Q ≤ T and T < S (since T < R and R = S). This strictly implies that Q < S, which is the same as S > Q. Thus, Conclusion-2 definitely follows.\n\nTherefore, only Conclusion-2 follows from the Statement.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1997,8 +2001,8 @@
         "There are no labour-intensive industries to accommodate the huge number of unemployed people.",
         "The education system should be properly designed so as to enable the educated people to be self-employed."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage explicitly states that 'rising education levels inflate unemployment challenges' and that younger Indians 'exhibit greater willingness to wait for the right job' (which reflects their aspirations). The author argues that the unemployment rate paints an inaccurate picture of the economy's performance because it is heavily influenced by these two factors: higher education levels and the willingness of the youth to wait for suitable jobs. Therefore, Option 1 accurately captures the author's intended message. Options 0, 2, and 3 introduce concepts not mentioned in the passage, such as the quality of education, labour-intensive industries, and self-employment.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2024,8 +2028,8 @@
         "As the statesmen/bureaucrats are the products of a society, it is desirable to have a system of education in a society that focuses on training its citizens in scientific method and philosophical thinking from a very early age.",
         "It is desirable that all scientists need to be philosophers as well to make their work goal-oriented and thus purposeful and useful to the society."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage draws a parallel between science and government/politics, emphasizing that both require the guiding force of philosophy to provide direction, coordination, and purpose. It explicitly states that 'Government suffers, precisely like science, for lack of philosophy' and that 'the pursuit of politics becomes a destructive bedlam when divorced from science and philosophy.' Furthermore, it defines statesmanship as 'movement guided by total knowledge and perspective.' Therefore, the most logical and practical message is that those who govern (statesmen) must be equipped with both scientific methods and philosophical thinking to gain the necessary perspective and effectively fulfill their roles and goals. Options 1, 2, and 3 introduce unsupported elements such as 'mixing empirical statesmen,' 'education from a very early age,' or restrict the focus solely to scientists, missing the broader application to government and politics.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2035,7 +2039,9 @@
         "source": "upsc-pyq",
         "year": "2023",
         "paper": "CSAT",
-        "questionNumber": 72
+        "questionNumber": 72,
+        "upscCorrectOption": 1,
+        "geminiPredictedOption": 0
       },
       "passageSetId": "set_8",
       "passageLabel": 2
@@ -2051,8 +2057,8 @@
         "Communal harmony",
         "Liberty"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage repeatedly emphasizes the concept of freedom as the ultimate goal of the state. It states that the state's purpose is 'to free each man from fear' and 'to lead men to live by, and to exercise, a free reason.' While personal safety, health of body and mind, and communal harmony are mentioned as outcomes of this freedom (e.g., 'live and act with full security', 'bodies and their minds to function safely', 'not act unfairly toward one another'), the overarching and ultimate goal that enables all of these is 'Liberty' (freedom from domination and fear, and the freedom to exercise reason).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2078,8 +2084,8 @@
         "2",
         "4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the remainder when 2^192 is divided by 6, we can look for a pattern in the remainders of successive powers of 2 divided by 6.\n\nLet's calculate the remainder for the first few powers of 2:\n- 2^1 = 2. When 2 is divided by 6, the remainder is 2.\n- 2^2 = 4. When 4 is divided by 6, the remainder is 4.\n- 2^3 = 8. When 8 is divided by 6, the remainder is 2.\n- 2^4 = 16. When 16 is divided by 6, the remainder is 4.\n- 2^5 = 32. When 32 is divided by 6, the remainder is 2.\n\nWe can clearly see a repeating pattern in the remainders: 2, 4, 2, 4, 2, 4...\n- For any odd power of 2 (e.g., 1, 3, 5), the remainder is 2.\n- For any even power of 2 (e.g., 2, 4, 6), the remainder is 4.\n\nIn our problem, the exponent is 192, which is an even number.\nTherefore, following the established pattern, the remainder when 2^192 is divided by 6 will be 4.\n\nAlternatively, using modular arithmetic:\nWe need to find x = 2^192 mod 6.\nSince 6 = 2 × 3, we can find the remainders modulo 2 and modulo 3.\n1) 2^192 mod 2 = 0 (since it's a multiple of 2)\n2) 2^192 mod 3 = (3 - 1)^192 mod 3 = (-1)^192 mod 3 = 1\n\nWe need a number between 0 and 5 that is both a multiple of 2 (even) and leaves a remainder of 1 when divided by 3. \nThe even numbers between 0 and 5 are 0, 2, and 4.\n- 0 mod 3 = 0\n- 2 mod 3 = 2\n- 4 mod 3 = 1\n\nThus, the remainder is 4.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2103,8 +2109,8 @@
         "DCCA",
         "DDCA"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the pattern, let's first count the total number of characters (letters and blanks) in the given sequence: A B C _ _ A B C _ D A B B C D _ A B C D Counting them gives exactly 20 characters.   Let's divide the sequence into 5 equal groups of 4 characters each: Group 1: A B C _ Group 2: _ A B C Group 3: _ D A B Group 4: B C D _ Group 5: A B C D  Looking at the complete 5",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -2128,8 +2134,8 @@
         "8",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let's break down the given information step by step:  1. **Identify DEF:** We are given that $E = 0$ and $F = 8$. Since $DEF$ is a 3-digit number, it can be written as $D08$.   2. **Find GHI:** We are given the equation $DEF + GHI = 975$. Substituting $DEF$, we get: $D08 + GHI = 975  \\implies GHI = 975 - D08$.  Let's test the",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2153,8 +2159,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Based on the explicit truth values given in the problem:  1. The second statement is given as a 'False Statement': \"At least one of R and S was selected for the job.\"  Since this statement is false, its exact opposite must be true. The negation of \"at least one\" is \"none\". Therefore, neither R nor S was selected for the job.  2. The first statement is a 'True Statement': \"One of P and Q was selected for the job.\"  This means exactly 1 person was selected from the pair P and Q.  3. The third statement is a '",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -2178,8 +2184,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let's analyze the given statements logically:\n\nStatement I: If P is true, then both Q and S are true. \nSymbolically: P → (Q ∧ S)\n\nStatement II: If R and S are true, then T is false. \nSymbolically: (R ∧ S) → ¬T\n\nNow let's evaluate the conclusions:\n\nConclusion 1: If T is true, then at least one of P and R must be false.\n- Assume T is true.\n- From Statement II, the contrapositive is T → ¬(R ∧ S). Since T is true, ¬(R ∧ S) must be true, meaning either R is false or S is false.\n- Case A: If R is false, then the condition 'at least one of P and R must be false' is immediately satisfied.\n- Case B: If S is false, we look at Statement I. The contrapositive of Statement I is ¬(Q ∧ S) → ¬P. Since S is false, (Q ∧ S) is false, which means P must be false. Thus, the condition 'at least one of P and R must be false' is again satisfied.\n- Therefore, Conclusion 1 is logically valid.\n\nConclusion 2: If Q is true, then P is true.\n- Statement I tells us that P → Q (If P is true, Q is true). \n- However, knowing Q is true does not guarantee P is true. This is a classic logical fallacy known as 'affirming the consequent'. Q could be true independently of P.\n- Therefore, Conclusion 2 cannot be concluded.\n\nSince only Conclusion 1 is valid, the correct answer is '1 only'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -2203,8 +2209,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To determine the validity of the statements, let's analyze the cuboid and its painted faces step by step.\n\nDimensions of the cuboid: Length (L) = 7 cm, Breadth (B) = 5 cm, Height (H) = 3 cm.\nTotal number of 1 cm small cubes = 7 × 5 × 3 = 105.\n\nThe faces are painted as follows:\n- Red on 7 cm × 5 cm faces (Top and Bottom)\n- Green on 5 cm × 3 cm faces (Left and Right)\n- Blue on 7 cm × 3 cm faces (Front and Back)\n\n**Statement 1: There are exactly 15 small cubes with no paint on any face.**\nThe number of inner cubes with no faces painted can be found using the formula:\nNo paint cubes = (L - 2) × (B - 2) × (H - 2)\n= (7 - 2) × (5 - 2) × (3 - 2)\n= 5 × 3 × 1 = 15.\nThus, Statement 1 is correct.\n\n**Statement 2: There are exactly 6 small cubes with exactly two faces, one painted with blue and the other with green.**\nCubes with exactly two faces painted lie on the edges of the cuboid, excluding the corner cubes (which have 3 faces painted).\nWe are looking for cubes painted with Blue and Green. These cubes will be located on the edges where the Blue faces (7 × 3) and Green faces (5 × 3) intersect.\n- The intersection of the 7 × 3 faces and 5 × 3 faces forms the edges of length 3 cm.\n- A cuboid has exactly 4 edges of length 3 cm.\n- The number of cubes with exactly two faces painted on each of these edges is (Edge Length - 2) = (3 - 2) = 1 cube per edge.\n- Total number of such cubes = 4 edges × 1 cube/edge = 4 cubes.\nStatement 2 claims there are 6 such cubes, which is incorrect.\n\nTherefore, only Statement 1 is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2228,8 +2234,8 @@
         "Two",
         "Three"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze the word 'INCOMPREHENSIBILITIES' which consists of 21 letters.  First, we find the frequency of each letter in the word: B: 1, C: 1, E: 3, H: 1, I: 5, L: 1, M: 1, N: 2, O: 1, P: 1, R: 1, S: 2, T: 1.  Next, we list the original positions of the letters: 1: I, 2: N, 3: C,",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",

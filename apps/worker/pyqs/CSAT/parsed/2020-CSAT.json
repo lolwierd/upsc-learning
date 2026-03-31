@@ -143,8 +143,8 @@
         "Service sector has been reducing the problem of unemployment.",
         "Increased social sector spending is imperative for large-scale job creation."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights the need for 24 million jobs over the next decade and states that e-commerce can only fill half of this gap. It explicitly concludes that 'Only those sectors that drive domestic demand such as health and education can comfortably fill the other half.' Health and education are key components of the social sector. Therefore, the passage strongly implies that to achieve large-scale job creation and fill the remaining jobs gap, increased focus and spending on the social sector are imperative. The other options are either contrary to the passage (Option 2) or address issues outside the primary focus of job creation (Options 0 and 1).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -170,8 +170,8 @@
         "1 and 3",
         "2 only"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption 1 is valid: The passage emphasizes that in the digital age, the State has an active role to play in guaranteeing security and ensuring that private parties do not thwart citizens' rights. To 'actively ensure' this protection, it is logically assumed that the State must have appropriate institutions or mechanisms in place.\n\nAssumption 2 is valid: The passage introduces the 'right to privacy' in the context of the digital age and uses free expression as an example to illustrate a broader point about substantive rights. It concludes that the State's role is to actively ensure that private parties cannot block these rights. Therefore, it logically follows that the State should ensure private parties do not violate citizens' right to privacy.\n\nAssumption 3 is invalid: The passage mentions that the focus on privacy is based on 'new realities of the digital age,' but it never implies that the digital economy is fundamentally incompatible with citizens' privacy. It merely highlights the need for state intervention to protect these rights.\n\nTherefore, only assumptions 1 and 2 are valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -197,8 +197,8 @@
         "Wetlands need to be reinforced as more than just open sources of water.",
         "Water supply should not be free of cost so as to prevent its misuse or overuse."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights the irony that while water comes from rivers and wetlands, it is often treated merely as a resource, divorced from its natural ecosystem. It criticizes public policy and engineering efforts for focusing solely on 'augmenting water supply' rather than 'strengthening the capacities of ecological systems.' From this, the most logical inference is that wetlands should be recognized and reinforced as vital ecological systems, rather than being treated merely as open sources for water extraction. Option 0 and Option 3 introduce outside information (Ramsar Convention and water pricing) not mentioned in the text. Option 1 contradicts the passage's critique of merely augmenting water systems.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -224,8 +224,8 @@
         "While making investments, find a trustworthy asset management organization which would manage your wealth for you.",
         "You should know that investing your money is a risky business."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage emphasizes that 'Asset allocation is the most important investment decision' and points out that while 'There is no asset that is risk-free', all extreme forms of risks 'will not manifest at the same time'. Asset allocation essentially means distributing investments across various asset classes. By stating that different assets will not fail simultaneously, the author implies that distributing your wealth across different kinds of assets is the best way to minimize risks, rather than leaving money idle out of fear.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -251,8 +251,8 @@
         "2, 3 and 4 only",
         "1, 2, 3 and 4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let us evaluate the given assumptions based on the passage:\n\n1. 'Biotechnology regulation is an evolving process.' - Valid. The passage states that future GM crops will have multiple traits, and therefore, the regulation of biotechnology 'cannot be understood solely in the context of the current generation of GM crops.' This implies that as the technology advances, the regulatory process must also evolve to address new developments.\n\n2. 'Participation of people is needed in policy decisions regarding biotechnology regulation.' - Invalid. While the passage mentions the need to consider 'socio-economic impacts,' it does not make any reference to the direct participation of the public or citizens in policy decision-making.\n\n3. 'Biotechnology regulation should take into account socio-economic aspects in decision-making.' - Valid. The passage explicitly states, 'there is a need to take a comprehensive look, taking into account various aspects, including socio-economic impacts, so that the potential of the technology can be harnessed while minimizing negative impacts.'\n\n4. 'Wider involvement of political executive in biotechnology regulation improves its effectiveness in dealing with the country's trade policies and international obligations.' - Invalid. The passage notes that domestic regulation cannot be viewed in isolation from trade policy and international treaties, but it makes absolutely no mention of the 'political executive' or their involvement improving effectiveness.\n\nTherefore, only assumptions 1 and 3 are validly derived from the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -278,8 +278,8 @@
         "Biotechnology's role is not confined to the current priorities of developing GM crops.",
         "The negative impacts of biotechnology are not properly understood."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage explicitly states that 'biotechnology's role in agriculture and the regulation of the same cannot be understood solely in the context of the current generation of GM crops.' It emphasizes the need to look beyond current single-trait GM crops and consider a comprehensive approach that includes future multi-trait crops, socio-economic impacts, climate change mitigation and adaptation, and international trade obligations. Therefore, the crux of the passage is that biotechnology's role extends far beyond the current priorities and limitations of developing present-day GM crops, making Option 2 the most accurate summary.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -305,8 +305,8 @@
         "14",
         "15"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the number of zeroes at the end of a product, we need to determine the number of pairs of prime factors (2 and 5) in the prime factorization of the product. Each pair of (2 × 5) creates one trailing zero. The total number of zeroes will be equal to the minimum of the total count of 2s and the total count of 5s.\n\nLet's count the number of 2s in the prime factorization of the given numbers:\n- 10 = 2^1 × 5 (one 2)\n- 20 = 2^2 × 5 (two 2s)\n- 30 = 2^1 × 15 (one 2)\n- 40 = 2^3 × 5 (three 2s)\n- 50 = 2^1 × 25 (one 2)\n- 60 = 2^2 × 15 (two 2s)\nTotal number of 2s = 1 + 2 + 1 + 3 + 1 + 2 = 10.\n\nNow, let's count the number of 5s:\n- The sequence contains 12 multiples of 5 (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60). Each of these contributes at least one 5, giving us 12 fives.\n- The numbers 25 (5^2) and 50 (2 × 5^2) each contribute an additional 5.\nTotal number of 5s = 12 + 2 = 14.\n\nThe number of trailing zeroes is the minimum of the total count of 2s and 5s.\nMinimum(10, 14) = 10.\n\nTherefore, there are 10 zeroes at the end of the product.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -330,8 +330,8 @@
         "37",
         "(X + Y + Z)"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. First, let's write the three-digit numbers in their expanded place-value form:\n   XYZ = 100X + 10Y + Z\n   YZX = 100Y + 10Z + X\n   ZXY = 100Z + 10X + Y\n\n2. Next, we find the sum of these three numbers:\n   Sum = (100X + 10Y + Z) + (100Y + 10Z + X) + (100Z + 10X + Y)\n   Sum = 111X + 111Y + 111Z\n   Sum = 111(X + Y + Z)\n\n3. Now, we factorize 111:\n   111 = 3 × 37\n   Therefore, the sum can be written as:\n   Sum = 3 × 37 × (X + Y + Z)\n\n4. Let's analyze the divisibility of this sum based on the given options:\n   - Option 0 (3): The sum has 3 as a prime factor, so it is always divisible by 3.\n   - Option 2 (37): The sum has 37 as a prime factor, so it is always divisible by 37.\n   - Option 3 (X + Y + Z): The sum is a multiple of (X + Y + Z), so it is always divisible by (X + Y + Z).\n   - Option 1 (9): For the sum to be divisible by 9, the prime factorization must contain at least two 3s (since 9 = 3 × 3). We already have one 3 from the number 111. For the sum to be divisible by 9, the term (X + Y + Z) must provide the second 3, meaning (X + Y + Z) must be a multiple of 3. However, the question explicitly states that (X + Y + Z) is NOT a multiple of 3. \n\n5. Conclusion: Since (X + Y + Z) is not a multiple of 3, the sum will never be divisible by 9.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -355,8 +355,8 @@
         "r",
         "s"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Let the given equality be equal to a constant 'k'. \nSo, p - 2016 = q + 2017 = r - 2018 = s + 2019 = k.\n\nStep 2: Express each variable (p, q, r, s) in terms of 'k':\np = k + 2016\nq = k - 2017\nr = k + 2018\ns = k - 2019\n\nStep 3: To find the largest natural number among p, q, r, and s, we simply need to compare the constants added to 'k'. \nSince 'k' is the same for all four equations, the variable with the largest constant added to 'k' will be the largest number.\n\nStep 4: Comparing the constants:\nFor p, the constant is +2016\nFor q, the constant is -2017\nFor r, the constant is +2018\nFor s, the constant is -2019\n\nStep 5: The largest constant is +2018, which corresponds to 'r'. Therefore, 'r' is the largest natural number.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -380,8 +380,8 @@
         "Nine",
         "Ten"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. The digits given to form the five-digit number are 1, 2, 3, 4, and 5.\n2. Any five-digit number formed by using all these digits exactly once without repetition will have the sum of its digits as: 1 + 2 + 3 + 4 + 5 = 15.\n3. According to the divisibility rule of 3, if the sum of the digits of a number is a multiple of 3, the number itself is divisible by 3.\n4. Since 15 is divisible by 3, every possible five-digit number formed by these digits will be divisible by 3.\n5. A prime number is a number greater than 1 that has no positive divisors other than 1 and itself. Since all these five-digit numbers are divisible by 3 (and are much larger than 3), none of them can be prime.\n6. Therefore, the number of five-digit prime numbers that can be obtained is zero.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -405,8 +405,8 @@
         "4",
         "5"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let the symbol ⊗ represent a digit 'x' (where x is an integer from 0 to 9).\n\nWe can write each term in the given sum using place value expansion:\n- ⊗ = x\n- 1⊗ = 10 + x\n- 5⊗ = 50 + x\n- ⊗⊗ = 10x + x = 11x\n- ⊗1 = 10x + 1\n\nThe sum of the left-hand side (LHS) is:\nLHS = x + (10 + x) + (50 + x) + 11x + (10x + 1)\nLHS = x + x + x + 11x + 10x + 10 + 50 + 1\nLHS = 24x + 61\n\nThe right-hand side (RHS) of the equation is 1⊗⊗, which can be expanded as:\nRHS = 100 + 10x + x\nRHS = 100 + 11x\n\nEquating LHS and RHS:\n24x + 61 = 100 + 11x\n\nSubtract 11x from both sides:\n13x + 61 = 100\n\nSubtract 61 from both sides:\n13x = 39\n\nDivide by 13:\nx = 3\n\nTo verify, substitute x = 3 back into the original equation:\n3 + 13 + 53 + 33 + 31 = 133\n133 = 133 (which matches 1⊗⊗ where ⊗ is 3).\n\nTherefore, the symbol ⊗ stands for the digit 3.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -430,8 +430,8 @@
         "1 foot",
         "3.25 feet"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the minimum length that can be measured using two sticks of given lengths, we need to find the Greatest Common Divisor (GCD) of the two lengths. This is because any length measured using these sticks will be a linear combination of their lengths, i.e., Length = |7.5x + 3.25y|, where x and y are integers. By Bezout's Identity, the smallest positive value of this linear combination is the GCD of the two numbers.\n\nStep 1: Convert the decimal lengths into fractions with a common denominator.\n7.5 feet = 750/100 = 30/4 feet\n3.25 feet = 325/100 = 13/4 feet\n\nStep 2: Use the formula for the GCD of fractions.\nGCD(a/b, c/d) = GCD(a, c) / LCM(b, d)\nHere, the numerators are 30 and 13, and the denominators are 4 and 4.\n\nStep 3: Calculate the GCD of the numerators and the LCM of the denominators.\nGCD(30, 13) = 1 (since 13 is a prime number and does not divide 30)\nLCM(4, 4) = 4\n\nStep 4: Find the GCD of the fractions.\nGCD(30/4, 13/4) = 1 / 4 = 0.25 feet.\n\nVerification:\nWe can verify this by finding integers x and y such that 7.5x + 3.25y = 0.25.\nIf we lay the 3.25 feet stick end-to-end 7 times, the total length is 7 × 3.25 = 22.75 feet.\nIf we lay the 7.5 feet stick end-to-end 3 times, the total length is 3 × 7.5 = 22.5 feet.\nThe difference between these two lengths is 22.75 - 22.5 = 0.25 feet. \n\nThus, the minimum length that can be measured is 0.25 foot.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -455,8 +455,8 @@
         "38",
         "40"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Analyze the given sequence: 14, 18, 20, 24, 30, 32, ...\n2. The problem states that a simple mathematical operation on each number results in a sequence related to prime numbers. Let's try subtracting 1 from each number in the sequence.\n3. Performing the subtraction:\n   14 - 1 = 13\n   18 - 1 = 17\n   20 - 1 = 19\n   24 - 1 = 23\n   30 - 1 = 29\n   32 - 1 = 31\n4. The resulting numbers (13, 17, 19, 23, 29, 31) form a sequence of consecutive prime numbers starting from 13.\n5. To find the next number in the sequence, we first identify the next prime number after 31, which is 37.\n6. We then apply the reverse operation (adding 1) to this prime number to get the next number in our original sequence: 37 + 1 = 38.\n7. Therefore, the next number in the sequence is 38, which corresponds to option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -480,8 +480,8 @@
         "9, 10",
         "11, 12"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. Let the total number of pages in the booklet be 'n'.\n2. The sum of all page numbers from 1 to n is given by the formula for the sum of the first n natural numbers: S = n(n+1)/2.\n3. A single torn leaf from a booklet contains two consecutive page numbers. Let these numbers be 'k' and 'k+1'.\n4. The sum of the remaining pages is given as 195. Therefore, the total sum of all pages minus the sum of the torn pages equals 195:\n   [n(n+1)/2] - (k + k + 1) = 195\n   [n(n+1)/2] - (2k + 1) = 195\n   n(n+1)/2 = 196 + 2k\n5. Since page numbers must be positive integers (k ≥ 1), the total sum n(n+1)/2 must be greater than 196.\n6. Let's test values for n to find a triangular number greater than 196:\n   - If n = 19, Sum = (19 × 20)/2 = 190 (Too small, as it is less than 195)\n   - If n = 20, Sum = (20 × 21)/2 = 210\n   - If n = 21, Sum = (21 × 22)/2 = 231\n7. Let's check n = 20:\n   Total sum = 210\n   Sum of the torn pages = 210 - 195 = 15\n   So, 2k + 1 = 15 ⇒ 2k = 14 ⇒ k = 7.\n   The page numbers are 7 and 8. (This is valid since 7 and 8 are consecutive, ≤ 20, and a standard double-sided page has an odd number followed by an even number).\n8. Let's check n = 21 just to be sure:\n   Total sum = 231\n   Sum of the torn pages = 231 - 195 = 36\n   So, 2k + 1 = 36 ⇒ 2k = 35 (Not possible, as k must be an integer).\n9. Therefore, the torn page contains the numbers 7 and 8.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -505,8 +505,8 @@
         "a, c, c, e",
         "b, c, d, e"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. First, let's count the total number of characters in the given sequence, including the blanks. The sequence 'abab_b_bcb_dcdcded_d' has exactly 20 characters.\n2. We can divide this sequence into 4 equal groups of 5 characters each to identify a repeating pattern:\n   - Group 1: a b a b _\n   - Group 2: b _ b c b\n   - Group 3: _ d c d c\n   - Group 4: d e d _ d\n3. Now, let's analyze the logical pattern in each group:\n   - Group 1 alternates between 'a' and 'b'. To complete the symmetrical pattern 'a b a b a', the first missing letter must be 'a'.\n   - Group 2 alternates between 'b' and 'c'. To complete the pattern 'b c b c b', the second missing letter must be 'c'.\n   - Group 3 alternates between 'c' and 'd'. To complete the pattern 'c d c d c', the third missing letter must be 'c'.\n   - Group 4 alternates between 'd' and 'e'. To complete the pattern 'd e d e d', the fourth missing letter must be 'e'.\n4. Combining these, the missing letters in order are a, c, c, e. This perfectly matches Option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -530,8 +530,8 @@
         "3",
         "4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze the addition of the two four-digit numbers: A3BC + DE2F = 15902.\n\nThe letters A, B, C, D, E, and F represent different digits greater than 3. The possible digits are 4, 5, 6, 7, 8, and 9. Since there are exactly 6 letters and 6 available digits, each digit will be used exactly once.\n\nLet's look at the addition column by column from right to left:\n\n1. **Units Column:** C + F ends in 2.\nSince C and F are digits greater than 3, their minimum sum is 4 + 5 = 9 and their maximum sum is 8 + 9 = 17. Therefore, C + F must be exactly 12. This gives a carry of 1 to the tens column.\n\n2. **Tens Column:** B + 2 + 1 (carry) ends in 0.\nB + 3 = 10 (since B is a single digit, it can't sum to 20)\nB = 7. \nThis gives a carry of 1 to the hundreds column.\n\n3. **Hundreds Column:** 3 + E + 1 (carry) ends in 9.\n4 + E = 9\nE = 5.\nThere is no carry to the thousands column (carry = 0).\n\n4. **Thousands Column:** A + D = 15.\n\nNow let's look at the digits we have used and the ones remaining:\n- We have found B = 7 and E = 5.\n- The remaining available digits are {4, 6, 8, 9}.\n- We know C + F = 12. From the remaining digits, the only pair that adds up to 12 is {4, 8}. So, C and F are 4 and 8 in some order.\n- This leaves the digits {6, 9} for A and D.\n- We can verify that A + D = 6 + 9 = 15, which perfectly matches our thousands column equation.\n\nTherefore, the values of A and D are 6 and 9 (in some order). \nThe difference between the values of A and D is |9 - 6| = 3.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -555,8 +555,8 @@
         "S1 and S2 together are not sufficient to answer the Question.",
         "S2 alone is sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To determine if there are more than 100 figures in the 51-page book, let's analyze the given statements:\n\n1. From S1: 'There are not more than two figures on any page.' This means each page can have 0, 1, or 2 figures. The maximum possible number of figures in the book is 51 pages × 2 figures/page = 102 figures. The minimum could be 0. Since the total could be 102 (which is > 100, so YES) or 0 (which is not > 100, so NO), S1 alone is not sufficient to answer the question.\n\n2. From S2: 'There is at least one figure on every page.' This means each page has 1 or more figures. The minimum possible number of figures is 51 pages × 1 figure/page = 51 figures. The maximum could be anything (e.g., 200). Since the total could be 51 (NO) or 200 (YES), S2 alone is not sufficient.\n\n3. Combining S1 and S2: Each page must have either 1 or 2 figures. The total number of figures in the book can range anywhere from 51 (if every page has 1 figure) to 102 (if every page has 2 figures). \n- If the total is 102, the answer to the question is YES.\n- If the total is 100 (e.g., 49 pages with 2 figures and 2 pages with 1 figure), the answer to the question is NO.\n\nBecause we still cannot definitively answer whether there are more than 100 figures (it could be YES or NO), S1 and S2 together are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -580,8 +580,8 @@
         "7.4",
         "7.2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the number of girls be G and the number of boys be B.\n\nFrom the table, the average marks in English for girls is 9 and for boys is 8. The overall average marks in English is 8.8.\nUsing the weighted average formula:\nOverall Average = (Total marks of Girls + Total marks of Boys) / (Total number of students)\n8.8 = (9G + 8B) / (G + B)\n\nSolving for the ratio of G to B:\n8.8(G + B) = 9G + 8B\n8.8G + 8.8B = 9G + 8B\n8.8B - 8B = 9G - 8.8G\n0.8B = 0.2G\nG / B = 0.8 / 0.2 = 4 / 1\nSo, the ratio of girls to boys is 4:1 (i.e., G = 4B).\n\nNow, we need to find the overall average marks in Hindi, which is denoted as x.\nThe average marks in Hindi for girls is 8 and for boys is 7.\nUsing the weighted average formula for Hindi:\nx = (8G + 7B) / (G + B)\n\nSubstitute G = 4B into the equation:\nx = (8(4B) + 7B) / (4B + B)\nx = (32B + 7B) / 5B\nx = 39B / 5B\nx = 39 / 5\nx = 7.8\n\nTherefore, the value of x is 7.8.",
       "metadata": {
         "category": "pure-static",
         "subject": "data_interpretation",
@@ -605,8 +605,8 @@
         "S is unmarried.",
         "None of the above"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. The family has 6 members across 2 generations, with 3 males, 3 females, 2 married couples, and 2 unmarried siblings.\n2. 'U is P's daughter' means P is a parent (Generation 1) and U is a female child (Generation 2).\n3. 'Q is R's mother-in-law' means Q is a parent (Generation 1) and R is a spouse of Q's child (Generation 2). Q is female.\n4. Since there are only 2 generations and 6 members, Generation 1 must consist of the first married couple: P and Q. Since Q is female, P must be male.\n5. Generation 2 consists of the remaining 4 members: U, R, S, and T.\n6. We are given that T is an unmarried male, and S is a male.\n7. The 3 males in the family are P, S, and T. Therefore, the 3 females must be Q, U, and R.\n8. Since R is a female and Q is her mother-in-law, R must be married to Q's son.\n9. Q's sons are S and T. Since T is explicitly stated to be unmarried, R must be married to S.\n10. Therefore, R is S's wife. (The two unmarried siblings are T and U, which perfectly satisfies all conditions).",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -630,8 +630,8 @@
         "12th July is a Sunday if the year is a leap year.",
         "12th July is not a Sunday if the year is a leap year."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the day of the week for a future date, we need to calculate the total number of days between the two dates and find the number of 'odd days' (the remainder when the total number of days is divided by 7).\n\nLet's calculate the number of days from 12th January to 12th July in a leap year:\n- January: 31 days in total. Days remaining = 31 - 12 = 19 days.\n- February: 29 days (since it is a leap year).\n- March: 31 days.\n- April: 30 days.\n- May: 31 days.\n- June: 30 days.\n- July: 12 days (up to 12th July).\n\nTotal number of days = 19 + 29 + 31 + 30 + 31 + 30 + 12 = 182 days.\n\nNow, we divide the total number of days by 7 to find the number of odd days:\n182 ÷ 7 = 26 weeks exactly, with a remainder of 0.\n\nSince the remainder is 0, there are 0 odd days. This means that 12th July will fall on the exact same day of the week as 12th January.\n\nGiven that 12th January is a Sunday, 12th July will also be a Sunday if the year is a leap year. This makes Option 2 the correct statement.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -655,8 +655,8 @@
         "2, 4 and 5",
         "3 only"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. Assumption 1 is valid: The passage highlights that Foreign Direct Investment (FDI) is highly volatile, leads to unstable employment, accentuates inequalities, and offers uncertain technological benefits. Therefore, relying on it as a long-term economic policy is unsound.\n2. Assumption 2 is invalid: The passage states that the volatility of FDI is a 'necessary consequence of their search for the highest returns.' This implies that volatility is an inherent characteristic of global capital and cannot be easily reduced by domestic policies.\n3. Assumption 3 is valid: The passage notes that while private investment in general is volatile, foreign private investment is 'more volatile.' Since FDI cannot be relied upon for employment, it logically implies that domestic private investment must be strengthened to ensure economic stability and job creation.\n4. Assumption 4 is invalid: The passage critiques the over-reliance on foreign private investment but does not suggest a blanket rule that public investment should be prioritized over all private investment.\n5. Assumption 5 is valid: The passage mentions that the 'existing state of physical and human capital in India may prove inadequate' for the diffusion of new technology. Human capital directly relates to education and health, implying that substantial public investment in these sectors is necessary to absorb foreign technology.\n\nThus, assumptions 1, 3, and 5 are valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -682,8 +682,8 @@
         "1, 3 and 4",
         "2, 3 and 5"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights the paradox of India suffering from droughts and floods while a large amount of river water flows unutilized into the sea. The most rational and practical implications to address this specific issue involve harnessing, storing, and redistributing this unutilized surface water. \n\nStatement 1 (Inter-linking of rivers) is a direct and practical implication, as it would help transfer surplus water from flood-prone river basins to drought-prone areas.\nStatement 2 (Building a network of dams and canals) is also a logical implication, as dams store excess water during floods, and canals distribute it to water-scarce regions, preventing it from flowing unutilized into the sea.\nStatement 3 (Digging borewells) relates to groundwater extraction, which does not solve the problem of unutilized river water.\nStatements 4 and 5 are administrative and regulatory measures that do not directly address the physical problem of river water flowing into the sea unutilized as highlighted in the passage.\n\nTherefore, only statements 1 and 2 are the correct logical implications.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -709,8 +709,8 @@
         "3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Assumption 1 is invalid because of the extreme word 'invariably'. While the passage states that lower tax rates encourage people to invest in education by allowing them to retain more income, it does not assume that this will 'invariably' (without exception) translate into greater investments, as other factors could be at play.\n2. Assumption 2 is invalid because it reverses the cause-and-effect relationship established in the passage. The passage argues that economic freedom leads to greater investment in education, not that investing in education ensures economic freedom.\n3. Assumption 3 is valid. The core message of the passage is that economic freedom (such as lower tax rates allowing people to enjoy the financial benefits of their skills) incentivizes people to invest in education. Since investing in education is the process of building human capital, it logically follows that economic freedom has a positive impact on building up human capital.\nTherefore, only assumption 3 is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -736,8 +736,8 @@
         "Water shortage in our cities is a perennial problem that cannot be solved.",
         "In view of the water crisis in our cities, there is an urgent need to limit the population of cities by adopting an upper limit of population size."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage explicitly states that sustainable water delivery requires 'financing mechanisms' due to the 'heavy investment' needed for water collection, treatment, distribution, and sewage infrastructure. It concludes by noting that if cities were rich enough, water could be delivered for free, but 'they are not.' This logically implies that since cities cannot afford to provide water for free, they must implement financing mechanisms to recover these costs from the consumers, which points directly to user charges. Options 1, 2, and 3 discuss efficiency, unsolvable water shortages, and population limits, none of which are supported or mentioned in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -763,8 +763,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Assumption 1 is invalid because the passage does not state that ONLY rich cities can ensure sustainable delivery of water. Instead, it states that since our cities are not rich enough to deliver water for free, they need to put 'financing mechanisms' in place to ensure sustainable delivery. This implies that non-rich cities can also achieve this through proper financing mechanisms.\n\nAssumption 2 is valid because the passage explicitly states that sustainable water delivery requires not just collecting, treating, and distributing water to users (households), but also requires 'investments in sewerage infrastructure and sewage treatment plants' to ensure untreated sewage is not discharged back into natural water bodies. Thus, sustainable delivery encompasses much more than just supplying water.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -790,8 +790,8 @@
         "2 and 3",
         "3 and 4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Assumption 1 is invalid: The passage notes that India has small and marginal farms and has experienced slow structural transformation, but it never implies that transformation is 'impossible' under these conditions.\n2. Assumption 2 is valid: The passage explicitly states that a significant change in the relative price scenario in favour of agriculture 'boosted private investments in agriculture by more than 50%.'\n3. Assumption 3 is invalid: The passage focuses on prices, investments, and poverty reduction. It makes absolutely no mention of 'value chains', 'livestock', or 'horticulture'.\n4. Assumption 4 is highly extreme because while rising global prices triggered the accelerated poverty reduction, calling them 'essential' (meaning poverty cannot reduce without them) contradicts the passage, which notes poverty was still reducing (albeit slowly) before the price rise. \n\nHowever, applying the method of elimination to the given options: Assumption 3 is completely out of scope, which definitively eliminates Options 0, 2, and 3. This leaves Option 1 as the only viable choice.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -801,7 +801,9 @@
         "source": "upsc-pyq",
         "year": "2020",
         "paper": "CSAT",
-        "questionNumber": 26
+        "questionNumber": 26,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 1
       },
       "passageSetId": "set_2",
       "passageLabel": 5
@@ -817,8 +819,8 @@
         "Private investment in agriculture should be given priority over public investment.",
         "Inclusive agricultural growth is key to reduce poverty in the near future."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights how a favorable price scenario for agriculture boosted private investments, leading to higher agri-GDP growth, increased real farm wages, and a significant net surplus in agri-trade. It explicitly states that 'All this led to unprecedented fall in poverty.' This demonstrates that robust and inclusive agricultural growth (evidenced by rising farm wages benefiting the workforce) is the primary driver for reducing poverty in India. Options 0, 1, and 2 introduce concepts not discussed in the passage, such as off-farm employment, farmer producer companies, and a comparison between private and public investment.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -844,8 +846,8 @@
         "S1 and S2 together are sufficient to answer the Question, but neither S1 alone nor S2 alone is sufficient to answer the Question.",
         "S1 and S2 together are not sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the largest among the four numbers P, Q, R, and S, let's evaluate the given statements.\n\nFrom Statement 1 (S1): R is greater than P and Q (R > P and R > Q). This means neither P nor Q can be the largest number. The largest number must be either R or S. Since we don't know the relationship between R and S, S1 alone is not sufficient.\n\nFrom Statement 2 (S2): S is not the largest number. This eliminates S, but leaves P, Q, or R as potential candidates for the largest number. Thus, S2 alone is not sufficient.\n\nCombining S1 and S2: S1 eliminates P and Q from being the largest, leaving R and S. S2 explicitly states that S is not the largest. Therefore, by the process of elimination, R must be the largest number.\n\nSince both statements together are required to uniquely identify R as the largest number, S1 and S2 together are sufficient, but neither alone is sufficient.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -869,8 +871,8 @@
         "S1 and S2 together are sufficient to answer the Question, but neither S1 alone nor S2 alone is sufficient to answer the Question.",
         "S1 and S2 together are not sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Identify the possible values of $n$ based on the given range. The natural numbers strictly between 10 and 20 are 11, 12, 13, 14, 15, 16, 17, 18, and 19.\n\nStep 2: Evaluate Statement S1. S1 states that $n$ is a prime number. The prime numbers in the given range are 11, 13, 17, and 19. Since there are multiple possible values for $n$, Statement S1 alone is not sufficient to answer the question.\n\nStep 3: Evaluate Statement S2. S2 states that $n$ leaves a remainder of 1 when divided by 4 (i.e., $n = 4k + 1$). The numbers in the given range that satisfy this condition are 13 (since $13 = 4 \\times 3 + 1$) and 17 (since $17 = 4 \\times 4 + 1$). Since there are multiple possible values, Statement S2 alone is not sufficient.\n\nStep 4: Evaluate S1 and S2 together. We need a number that is both prime and leaves a remainder of 1 when divided by 4. The numbers in our range that satisfy both conditions are 13 and 17. \n\nSince there are still two possible values (13 and 17), we cannot uniquely determine the exact value of $n$. Therefore, S1 and S2 together are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -894,8 +896,8 @@
         "S1 and S2 together are sufficient to answer the Question, but neither S1 alone nor S2 alone is sufficient to answer the Question.",
         "S1 and S2 together are not sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the two numbers be x and y.\n\nFrom Statement 1 (S1): \nTheir product is 21, so x * y = 21. \nThere are infinitely many pairs of real numbers (or multiple pairs of integers like 3 and 7, 1 and 21, -3 and -7) whose product is 21. Thus, S1 alone is not sufficient to find the exact numbers.\n\nFrom Statement 2 (S2): \nTheir sum is 10, so x + y = 10. \nThere are infinitely many pairs of numbers (like 1 and 9, 2 and 8, 3 and 7) whose sum is 10. Thus, S2 alone is not sufficient.\n\nCombining S1 and S2:\nWe have a system of two equations:\n1) x * y = 21\n2) x + y = 10\n\nWe can substitute y = 10 - x into the first equation:\nx * (10 - x) = 21\n10x - x^2 = 21\nx^2 - 10x + 21 = 0\n\nFactoring the quadratic equation:\n(x - 3)(x - 7) = 0\nSo, x = 3 or x = 7.\nIf x = 3, then y = 10 - 3 = 7.\nIf x = 7, then y = 10 - 7 = 3.\n\nIn both cases, the two numbers are exactly 3 and 7. Since we can uniquely determine the two numbers by using both statements, S1 and S2 together are sufficient to answer the question, but neither statement alone is sufficient.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -919,8 +921,8 @@
         "North-East",
         "North-West"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's trace the man's movements step by step using a coordinate system, assuming the starting point is at the origin (0, 0).\n\n1. The house faces East, which means the backside of the house faces West. \n2. He walks down the backside straight for 25 metres. This means he walks 25 metres towards the West. His current position is (-25, 0).\n3. He then turns to the right. Facing West, a right turn points him towards the North. He walks 50 metres North. His new position is (-25, 50).\n4. Finally, he turns towards the left. Facing North, a left turn points him towards the West again. He walks 25 metres West. His final position is (-50, 50).\n\nComparing his final position (-50, 50) to his starting point (0, 0), he is 50 metres West and 50 metres North. Therefore, his direction from the starting point is North-West.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -944,8 +946,8 @@
         "Neither Conclusion-I nor Conclusion-II",
         "Both Conclusion-I and Conclusion-II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "From the given statements, every number in the considered set is divisible by both 2 and 3. Since 2 and 3 are coprime (they have no common factors other than 1), any number divisible by both must also be divisible by their least common multiple (LCM), which is 6. Therefore, Conclusion-I ('All numbers are divisible by 6') logically follows. On the other hand, a number being divisible by 6 does not guarantee it is divisible by 4. For example, numbers like 6, 18, and 30 are divisible by both 2 and 3, but they are not divisible by 4. Thus, Conclusion-II ('All numbers are divisible by 4') does not logically follow. Hence, only Conclusion-I is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -969,8 +971,8 @@
         "Neither Conclusion-I nor Conclusion-II",
         "Both Conclusion-I and Conclusion-II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze the given statements using set theory or Venn diagrams.\n\nLet C = Cats, D = Dogs, and B = Black things.\nStatement 1: All cats are dogs (C ⊆ D).\nStatement 2: All cats are black (C ⊆ B).\n\nFrom these two statements, we can definitively conclude that the cats are a subset of both dogs and black things. Therefore, the intersection of dogs and black things is not empty (i.e., 'Some dogs are black' and 'Some black things are dogs' are true conclusions).\n\nNow let's evaluate the given conclusions:\n- Conclusion-I: 'All dogs are black.' We know that the dogs which are cats are black. However, the statements provide no information about the dogs that are NOT cats. They could be black, or they could be of another color. Since this is not a certainty, Conclusion-I does not logically follow.\n- Conclusion-II: 'Some dogs are not black.' As established, we don't know the color of the dogs that are not cats. It is entirely possible that all dogs happen to be black (if the set of Dogs is equal to the set of Cats, or if all non-cat dogs also happen to be black). Because we cannot be absolutely certain that there are non-black dogs, Conclusion-II does not logically follow.\n\nSince neither conclusion is 100% certain in all possible scenarios, neither logically follows from the given statements.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -994,8 +996,8 @@
         "7",
         "8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find how many odd numbers are followed by another odd number, we need to look for pairs of adjacent odd numbers in the given sequence.\n\nThe given sequence is: \n5, 1, 4, 7, 3, 9, 8, 5, 7, 2, 6, 3, 1, 5, 8, 6, 3, 8, 5, 2, 2, 4, 3, 4, 9, 6\n\nLet's evaluate the numbers one by one:\n1. **5** is followed by **1** (Odd, Odd) -> Count = 1\n2. 1 is followed by 4 (Odd, Even)\n3. 4 is followed by 7 (Even, Odd)\n4. **7** is followed by **3** (Odd, Odd) -> Count = 2\n5. **3** is followed by **9** (Odd, Odd) -> Count = 3\n6. 9 is followed by 8 (Odd, Even)\n7. 8 is followed by 5 (Even, Odd)\n8. **5** is followed by **7** (Odd, Odd) -> Count = 4\n9. 7 is followed by 2 (Odd, Even)\n10. 2 is followed by 6 (Even, Even)\n11. 6 is followed by 3 (Even, Odd)\n12. **3** is followed by **1** (Odd, Odd) -> Count = 5\n13. **1** is followed by **5** (Odd, Odd) -> Count = 6\n14. 5 is followed by 8 (Odd, Even)\n15. 8 is followed by 6 (Even, Even)\n16. 6 is followed by 3 (Even, Odd)\n17. 3 is followed by 8 (Odd, Even)\n18. 8 is followed by 5 (Even, Odd)\n19. 5 is followed by 2 (Odd, Even)\n20. 2 is followed by 2 (Even, Even)\n21. 2 is followed by 4 (Even, Even)\n22. 4 is followed by 3 (Even, Odd)\n23. 3 is followed by 4 (Odd, Even)\n24. 4 is followed by 9 (Even, Odd)\n25. 9 is followed by 6 (Odd, Even)\n\nThere are exactly 6 instances where an odd number is immediately followed by another odd number. Therefore, the correct answer is 6.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1019,8 +1021,8 @@
         "42",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. A is 16th from the left end.\n2. G is 11th to the right of A. Therefore, G's position from the left end = 16 + 11 = 27th.\n3. V is 18th from the right end.\n4. G is 3rd from V towards the right end. This means G's position from the right end is 3 less than V's position from the right end. So, G's position from the right end = 18 - 3 = 15th.\n5. Now we have G's position from both ends: 27th from the left and 15th from the right.\n6. The total number of boys in the row = (G's position from left) + (G's position from right) - 1 = 27 + 15 - 1 = 41.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1044,8 +1046,8 @@
         "S2 and S3 together are sufficient to answer the Question.",
         "S1 and S3 together are sufficient to answer the Question."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the youngest among A, B, C, and D, let's analyze the given statements:\n\nFrom Statement S1: C is younger than D, but older than A and B. This gives us the relationship: D > C > A and D > C > B. From this, we know that either A or B is the youngest, but we cannot determine exactly who it is.\n\nFrom Statement S2: D is the oldest. This only confirms what we already know from S1 (that D is at the top) and does not help in finding the youngest.\n\nFrom Statement S3: A is older than B. This gives us the relationship: A > B.\n\nIf we combine S1 and S3:\nS1 tells us that D and C are older than both A and B.\nS3 tells us that A is older than B.\nCombining these, we get the exact age order: D > C > A > B.\n\nThis clearly shows that B is the youngest. Therefore, Statements S1 and S3 together are sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1069,8 +1071,8 @@
         "12",
         "13"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of integers between 1 and 100 that have 4 as a digit but are not divisible by 4, we can follow these steps:\n\nStep 1: Identify all integers between 1 and 100 that contain the digit '4'.\nThese numbers either end with 4 or start with 4 (the 40s).\n- Numbers ending in 4: 4, 14, 24, 34, 44, 54, 64, 74, 84, 94 (10 numbers)\n- Numbers starting with 4: 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 (10 numbers)\nSince 44 is in both lists, we count it only once. \nTotal numbers containing the digit 4 = 10 + 10 - 1 = 19 numbers.\n\nStep 2: Identify which of these 19 numbers are divisible by 4.\nLet's check them:\n- 4 (4 × 1)\n- 24 (4 × 6)\n- 40 (4 × 10)\n- 44 (4 × 11)\n- 48 (4 × 12)\n- 64 (4 × 16)\n- 84 (4 × 21)\nThere are exactly 7 numbers in this list that are divisible by 4.\n\nStep 3: Subtract the divisible numbers from the total numbers containing the digit 4.\nTotal numbers not divisible by 4 = (Total numbers with digit 4) - (Numbers with digit 4 divisible by 4)\nTotal = 19 - 7 = 12.\n\nFor verification, the 12 numbers are: 14, 34, 41, 42, 43, 45, 46, 47, 49, 54, 74, and 94. None of these are divisible by 4.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1094,8 +1096,8 @@
         "v = u",
         "v = 4u"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. Let the side length of cube P be 'a'. The volume of cube P is x = a^3.\n2. The side length of cube Q is given as two times that of P, so its side length is '2a'. The volume of cube Q is y = (2a)^3 = 8a^3. Therefore, y = 8x.\n3. The mass of cube P is given as 'm'.\n4. The mass of cube Q is given as two times that of P, so n = 2m.\n5. We are given the formulas for density: u = m / x and v = n / y.\n6. Substitute the values of n and y in terms of m and x into the equation for v:\n   v = (2m) / (8x)\n   v = (2/8) * (m/x)\n   v = (1/4) * (m/x)\n7. Since u = m / x, we can substitute 'u' into the equation:\n   v = (1/4) * u\n8. Multiplying both sides by 4 gives:\n   u = 4v\n\nThis matches the first option.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1119,8 +1121,8 @@
         "35 years",
         "45 years"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the age of the teacher be 'T' and the age of each student be 'S'. \n\nGiven:\n1. The average age of the teacher and the three students (4 people in total) is 20 years.\nFormula used: Average = (Sum of observations) / (Number of observations)\nSum of their ages = 20 * 4 = 80 years.\nSo, T + 3S = 80  --- (Equation 1)\n\n2. The difference between the age of the teacher and each student is 20 years. Assuming the teacher is older than the students:\nT - S = 20 \n=> S = T - 20  --- (Equation 2)\n\nSubstitute Equation 2 into Equation 1:\nT + 3(T - 20) = 80\nT + 3T - 60 = 80\n4T - 60 = 80\n4T = 80 + 60\n4T = 140\nT = 140 / 4\nT = 35\n\nThe age of the teacher is 35 years. \n(Verification: If the teacher is 35, each student is 35 - 20 = 15 years old. The sum of their ages is 35 + 15 + 15 + 15 = 80. The average is 80 / 4 = 20 years, which matches the problem statement perfectly.)",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1144,8 +1146,8 @@
         "₹ 3,70,000",
         "₹ 3,75,000"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. Identify the given values: Selling Price (SP) = ₹ 3,00,000 and Loss Percentage = 20%.\n2. The formula to find the Cost Price (CP) when there is a loss is: CP = SP / (1 - Loss% / 100).\n3. Substitute the given values into the formula: CP = 3,00,000 / (1 - 20 / 100).\n4. Simplify the denominator: 1 - 0.20 = 0.80 (or 4/5).\n5. Calculate the Cost Price: CP = 3,00,000 / (4/5) = (3,00,000 * 5) / 4.\n6. Divide 3,00,000 by 4 to get 75,000, then multiply by 5: 75,000 * 5 = ₹ 3,75,000.\n7. Therefore, the person spent ₹ 3,75,000 to buy the car.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1169,8 +1171,8 @@
         "Some of the fungal infections of plants cannot be prevented or stopped from spreading across large areas.",
         "Relying on a homogeneous food source is not desirable."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights how the Irish became 'almost wholly dependent on the potato' and planted 'primarily one prodigious variety' (the Lumper). Because they relied so heavily on this single, homogeneous food source, its vulnerability to a specific fungus led to a devastating famine that killed or displaced millions. Therefore, the critical message is that relying on a homogeneous food source is highly risky and undesirable.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1196,8 +1198,8 @@
         "1 only",
         "3 and 5 only"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage highlights the severe crisis of malnutrition among children in India, which leads to stunting, cognitive damage, and high mortality rates due to a lack of 'right foods and nutrients.' To address this multi-dimensional issue, a holistic approach is required.\n\n- Statement 1 is incorrect: The passage does not suggest that the Public Distribution System (PDS) should be exclusively monitored by the Union Government. This is a specific administrative measure not implied by the text. Furthermore, PDS traditionally focuses on calorie-dense cereals rather than the diverse 'right foods and nutrients' emphasized in the passage.\n- Statement 2 is correct: Delaying marriage and first pregnancy ensures that a mother is biologically mature and adequately nourished, which directly reduces the risk of low birth weight and malnutrition in her children.\n- Statement 3 is correct: Immediate breastfeeding provides infants with essential nutrients and antibodies, which are critical for early development and immunity against diseases.\n- Statement 4 is correct: Safe drinking water and proper sanitation (WASH) are vital because frequent infections (like diarrhea) caused by poor sanitation prevent the absorption of nutrients, leading to stunting and malnutrition.\n- Statement 5 is correct: Vaccination protects children from preventable diseases that can severely weaken their immune systems and exacerbate malnutrition.\n\nThus, statements 2, 3, 4, and 5 represent the most rational and practical implications for tackling the root causes of the malnutrition crisis described in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1223,8 +1225,8 @@
         "2 and 3 only",
         "1 and 4 only"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Statement 1 is incorrect because the passage mentions that the yield of 'Pusa Arhar 16' will be greater than 'existing varieties' of pulses, but it does not provide any data comparing farmers' income from pulse cultivation versus paddy cultivation. Statement 2 is a rational inference because the passage explicitly states that farmers burn leftover paddy stalks (which causes pollution), whereas Arhar (pulse) straw can be ploughed back into the soil to decompose, thereby avoiding burning and reducing pollution. Statement 3 is correct because the passage notes that Arhar straw is green, can be ploughed back into the soil, and decomposes very fast, which inherently adds organic matter and improves soil quality. Statement 4 is an extreme generalization; while the passage highlights the difficulty of decomposing paddy straw, it does not claim it has absolutely 'no usefulness'. Statement 5 is incorrect because the passage identifies the high silica content and the resulting inability of paddy straw to decompose easily as the reason farmers burn it, not mechanized agriculture itself. Therefore, only statements 2 and 3 are logical and rational inferences.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1250,8 +1252,8 @@
         "3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Statement 1 is invalid because the passage attributes the practice of holding maximum water in reservoirs to the need for both 'electricity generation and irrigation,' not an 'over-dependence on hydropower projects.' The term 'over-dependence' is also an extreme assumption not supported by the text.\n\nStatement 2 is valid and directly supported by the passage. The text states that it is an 'internationally accepted practice that the water level of a reservoir should be kept below a certain level before the onset of monsoon season' to leave space for excess rainwater. It also criticizes authorities for storing the maximum amount of water 'even before the close of the monsoon.' This logically implies that the storage capacity of dams should not be fully utilized before or during the monsoon season to allow for the regulated release of water.\n\nStatement 3 is invalid. While the passage indicates that authorities prioritize electricity and irrigation over leaving space for excess rainwater (which aids in flood control), it does not necessarily imply that the role of dams in flood control is 'underestimated.' The authorities might fully understand the flood control aspect but are simply prioritizing other pressing economic needs (power and agriculture). \n\nTherefore, only assumption 2 is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1261,7 +1263,9 @@
         "source": "upsc-pyq",
         "year": "2020",
         "paper": "CSAT",
-        "questionNumber": 44
+        "questionNumber": 44,
+        "upscCorrectOption": 3,
+        "geminiPredictedOption": 1
       },
       "passageSetId": "set_3",
       "passageLabel": 4
@@ -1277,8 +1281,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Statement 1 is a logical inference. The passage highlights that economic liberalization was driven by the government's short-term economic problems rather than long-term development objectives or the people's priorities, leading to flawed 'conception and design.' To achieve 'meaningful development' and resolve the ongoing crises, it is logically implied that the State must rethink and redefine its economic role to align with broader, long-term objectives.\n\nStatement 2 is not a valid inference. The passage explicitly blames the 'conception and design' of economic liberalization for the current problems (like jobless growth, poverty, and the crisis in education). It does not discuss the 'implementation' of policies or whether 'sufficient investments' were made in social sectors. Assuming a lack of investment or poor implementation goes beyond the information provided in the text.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1288,7 +1292,9 @@
         "source": "upsc-pyq",
         "year": "2020",
         "paper": "CSAT",
-        "questionNumber": 45
+        "questionNumber": 45,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 0
       },
       "passageSetId": "set_3",
       "passageLabel": 5
@@ -1304,8 +1310,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption 1 is invalid because the passage does not mention or imply anything about integrating India's economy with the global economy to create jobs or sustain growth. Instead, it emphasizes resolving domestic crises in agriculture, infrastructure, industrialization, and education. \n\nAssumption 2 is invalid because it contradicts the passage. The author explicitly states that economic liberalization has resulted in 'jobless growth, persistent poverty and rising inequality' due to limitations in its conception and design. The author does not assume that liberalization would automatically reduce poverty or create sufficient employment in the long run; rather, the passage highlights its failure to do so. Therefore, neither assumption is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1331,8 +1337,8 @@
         "3 only is the best option for the customer.",
         "All the options are equally good for the customer."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the initial price of the article be P. \n\nWhen a price undergoes a percentage change (either a discount or a tax), the new price is calculated by multiplying the original price by a factor. \n- A discount of 10% means multiplying by (1 - 0.10) = 0.90\n- A discount of 20% means multiplying by (1 - 0.20) = 0.80\n- A service tax of 10% means multiplying by (1 + 0.10) = 1.10\n\nLet's calculate the final price for each option:\n\nOption 1: Successive discounts of 10% and 20%, then a service tax of 10%.\nFinal Price = P × 0.90 × 0.80 × 1.10 = P × 0.792\n\nOption 2: Successive discounts of 20% and 10%, then a service tax of 10%.\nFinal Price = P × 0.80 × 0.90 × 1.10 = P × 0.792\n\nOption 3: Pay a service tax of 10% first, then successive discounts of 20% and 10%.\nFinal Price = P × 1.10 × 0.80 × 0.90 = P × 0.792\n\nBecause multiplication is commutative (i.e., the order in which you multiply the numbers does not change the product), the final price in all three scenarios is exactly the same (79.2% of the original price). Therefore, all the options are equally good for the customer.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1356,8 +1362,8 @@
         "262",
         "246"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "First, let's assign the numerical values to the letters based on their alphabetical order: A=1, B=2, C=3, D=4, E=5, F=6, G=7, H=8, I=9.\n\nNext, let's look at the letters given in the problem and concatenate their corresponding numbers:\n- For 'GHI', the letters correspond to 7, 8, and 9. Concatenating them gives the number 789.\n- For 'DEF', the letters correspond to 4, 5, and 6. Concatenating them gives the number 456.\n\nNow, let's find the relationship between these concatenated numbers and the values given in the problem:\n- We are given GHI = 1578. Notice that 789 × 2 = 1578.\n- We are given DEF = 912. Notice that 456 × 2 = 912.\n\nThe pattern is to concatenate the alphabetical positions of the letters to form a number, and then multiply that number by 2.\n\nApplying this same logic to 'ABC':\n- The letters A, B, and C correspond to 1, 2, and 3.\n- Concatenating them gives the number 123.\n- Multiplying by 2 gives: 123 × 2 = 246.\n\nTherefore, ABC is equal to 246.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1381,8 +1387,8 @@
         "NPIL",
         "NPJM"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the missing term, we need to determine the pattern in the first pair of the analogy (ACPQ : BESU).\n\nLet's look at the alphabetical positions of the letters:\nA (1) → B (2) : +1\nC (3) → E (5) : +2\nP (16) → S (19) : +3\nQ (17) → U (21) : +4\n\nThe pattern applied to the letters is +1, +2, +3, +4.\n\nNow, we apply the exact same pattern to the letters of 'MNGI':\nM (13) + 1 = 14 → N\nN (14) + 2 = 16 → P\nG (7) + 3 = 10 → J\nI (9) + 4 = 13 → M\n\nCombining these letters, we get 'NPJM'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1406,8 +1412,8 @@
         "(1/3)^-4",
         "(1/6)^-2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the largest number, we can simplify each option using the rule of negative exponents, which states that (a/b)^-n = (b/a)^n.\n\nStep 1: Evaluate Option 0\n(1/2)^-6 = (2/1)^6 = 2^6 = 64\n\nStep 2: Evaluate Option 1\n(1/4)^-3 = (4/1)^3 = 4^3 = 64\n\nStep 3: Evaluate Option 2\n(1/3)^-4 = (3/1)^4 = 3^4 = 81\n\nStep 4: Evaluate Option 3\n(1/6)^-2 = (6/1)^2 = 6^2 = 36\n\nStep 5: Compare the values\nThe calculated values are 64, 64, 81, and 36. The largest value among these is 81.\n\nTherefore, (1/3)^-4 is the largest number.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1431,8 +1437,8 @@
         "1 1/4 m",
         "1 3/4 m"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the greatest length \\( x \\) such that \\( 3 \\frac{1}{2} \\) m and \\( 8 \\frac{3}{4} \\) m are integral multiples of \\( x \\), we need to find the Highest Common Factor (HCF) of the two given lengths.\n\n**Step 1: Convert the mixed fractions to improper fractions.**\n\\( 3 \\frac{1}{2} = \\frac{7}{2} \\)\n\\( 8 \\frac{3}{4} = \\frac{35}{4} \\)\n\n**Step 2: Use the formula for the HCF of fractions.**\nThe formula to find the HCF of two or more fractions is:\n\\[ \\text{HCF of fractions} = \\frac{\\text{HCF of Numerators}}{\\text{LCM of Denominators}} \\]\n\n**Step 3: Calculate the HCF of the numerators and the LCM of the denominators.**\n- Numerators are 7 and 35. The highest number that divides both 7 and 35 is 7. So, HCF(7, 35) = 7.\n- Denominators are 2 and 4. The lowest common multiple of 2 and 4 is 4. So, LCM(2, 4) = 4.\n\n**Step 4: Find the HCF of the fractions.**\n\\[ \\text{HCF} = \\frac{7}{4} \\]\n\n**Step 5: Convert the improper fraction back to a mixed fraction.**\n\\[ \\frac{7}{4} = 1 \\frac{3}{4} \\text{ m} \\]\n\n**Alternative Method (using centimeters):**\n- Convert lengths to cm: \\( 3.5 \\text{ m} = 350 \\text{ cm} \\) and \\( 8.75 \\text{ m} = 875 \\text{ cm} \\).\n- Prime factorization of 350 = \\( 2 \\times 5^2 \\times 7 \\)\n- Prime factorization of 875 = \\( 5^3 \\times 7 \\)\n- HCF(350, 875) = \\( 5^2 \\times 7 = 25 \\times 7 = 175 \\text{ cm} \\).\n- Convert back to meters: \\( 175 \\text{ cm} = 1.75 \\text{ m} = 1 \\frac{3}{4} \\text{ m} \\).\n\n**Verification:**\n- \\( 3 \\frac{1}{2} \\div 1 \\frac{3}{4} = \\frac{7}{2} \\times \\frac{4}{7} = 2 \\) (Integral multiple)\n- \\( 8 \\frac{3}{4} \\div 1 \\frac{3}{4} = \\frac{35}{4} \\times \\frac{4}{7} = 5 \\) (Integral multiple)\n\nThus, the greatest length \\( x \\) is \\( 1 \\frac{3}{4} \\text{ m} \\).",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1456,8 +1462,8 @@
         "1961-1971",
         "1971-1981"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The natural growth rate is calculated as the difference between the Birth rate and the Death rate (Natural Growth Rate = Birth rate - Death rate). Let's calculate this for each period given in the options:\n\n1. 1911-1921: 48.1 - 35.5 = 12.6\n2. 1941-1951: 39.9 - 27.4 = 12.5\n3. 1961-1971: 41.1 - 18.9 = 22.2\n4. 1971-1981: 37.1 - 14.8 = 22.3\n\nComparing the calculated natural growth rates, the maximum value is 22.3, which corresponds to the period 1971-1981.",
       "metadata": {
         "category": "pure-static",
         "subject": "data_interpretation",
@@ -1481,8 +1487,8 @@
         "127/99",
         "137/99"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To convert the recurring decimal 1.272727... into a fraction, follow these steps:\n\n1. Let x = 1.272727... (Equation 1)\n2. Since there are two repeating digits ('27'), multiply both sides of the equation by 10^2 (which is 100) to shift the decimal point by two places.\n3. 100x = 127.272727... (Equation 2)\n4. Subtract Equation 1 from Equation 2:\n   100x - x = 127.272727... - 1.272727...\n   99x = 126\n5. Solve for x:\n   x = 126 / 99\n6. Simplify the fraction by dividing both the numerator and the denominator by their greatest common divisor, which is 9:\n   126 ÷ 9 = 14\n   99 ÷ 9 = 11\n7. Therefore, x = 14/11.\n\nComparing this with the given options, 14/11 matches the second option.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1506,8 +1512,8 @@
         "1122",
         "1222"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Step 1: Find the Least Common Multiple (LCM) of the given divisors (3, 4, 5, and 6). \nPrime factorization:\n3 = 3\n4 = 2^2\n5 = 5\n6 = 2 × 3\nLCM(3, 4, 5, 6) = 2^2 × 3 × 5 = 60.\n\nStep 2: Any number that leaves a remainder of 2 when divided by 3, 4, 5, and 6 will be of the form:\nNumber = (LCM × k) + Remainder = 60k + 2, where k is an integer.\n\nStep 3: We need to find the least four-digit number of this form. The smallest four-digit number is 1000.\nSet up the inequality to find k:\n60k + 2 ≥ 1000\n60k ≥ 998\nk ≥ 998 / 60\nk ≥ 16.63\n\nStep 4: Since k must be a whole number, the smallest possible integer value for k is 17.\n\nStep 5: Substitute k = 17 into the formula:\nNumber = 60(17) + 2\nNumber = 1020 + 2 = 1022.\n\nStep 6: Verify the answer.\n1022 ÷ 3 = 340 with a remainder of 2\n1022 ÷ 4 = 255 with a remainder of 2\n1022 ÷ 5 = 204 with a remainder of 2\n1022 ÷ 6 = 170 with a remainder of 2\n\n1022 is the least four-digit number satisfying all conditions, which matches option 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1531,8 +1537,8 @@
         "34 2/7%",
         "35%"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the total number of adult men be 'M' and the total number of adult women be 'W'.\n\nGiven that 40% of men are married and 30% of women are married, we can write:\nNumber of married men = 0.40M\nNumber of married women = 0.30W\n\nSince no man marries more than one woman, no woman marries more than one man, and there are no widows or widowers, the number of married men must be exactly equal to the number of married women.\nTherefore, 0.40M = 0.30W\n=> M / W = 30 / 40 = 3 / 4\n\nLet us assume the number of men M = 300 and the number of women W = 400.\nTotal adult population = M + W = 300 + 400 = 700.\n\nNumber of married men = 40% of 300 = 120.\nNumber of married women = 30% of 400 = 120.\nTotal married adult population = 120 + 120 = 240.\n\nNow, we need to find the percentage of the married adult population out of the total adult population:\nPercentage = (Total married population / Total adult population) × 100\nPercentage = (240 / 700) × 100\nPercentage = 240 / 7 %\n\nConverting this improper fraction into a mixed fraction:\n240 ÷ 7 = 34 with a remainder of 2.\nSo, the percentage is 34 2/7%.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1556,8 +1562,8 @@
         "5",
         "1"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the remainder when the product $51 \\times 27 \\times 35 \\times 62 \\times 75$ is divided by 100, we can analyze the factors of 2 and 5 in the product, as $100 = 2^2 \\times 5^2$.\n\nStep 1: Break down the numbers into their prime factors to count the number of 2s and 5s.\n- $51 = 3 \\times 17$ (No factors of 2 or 5)\n- $27 = 3^3$ (No factors of 2 or 5)\n- $35 = 5 \\times 7$ (One factor of 5)\n- $62 = 2 \\times 31$ (One factor of 2)\n- $75 = 3 \\times 5^2$ (Two factors of 5)\n\nStep 2: Count the total factors of 2 and 5.\n- Total factors of 2 = 1\n- Total factors of 5 = 1 (from 35) + 2 (from 75) = 3\n\nStep 3: Express the product in terms of its factors of 2 and 5.\nThe product can be written as $2^1 \\times 5^3 \\times K$, where $K$ is the product of all the remaining odd factors ($3 \\times 17 \\times 3^3 \\times 7 \\times 31 \\times 3$). \nSince $K$ is formed entirely by multiplying odd numbers, $K$ itself must be an odd number.\n\nStep 4: Simplify the expression.\nProduct = $2 \\times 125 \\times K = 250 \\times K = 50 \\times (5 \\times K)$.\nSince 5 is odd and $K$ is odd, their product $(5 \\times K)$ is also an odd number. \nLet $(5 \\times K) = 2m + 1$ for some integer $m$.\n\nStep 5: Find the remainder.\nSubstitute $(2m + 1)$ back into the equation:\nProduct = $50 \\times (2m + 1) = 100m + 50$.\n\nAny number in the form of $100m + 50$ is a multiple of 100 plus 50. Therefore, when this product is divided by 100, the remainder will always be 50.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1581,8 +1587,8 @@
         "₹ 400",
         "₹ 450"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Simplify the given ratio of shares.\nThe given ratio for X, Y, and Z is 1/2 : 3/4 : 5/6.\nTo convert these fractions into whole numbers, find the Least Common Multiple (LCM) of the denominators 2, 4, and 6, which is 12.\nMultiply each fraction by 12:\n- X's ratio = (1/2) × 12 = 6\n- Y's ratio = (3/4) × 12 = 9\n- Z's ratio = (5/6) × 12 = 10\nSo, the simplified ratio of their shares is 6 : 9 : 10.\n\nStep 2: Calculate the total number of parts.\nTotal parts = 6 + 9 + 10 = 25 parts.\n\nStep 3: Find the value of a single part.\nThe total sum to be distributed is ₹ 2,500.\nValue of 1 part = Total Sum / Total parts = 2500 / 25 = ₹ 100.\n\nStep 4: Calculate the difference between the maximum and minimum shares.\nThe maximum share corresponds to the largest ratio part, which is 10 (Z's share).\nThe minimum share corresponds to the smallest ratio part, which is 6 (X's share).\nDifference in parts = 10 - 6 = 4 parts.\n\nStep 5: Calculate the exact monetary difference.\nDifference = 4 parts × ₹ 100 = ₹ 400.\n\n(Alternatively, you can find the exact shares: X = ₹ 600, Y = ₹ 900, Z = ₹ 1000. The difference between the maximum and minimum is 1000 - 600 = ₹ 400).\n\nThis matches Option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1606,8 +1612,8 @@
         "For any positive integer n only",
         "For any real number n"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the value of n for which the sum of the digits of (10^n + 1) is 2, let's test different types of numbers for n:\n\nStep 1: Test for n = 0 (which is a whole number).\nIf n = 0, then 10^0 + 1 = 1 + 1 = 2.\nThe sum of the digits of 2 is simply 2. So, n = 0 works.\n\nStep 2: Test for positive integers (n = 1, 2, 3, ...).\nIf n = 1, 10^1 + 1 = 10 + 1 = 11. The sum of digits is 1 + 1 = 2.\nIf n = 2, 10^2 + 1 = 100 + 1 = 101. The sum of digits is 1 + 0 + 1 = 2.\nIf n = 3, 10^3 + 1 = 1000 + 1 = 1001. The sum of digits is 1 + 0 + 0 + 1 = 2.\nIn general, for any positive integer n, 10^n is written as a '1' followed by n '0's. When you add 1 to it, the last '0' becomes a '1'. The resulting number will always be in the format 100...001. The sum of its digits will always be 1 + 0 + ... + 0 + 1 = 2. So, all positive integers work.\n\nStep 3: Test for real numbers (e.g., fractions or decimals).\nIf n = 0.5, 10^0.5 + 1 = √10 + 1 ≈ 3.162 + 1 = 4.162...\nThe sum of digits is clearly not 2. So, it does not work for all real numbers.\n\nStep 4: Evaluate the given options.\n- Option 0 ('For n = 0 only') is incorrect because positive integers also work.\n- Option 2 ('For any positive integer n only') is incorrect because n = 0 also works.\n- Option 3 ('For any real number n') is incorrect because fractional/decimal values do not work.\n- Option 1 ('For any whole number n') is correct because the set of whole numbers includes 0 and all positive integers (0, 1, 2, 3, ...), all of which satisfy the condition.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1631,8 +1637,8 @@
         "It remains the same.",
         "No conclusion can be drawn due to insufficient data."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The average weight of the entire class is calculated by dividing the total weight of all students by the total number of students in the class. Shifting students from one group to another within the same class does not change the total weight of the students, nor does it change the total number of students. Since both the total weight and the total number of students remain constant, the average weight of the class remains the same.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1656,8 +1662,8 @@
         "14",
         "10"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. We are given 5 distinct denominations: ₹ 50, ₹ 100, ₹ 200, ₹ 500, and ₹ 2,000.\n2. We need to find the number of different sums that can be formed by taking at least three denominations at a time. This means we can choose 3, 4, or 5 denominations.\n3. The number of ways to choose 'r' items from 'n' items is given by the combination formula: nCr = n! / [r! * (n - r)!].\n4. Number of ways to choose 3 denominations out of 5: 5C3 = 5! / (3! * 2!) = 10.\n5. Number of ways to choose 4 denominations out of 5: 5C4 = 5! / (4! * 1!) = 5.\n6. Number of ways to choose 5 denominations out of 5: 5C5 = 5! / (5! * 0!) = 1.\n7. Total number of combinations = 10 + 5 + 1 = 16.\n8. To ensure all these 16 sums are distinct, we can check if the denominations form a super-increasing sequence (where each term is greater than the sum of all previous terms):\n   - 100 > 50\n   - 200 > 50 + 100 (= 150)\n   - 500 > 50 + 100 + 200 (= 350)\n   - 2000 > 50 + 100 + 200 + 500 (= 850)\n9. Since each denomination is strictly greater than the sum of all smaller denominations, it is impossible for two different combinations of these notes to produce the same total sum. Every combination yields a unique sum.\n10. Therefore, exactly 16 different sums can be formed.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1681,8 +1687,8 @@
         "India lacks the institutional mechanism to deal with the failure of banks.",
         "Encouraging the foreign investments in our industrial sector is a good alternative to this sector's dependence on banks for credit."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage explicitly states that 'we cannot shut down banks because there is no proper system to shut them down' and highlights the absence of a 'resolution corporation for banks' as an institutional change that should have followed the 1991 reforms. This directly translates to the inference that India lacks the institutional mechanism to deal with the failure of banks. Option 0 is too broad and extreme. Option 1 makes a generalized claim about the overall economy which is beyond the scope of the passage. Option 3 introduces foreign investment, which is not mentioned in the text at all.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1708,8 +1714,8 @@
         "Getting renewable resources to market too soon may be costly.",
         "India should put in more efforts in the exploration of natural gas."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights that 'certain renewable resources are still going through their cost curves and learning curves' and that 'business houses are wary of investing too heavily in renewable energy at a time when the technology is not yet ready.' This implies that the technology is currently expensive and not fully developed, making premature investment or bringing it to market too soon a costly and risky endeavor. Options 0, 1, and 3 introduce claims not supported by the text, such as the likelihood of failing emission targets, importing gas, or exploring natural gas.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1735,8 +1741,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption 1 is invalid because the passage does not mention or imply anything about governments providing 'inefficient and costly subsidies'. It only states that the Indian Government has invested heavily in renewable energy, while business houses are wary because the technology is not yet ready. \n\nAssumption 2 is invalid because the passage explicitly states that towards the commitment of reducing emissions by 33% by 2030, the government has 'initiated a strong push towards a gas-based economy AND has also invested heavily in renewable energy.' Therefore, it is incorrect to assume that the emission reduction shall be solely or primarily on the basis of a gas-based economy, as renewable energy is also a key component of this goal. \n\nSince neither assumption is logically supported by or derived from the passage, 'Neither 1 nor 2' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1746,7 +1752,9 @@
         "source": "upsc-pyq",
         "year": "2020",
         "paper": "CSAT",
-        "questionNumber": 63
+        "questionNumber": 63,
+        "upscCorrectOption": 0,
+        "geminiPredictedOption": 3
       },
       "passageSetId": "set_4",
       "passageLabel": 2
@@ -1762,8 +1770,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Assumption 1 is valid: The passage distinguishes 'genome editing' from 'genome modification' and explains that editing involves dissecting and repairing a plant's own genome to create mutations, a process that occurs naturally. This implies that it does not require the introduction or transfer of foreign genes from one plant to another. \n\nAssumption 2 is valid: The passage explicitly states that researchers use molecular scissors to dissect and repair the genome, which is 'a process that occurs naturally when plants are under attack from diseases' (environmental factors) to help them survive. It further notes that this evolutionary process can be speeded up to alter relevant genes 'very precisely'. \n\nSince both assumptions are logically supported by the passage, 'Both 1 and 2' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1789,8 +1797,8 @@
         "Solid waste management should be integrated with the maintenance of drainage and sewerage networks.",
         "Bad management of solid waste and sewerage systems by our municipalities is the reason for drinking water shortages in our cities."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights that the health consequences of solid waste management are not just about dry garbage, but also about how unscientific waste management interacts with poor drainage and untreated sewage. This combination leads to choked drains, stagnant water, and the spread of diseases. Because these issues are deeply interconnected and exacerbate one another, the critical message logically derived from the passage is that solid waste management cannot be handled in isolation; it must be integrated with the maintenance of drainage and sewerage networks to effectively prevent health hazards. Options 0, 1, and 3 are either minor details, out of scope, or not mentioned in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1816,8 +1824,8 @@
         "Religious freedom of the citizens is not covered under fundamental rights.",
         "Religious practices of any community are immune to State laws."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage explicitly states that the right to religious freedom under Article 25 is 'subject to public order, morality, health and to the other provisions of this Part'. It further explains that this acts as a 'subordination clause', placing other fundamental rights (like the right to equality) above religious freedom. This implies that religious freedom is not absolute and is open to State intervention if it conflicts with public order, morality, health, or other fundamental rights. Therefore, Option 1 is the most logical inference. Options 0 and 3 contradict the passage, and Option 2 is factually incorrect as the passage notes Article 25 is part of the fundamental rights.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1843,8 +1851,8 @@
         "12",
         "6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. The given word is 'DELHI', which consists of 5 distinct letters: D, E, L, H, and I.\n2. We need to form 5-letter words using all these letters such that each word starts with 'D' and ends with 'I'.\n3. The positions of the first and the last letters are fixed: D _ _ _ I.\n4. The remaining letters to be arranged in the 3 middle positions are E, L, and H.\n5. The number of ways to arrange 'n' distinct objects in 'n' positions is given by the formula n! (n factorial).\n6. Here, we have 3 distinct letters (E, L, H) to be arranged in 3 positions. So, the number of ways = 3! = 3 × 2 × 1 = 6.\n7. Therefore, 6 different words can be constructed (DELHI, DEHLI, DLEHI, DLHEI, DHELI, DHLEI).\n8. This matches the option with the value 6.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1868,8 +1876,8 @@
         "16 : 9",
         "17 : 8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the final quantity of liquid A after 'n' replacement operations, we use the formula: \nFinal quantity of A = Initial quantity of A × (1 - (Quantity replaced / Total quantity))^n\n\nGiven:\n- Initial quantity of liquid A = 20 litres\n- Quantity replaced each time = 4 litres\n- Total quantity of the mixture = 20 litres\n- Number of operations (n) = 2\n\nStep 1: Calculate the final quantity of liquid A.\nFinal quantity of A = 20 × (1 - 4/20)^2\n= 20 × (1 - 1/5)^2\n= 20 × (4/5)^2\n= 20 × (16/25)\n= 320 / 25\n= 12.8 litres\n\nStep 2: Calculate the final quantity of liquid B.\nSince the total volume of the mixture remains constant at 20 litres:\nFinal quantity of B = Total quantity - Final quantity of A\n= 20 - 12.8\n= 7.2 litres\n\nStep 3: Find the ratio of the quantity of liquid A to liquid B.\nRatio = 12.8 : 7.2\nMultiply both sides by 10 to remove decimals: 128 : 72\nDivide both sides by their greatest common divisor (8):\n128 / 8 = 16\n72 / 8 = 9\n\nThe final ratio of liquid A to liquid B is 16 : 9.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1893,8 +1901,8 @@
         "62",
         "49"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Calculate the total runs scored by the batsman after 50 innings.\nTotal runs after 50 innings = Average score × Number of innings = 46.4 × 50 = 2320 runs.\n\nStep 2: Calculate the new average after the 60th innings.\nThe average increases by 2.6, so the new average = 46.4 + 2.6 = 49.0.\n\nStep 3: Calculate the total runs scored after 60 innings.\nTotal runs after 60 innings = New average × Number of innings = 49.0 × 60 = 2940 runs.\n\nStep 4: Find the total runs scored in the last 10 innings.\nRuns in the last 10 innings = Total runs after 60 innings - Total runs after 50 innings\nRuns in the last 10 innings = 2940 - 2320 = 620 runs.\n\nStep 5: Calculate the average score in the last 10 innings.\nAverage score in the last 10 innings = Total runs in last 10 innings / 10\nAverage = 620 / 10 = 62.\n\nAlternatively, using the deviation method:\nThe average increased by 2.6 over 60 innings, meaning the batsman scored 60 × 2.6 = 156 runs more than what was required to maintain the old average of 46.4. \nTotal runs in the last 10 innings = (10 × 46.4) + 156 = 464 + 156 = 620.\nAverage = 620 / 10 = 62.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1918,8 +1926,8 @@
         "₹ 50",
         "₹ 60"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let the original price of rice be ₹ x per kg.\n\nAfter a 25% hike, the new price of rice becomes:\nNew Price = x + 25% of x = x + 0.25x = 1.25x = ₹ (5x/4) per kg.\n\nWe know the formula: Quantity = Total Amount / Price per kg.\n\nThe original quantity of rice that could be bought for ₹ 1,200 is:\nOriginal Quantity = 1200 / x\n\nThe new quantity of rice that can be bought for ₹ 1,200 is:\nNew Quantity = 1200 / (5x/4) = (1200 × 4) / 5x = 4800 / 5x = 960 / x\n\nAccording to the question, the person purchases 6 kg less rice due to the price hike. Therefore, the difference between the original quantity and the new quantity is 6 kg:\n(1200 / x) - (960 / x) = 6\n\nSolving for x:\n(1200 - 960) / x = 6\n240 / x = 6\nx = 240 / 6\nx = 40\n\nThus, the original price of rice per kg was ₹ 40.\n\nVerification:\nOriginal price = ₹ 40/kg -> Quantity = 1200 / 40 = 30 kg.\nNew price = ₹ 50/kg (25% increase) -> Quantity = 1200 / 50 = 24 kg.\nDifference in quantity = 30 kg - 24 kg = 6 kg. This matches the given condition.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1943,8 +1951,8 @@
         "10",
         "12"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Step 1: Find the total time X takes to complete 100% of the work.\nX completes 20% (or 1/5) of the work in 8 days.\nTotal time taken by X to complete the whole work = 8 * 5 = 40 days.\nSo, X's 1-day work = 1/40.\n\nStep 2: Find the total time Y takes to complete 100% of the work.\nY completes 25% (or 1/4) of the work in 6 days.\nTotal time taken by Y to complete the whole work = 6 * 4 = 24 days.\nSo, Y's 1-day work = 1/24.\n\nStep 3: Find their combined rate of work.\nWork done by X and Y together in 1 day = (1/40) + (1/24)\nTaking the LCM of 40 and 24, which is 120:\n(1/40) + (1/24) = (3/120) + (5/120) = 8/120 = 1/15.\nThis means X and Y working together can complete the entire work in 15 days.\n\nStep 4: Calculate the time required to complete 40% of the work.\nTime taken to complete 40% of the work = 40% of 15 days\n= (40/100) * 15\n= (2/5) * 15\n= 2 * 3 = 6 days.\n\nTherefore, they will complete 40% of the work in 6 days.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1968,8 +1976,8 @@
         "lies between 2v and 3v km/hr",
         "lies between 3v and 4v km/hr"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the average speed for the entire journey, we use the formula:\nAverage Speed = Total Distance / Total Time\n\nLet the distance between place X and place Y be 'd' km.\nThe car makes 4 trips of distance 'd' each (X to Y, Y to X, X to Y, Y to X).\nTotal distance covered = d + d + d + d = 4d km.\n\nNow, let's calculate the time taken for each leg of the journey using the formula Time = Distance / Speed:\n1. Time for 1st trip (X to Y) = d / v\n2. Time for 2nd trip (Y to X) = d / 2v\n3. Time for 3rd trip (X to Y) = d / 3v\n4. Time for 4th trip (Y to X) = d / 4v\n\nTotal Time = (d / v) + (d / 2v) + (d / 3v) + (d / 4v)\nTaking (d / v) common:\nTotal Time = (d / v) * (1 + 1/2 + 1/3 + 1/4)\nTo add the fractions, find the Least Common Multiple (LCM) of the denominators 1, 2, 3, and 4, which is 12.\nTotal Time = (d / v) * (12/12 + 6/12 + 4/12 + 3/12)\nTotal Time = (d / v) * (25 / 12) = 25d / 12v\n\nNow, substitute the Total Distance and Total Time back into the Average Speed formula:\nAverage Speed = 4d / (25d / 12v)\nAverage Speed = (4d * 12v) / 25d\nAverage Speed = 48v / 25\nAverage Speed = 1.92v km/hr\n\nSince 1.92v is greater than 1v and less than 2v, the average speed of the car for the entire journey lies between v and 2v km/hr.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1993,8 +2001,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Step 1: Analyze Statement 1.\nA circle and a square can be completely disjoint (e.g., the circle is entirely inside or entirely outside the square), meaning they have 0 points of intersection. Even if we assume they must intersect, a circle can touch a square tangentially at exactly one point (e.g., touching one side or one vertex). Thus, the minimum number of points of intersection is 0 (or 1 if they are forced to touch), not 2. Therefore, Statement 1 is incorrect.\n\nStep 2: Analyze Statement 2.\nA square is composed of 4 straight line segments. Geometrically, a circle can intersect a single straight line in a maximum of 2 distinct points. Since the square has 4 sides, the circle can intersect the square in at most 4 × 2 = 8 points. This maximum of 8 points is practically achievable (for example, if you place a circle at the center of the square with a radius slightly larger than the shortest distance to the sides but smaller than the distance to the corners, it will cut each of the 4 sides exactly twice). Therefore, Statement 2 is correct.\n\nStep 3: Conclusion.\nSince only Statement 2 is correct, the right choice is '2 only'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2018,8 +2026,8 @@
         "1 : 3",
         "3 : 1"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the speed of the man in still water be 'v' and the speed of the current be 'c'. \n\nThe speed downstream (with the current) is given by the formula: \nSpeed downstream = v + c \n\nThe speed upstream (against the current) is given by the formula: \nSpeed upstream = v - c \n\nLet the certain distance rowed be 'd'. \nTime taken to row downstream, T_down = d / (v + c) \nTime taken to row upstream, T_up = d / (v - c) \n\nAccording to the problem, the man takes half the time to row downstream as he does to row upstream. \nTherefore, T_down = (1/2) * T_up \n\nSubstituting the time formulas into the equation: \nd / (v + c) = (1/2) * [d / (v - c)] \n\nDividing both sides by 'd' and cross-multiplying gives: \n2 * (v - c) = 1 * (v + c) \n2v - 2c = v + c \n\nRearranging the terms to group 'v' and 'c' on opposite sides: \n2v - v = c + 2c \nv = 3c \n\nTo find the ratio of the speed in still water to the speed of the current (v : c), we divide both sides by c: \nv / c = 3 / 1 \n\nThus, the ratio is 3 : 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2043,8 +2051,8 @@
         "5",
         "2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the two natural numbers be x and y, where x > y. \n\nAccording to the question, the difference of their squares is 63:\nx² - y² = 63\n\nUsing the algebraic identity a² - b² = (a - b)(a + b), we can rewrite the equation as:\n(x - y)(x + y) = 63\n\nSince x and y are natural numbers (positive integers starting from 1), both (x - y) and (x + y) must be positive integers, and (x + y) must be greater than (x - y).\n\nWe need to find all pairs of factors of 63. The factor pairs of 63 are:\n1. 1 × 63\n2. 3 × 21\n3. 7 × 9\n\nNow, we equate (x - y) and (x + y) to these factor pairs to solve for x and y:\n\nCase 1: \nx - y = 1\nx + y = 63\nAdding both equations: 2x = 64 ⇒ x = 32\nSubtracting both equations: 2y = 62 ⇒ y = 31\nPair 1: (32, 31). Verification: 32² - 31² = 1024 - 961 = 63.\n\nCase 2: \nx - y = 3\nx + y = 21\nAdding both equations: 2x = 24 ⇒ x = 12\nSubtracting both equations: 2y = 18 ⇒ y = 9\nPair 2: (12, 9). Verification: 12² - 9² = 144 - 81 = 63.\n\nCase 3: \nx - y = 7\nx + y = 9\nAdding both equations: 2x = 16 ⇒ x = 8\nSubtracting both equations: 2y = 2 ⇒ y = 1\nPair 3: (8, 1). Verification: 8² - 1² = 64 - 1 = 63.\n\nThere are exactly 3 pairs of natural numbers that satisfy the given condition.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2068,8 +2076,8 @@
         "4/5",
         "5/6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the original fraction be represented as x/y. When 5 is added to both the numerator and the denominator, the new fraction becomes (x + 5)/(y + 5).\n\nThe change in the value of the fraction can be calculated using the formula:\nChange = (x + 5)/(y + 5) - x/y\nChange = [y(x + 5) - x(y + 5)] / [y(y + 5)]\nChange = (xy + 5y - xy - 5x) / [y(y + 5)]\nChange = 5(y - x) / [y(y + 5)]\n\nFor all the given fractions (2/3, 3/4, 4/5, and 5/6), the difference between the denominator and the numerator is 1 (i.e., y - x = 1).\nSubstituting (y - x) = 1 into our change formula, we get:\nChange = 5 / [y(y + 5)]\n\nTo find the fraction with the minimum change, we need to find the one that yields the smallest value for 5 / [y(y + 5)]. This occurs when the denominator of this expression, y(y + 5), is maximized. \n\nLet's evaluate y(y + 5) for each option:\n1. For 2/3, y = 3: y(y + 5) = 3(8) = 24. (Change = 5/24 ≈ 0.208)\n2. For 3/4, y = 4: y(y + 5) = 4(9) = 36. (Change = 5/36 ≈ 0.139)\n3. For 4/5, y = 5: y(y + 5) = 5(10) = 50. (Change = 5/50 = 0.100)\n4. For 5/6, y = 6: y(y + 5) = 6(11) = 66. (Change = 5/66 ≈ 0.076)\n\nThe largest value for y(y + 5) is 66, which corresponds to the fraction 5/6. Therefore, 5/6 will have the minimum change in its value.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2093,8 +2101,8 @@
         "2n + 4",
         "3n + 1"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Identify the possible values for the digit n. Since n is a single digit greater than 3, the possible values are {4, 5, 6, 7, 8, 9}.\nStep 2: Apply the condition that n is divisible by 3. The numbers from the set {4, 5, 6, 7, 8, 9} that are divisible by 3 are 6 and 9.\nStep 3: Apply the condition that n is not divisible by 6. Between 6 and 9, 6 is divisible by 6, while 9 is not. Therefore, the value of n must be 9.\nStep 4: Substitute n = 9 into the given options to check which expression yields a number divisible by 4.\n- Option 0: 2n = 2(9) = 18. (18 is not divisible by 4)\n- Option 1: 3n = 3(9) = 27. (27 is not divisible by 4)\n- Option 2: 2n + 4 = 2(9) + 4 = 18 + 4 = 22. (22 is not divisible by 4)\n- Option 3: 3n + 1 = 3(9) + 1 = 27 + 1 = 28. (28 is perfectly divisible by 4, since 28 / 4 = 7)\n\nTherefore, 3n + 1 is divisible by 4.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2118,8 +2126,8 @@
         "100",
         "1000"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Understand the given relationship between volume and weight.\nGiven: 1 litre of water weighs 1 kg.\n\nStep 2: Convert the units to a smaller scale.\nWe know that:\n1 litre = 1000 cubic centimetres (cm³)\n1 kg = 1000 grams (gm)\nTherefore, 1000 cm³ of water weighs 1000 gm, which simplifies to 1 cm³ of water weighing 1 gm.\n\nStep 3: Convert cubic centimetres to cubic millimetres.\nWe know that 1 cm = 10 mm.\nSo, 1 cm³ = (10 mm)³ = 1000 mm³.\nThis means 1000 mm³ of water weighs 1 gm.\n\nStep 4: Calculate the volume for 0.1 gm of water.\nIf 1 gm of water has a volume of 1000 mm³,\nthen 0.1 gm of water will have a volume of 0.1 × 1000 mm³ = 100 mm³.\n\nTherefore, 100 cubic millimetres of water will weigh 0.1 gm. This matches option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2143,8 +2151,8 @@
         "20 kg",
         "25 kg"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the weight of the empty vessel be 'V' and the weight of the water when the vessel is completely full be 'W'.\n\nAccording to the first condition, the vessel full of water weighs 40 kg:\n1) V + W = 40\n\nAccording to the second condition, when the vessel is one-third filled, its weight is 20 kg:\n2) V + W/3 = 20\n\nNow, subtract equation (2) from equation (1):\n(V + W) - (V + W/3) = 40 - 20\nW - W/3 = 20\n2W/3 = 20\n\nSolve for W (the weight of the water when full):\nW = 20 * (3/2)\nW = 30 kg\n\nSubstitute the value of W back into equation (1) to find V:\nV + 30 = 40\nV = 40 - 30\nV = 10 kg\n\nThe weight of the empty vessel is 10 kg.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2168,8 +2176,8 @@
         "30",
         "31"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the total number of jumps required for the frog to come out of the well, we need to account for the fact that on the final jump, the frog will reach the top and will not slide back down.\n\n1. Convert the total depth of the well into centimeters:\n   Total depth = 4.5 m = 450 cm.\n\n2. Calculate the effective distance covered in a single jump (excluding the final jump):\n   Distance covered in one jump = 30 cm (up) - 15 cm (down) = 15 cm.\n\n3. Calculate the distance the frog needs to cover before its final jump:\n   Since the frog covers 30 cm in its last jump without sliding down, the distance to be covered by the 'jump and slide' process is:\n   Distance before final jump = Total depth - Upward jump distance\n   Distance before final jump = 450 cm - 30 cm = 420 cm.\n\n4. Calculate the number of jumps required to cover this 420 cm:\n   Number of jumps = 420 cm / 15 cm per jump = 28 jumps.\n\n5. After 28 jumps, the frog is at a height of 420 cm. On the 29th jump, the frog jumps up 30 cm, reaching exactly 450 cm (the top of the well), and escapes without sliding down.\n\nTotal number of jumps = 28 + 1 = 29 jumps.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",

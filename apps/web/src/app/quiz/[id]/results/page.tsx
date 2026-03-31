@@ -382,6 +382,23 @@ export default function ResultsPage() {
                 })}
               </div>
 
+              {/* Gemini Mismatch Warning */}
+              {(() => {
+                const meta: any = answer.metadata;
+                if (typeof meta?.geminiPredictedOption === "number" && meta.upscCorrectOption !== meta.geminiPredictedOption) {
+                  return (
+                    <div className="mt-4 ml-11 flex items-start gap-2 text-sm text-amber-800 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                      <span className="text-base leading-none mt-0.5">🤖</span>
+                      <p>
+                        <span className="font-semibold block mb-0.5">Gemini's Analysis Mismatch</span>
+                        The official UPSC answer is <strong>Option {String.fromCharCode(65 + (correctOption ?? 0))}</strong>, but Gemini originally predicted <strong>Option {String.fromCharCode(65 + meta.geminiPredictedOption)}</strong>. The explanation below corresponds to its incorrect prediction.
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
               {/* Explanation */}
               {answer.explanation && (
                 <div className="mt-4 ml-11 p-3 bg-blue-50 rounded-lg">
@@ -391,18 +408,24 @@ export default function ResultsPage() {
                   <Markdown className="text-sm text-blue-700" text={answer.explanation} />
                   
                   {/* Grounding Sources for Current Affairs questions */}
-                  {answer.metadata?.groundingSources && answer.metadata.groundingSources.length > 0 && (
-                    <GroundingSourcesList sources={answer.metadata.groundingSources} />
-                  )}
+                  {(() => {
+                    const meta: any = answer.metadata;
+                    return meta?.groundingSources && meta.groundingSources.length > 0 && (
+                      <GroundingSourcesList sources={meta.groundingSources} />
+                    );
+                  })()}
                   
                   {/* Derived From Topic for trending topics */}
-                  {answer.metadata?.derivedFromTopic && (
-                    <div className="mt-2 p-2 bg-purple-50 rounded border border-purple-200">
-                      <p className="text-xs text-purple-800">
-                        📊 <span className="font-medium">Trending Topic:</span> {answer.metadata.derivedFromTopic}
-                      </p>
-                    </div>
-                  )}
+                  {(() => {
+                    const meta: any = answer.metadata;
+                    return meta?.derivedFromTopic && (
+                      <div className="mt-2 p-2 bg-purple-50 rounded border border-purple-200">
+                        <p className="text-xs text-purple-800">
+                          📊 <span className="font-medium">Trending Topic:</span> {meta.derivedFromTopic}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </Card>

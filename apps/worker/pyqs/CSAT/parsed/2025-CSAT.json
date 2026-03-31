@@ -159,8 +159,8 @@
         "Sustenance of livelihood and degradation of ecosystem while being together exacerbate one another, leading to conflicts and imbalance.",
         "Commercial exploitation of ecosystems should be completely stopped."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To determine the critical message, we can evaluate the given options using the process of elimination based on the passage:  - Option 0 is incorrect. The passage does not dismiss the conservation of biodiversity as a non-issue; rather, it acknowledges it as one of the major competing interests that must be navigated alongside livelihoods and commercial potential. - Option 1 is incorrect. The passage mentions that commercial exploitation adversely affects livelihoods, but it never discusses or implies anything about legal or \"fundamental rights.\" - Option 3 is incorrect. The author notes that commercial exploitation has the \"potential to boost national income,\" particularly in developing countries. The passage highlights the need to manage",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -186,8 +186,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption I is invalid because it contradicts the passage. The passage explicitly states that 'commercial exploitation has the potential to boost national income', particularly in developing countries, implying that countries do depend on ecosystems for economic growth. Assumption II is also invalid because the passage makes no mention of resource-rich countries sharing resources with resource-poor countries to prevent ecosystem degradation. Since neither assumption is supported by or logically derived from the passage, the correct answer is 'Neither I nor II'.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -213,8 +213,8 @@
         "Countries with large economies are in a better position to adopt green technologies.",
         "Timing plays a crucial role in the case of green technology development."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage discusses how renewable energy costs fall rapidly due to economies of scale and path-dependent innovation. It then concludes by emphasizing that 'Moving early and gradually gives economies more time to adjust' and that 'A late, more chaotic transition is costlier.' This clearly highlights that the timing of the transition (moving early versus moving late) is critical to successfully and cost-effectively adopting green technology. Therefore, Option 3 best reflects the central idea. Option 0 focuses on a supporting detail rather than the main message. Option 1 is too broad and does not specifically address green technology. Option 2 introduces an idea about 'large economies' which is not mentioned in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -240,8 +240,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Assumption I is invalid because it introduces specific elements like 'public finances' and 'a country like India,' which are neither mentioned nor logically implied by the passage. The passage discusses general economic benefits but does not make specific claims about public finances or single out any particular country.\n\nAssumption II is invalid because it assumes that the pattern of falling costs (like that of solar energy) alone will lead to an easy green transition. However, the passage explicitly states that an easy transition ('without much disruption') depends on 'moving early and gradually.' It warns that a 'late, more chaotic transition is costlier.' Therefore, the cost pattern of the technology does not guarantee an easy transition if the shift is delayed.\n\nSince neither assumption is supported by the passage, 'Neither I nor II' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -251,7 +251,9 @@
         "source": "upsc-pyq",
         "year": "2025",
         "paper": "CSAT",
-        "questionNumber": 4
+        "questionNumber": 4,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 3
       },
       "passageSetId": "set_1",
       "passageLabel": 2
@@ -267,8 +269,8 @@
         "8",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. We are given that a natural number $N$ can be expressed as the sum of three of its distinct factors $p, q,$ and $r$. So, $N = p + q + r$.  2. Since $p, q,$ and $r$ are factors of $N$, we can write them as $p = N/a$, $q = N/b$, and $r = N/c$, where $a, b,$ and $c$ are distinct positive integers.  3. Substituting these into the equation gives:    $N = \\frac{N}{a} + \\frac{N}{b} + \\frac{N}{c}$  4. Dividing the entire equation by $N$, we get:    $1 = \\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c}$  5. We need to find distinct positive integers $a, b,$ and $c$ that satisfy this equation. Let's assume $a < b < c$.    - If $a \\ge 3$, the maximum possible sum would be $\\frac{1}{3} + \\frac{1}{4} + \\frac{1}{5} = \\frac{47}{60}$, which is less than 1. Thus, $a$ must be 2.    - Substituting $a = 2$ into the equation:      $\\frac{1}{b} + \\frac{1}{c} = 1 - \\frac{1}{2} = \\frac{1}{2}$    - If $b \\ge 4$, the maximum possible sum would be $\\frac{1}{4} + \\frac{1}{5} = \\frac{9}{20}$, which is less than $\\frac{1}{2}$. Thus, $b$ must be 3.    - Substituting $b = 3$ into the equation:      $\\frac{1}{c} = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6} \\implies c = 6$  6. The only solution is $a = 2, b = 3,$ and $c = 6$. This means the distinct factors are $p = N/2$, $q = N/3$, and $r = N/6$.  7. For $p, q,$ and $r$ to be natural numbers, $N$ must be perfectly divisible by 2, 3, and 6. Therefore, $N$ must be a multiple of their Least Common Multiple (LCM), which is 6.  8. The question asks for the number of such natural numbers below 50. We simply list the multiples of 6 that are less than 50:    6, 12, 18, 24, 30, 36, 42, 48.  9. Counting them,",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -292,8 +294,8 @@
         "6",
         "More than 6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The question states that $p, q,$ and $r$ are prime numbers less than 20 and they satisfy the equation $p - q = q - r$. This equation can be rewritten as $p + r = 2q$, which means that $p, q,$ and $r$ form an Arithmetic Progression (AP).  The prime numbers less than 20 are: 2, 3, 5, 7, 11, 13, 17, and 19.  Since $2q$ is an even number, the sum of $p$ and $r$ must also",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -317,8 +319,8 @@
         "Three",
         "More than three"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of possible values of (p + q + r), we need to find all sets of natural numbers (p, q, r) that satisfy the equation 1/p + 1/q + 1/r = 1.\n\nWithout loss of generality, let's assume p ≤ q ≤ r. \nSince 1/p + 1/q + 1/r = 1 and p is the smallest, 1/p must be the largest fraction. Therefore, 3/p ≥ 1, which implies p ≤ 3.\nSince p is a natural number, the possible values for p are 1, 2, or 3.\n\nCase 1: p = 1\n1/1 + 1/q + 1/r = 1 ⇒ 1/q + 1/r = 0\nSince q and r are natural numbers, their reciprocals must be positive. Thus, this case yields no solutions.\n\nCase 2: p = 2\n1/2 + 1/q + 1/r = 1 ⇒ 1/q + 1/r = 1/2\nSince q ≤ r, we have 2/q ≥ 1/2, which implies q ≤ 4. Also, since q ≥ p, q can be 2, 3, or 4.\n- If q = 2: 1/2 + 1/r = 1/2 ⇒ 1/r = 0 (Not possible)\n- If q = 3: 1/3 + 1/r = 1/2 ⇒ 1/r = 1/2 - 1/3 = 1/6 ⇒ r = 6. \n  This gives the solution (2, 3, 6). The sum is p + q + r = 2 + 3 + 6 = 11.\n- If q = 4: 1/4 + 1/r = 1/2 ⇒ 1/r = 1/2 - 1/4 = 1/4 ⇒ r = 4. \n  This gives the solution (2, 4, 4). The sum is p + q + r = 2 + 4 + 4 = 10.\n\nCase 3: p = 3\n1/3 + 1/q + 1/r = 1 ⇒ 1/q + 1/r = 2/3\nSince q ≤ r, we have 2/q ≥ 2/3, which implies q ≤ 3. Also, since q ≥ p, q must be exactly 3.\n- If q = 3: 1/3 + 1/r = 2/3 ⇒ 1/r = 2/3 - 1/3 = 1/3 ⇒ r = 3.\n  This gives the solution (3, 3, 3). The sum is p + q + r = 3 + 3 + 3 = 9.\n\nThe possible values for the sum (p + q + r) are 9, 10, and 11. \nTherefore, there are exactly 3 possible values.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -342,8 +344,8 @@
         "June, May",
         "June, April"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's convert the months into their corresponding numerical values (1 for January, 2 for February, ..., 12 for December):\nJanuary = 1\nJanuary = 1\nDecember = 12\nOctober = 10\nX = ?\nMarch = 3\nOctober = 10\nY = ?\nSeptember = 9\n\nNow, let's look at the sequence of numbers: 1, 1, 12, 10, X, 3, 10, Y, 9.\nLet's find the difference between consecutive terms (going backwards in months, which means subtracting and wrapping around 12):\n1 - 0 = 1 (January)\n1 - 1 = 0 → 12 (December)\n12 - 2 = 10 (October)\n10 - 3 = 7 (July) → X\n7 - 4 = 3 (March)\n3 - 5 = -2 → 12 - 2 = 10 (October)\n10 - 6 = 4 (April) → Y\n4 - 7 = -3 → 12 - 3 = 9 (September)\n\nThe pattern is subtracting consecutive integers (0, 1, 2, 3, 4, 5, 6, 7) from the previous month's numerical value. \nFollowing this pattern, X corresponds to the 7th month (July) and Y corresponds to the 4th month (April).",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -367,8 +369,8 @@
         "216",
         "Cannot be determined"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Team X scored a total of N runs in 20 overs.\n\nStep 2: Team Y tied the score (scored N runs) in 10% less overs. \n10% of 20 overs = 2 overs. \nSo, Team Y took 20 - 2 = 18 overs to score N runs.\n\nStep 3: Team Y's average run rate is calculated as Total Runs / Total Overs = N / 18 runs per over.\n\nStep 4: The problem states that if Team Y's average run rate had been 50% higher, the scores would have been tied in 12 overs. \nLet's calculate the new run rate: \nNew run rate = (N / 18) + 50% of (N / 18) \n= (N / 18) * 1.5 \n= N / 12 runs per over.\n\nStep 5: At this new run rate of N / 12 runs per over, the number of overs required to score N runs would be: \nTotal Runs / New Run Rate = N / (N / 12) = 12 overs.\n\nStep 6: The condition given in the problem (that it would take 12 overs) perfectly matches our calculation for any value of N. This means the second statement is simply a mathematical restatement of the first and does not provide a new independent equation to solve for N.\n\nSince N can be any value and still satisfy all the conditions given in the problem, the exact number of runs scored by Team X cannot be determined.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -392,8 +394,8 @@
         "p(10^4 - k^2) = q x 10^4",
         "p(10^4 - k^2) = q x 10^8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the original price of the commodity be 'p'.\n\nWhen a value is increased by k%, it is multiplied by (1 + k/100). When it is decreased by k%, it is multiplied by (1 - k/100).\n\nThe price undergoes four successive changes:\n1. Increased by k%: p × (1 + k/100)\n2. Decreased by k%: p × (1 + k/100) × (1 - k/100)\n3. Increased by k%: p × (1 + k/100) × (1 - k/100) × (1 + k/100)\n4. Decreased by k%: p × (1 + k/100) × (1 - k/100) × (1 + k/100) × (1 - k/100)\n\nThe final price is given as 'q'. Therefore, we can write the equation:\nq = p × [(1 + k/100) × (1 - k/100)]^2\n\nUsing the algebraic identity (a + b)(a - b) = a^2 - b^2:\n(1 + k/100) × (1 - k/100) = 1 - (k^2 / 10000) = (10000 - k^2) / 10000\n\nSubstitute this back into the equation for q:\nq = p × [ (10000 - k^2) / 10000 ]^2\n\nSince 10000 = 10^4, we can rewrite the equation as:\nq = p × [ (10^4 - k^2) / 10^4 ]^2\nq = p × [ (10^4 - k^2)^2 / (10^4)^2 ]\nq = p × [ (10^4 - k^2)^2 / 10^8 ]\n\nMultiplying both sides by 10^8 to eliminate the denominator:\nq × 10^8 = p(10^4 - k^2)^2\n\nThis matches the relation given in the first option.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -417,8 +419,8 @@
         "It is basically the responsibility of the Union Government to implement the climate action plans and ensure net zero emissions.",
         "India needs to formulate effective climate change mitigation and adaptation strategies at the State/region level."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights that different States and regions in India (coastal States, drier districts, Himalayan regions, peninsular India) face unique challenges and possess distinct opportunities regarding climate change. It concludes by stating that these various regional aspects must be considered to develop clear and sustainable goals for the future. Option 3 perfectly captures this central message by suggesting that India needs to formulate its climate change mitigation and adaptation strategies tailored to the State or regional level. Option 0 is incorrect because the passage does not assign exclusive administrative 'responsibility' to the States. Option 1 is overly pessimistic and contradicts the author's call for developing sustainable goals. Option 2 introduces the Union Government, which is not mentioned in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -444,8 +446,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption I is valid because the passage discusses 'opportunities for reducing emissions' using natural resources like 'wind power' (green energy) alongside adaptation measures (protecting shores, preparing for variable monsoons), and concludes that these aspects must be considered for developing 'sustainable goals for the future.' This clearly implies that green energy production can be integrated with climate change mitigation and adaptation strategies. Assumption II is invalid because the passage states that 'Each State in India faces a distinctive set of challenges' and provides examples of coastal, drier, and Himalayan regions. It does not compare the severity of these effects or suggest that the impacts are 'much more severe' in coastal and mountainous regions than in others.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -455,7 +457,9 @@
         "source": "upsc-pyq",
         "year": "2025",
         "paper": "CSAT",
-        "questionNumber": 12
+        "questionNumber": 12,
+        "upscCorrectOption": 3,
+        "geminiPredictedOption": 0
       },
       "passageSetId": "set_2",
       "passageLabel": 1
@@ -471,8 +475,8 @@
         "Poverty and social inequality are so intricately linked that they pose an unmanageable crisis for India.",
         "Insecurity, more than poverty, is the main economic issue that Government policies must address."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage explicitly states that 'insecurity, more than poverty, is the most acutely felt economic problem' in India. It further elaborates that economic insecurities affect not just those below the poverty line, but also those above it, and concludes by noting that 'Many Government policies are actually intended towards mitigating these insecurities.' Option 3 perfectly captures this central theme by highlighting insecurity as the primary economic issue that requires the attention of government policies. The other options misrepresent the passage by either conflating economic and social problems, incorrectly identifying poverty as the root cause of insecurity, or making unsupported claims about an 'unmanageable crisis'.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -498,8 +502,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption I is valid because the passage explicitly states that 'even those just over the poverty line are subject to multiple economic insecurities of various kinds', which directly supports the idea that people above the poverty line are prone to anxiety about economic insecurity. Assumption II is invalid because the passage does not suggest that eradicating poverty will lead to peace and social equality; in fact, it highlights social inequality as a distinct social problem and emphasizes that economic insecurity is a more acutely felt problem than poverty itself. Therefore, only Assumption I is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -525,8 +529,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the minimum number of cuts to divide a cube into 60 equal pieces, we need to express 60 as the product of three integers (x, y, z) such that their sum is minimized. The number of pieces along the three dimensions will be x, y, and z, where x * y * z = 60. The number of cuts required along each dimension is (x - 1), (y - 1), and (z - 1). Thus, the total number of cuts is (x - 1) + (y - 1) + (z - 1) = x + y + z - 3.\n\nThe possible triplets (x, y, z) for 60 are:\n- 1 * 1 * 60 (Cuts: 0 + 0 + 59 = 59)\n- 1 * 2 * 30 (Cuts: 0 + 1 + 29 = 30)\n- 1 * 3 * 20 (Cuts: 0 + 2 + 19 = 21)\n- 1 * 4 * 15 (Cuts: 0 + 3 + 14 = 17)\n- 1 * 5 * 12 (Cuts: 0 + 4 + 11 = 15)\n- 1 * 6 * 10 (Cuts: 0 + 5 + 9 = 14)\n- 2 * 2 * 15 (Cuts: 1 + 1 + 14 = 16)\n- 2 * 3 * 10 (Cuts: 1 + 2 + 9 = 12)\n- 2 * 5 * 6 (Cuts: 1 + 4 + 5 = 10)\n- 3 * 4 * 5 (Cuts: 2 + 3 + 4 = 9)\n\nThe minimum number of cuts is achieved with the triplet 3, 4, and 5, which requires 9 cuts. Therefore, Statement I is correct.\n\nFor Statement II, the number of smaller pieces that are not painted on any face (the inner core pieces) is calculated by subtracting 2 from each dimension's piece count (to remove the outer painted layers) and multiplying them: \nUnpainted pieces = (x - 2) * (y - 2) * (z - 2)\nUnpainted pieces = (3 - 2) * (4 - 2) * (5 - 2) = 1 * 2 * 3 = 6.\nTherefore, Statement II is also correct.\n\nSince both statements are correct, the right choice is 'Both I and II'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -550,8 +554,8 @@
         "65",
         "64"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze the given equations to find the hidden mathematical rule.\n\nGiven:\n1) 7 * 24 = 25\n2) 12 * 16 = 20\n\nIf we square the numbers on the left side and add them, we get:\n1) 7² + 24² = 49 + 576 = 625. The square root of 625 is 25.\n2) 12² + 16² = 144 + 256 = 400. The square root of 400 is 20.\n\nThis shows that the operation 'a * b' is defined by the formula: √(a² + b²) (which is the Pythagorean theorem for finding the hypotenuse of a right-angled triangle).\n\nNow, apply this same rule to find the value of 16 * 63:\n16 * 63 = √(16² + 63²)\n16² = 256\n63² = 3969\n\nAdding these together:\n256 + 3969 = 4225\n\nNow, find the square root of 4225:\n√4225 = 65 (since 65 × 65 = 4225)\n\nTherefore, 16 * 63 = 65.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -575,8 +579,8 @@
         "220 km",
         "240 km"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the reduction in travel distance, we can use the relationship: Expenditure = (Distance / Mileage) × Price of Petrol.\n\nStep 1: Calculate the initial expenditure.\n- Initial Distance = 2200 km\n- Mileage = 16 km/litre\n- Initial Petrol Consumed = 2200 / 16 = 137.5 litres\n- Initial Price of Petrol = ₹ 90 per litre\n- Initial Expenditure = 137.5 × 90 = ₹ 12,375\n\nStep 2: Calculate the new price of petrol.\n- The price shot up by 10%.\n- New Price = 90 + (10% of 90) = 90 + 9 = ₹ 99 per litre.\n\nStep 3: Calculate the new distance he can travel with the same expenditure.\n- Desired Expenditure = ₹ 12,375\n- New Petrol Consumed = Expenditure / New Price = 12375 / 99 = 125 litres\n- New Distance = New Petrol Consumed × Mileage = 125 × 16 = 2000 km\n\nStep 4: Calculate the reduction in travel.\n- Reduction in Distance = Initial Distance - New Distance\n- Reduction = 2200 - 2000 = 200 km.\n\nAlternative Shortcut Method:\nSince expenditure and mileage are constant, distance is inversely proportional to the price of petrol. \n- Price increases by 10%, meaning the new price is 110% (or 11/10) of the original price.\n- Therefore, the new distance will be 10/11 of the original distance.\n- Reduction in distance = 1/11 of the original distance = (1/11) × 2200 = 200 km.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -600,8 +604,8 @@
         "1078",
         "1082"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Find the difference between each divisor and its corresponding remainder.\nDivisor 3 - Remainder 1 = 2\nDivisor 5 - Remainder 3 = 2\nDivisor 6 - Remainder 4 = 2\nDivisor 9 - Remainder 7 = 2\n\nStep 2: Since the difference between the divisor and the remainder is a constant (2) in all cases, the required number N can be expressed using the formula:\nN = [LCM(divisors) × k] - constant difference\nN = [LCM(3, 5, 6, 9) × k] - 2, where k is a positive integer.\n\nStep 3: Calculate the Least Common Multiple (LCM) of 3, 5, 6, and 9.\nPrime factorization:\n3 = 3\n5 = 5\n6 = 2 × 3\n9 = 3²\nLCM = 2 × 3² × 5 = 90.\nSo, the number is of the form N = 90k - 2.\n\nStep 4: We need the smallest 4-digit number, which means N ≥ 1000.\n90k - 2 ≥ 1000\n90k ≥ 1002\nk ≥ 1002 / 90\nk ≥ 11.133...\n\nStep 5: Since k must be an integer, the smallest possible value for k is 12.\nSubstitute k = 12 into the equation:\nN = 90(12) - 2\nN = 1080 - 2\nN = 1078\n\nStep 6: Verify the answer.\n1078 ÷ 3 = 359 with a remainder of 1\n1078 ÷ 5 = 215 with a remainder of 3\n1078 ÷ 6 = 179 with a remainder of 4\n1078 ÷ 9 = 119 with a remainder of 7\n\n1078 is the smallest 4-digit number satisfying all conditions, which matches Option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -625,8 +629,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's evaluate both statements step by step:\n\nStatement I: A ≤ B > C < D > E > F ≥ G = H\nWe need to find the relationship between B and E. The chain connecting them is B > C < D > E. Because the inequality signs face opposite directions (B > C and D > C; D > E and C < D), the relationship between B and E cannot be uniquely determined. For example, we could have B = 5, C = 2, D = 10, and E = 8 (where B < E), or B = 10, C = 2, D = 8, and E = 5 (where B > E). Thus, B is not always greater than E. Statement I is incorrect.\n\nStatement II: P > Q = R ≥ S = T ≤ U = V > W\nWe need to find the relationship between S and V. The chain connecting them is S = T ≤ U = V. This simplifies directly to S ≤ V. This means S is either less than or equal to V. Because S can be exactly equal to V, the claim that S is *always* less than V (S < V) is false. Statement II is incorrect.\n\nSince neither Statement I nor Statement II is correct, the right choice is 'Neither I nor II'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -650,8 +654,8 @@
         "5",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. The given expression is 1 × 3 × 5 × 7 × 9 × ... × 999, which is the product of all odd numbers from 1 to 999.\n2. Notice that the number 5 is one of the factors in this multiplication.\n3. A known mathematical rule states that when 5 is multiplied by any odd number, the unit digit of the resulting product is always 5 (e.g., 5 × 1 = 5, 5 × 3 = 15, 5 × 7 = 35, etc.).\n4. Since the sequence consists entirely of odd numbers, there are no even numbers (like 2, 4, 6) that could multiply with 5 to produce a unit digit of 0.\n5. Therefore, the product of all these odd numbers will inevitably have 5 as its unit digit.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -675,8 +679,8 @@
         "India lagged behind other countries in adapting mechanized and modern farming.",
         "Rural-to-urban migration resulted in the stagnant agriculture sector."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights a sharp contrast between the agricultural and non-agricultural sectors in India. It states that while the non-agricultural economy consistently grew from the 1980s to the 2000s (a period widely known for India's economic liberalization and reforms), the agricultural sector suffered relative stagnation after the 1980s. A corollary is a direct logical consequence of the facts presented. Since the non-agricultural sectors experienced consistent growth during the reform years while agriculture stagnated, it logically follows that the benefits of these economic reforms and growth drivers percolated down much more slowly to the agriculture sector compared to other sectors. Options 1, 2, and 3 introduce outside concepts (the Green Revolution, comparisons with other countries, and rural-to-urban migration) that are neither mentioned nor implied in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -702,8 +706,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage purely describes the historical growth trends of the agricultural and non-agricultural sectors in independent India, highlighting the stagnation in agriculture compared to the consistent growth in the non-agricultural economy. It does not discuss the causes of this stagnation, nor does it suggest any policy measures, solutions, or interventions such as large-scale commercial cultivation, corporate farming, free crop insurance, or heavy subsidies. Therefore, neither of the given assumptions can be logically derived or assumed from the text.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -713,7 +717,9 @@
         "source": "upsc-pyq",
         "year": "2025",
         "paper": "CSAT",
-        "questionNumber": 22
+        "questionNumber": 22,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 3
       },
       "passageSetId": "set_3",
       "passageLabel": 1
@@ -729,8 +735,8 @@
         "Household units of the handloom sector should be modernized and made an economically viable organized industry.",
         "Handloom products need to be converted to machine-made designer products so as to make them more popular."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "There is a mismatch in the question provided: the passage discusses the agricultural sector's growth in India, whereas the options pertain to a completely different passage about the handloom industry. However, based on the standard UPSC CSAT question from which these options are derived, the intended passage argues against viewing the handloom sector merely as a cultural artifact surviving on state patronage, and instead advocates for recognizing its economic potential. Therefore, Option 0 is the correct answer for the passage that corresponds to these options.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -756,8 +762,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage focuses entirely on the growth rates of the agricultural and non-agricultural sectors in independent India, highlighting the relative stagnation of agriculture compared to the consistent growth of the non-agricultural economy. It makes absolutely no mention of the handloom sector, State involvement in it, or the appeal of handloom products. Therefore, neither assumption I nor assumption II can be logically derived or assumed from the given text.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -783,8 +789,8 @@
         "22",
         "23"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of natural numbers among the first 100 that are not divisible by 2, 3, 5, 7, and 9, we can simplify the condition. Since 9 is a multiple of 3, any number divisible by 9 is already divisible by 3. Thus, we only need to find the numbers not divisible by 2, 3, 5, or 7.\n\n**Method 1: Using Prime Factorization Properties**\nAny composite number less than or equal to 100 must have a prime factor less than or equal to $\\sqrt{100} = 10$. The prime numbers less than 10 are 2, 3, 5, and 7. \nTherefore, any composite number up to 100 is divisible by at least one of 2, 3, 5, or 7. \nThis means the only numbers up to 100 that are NOT divisible by 2, 3, 5, or 7 are:\n1. The number 1 (which is neither prime nor composite).\n2. The prime numbers greater than 7 and less than or equal to 100.\n\nThere are exactly 25 prime numbers between 1 and 100. The first four are 2, 3, 5, and 7. \nThe number of primes greater than 7 is $25 - 4 = 21$.\nAdding the number 1, the total count is $21 + 1 = 22$.\n\n**Method 2: Principle of Inclusion-Exclusion**\nLet's count the numbers divisible by 2, 3, 5, or 7 up to 100.\n- Divisible by 2: $\\lfloor 100/2 \\rfloor = 50$\n- Divisible by 3: $\\lfloor 100/3 \\rfloor = 33$\n- Divisible by 5: $\\lfloor 100/5 \\rfloor = 20$\n- Divisible by 7: $\\lfloor 100/7 \\rfloor = 14$\nSum of singles = $50 + 33 + 20 + 14 = 117$\n\nNow, subtract the numbers divisible by pairs (LCM of the pairs):\n- Divisible by 6: $\\lfloor 100/6 \\rfloor = 16$\n- Divisible by 10: $\\lfloor 100/10 \\rfloor = 10$\n- Divisible by 14: $\\lfloor 100/14 \\rfloor = 7$\n- Divisible by 15: $\\lfloor 100/15 \\rfloor = 6$\n- Divisible by 21: $\\lfloor 100/21 \\rfloor = 4$\n- Divisible by 35: $\\lfloor 100/35 \\rfloor = 2$\nSum of pairs = $16 + 10 + 7 + 6 + 4 + 2 = 45$\n\nNow, add the numbers divisible by triplets (LCM of the triplets):\n- Divisible by 30: $\\lfloor 100/30 \\rfloor = 3$\n- Divisible by 42: $\\lfloor 100/42 \\rfloor = 2$\n- Divisible by 70: $\\lfloor 100/70 \\rfloor = 1$\n- Divisible by 105: $\\lfloor 100/105 \\rfloor = 0$\nSum of triplets = $3 + 2 + 1 + 0 = 6$\n\nFinally, subtract the numbers divisible by all four (LCM = 210):\n- Divisible by 210: $\\lfloor 100/210 \\rfloor = 0$\n\nUsing the Inclusion-Exclusion formula:\nTotal divisible = $117 - 45 + 6 - 0 = 78$\n\nThe number of integers NOT divisible by any of them is:\n$100 - 78 = 22$\n\nBoth methods confirm the answer is 22.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -808,8 +814,8 @@
         "– 15/2",
         "None of the above"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Find the maximum value of (x + y).\nThe maximum value of the sum of two independent variables occurs when both variables are at their maximum values.\nGiven 4 ≤ x ≤ 8, the maximum value of x is 8.\nGiven 2 ≤ y ≤ 7, the maximum value of y is 7.\nMaximum value of (x + y) = 8 + 7 = 15.\n\nStep 2: Find the minimum value of (x - y).\nThe minimum value of the difference (x - y) occurs when x is at its minimum value and y is at its maximum value.\nThe minimum value of x is 4.\nThe maximum value of y is 7.\nMinimum value of (x - y) = 4 - 7 = -3.\n\nStep 3: Calculate the ratio.\nRatio = [Maximum value of (x + y)] / [Minimum value of (x - y)]\nRatio = 15 / (-3) = -5.\n\nStep 4: Compare with the given options.\nThe calculated ratio is -5, which does not match 6, 15/2, or -15/2. \n\n(Note: A common mistake is to incorrectly calculate the minimum of (x - y) as Min(x) - Min(y) = 4 - 2 = 2, which would give a ratio of 15/2. However, mathematically, the true minimum is achieved by subtracting the largest possible y from the smallest possible x, giving -3).\n\nTherefore, the correct option is 'None of the above'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -833,8 +839,8 @@
         "6",
         "7"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the possible values of $k$, we need to test prime numbers for $p$ and $k$ such that $p^2 + k$ is a prime number less than 30.  Since $p^2 + k < 30$ and $k$ is a prime (so $k \\ge 2$), $p^2$ must be strictly less than 28. The only prime numbers whose squares are less than 28 are $p = 2, 3,$ and $5$.  Let's evaluate each possible value for $p$:  **Case 1: $p = 2$** $p^2 = 4$. We need $4 + k < 30$, which means $k < 26$. Let's test all prime numbers $k < 26$ (which are 2, 3, 5, 7, 11, 13, 17, 19, 23): - If $k = 2$, $4 + 2 = 6$ (Not prime) - If $k = 3$, $4 + 3 = 7$ (Prime) \\u2714 - If $k = 5$, $4 + 5 = 9$ (Not prime) - If $k = 7$, $4 + 7 = 11$ (Prime) \\u2714 - If $k = 11$, $4 + 11 = 15$ (Not prime) - If $k = 13$, $4 + 13 = 17$ (Prime) \\u2714 - If $k = 17$, $4 + 17 = 21$ (Not prime) - If $k = 19$, $4 + 19 = 23$ (Prime) \\u2714 - If $k = 23$, $4 + 23 = 27$ (Not prime) From this case, the possible values for $k$ are **3, 7, 13, and 19**.  **Case 2: $p = 3$** $p^2 = 9$. We need $9 + k < 30$, which means $k < 21$. Since 9 is an odd number, adding any odd prime $k$ will result in an even number greater than 2, which cannot be prime. Therefore, $k$ must be the only even prime, which is 2. - If $k = 2$, $9 + 2 = 11$ (Prime) \\u2714 From this case, the possible value for $k$ is **2**.  **Case 3: $p = 5$** $p^2 = 25$. We need $25 + k < 30$, which means $k < 5$. The prime numbers less than 5 are 2 and 3. - If $k = 2$, $25 + 2 = 27$ (Not prime) - If $k = 3$, $25 + 3 = 28$ (Not prime) There are no valid values for $k$ in this case.  Combining all the valid results, the possible values of $k$ are **2, 3, 7, 13",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -858,8 +864,8 @@
         "8",
         "More than 8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the number of sets of three positive integers with an LCM of 1001 and an HCF of 1, we first find the prime factorization of 1001.  1001 = 7 \\u00d7 11 \\u00d7 13.  Since the LCM of the three numbers is 1001, all three numbers must be divisors of 1001. The divisors of 1001 are formed by the combinations of its prime factors: 1, 7, 11, 13, 77,",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -883,8 +889,8 @@
         "4",
         "More than 4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's write the given word equation in terms of place values. We are given that PQR, PPT are 3-digit numbers and PS is a 2-digit number.  Equation: PQR - PS = PPT  This can be written as:   P Q R -   P S -------   P P T  From the hundreds column, we see that P remains P in the result. This means there is no borrow taken from the hundreds place.   Now let's look at the tens column. We are given Q = 3.  The tens column",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -908,8 +914,8 @@
         "B, C, B, A, C",
         "C, B, B, A, C"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the pattern, let's first count the total number of characters (letters and blanks) in the given sequence: A B _ C C _ A _ B C C C _ B B C _ C. \n\nCounting them, we get exactly 18 positions. A common approach for such sequences is to divide them into equal groups. Let's divide the 18 positions into 3 groups of 6 characters each:\n\nGroup 1: A B _ C C _\nGroup 2: A _ B C C C\nGroup 3: _ B B C _ C\n\nNow, let's compare the groups to see if they can be made identical:\n- The 1st letter of Groups 1 and 2 is 'A'. So, the 1st letter of Group 3 must be 'A'.\n- The 2nd letter of Groups 1 and 3 is 'B'. So, the 2nd letter of Group 2 must be 'B'.\n- The 3rd letter of Groups 2 and 3 is 'B'. So, the 3rd letter of Group 1 must be 'B'.\n- The 4th letter of all groups is 'C'.\n- The 5th letter of Groups 1 and 2 is 'C'. So, the 5th letter of Group 3 must be 'C'.\n- The 6th letter of Groups 2 and 3 is 'C'. So, the 6th letter of Group 1 must be 'C'.\n\nFilling in these missing letters, every group becomes exactly the same: 'A B B C C C'.\n\nLet's extract the letters we used to fill the blanks in order:\n1st blank (Group 1, 3rd letter): B\n2nd blank (Group 1, 6th letter): C\n3rd blank (Group 2, 2nd letter): B\n4th blank (Group 3, 1st letter): A\n5th blank (Group 3, 5th letter): C\n\nThe sequence of blanks is B, C, B, A, C, which perfectly matches the third option.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -933,8 +939,8 @@
         "Classroom approach to higher education should be done away with.",
         "Classroom needs to be reimagined and teaching needs to be re-invented."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights the flaws in the current examination-focused education system and emphasizes the need for critical thinking, learning by doing, and independent thought. It explicitly concludes that 'Teaching has to be re-invented' to meet the new demands of society and the future of work. Option 3 perfectly captures this central theme by stating that the classroom needs to be reimagined and teaching needs to be re-invented. Option 0 is not mentioned in the passage. Option 1 focuses on a single supporting detail rather than the main idea. Option 2 is an extreme statement not supported by the text, as the passage calls for reinventing teaching, not abolishing the classroom approach entirely.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -960,8 +966,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption I is valid because the passage explicitly states that 'the new demands of society and the future of work require critical and independent thinking' and concludes that 'Teaching has to be re-invented.' This implies that higher education must evolve and align itself with the changing needs and developments of society. Assumption II is invalid because the passage focuses entirely on the pedagogical approach (how to think vs. what to think, examination-focused vs. critical thinking) and makes no mention of financial allocations or funding for higher education.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -987,8 +993,8 @@
         "Plant-based protein should replace the animal-based protein in our daily diets.",
         "Inequality in food production and consumption is inevitable in any fast changing society."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage primarily discusses how wealthier societies consume more animal products, which requires feeding grains and legumes to animals instead of humans. It then highlights the core issue: 'this conversion of plant-based food into animal food for humans is far from efficient,' providing statistics (16% for chickens, 5-7% for large animals) to prove how much energy/calories are lost in the process. Therefore, Option 1 best captures the crux of the passage by stating that animal-based food is far less efficient than plant-based food in terms of production and utilization. Options 0 and 2 suggest policy changes or dietary replacements which are not explicitly advocated in the text, and Option 3 makes a broad claim about inevitability that is not supported by the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1014,8 +1020,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Assumption I is invalid because the passage does not discuss the objectives or processes of food manufacturing and processing industries, nor does it prescribe what they 'should' do. It merely describes consumption patterns and their inefficiencies. Assumption II is valid and directly supported by the passage. The passage states that as societies become wealthier, they consume more animal products, which involves feeding basic foodstuffs (like grains and legumes) to animals instead of humans (indirect utilization). The passage explicitly notes that this conversion is 'far from efficient,' resulting in a massive loss of calories (only 16% recovered from chickens, and 5-7% from large animals). Therefore, wealthier societies do incur a great loss of calories due to this indirect utilization.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1041,8 +1047,8 @@
         "5",
         "7"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the maximum value of n such that the given product is divisible by 35^n, we need to find the highest power of 35 that divides the product.\n\nSince 35 = 5 × 7, we must find the total number of 5s and 7s in the prime factorization of the given product. The maximum power of 35 will be limited by the smaller of the two powers (power of 5 or power of 7).\n\nLet's break down each term into its prime factors to count the powers of 5 and 7:\n1. 7 = 7^1 (One 7)\n2. 343 = 7^3 (Three 7s)\n3. 385 = 5 × 77 = 5^1 × 7^1 × 11^1 (One 5, One 7)\n4. 1000 = 10^3 = (2 × 5)^3 = 2^3 × 5^3 (Three 5s)\n5. 2401 = 7^4 (Four 7s)\n6. 77777 = 7 × 11111 = 7^1 × 11111 (One 7)\n\nNow, let's sum the powers of 5:\nTotal power of 5 = 1 (from 385) + 3 (from 1000) = 4\n\nNext, let's sum the powers of 7:\nTotal power of 7 = 1 (from 7) + 3 (from 343) + 1 (from 385) + 4 (from 2401) + 1 (from 77777) = 10\n\nThe product can be written as 5^4 × 7^10 × (other prime factors).\nTo form 35, we need pairs of 5 and 7. Since we only have four 5s and ten 7s, we can only form four pairs of (5 × 7).\n\nTherefore, the maximum value of n is min(4, 10) = 4.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1066,8 +1072,8 @@
         "9",
         "6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the pattern, let's look at the ratio between the consecutive terms given in the sequence:\n18 / 12 = 1.5\n36 / 18 = 2\n90 / 36 = 2.5\n\nThe multipliers are increasing by 0.5 at each step (1.5, 2, 2.5). \nWorking backwards from 12, the previous multipliers should be 1 and 0.5.\nLet's test this hypothesis:\n24 * 0.5 = 12\n12 * 1 = 12\n12 * 1.5 = 18\n18 * 2 = 36\n36 * 2.5 = 90\n\nThe pattern holds perfectly. Therefore, the missing term X is 12.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1091,8 +1097,8 @@
         "14",
         "15"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "**Step 1: Find the relative speed**\nSince P and Q are walking in opposite directions, their relative speed is the sum of their individual speeds.\n* P's speed = 5 rounds per hour\n* Q's speed = 3 rounds per hour\n* Relative speed = 5 + 3 = 8 rounds per hour\n\n**Step 2: Determine the time interval between crossings**\nA relative speed of 8 rounds per hour means that together, they cover the distance of the circular track 8 times in one hour. Therefore, they will cross each other 8 times every 60 minutes.\n* Time taken for one crossing = 60 minutes / 8 = 7.5 minutes.\nThis means P and Q cross each other exactly every 7.5 minutes starting from 5:00 a.m.\n\n**Step 3: Set up the time window**\nLet $n$ be the $n^{th}$ time they cross each other. The time elapsed since 5:00 a.m. for the $n^{th}$ crossing is $7.5 \\times n$ minutes.\nThe question asks for the number of crossings strictly **between** 5:20 a.m. and 7:00 a.m. \n* 5:20 a.m. is 20 minutes after 5:00 a.m.\n* 7:00 a.m. is 120 minutes after 5:00 a.m.\n\nBecause the word \"between\" implies a strict interval (excluding the exact boundary times), we need to find the integer values of $n$ that satisfy the following inequality:\n$$20 < 7.5 \\times n < 120$$\n\n**Step 4: Solve for $n$**\nDivide the entire inequality by 7.5:\n$$\\frac{20}{7.5} < n < \\frac{120}{7.5}$$\n$$\\frac{200}{75} < n < 16$$\n$$2.66 < n < 16$$\n\nSince $n$ represents the crossing number, it must be a whole integer. The valid integer values for $n$ that satisfy this condition are:\n$n = 3, 4, 5, \\dots, 15$\n\n*(Note: The 1st and 2nd crossings happen at 5:07:30 a.m. and 5:15:00 a.m., which are before the time window. The 16th crossing happens at exactly 7:00:00 a.m., which is excluded because the question asks for crossings strictly \"between\" the two times).*\n\n**Step 5: Count the total number of valid crossings**\nTo find the total number of crossings from the 3rd to the 15th, we calculate:\nTotal crossings = $15 - 3 + 1 = 13$\n\nThey will cross each other 13 times between 5:20 a.m. and 7:00 a.m.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1116,8 +1122,8 @@
         "QRSP",
         "SPQR"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Given the substitutions: P = +, Q = -, R = x, S = ÷. We need to find the correct sequence of operators to make the equation 60 _ 15 _ 3 _ 20 _ 4 = 20 true. Let's test the options using the BODMAS rule (Bracket, Of, Division, Multiplication, Addition, Subtraction):\n\nOption 0 (SPRQ): 60 ÷ 15 + 3 x 20 - 4\n= 4 + 60 - 4 = 60 (Incorrect)\n\nOption 1 (QRPS): 60 - 15 x 3 + 20 ÷ 4\n= 60 - 45 + 5\n= 15 + 5 = 20 (Correct)\n\nOption 2 (QRSP): 60 - 15 x 3 ÷ 20 + 4\n= 60 - 2.25 + 4 = 61.75 (Incorrect)\n\nOption 3 (SPQR): 60 ÷ 15 + 3 - 20 x 4\n= 4 + 3 - 80 = -73 (Incorrect)\n\nTherefore, the correct sequence of notations is QRPS.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1141,8 +1147,8 @@
         "20 m",
         "24 m"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the speed of the tram be 'S' km/hr and its length be 'L' meters.\n\nWhen the tram overtakes a person walking in the same direction, the relative speed is the difference between their speeds.\nRelative speed of the tram with respect to person X = (S - 3) km/hr\nRelative speed of the tram with respect to person Y = (S - 4) km/hr\n\nTo convert the relative speeds from km/hr to m/s, we multiply by (5/18).\nRelative speed w.r.t X = (S - 3) × (5/18) m/s\nRelative speed w.r.t Y = (S - 4) × (5/18) m/s\n\nThe distance covered by the tram to completely pass a person is equal to its own length (L).\nUsing the formula: Distance = Speed × Time\n\nFor person X:\nL = (S - 3) × (5/18) × 8  --- (Equation 1)\n\nFor person Y:\nL = (S - 4) × (5/18) × 9  --- (Equation 2)\n\nSince the length of the tram is the same in both cases, we can equate Equation 1 and Equation 2:\n(S - 3) × (5/18) × 8 = (S - 4) × (5/18) × 9\n\nCanceling (5/18) from both sides:\n8(S - 3) = 9(S - 4)\n8S - 24 = 9S - 36\n9S - 8S = 36 - 24\nS = 12 km/hr\n\nNow, substitute the value of S back into Equation 1 to find the length of the tram (L):\nL = (12 - 3) × (5/18) × 8\nL = 9 × (5/18) × 8\nL = (45/18) × 8\nL = 2.5 × 8\nL = 20 meters.\n\n(Verification with Equation 2: L = (12 - 4) × (5/18) × 9 = 8 × (5/18) × 9 = 40/2 = 20 meters. The answer is verified.)",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1166,8 +1172,8 @@
         "10",
         "11"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the number of digits in N, we can use two methods:\n\n**Method 1: Recognizing the pattern of repunit squares**\nThere is a well-known mathematical pattern for the squares of numbers consisting entirely of the digit '1' (repunits):\n- 1^2 = 1\n- 11^2 = 121\n- 111^2 = 12321\n- 1111^2 = 1234321\nFollowing this pattern, the number of 1s in the base equals the highest digit in the middle of the palindromic square.\nFor N^2 = 12345678987654321, the highest middle digit is 9. \nTherefore, N = 111111111, which clearly has 9 digits.\n\n**Method 2: Using the square root digit formula**\nIf a perfect square has 'd' digits, its square root will have exactly ⌈d/2⌉ digits (i.e., d/2 rounded up to the nearest whole number).\nThe given number N^2 = 12345678987654321 has exactly 17 digits.\nNumber of digits in N = ⌈17 / 2⌉ = ⌈8.5⌉ = 9 digits.\n\nBoth methods confirm that N has 9 digits.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1191,8 +1197,8 @@
         "Cheaper goods and services can be made available to people by using low-carbon technologies.",
         "Manufacturing industries that use low-carbon technologies should be provided with subsidies."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage highlights that achieving net-zero carbon requires significant cuts in household emissions. It emphasizes that behavioral changes by individuals (demand-side measures) are necessary but can only be achieved if companies and governments provide 'more incentives to change' by making low-carbon options cheaper and more widely available. Therefore, Option 1 best captures the central idea that low-carbon behavior in people must be driven by proper incentivization. Option 0 is incorrect because the passage does not state that net-zero is possible 'only' through household emission reductions. Option 2 reverses the logic of the passage, and Option 3 introduces specific terms like 'manufacturing industries' and 'subsidies' which are not discussed in the text.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1218,8 +1224,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption I is valid: The passage explicitly states that achieving behavioural changes requires \"companies and governments to provide more incentives to change through supply-side investments to make low-carbon options cheaper and more widely available.\" This logically implies that supply-side investments (investments in the production/supply side, i.e., companies) provide the necessary incentives that \"can result\" in low-carbon behaviour among people. The use of \"can result\" makes it a reasonable and supported inference.\n\nAssumption II is invalid: The passage notes that achieving up to half of the required emission reductions through behavioural changes \"would require companies and governments to provide more incentives.\" This means their involvement is necessary to achieve the massive *scale* of reduction required for net-zero emissions. However, stating that people are completely \"not capable of adapting low-carbon behaviour\" without them is an extreme generalization. People may still be capable of adopting smaller-scale low-carbon behaviours (e.g., turning off lights, walking instead of driving) without corporate or government intervention, but large-scale shifts require external incentives and affordability. Therefore, this assumption is too extreme to be valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1245,8 +1251,8 @@
         "Circular economy can be beneficial for sustainable growth.",
         "Circular use of material resources is the only option for some industries for their survival."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights the unsustainable increase in raw material consumption and the low rate of reuse. It uses the example of vehicle batteries to illustrate how recovering and reusing pricey and hard-to-obtain materials can mitigate supply chain risks and environmental issues. This concept of recovering and reusing materials is the core principle of a 'circular economy'. Option 2 best captures this pragmatic message by stating that a circular economy is beneficial for sustainable growth. Options 0, 1, and 3 use extreme terms ('not possible', 'every sector... immediately', 'only option... survival') which are not supported by the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1272,8 +1278,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Assumption I is invalid: The passage states that currently 'less than 9% of this is reused' and recommends that old batteries 'should go back to a factory'. This is a prescriptive statement (a suggestion for the future) rather than a descriptive one. Therefore, the passage does not assume that automobile factories are currently examples of the circular economy.\n\nAssumption II is valid: The passage highlights that global consumption of raw materials has quadrupled (indicating economic growth) and points out the high costs, supply chain complications, and risks associated with extracting new minerals. By concluding that 'reusing materials makes sense' and advocating for the recovery of ingredients to build new batteries, the author assumes that the circular use of mineral resources is a practical, viable solution that can sustain ongoing production and economic demands. Thus, it assumes economic growth is compatible with circular resource use.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1299,8 +1305,8 @@
         "12 minutes",
         "16 minutes"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Find the rate of filling for Set X.\n20 pipes of Set X can fill 70% (or 7/10) of the tank in 14 minutes.\nRate of 20 pipes of X = (7/10) / 14 = 1/20 of the tank per minute.\nSince half of the pipes of Set X are closed, only 10 pipes are open.\nRate of 10 pipes of X = (1/20) / 2 = 1/40 of the tank per minute.\n\nStep 2: Find the rate of filling for Set Y.\n10 pipes of Set Y can fill 3/8 of the tank in 6 minutes.\nRate of 10 pipes of Y = (3/8) / 6 = 3/48 = 1/16 of the tank per minute.\nSince only half of the pipes of Set Y are open, 5 pipes are open.\nRate of 5 pipes of Y = (1/16) / 2 = 1/32 of the tank per minute.\n\nStep 3: Find the rate of emptying for Set Z.\n16 pipes of Set Z can empty 50% (or 1/2) of the tank in 20 minutes.\nRate of 16 pipes of Z = (1/2) / 20 = 1/40 of the tank per minute.\nAll 16 pipes of Set Z are open, so their emptying rate is 1/40 of the tank per minute.\n\nStep 4: Calculate the net rate of the open pipes.\nNet rate = (Rate of 10 pipes of X) + (Rate of 5 pipes of Y) - (Rate of 16 pipes of Z)\nNet rate = 1/40 + 1/32 - 1/40\nNet rate = 1/32 of the tank per minute.\n\nStep 5: Calculate the time required to fill 50% (1/2) of the tank.\nTime = Work / Net Rate\nTime = (1/2) / (1/32) = (1/2) * 32 = 16 minutes.\n\nIt will take 16 minutes to fill 50% of the tank.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1324,8 +1330,8 @@
         "2",
         "3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the number of distinct remainders of (1^n + 2^n) when divided by 4 for any natural number n (where n = 1, 2, 3, ...), let's evaluate the expression for different values of n:\n\nStep 1: For n = 1\n(1^1 + 2^1) = 1 + 2 = 3.\nWhen 3 is divided by 4, the remainder is 3.\n\nStep 2: For n = 2\n(1^2 + 2^2) = 1 + 4 = 5.\nWhen 5 is divided by 4, the remainder is 1.\n\nStep 3: For n = 3\n(1^3 + 2^3) = 1 + 8 = 9.\nWhen 9 is divided by 4, the remainder is 1.\n\nStep 4: For any n ≥ 2\nNotice that 1^n is always 1. \nFor any n ≥ 2, 2^n will always be a multiple of 4 (e.g., 2^2 = 4, 2^3 = 8, 2^4 = 16, etc.). Therefore, 2^n ≡ 0 (mod 4).\nSo, (1^n + 2^n) ≡ (1 + 0) ≡ 1 (mod 4).\nThis means for all n ≥ 2, the remainder will always be 1.\n\nConclusion:\nThe only possible remainders when (1^n + 2^n) is divided by 4 are 3 (when n = 1) and 1 (when n ≥ 2). \nThus, there are exactly 2 distinct remainders.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1349,8 +1355,8 @@
         "37",
         "481"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. We are given that P is a 3-digit number of the form QQQ. This means P can be written as Q × 111, where Q is a single non-zero digit (1 to 9).\n2. Let's find the prime factorization of 111: 111 = 3 × 37. Therefore, P = 3 × 37 × Q.\n3. Next, we need to find the prime factorization of 481. Testing for divisibility by prime numbers, we find that 481 is not divisible by 2, 3, 5, 7, or 11. Testing 13, we get 481 ÷ 13 = 37. So, the prime factorization of 481 is 13 × 37.\n4. We need to find the Highest Common Factor (HCF) of P (which is 3 × 37 × Q) and 481 (which is 13 × 37).\n5. Both numbers clearly share the prime factor 37.\n6. For the HCF to be larger than 37, P would also need to be a multiple of 13. However, since Q is a single digit from 1 to 9, it cannot be a multiple of 13. Thus, 13 is not a factor of P.\n7. Therefore, the highest common factor of P and 481 is exactly 37.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1374,8 +1380,8 @@
         "6",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the 489th digit in the sequence 123456789101112..., we need to count the number of digits contributed by numbers of different lengths.\n\nStep 1: Count the digits from 1-digit numbers (1 to 9).\nThere are 9 numbers, each with 1 digit.\nTotal digits = 9 × 1 = 9 digits.\n\nStep 2: Count the digits from 2-digit numbers (10 to 99).\nThere are 90 numbers, each with 2 digits.\nTotal digits = 90 × 2 = 180 digits.\n\nStep 3: Calculate the total digits used so far.\nTotal digits = 9 + 180 = 189 digits.\n\nStep 4: Find the remaining digits needed to reach the 489th digit.\nRemaining digits = 489 - 189 = 300 digits.\n\nStep 5: Determine how many 3-digit numbers are needed for the remaining 300 digits.\nSince each 3-digit number contributes 3 digits, the number of 3-digit numbers required is:\n300 ÷ 3 = 100 numbers.\n\nStep 6: Find the 100th 3-digit number.\nThe 3-digit numbers start from 100. \nThe 1st 3-digit number is 100.\nThe 100th 3-digit number is 100 + 100 - 1 = 199.\n\nStep 7: Identify the exact digit.\nSince 300 is perfectly divisible by 3, the 489th digit of the sequence will be the last digit of the 100th 3-digit number (199).\nThe last digit of 199 is 9.\n\nTherefore, the 489th digit is 9.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1399,8 +1405,8 @@
         "R",
         "Cannot be concluded"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine who stole the mobile phone, we need to analyze the statements made by the suspects. However, a crucial piece of information is missing from the problem: there are no conditions provided regarding the truthfulness of the suspects (e.g., 'only one person is telling the truth', 'only one person is lying', or 'each person makes one true and one false statement').   Let's evaluate the possibilities without any truth-telling constraints: 1. If P stole the phone: P's statements would both be false. Q's statements would both be true. R's statements would both be true. This is a logically consistent scenario where P is the thief, P lies, and Q and R tell the truth. 2. If Q stole the phone: P's statements would both be true.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1424,8 +1430,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's break down the tournament results step by step.  **1. Analyze the Points:** - Total matches played = 3 (P vs Q, P vs R, Q vs R). - Points system: Win = 2 points, Draw = 1 point, Loss = 0 points. - P got 3 points: Since each team plays 2 matches, the only way to get 3 points is 1 Win and 1 Draw (2 + 1 = 3). - R got 1 point: The only way to get 1 point is 1 Draw and 1 Loss (1 + 0 = 1). - Q got 2 points: This could be from 2 Draws (1 + 1 = 2) OR 1 Win and 1 Loss (2 + 0 = 2).  **2. Determine the Match Outcomes:** - **Scenario A (Q has 1 Win, 1 Loss):** If Q didn't draw any match, the draws for P and R must be against each other. So, P drew with R. Since P has 1 win, P must have beaten Q. Since Q has 1 win, Q must have beaten R.  Let's check the goals for Scenario A: P beat Q, so P scored at least 1 goal. Since P scored exactly 1 goal in the tournament, P scored 1 against Q and 0 against R. Because P drew with R, R must have also scored 0 against P. Q beat R, so Q scored at least 1 goal. Since Q scored exactly 1 goal, Q scored 1 against R and 0 against P. This leaves R with 0 goals scored in the tournament. However, the problem states each team scored exactly 1 goal. Thus, Scenario A is invalid.  - **Scenario B (Q has 2 Draws):** Q drew with P and Q drew with R. This accounts for P's 1 draw and R's 1 draw. Therefore, P's win must be against R, and R's loss is against P. Match results for Scenario B:   - P vs Q: Draw   - P vs R: P won   - Q vs R: Draw  **3. Determine the Goals (Scenario B):** - **P vs R (P won):** Since P won, P must have scored at least 1 goal. Since P scored exactly 1 goal in the entire tournament, P scored 1 against R and 0 against Q. R lost, so R scored 0 against P. (Score: P 1 - 0 R) - **P vs Q (Draw):** Since P scored 0 goals against Q, and the match was a draw, Q must have also scored 0 goals against P. (Score: P 0 - 0 Q) - **Q vs R (Draw):** Q scored exactly 1 goal in the tournament and scored 0 against P, so Q must have scored its 1 goal against R. Since the match was a draw, R must have also scored 1 goal against Q. This",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1449,8 +1455,8 @@
         "Our food security should not depend on agricultural productivity alone.",
         "Genetically honed crops should be replaced with their wild varieties in our present cultivation practices."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage highlights that while genetically honed crops produce high yields in current conditions, they lack the genetic variation needed to cope with climate changes and new diseases. Because of this, a disease could 'catastrophically' or 'suddenly rampage through a genetically honed crop.' This severe vulnerability directly points to the risk of widespread crop failure, which implies that our heavy reliance on these genetically refined crops poses a significant threat to our future food security. Option 1 best captures this central theme. Option 0 is too broad and misses the specific role of genetic honing. Options 2 and 3 suggest solutions or ideas that are not discussed in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1476,8 +1482,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Assumption I is valid: The passage states that changes in climate could make \"some plant infections more common in all climatic zones.\" For a disease to become common in all climatic zones, it would necessarily have to spread or migrate to new areas where it was previously uncommon or non-existent.\n\nAssumption II is valid: The passage highlights a core problem: centuries of selective breeding have \"bred out\" genetic variations in high-value crops, making them highly vulnerable to new diseases and changing conditions (which threatens food security). The logical underlying assumption is that these lost genetic variations—which are naturally preserved in the unbred, wild relatives of these crops—are essential for building resilience. Therefore, understanding and utilizing the genetic diversity of wild relatives would help us cope with these changes and strengthen food security.\n\nSince both assumptions are logically supported by the passage, 'Both I and II' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1503,8 +1509,8 @@
         "Rulers in a democracy need the support of opposition for their political survival.",
         "In a democracy, the opposition is indispensable for the balance of political power and good governance."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage emphasizes the crucial role of opponents (the opposition) in keeping a statesman (the administration) on the 'path of reason and good sense' by pointing out dangers that supporters might ignore. It concludes by stating that the 'national unity of free people depends upon a sufficiently even balance of political power,' which prevents the administration from becoming arbitrary. Option 3 perfectly encapsulates this critical message by stating that the opposition is indispensable for maintaining the balance of political power and ensuring good governance. Option 0 contradicts the passage. Option 1 is incorrect because the passage explicitly states that the balance of power makes it impracticable for the opposition to be 'revolutionary'. Option 2 is incorrect because the passage talks about needing the opposition's criticism, not their 'support'.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1530,8 +1536,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption I is invalid because the passage states that even a 'good statesman' and a 'wise' leader needs opponents to stay on the path of reason and good sense. It does not state or imply that a strong opposition is required 'only' if the Head of Government is indifferent. Assumption II is invalid because the passage explicitly warns against an opposition that is 'revolutionary and irreconcilable'. It advocates for a 'sufficiently even balance of political power', not an increasingly aggressive opposition. Therefore, neither assumption is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1557,8 +1563,8 @@
         "Only four",
         "Only five"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Based on the given information:\n1. 'P is the brother of Q and R' means P is male, and P, Q, and R are siblings.\n2. 'S is R's mother' means S is female and is the mother of all three siblings (P, Q, and R).\n3. 'T is P's father' means T is male and is the father of all three siblings (P, Q, and R).\n\nNow let's evaluate the statements:\nI. S and T are a couple: Since S is the mother and T is the father of the same siblings, they are a couple. (Definitely true)\nII. Q is T's son: The gender of Q is not specified. Q could be a son or a daughter. (Not definitely true)\nIII. T is Q's father: Since T is the father of the siblings, T is Q's father. (Definitely true)\nIV. S is P's mother: Since S is the mother of the siblings, S is P's mother. (Definitely true)\nV. R is T's daughter: The gender of R is not specified. R could be a son or a daughter. (Not definitely true)\nVI. P is S's son: P is male (as he is a brother) and S is his mother, so P is S's son. (Definitely true)\n\nStatements I, III, IV, and VI are definitely true. Therefore, exactly four statements are definitely true.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1582,8 +1588,8 @@
         "440000",
         "630000"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The code for each word is obtained by multiplying the alphabetical position values of its constituent letters.\n\nAlphabetical positions:\nN = 14\nO = 15\nT = 20\nE = 5\nS = 19\n\nChecking the given codes:\nNO = 14 × 15 = 210\nNOT = 14 × 15 × 20 = 4200\nNOTE = 14 × 15 × 20 × 5 = 21000\n\nFollowing the same pattern for NOTES:\nNOTES = 14 × 15 × 20 × 5 × 19 = 21000 × 19 = 399000.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1607,8 +1613,8 @@
         "71913",
         "71813"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the code for 'YEMEN', we first map each letter of the given words to their corresponding digits based on their positions.\n\nFrom 'FRANCE' = 654321, we get:\nF = 6\nR = 5\nA = 4\nN = 3\nC = 2\nE = 1\n\nFrom 'GERMANY' = 9158437, we get:\nG = 9\nE = 1\nR = 5\nM = 8\nA = 4\nN = 3\nY = 7\n\nNotice that the common letters (R, A, N, E) have the exact same digits in both words, confirming that this is a direct letter-to-digit substitution code.\n\nNow, we use this mapping to find the code for 'YEMEN':\nY = 7\nE = 1\nM = 8\nE = 1\nN = 3\n\nCombining these digits, 'YEMEN' is coded as 71813.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1632,8 +1638,8 @@
         "5",
         "6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's break down the given conditions for the 5-digit number PQRST:\n\n1. All digits (P, Q, R, S, T) are distinct and range from 0 to 9.\n2. T ≠ 0.\n3. P = 3 × T.\n4. S = Q + 4.\n5. Q = R + 3.\n\nFirst, let's find the possible values for T and P using condition 3 (P = 3 × T). Since T ≠ 0 and P must be a single digit (0-9), the possible (T, P) pairs are:\n- If T = 1, P = 3\n- If T = 2, P = 6\n- If T = 3, P = 9\n(T cannot be 4 or more because P would be 12 or greater, which is not a valid digit).\n\nNext, let's find the possible values for R, Q, and S using conditions 4 and 5. Substituting Q into the equation for S gives:\nS = (R + 3) + 4 = R + 7.\nSince S must be a single digit (0-9), the possible (R, Q, S) triplets are:\n- If R = 0, Q = 3, S = 7\n- If R = 1, Q = 4, S = 8\n- If R = 2, Q = 5, S = 9\n(R cannot be 3 or more because S would be 10 or greater).\n\nNow, we combine the (T, P) pairs with the (R, Q, S) triplets and filter out any combinations where digits are repeated (since all 5 digits must be distinct):\n\n**Case 1: (T, P) = (1, 3)**\n- With (0, 3, 7): Digits are {3, 3, 0, 7, 1}. P and Q are both 3. (Invalid)\n- With (1, 4, 8): Digits are {3, 4, 1, 8, 1}. T and R are both 1. (Invalid)\n- With (2, 5, 9): Digits are {3, 5, 2, 9, 1}. All distinct! → **Valid Number: 35291**\n\n**Case 2: (T, P) = (2, 6)**\n- With (0, 3, 7): Digits are {6, 3, 0, 7, 2}. All distinct! → **Valid Number: 63072**\n- With (1, 4, 8): Digits are {6, 4, 1, 8, 2}. All distinct! → **Valid Number: 64182**\n- With (2, 5, 9): Digits are {6, 5, 2, 9, 2}. T and R are both 2. (Invalid)\n\n**Case 3: (T, P) = (3, 9)**\n- With (0, 3, 7): Digits are {9, 3, 0, 7, 3}. T and Q are both 3. (Invalid)\n- With (1, 4, 8): Digits are {9, 4, 1, 8, 3}. All distinct! → **Valid Number: 94183**\n- With (2, 5, 9): Digits are {9, 5, 2, 9, 3}. P and S are both 9. (Invalid)\n\nCounting the valid combinations, there are exactly 4 such 5-digit numbers possible.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1657,8 +1663,8 @@
         "5",
         "6"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. First, we find the total time each person takes to complete the entire work alone:\n   - X completes 1/3 of the work in 6 days, so X takes 6 * 3 = 18 days to complete the whole work.\n   - Y completes 1/3 of the work in 8 days, so Y takes 8 * 3 = 24 days to complete the whole work.\n   - Z completes 3/4 of the work in 12 days, so Z takes 12 * (4/3) = 16 days to complete the whole work.\n\n2. Let the total amount of work be the Least Common Multiple (LCM) of 18, 24, and 16. \n   - LCM(18, 24, 16) = 144 units.\n\n3. Now, we calculate the 1-day work (efficiency) of each person:\n   - X's efficiency = 144 / 18 = 8 units/day.\n   - Y's efficiency = 144 / 24 = 6 units/day.\n   - Z's efficiency = 144 / 16 = 9 units/day.\n\n4. The combined efficiency of X, Y, and Z working together is:\n   - 8 + 6 + 9 = 23 units/day.\n\n5. We are given that Y alone finishes the remaining work in 8 2/3 days. Let's calculate the work done by Y in this time:\n   - 8 2/3 days = 26/3 days.\n   - Work done by Y alone = Y's efficiency * time = 6 * (26/3) = 2 * 26 = 52 units.\n\n6. The rest of the work was done by X, Y, and Z together in the first 'n' days:\n   - Work done together = Total work - Work done by Y alone\n   - Work done together = 144 - 52 = 92 units.\n\n7. Finally, we find 'n' by dividing the work done together by their combined efficiency:\n   - n = 92 / 23 = 4 days.\n\nTherefore, n is equal to 4.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1682,8 +1688,8 @@
         "29",
         "30"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the value of X, let's analyze the differences between consecutive terms in the given sequence:\n\n3 - 1 = 2\n6 - 3 = 3\n11 - 6 = 5\n18 - 11 = 7\n\nThe differences are 2, 3, 5, and 7. We can observe that these are consecutive prime numbers.\n\nFollowing this pattern, the next prime number after 7 is 11. Therefore, the difference between X and 18 should be 11:\n18 + 11 = 29\nSo, X = 29.\n\nTo verify this, we check the next difference. The prime number after 11 is 13. If X is 29, adding 13 should give us the next term in the sequence:\n29 + 13 = 42\n\nThis perfectly matches the last term in the sequence. Thus, X is indeed 29.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1707,8 +1713,8 @@
         "No State can ensure its economic survival for long without the role of corporate capitalism.",
         "Corporate capitalism and democracy have mutual dependence for their continued existence."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage argues that corporate capitalism is essential for a democracy's economic growth, modernization, and job creation. Crucially, it concludes by highlighting that the wealth and revenues generated by corporate capitalism enable the State to provide 'greater welfare for the marginalized' and create 'a more level playing field in terms of opportunities.' These are fundamental socio-political objectives of a modern democratic State. Therefore, the critical message is that corporate capitalism is a necessary tool (imperative) for a State to achieve its broader political and welfare goals. Option 0 is inaccurate because the passage states corporate capitalism is needed for a democracy's *economic growth*, not necessarily for the existence of democracy itself. Option 2 incorrectly focuses on 'economic survival' rather than growth and welfare. Option 3 is incorrect because the passage does not suggest 'mutual dependence' (it never claims corporate capitalism needs democracy to exist).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1718,7 +1724,9 @@
         "source": "upsc-pyq",
         "year": "2025",
         "paper": "CSAT",
-        "questionNumber": 61
+        "questionNumber": 61,
+        "upscCorrectOption": 0,
+        "geminiPredictedOption": 1
       },
       "passageSetId": "set_7",
       "passageLabel": 1
@@ -1734,8 +1742,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Statement I is invalid: The passage explicitly states that corporate capitalism \"generates jobs\" and helps fix the \"unemployment challenge,\" which supports the idea that it provides employment opportunities (demand for labor). However, it does not imply that it promotes the \"growth of the labour force.\" The labor force refers to the total number of people willing and able to work (supply of labor), which is primarily determined by demographic factors (like population growth and age structure) rather than corporate capitalism.\n\n2. Statement II is invalid: The passage states that corporate capitalism generates \"additional revenues for the State — which in turn, can be used for greater welfare for the marginalized.\" This describes a redistributive policy where the government taxes corporations to fund welfare programs. The \"trickle-down effect\" is a different economic concept which argues that wealth generated by businesses and the wealthy will naturally flow down to benefit the poorer sections of society through market mechanisms (like direct job creation and higher wages), without the need for State intervention or welfare. Since the passage credits State-led welfare rather than natural market forces for helping the marginalized, it does not assume the trickle-down effect.\n\nTherefore, neither assumption is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1745,7 +1753,9 @@
         "source": "upsc-pyq",
         "year": "2025",
         "paper": "CSAT",
-        "questionNumber": 62
+        "questionNumber": 62,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 3
       },
       "passageSetId": "set_7",
       "passageLabel": 1
@@ -1761,8 +1771,8 @@
         "It takes individuals out of a state of isolation and gives them a chance to participate in the common endeavour.",
         "It permits citizens to have a variety of loyalties and allegiance."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage highlights the power imbalance between a single, 'relatively powerless' individual and a 'potentially powerful' State. A 'network of voluntary associations' acts as a 'buffer' to protect the individual from being overwhelmed by the State. Option 2 best explains how this buffer works: by taking individuals out of their isolated, powerless state and uniting them in a 'common endeavour' (the voluntary association), they gain collective strength. This collective participation empowers them, thereby creating a protective buffer against the State's power. Options 0, 1, and 3 do not capture this specific dynamic of overcoming individual powerlessness through collective unity.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1788,8 +1798,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's evaluate both statements by finding the number of factors for a natural number $N$. The number of factors of a number $N = p_1^{a} \\cdot p_2^{b} \\dots$ is given by the formula $(a+1)(b+1)\\dots$\n\n**Statement I:**\nWe need a natural number $N$ such that when it is increased by 50%, its number of factors remains unchanged.\nIncreasing a number by 50% means multiplying it by $1.5$, or $\\frac{3}{2}$. For the result to be a natural number, $N$ must be a multiple of 2.\nLet's assume $N = 2^a \\cdot 3^b$. \nThen, the new number is $\\frac{3}{2}N = 2^{a-1} \\cdot 3^{b+1}$.\nFor the number of factors to remain unchanged, we must have:\n$(a+1)(b+1) = (a-1+1)(b+1+1)$\n$(a+1)(b+1) = a(b+2)$\n$ab + a + b + 1 = ab + 2a$\n$b + 1 = a$\nLet's test $b = 1$, which gives $a = 2$.\nSo, $N = 2^2 \\cdot 3^1 = 12$.\nThe number of factors of 12 is $(2+1)(1+1) = 6$.\nWhen 12 is increased by 50%, it becomes $12 \\times 1.5 = 18$.\nThe prime factorization of 18 is $2^1 \\cdot 3^2$, and its number of factors is $(1+1)(2+1) = 6$.\nSince both 12 and 18 have 6 factors, Statement I is correct.\n\n**Statement II:**\nWe need a natural number $N$ such that when it is increased by 150%, its number of factors remains unchanged.\nIncreasing a number by 150% means multiplying it by $(1 + 1.5) = 2.5$, or $\\frac{5}{2}$. For the result to be a natural number, $N$ must be a multiple of 2.\nLet's assume $N = 2^a \\cdot 5^c$.\nThen, the new number is $\\frac{5}{2}N = 2^{a-1} \\cdot 5^{c+1}$.\nFor the number of factors to remain unchanged, we must have:\n$(a+1)(c+1) = (a-1+1)(c+1+1)$\n$(a+1)(c+1) = a(c+2)$\n$ac + a + c + 1 = ac + 2a$\n$c + 1 = a$\nLet's test $c = 1$, which gives $a = 2$.\nSo, $N = 2^2 \\cdot 5^1 = 20$.\nThe number of factors of 20 is $(2+1)(1+1) = 6$.\nWhen 20 is increased by 150%, it becomes $20 \\times 2.5 = 50$.\nThe prime factorization of 50 is $2^1 \\cdot 5^2$, and its number of factors is $(1+1)(2+1) = 6$.\nSince both 20 and 50 have 6 factors, Statement II is also correct.\n\nBoth statements I and II are correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1813,8 +1823,8 @@
         "31 km",
         "37 km"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's map the coordinates of all the places to find the lengths of the roads. Let A be at the origin (0, 0).\n\n1. 'A is 6 km south of B' → B is at (0, 6). Road AB = 6 km.\n2. 'A is 10 km west of C' → C is at (10, 0). Road AC = 10 km.\n3. 'C is 6 km north of D' → D is at (10, -6). Road CD = 6 km.\n4. 'D is 5 km east of E' → E is at (5, -6). Road DE = 5 km.\n5. 'F is 9 km west of B' → F is at (-9, 6). Road BF = 9 km.\n6. 'F is 12 km north of G' → G is at (-9, -6). Road FG = 12 km.\n\nWe also have a road EG. Let's find its length:\nE is at (5, -6) and G is at (-9, -6). Since they lie on the same horizontal line, the distance EG = 5 - (-9) = 14 km.\n\nThe person travels from D to F through the available roads (AB, AC, CD, DE, BF, EG, FG). Let's trace the possible paths:\n\nPath 1: D → C → A → B → F\nDistance = CD + AC + AB + BF = 6 + 10 + 6 + 9 = 31 km.\n\nPath 2: D → E → G → F\nDistance = DE + EG + FG = 5 + 14 + 12 = 31 km.\n\nBoth valid paths result in a total distance of 31 km. Therefore, the distance covered by the person is 31 km.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1838,8 +1848,8 @@
         "1728",
         "2197"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let's analyze the given numbers by expressing them as perfect cubes:\n- 64 is 4³ and it is coded as 343, which is 7³.\n- 216 is 6³ and it is coded as 729, which is 9³.\n\nIn both cases, the base of the cube is increased by 3 to get the coded number:\n- 4 + 3 = 7 ➔ 7³ = 343\n- 6 + 3 = 9 ➔ 9³ = 729\n\nApplying the same logic to 512:\n- 512 is 8³.\n- Increasing the base by 3 gives: 8 + 3 = 11.\n- 11³ = 1331.\n\nTherefore, 512 is written as 1331 in that code.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1863,8 +1873,8 @@
         "2",
         "3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "To find the remainder when the series $9^3 + 9^4 + 9^5 + \\dots + 9^{100}$ is divided by 6, we can analyze the remainder of each term individually or group the terms.\n\n**Method 1: Finding the remainder of each term**\nLet's find the remainder of powers of 9 when divided by 6:\n- $9^1 = 9 \\equiv 3 \\pmod 6$\n- $9^2 = 81 \\equiv 3 \\pmod 6$\n- $9^3 = 729 \\equiv 3 \\pmod 6$\n\nIn general, any positive integer power of 9 leaves a remainder of 3 when divided by 6. This is because $9^k = (6 + 3)^k$, and expanding this using the binomial theorem will leave only $3^k$ not explicitly multiplied by 6. Furthermore, $3^k = 3 \\times 3^{k-1}$, which is an odd multiple of 3, and any odd multiple of 3 leaves a remainder of 3 when divided by 6.\n\nThe given series has terms from $9^3$ to $9^{100}$. \nThe total number of terms in the series is $100 - 3 + 1 = 98$ terms.\n\nSince each of the 98 terms leaves a remainder of 3 when divided by 6, the sum of the remainders is:\n$98 \\times 3 = 294$\n\nNow, we divide 294 by 6 to find the final remainder:\n$294 \\div 6 = 49$ with a remainder of 0.\n\n**Method 2: Grouping into pairs**\nWe can factor out adjacent terms in pairs:\n$9^k + 9^{k+1} = 9^k(1 + 9) = 10 \\times 9^k$\n\nSince 10 is an even number (divisible by 2) and $9^k$ is a multiple of 3, their product $10 \\times 9^k$ is always divisible by $2 \\times 3 = 6$. \n\nThe series has 98 terms, which is an even number. Therefore, we can perfectly group the entire series into 49 pairs:\n$(9^3 + 9^4) + (9^5 + 9^6) + \\dots + (9^{99} + 9^{100})$\n\nSince every pair is completely divisible by 6, the entire sum is divisible by 6. \n\nThus, the remainder is 0.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1888,8 +1898,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question can be answered even without using any of the Statements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine if the statements are needed, let's first try to answer the question using only our mathematical knowledge.\n\nThe question asks for the 'smallest 1-digit number having exactly 4 distinct factors'.\nLet's list the positive 1-digit numbers and count their distinct factors:\n- 1: 1 factor (1)\n- 2: 2 factors (1, 2)\n- 3: 2 factors (1, 3)\n- 4: 3 factors (1, 2, 4)\n- 5: 2 factors (1, 5)\n- 6: 4 factors (1, 2, 3, 6)\n- 7: 2 factors (1, 7)\n- 8: 4 factors (1, 2, 4, 8)\n- 9: 3 factors (1, 3, 9)\n\nThe 1-digit numbers that have exactly 4 distinct factors are 6 and 8. \nThe question specifically asks for the *smallest* 1-digit number with exactly 4 distinct factors. Comparing 6 and 8, the smallest is clearly 6.\n\nSince we were able to find a unique and definitive answer (which is 6) to the question without needing any additional information, Statements I and II are completely redundant. \n\nTherefore, the question can be answered even without using any of the statements.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1913,8 +1923,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question can be answered even without using any of the Statements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. We are given the equation PP × PQ = RRSS, where P, Q, R, and S are distinct non-zero digits.\n2. We are also given the constraints P ≤ 3 and Q ≤ 4.\n3. Since P is a non-zero digit and P ≤ 3, the possible values for P are 1, 2, and 3.\n4. Let's evaluate the product PP × PQ for each possible value of P:\n   - Case 1: P = 1.\n     PP = 11. Since Q ≤ 4 and Q ≠ P, Q can be 2, 3, or 4.\n     The maximum possible product is 11 × 14 = 154.\n     However, RRSS is a 4-digit number. Thus, P cannot be 1.\n   - Case 2: P = 2.\n     PP = 22. Since Q ≤ 4 and Q ≠ P, Q can be 1, 3, or 4.\n     The maximum possible product is 22 × 24 = 528.\n     This is also not a 4-digit number. Thus, P cannot be 2.\n   - Case 3: P = 3.\n     PP = 33. Since Q ≤ 4 and Q ≠ P, Q can be 1, 2, or 4.\n     Let's check the products for these values of Q:\n     If Q = 1, 33 × 31 = 1023. (Not in the form RRSS)\n     If Q = 2, 33 × 32 = 1056. (Not in the form RRSS)\n     If Q = 4, 33 × 34 = 1122.\n5. The product 1122 is exactly in the form RRSS, where R = 1 and S = 2.\n6. Let's verify if P, Q, R, S are distinct non-zero digits:\n   P = 3, Q = 4, R = 1, S = 2.\n   All four digits are distinct and non-zero. The conditions P ≤ 3 and Q ≤ 4 are also satisfied.\n7. Therefore, the value of Q is uniquely determined to be 4 from the question statement alone.\n8. We do not need Statement I (R = 1) or Statement II (S = 2) to find the value of Q, as they are redundant.\n9. Thus, the Question can be answered even without using any of the Statements.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1938,8 +1948,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even using any of the Statements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find how Q is related to P, we need to determine the exact relationship between them.\n\nFrom Statement I alone: We know P has two sisters, R and S. There is no mention of Q, so Statement I alone is not sufficient.\n\nFrom Statement II alone: We know R's father is the brother of Q. There is no mention of P, so Statement II alone is not sufficient.\n\nCombining Statement I and Statement II: \nFrom Statement I, P, R, and S are siblings. \nFrom Statement II, R's father is the brother of Q. \nSince P and R are siblings, R's father is also P's father. Therefore, P's father is the brother of Q. \nThis means Q is the sibling of P's father. Thus, Q could be the paternal uncle (if Q is male) or the paternal aunt (if Q is female) of P. \n\nSince the gender of Q is not specified in either of the statements, we cannot definitively determine the exact relationship of Q to P. Therefore, the question cannot be answered even by using both statements together.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1963,8 +1973,8 @@
         "Inflation data under-presents services in the consumption basket.",
         "Knowledge of inflation rate is not really of any use to anybody in the country."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage emphasizes that a single inflation number is an aggregate of various commodities and services, and that price changes vary across different items and for different income groups (poor, middle class, rich). Because the inflation rate is a composite or averaged index, it masks the variations in price changes of specific goods and the actual cost of living for different classes. Therefore, it does not accurately reflect the specific price rise of individual items or commodities. Options 0, 2, and 3 are either extreme, not mentioned in the text, or contrary to the passage. Thus, Option 1 is the most logical and rational message conveyed.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1990,8 +2000,8 @@
         "No economic activity is possible without being exposed to betrayal.",
         "Trust is important though it entails risk."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights two main aspects of trust: its inherent risk and its immense importance. The risk is shown through phrases like 'being vulnerable to others' and 'willingness to expose oneself to betrayal'. Its importance is emphasized by describing it as a 'super-commodity', the 'essence of globalizing behaviour', and a fundamental requirement for entrepreneurship. Option 3 perfectly captures both of these core themes—that trust is highly important despite the risks it entails. The other options are either factually incorrect according to the passage (Option 0), make extreme generalizations not supported by the text (Option 2), or misinterpret the definition of trust (Option 1).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2017,8 +2027,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question cannot be answered even using any of the Statements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the score of Team P be 'x' and Team Q be 'x + 3' with 10 minutes remaining (since P is behind by 3 goals).\n\nStatement I says Team P scored 4 goals in the last 10 minutes. This means Team P's final score is x + 4. However, we do not know how many goals Team Q scored in the last 10 minutes. Thus, Statement I alone is insufficient.\n\nStatement II says Team Q scored a total of 4 goals in the match. This means Team Q's final score is 4. Since Team Q had at least 3 goals with 10 minutes remaining, their score at that time could have been 3 (meaning x = 0) or 4 (meaning x = 1). We don't know Team P's final score. Thus, Statement II alone is insufficient.\n\nCombining both statements:\nFrom Statement II, Team Q's final score is 4. The score with 10 minutes remaining could be:\nCase 1: Q = 3, P = 0. In the last 10 minutes, Q scores 1 goal (to reach 4) and P scores 4 goals (from Statement I). The final score is P = 4, Q = 4. The match is a draw (P does not win).\nCase 2: Q = 4, P = 1. In the last 10 minutes, Q scores 0 goals (to remain at 4) and P scores 4 goals. The final score is P = 5, Q = 4. Team P wins.\n\nSince we get two different possible outcomes (a draw or a win for P), we cannot definitively answer the question 'Does team P win the match?' even when using both statements together.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -2042,8 +2052,8 @@
         "The Question can be answered by using both the Statements together, but cannot be answered using either Statement alone.",
         "The Question can be answered even without using any of the Statements."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Step 1: Simplify the given expression.\nThe expression is (p + q)² - 4pq.\nUsing the algebraic identity (p + q)² = p² + 2pq + q², we can rewrite the expression as:\np² + 2pq + q² - 4pq = p² - 2pq + q²\nThis simplifies to the identity (p - q)².\n\nStep 2: Analyze the question.\nThe question asks if (p - q)² is positive (i.e., > 0), given that p and q are natural numbers.\nThe square of any real number is always non-negative (≥ 0). It is strictly positive (> 0) as long as the number is not zero. Therefore, (p - q)² > 0 if and only if p ≠ q.\n\nStep 3: Evaluate Statement I.\nStatement I says p < q.\nIf p < q, then p ≠ q. Therefore, (p - q) will be a non-zero negative number, and its square (p - q)² will definitely be strictly positive.\nSo, Statement I alone is sufficient to answer the question with a \"Yes\".\n\nStep 4: Evaluate Statement II.\nStatement II says p > q.\nIf p > q, then p ≠ q. Therefore, (p - q) will be a positive number, and its square (p - q)² will also be strictly positive.\nSo, Statement II alone is also sufficient to answer the question with a \"Yes\".\n\nConclusion:\nThe question can be answered using either Statement I alone or Statement II alone.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2067,8 +2077,8 @@
         "Value-I < Value-III < Value-II",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. Let the runs scored by players X, Y, and Z be $X$, $Y$, and $Z$ respectively.\n2. According to the problem, the sum of their runs is 37: \n   $X + Y + Z = 37$\n3. We are also given that the ratio of runs scored by X to Y is equal to the ratio of runs scored by Y to Z:\n   $\\frac{X}{Y} = \\frac{Y}{Z} \\implies Y^2 = XZ$\n   This indicates that $X$, $Y$, and $Z$ are in a Geometric Progression (GP).\n4. Let the common ratio of this GP be $r = \\frac{p}{q}$, where $p$ and $q$ are coprime positive integers.\n5. To ensure $X$, $Y$, and $Z$ are integers, they can be represented as:\n   $X = k \\cdot q^2$\n   $Y = k \\cdot p \\cdot q$\n   $Z = k \\cdot p^2$\n   where $k$ is a positive integer.\n6. Substituting these into the sum equation gives:\n   $k \\cdot q^2 + k \\cdot p \\cdot q + k \\cdot p^2 = 37$\n   $k(q^2 + pq + p^2) = 37$\n7. Since 37 is a prime number, the only possible integer factors are 1 and 37. Thus, $k$ must be 1, and:\n   $q^2 + pq + p^2 = 37$\n8. By testing positive integer values for $p$ and $q$:\n   - If $p = 3$: $q^2 + 3q + 9 = 37 \\implies q^2 + 3q - 28 = 0 \\implies (q+7)(q-4) = 0 \\implies q = 4$\n   - If $p = 4$: $q^2 + 4q + 16 = 37 \\implies q^2 + 4q - 21 = 0 \\implies (q+7)(q-3) = 0 \\implies q = 3$\n9. This gives us two possible scenarios:\n   - **Case 1 ($p=3, q=4$):** $X = 1(4^2) = 16$, $Y = 1(3 \\times 4) = 12$, $Z = 1(3^2) = 9$. \n     Here, $X > Y > Z$ (Value-I > Value-II > Value-III).\n   - **Case 2 ($p=4, q=3$):** $X = 1(3^2) = 9$, $Y = 1(4 \\times 3) = 12$, $Z = 1(4^2) = 16$. \n     Here, $X < Y < Z$ (Value-I < Value-II < Value-III).\n10. Both cases perfectly satisfy all the conditions given in the problem ($16+12+9=37$ and $\\frac{16}{12} = \\frac{12}{9}$; $9+12+16=37$ and $\\frac{9}{12} = \\frac{12}{16}$). \n11. Because there are two valid but opposite inequalities for the values, the exact relationship cannot be uniquely determined.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2092,8 +2102,8 @@
         "Value-I = Value-II",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Understand the given equation \\( p + q = 10 \\), where \\( p \\) and \\( q \\) are integers.\n\nStep 2: Calculate Value-I. We need the maximum value of \\( p \\times q \\) for positive integers \\( p \\) and \\( q \\). The possible pairs of \\( (p, q) \\) that sum to 10 are (1, 9), (2, 8), (3, 7), (4, 6), and (5, 5). Their respective products are 9, 16, 21, 24, and 25. The maximum product is achieved when \\( p = 5 \\) and \\( q = 5 \\). Thus, Value-I = 25.\n\nStep 3: Calculate Value-II. We need the maximum value of \\( p \\times q \\) given the constraints \\( p \\geq -6 \\) and \\( q \\geq -4 \\). Since \\( p + q = 10 \\), we can express \\( q \\) as \\( 10 - p \\). The condition \\( q \\geq -4 \\) means \\( 10 - p \\geq -4 \\), which simplifies to \\( p \\leq 14 \\). So, \\( p \\) can be any integer in the range \\( [-6, 14] \\).\nThe product can be written as a quadratic function: \\( f(p) = p(10 - p) = 10p - p^2 \\). \nFor a downward-opening parabola \\( ax^2 + bx + c \\), the maximum value occurs at \\( p = \\frac{-b}{2a} \\). Here, \\( a = -1 \\) and \\( b = 10 \\), so the maximum occurs at \\( p = \\frac{-10}{2(-1)} = 5 \\).\nSince \\( p = 5 \\) falls perfectly within our allowed range of \\( [-6, 14] \\), the maximum product is achieved at \\( p = 5 \\) and \\( q = 5 \\). The maximum product is \\( 5 \\times 5 = 25 \\). Thus, Value-II = 25.\n\nStep 4: Compare Value-I and Value-II. Since Value-I = 25 and Value-II = 25, we can conclude that Value-I = Value-II.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2117,8 +2127,8 @@
         "Value-I = Value-II",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Calculate Value-I.\nThe set consists of 11 consecutive integers, each being ≥ -5. To minimize the average of these numbers, the integers themselves must be as small as possible. The smallest possible 11 consecutive integers starting from -5 are: -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5. \nThe average of a set of consecutive integers is equal to its middle term. The middle (6th) term of this set is 0. \nAlternatively, the sum is (-5) + (-4) + ... + 5 = 0, so the average is 0 / 11 = 0.\nThus, Value-I = 0.\n\nStep 2: Calculate Value-II.\nThe set consists of 11 consecutive non-negative integers. To minimize their product, the product should be as small as possible. Since all numbers are non-negative, the minimum possible product is 0, which occurs if 0 is included in the set.\nThe smallest 11 consecutive non-negative integers are: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.\nTheir product is 0 × 1 × 2 × ... × 10 = 0.\nThus, Value-II = 0.\n\nStep 3: Compare Value-I and Value-II.\nSince Value-I = 0 and Value-II = 0, we can conclude that Value-I = Value-II.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2142,8 +2152,8 @@
         "k + 1",
         "k/2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. The average of three numbers p, q, and r is k. Therefore, the sum of the numbers is given by the formula: Sum = Average × Number of items. So, p + q + r = 3k.\n2. The problem states that p is as much more than the average as q is less than the average. Mathematically, this can be written as: p - k = k - q.\n3. Rearranging this equation by bringing q to the left side and k to the right side gives: p + q = k + k, which simplifies to p + q = 2k.\n4. Now, substitute the value of (p + q) into the first equation (p + q + r = 3k).\n5. This gives: 2k + r = 3k.\n6. Solving for r, we get: r = 3k - 2k = k.\n7. Therefore, the value of r is k, which matches the first option.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2167,8 +2177,8 @@
         "Both I and II",
         "Neither I nor II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Given that x is a real number between 0 and 1 (i.e., 0 < x < 1).\n\nLet's evaluate Statement I: x² > x³\nSince 0 < x < 1, we can multiply the inequality x < 1 by x² (which is positive) on both sides.\nThis gives: x³ < x², or x² > x³.\nAlternatively, we can pick a value for x, say x = 1/2.\nx² = (1/2)² = 1/4\nx³ = (1/2)³ = 1/8\nSince 1/4 > 1/8, Statement I is correct.\n\nLet's evaluate Statement II: x > √x\nSince 0 < x < 1, taking the square root of both sides gives 0 < √x < 1.\nMultiplying the inequality √x < 1 by √x (which is positive) on both sides gives:\nx < √x.\nAlternatively, using our test value x = 1/4:\nx = 1/4\n√x = √(1/4) = 1/2\nSince 1/4 is not greater than 1/2, Statement II is incorrect.\n\nTherefore, only Statement I is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2192,8 +2202,8 @@
         "There can be more than one such number.",
         "No such number exists."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. Let the two natural numbers be $x$ and $x + 10$, since the difference between them is 10.\n2. The numbers that lie strictly 'between' these two numbers are $x+1, x+2, x+3, \\dots, x+9$. This gives us a sequence of exactly 9 consecutive natural numbers.\n3. We need to find how many of these 9 consecutive numbers are divisible by 5. Let's test a few cases:\n   - **Case 1:** Let $x = 5$. The two numbers are 5 and 15. The numbers strictly between them are 6, 7, 8, 9, 10, 11, 12, 13, 14. Among these, only **10** is divisible by 5. (Here, there is only 1 such number).\n   - **Case 2:** Let $x = 6$. The two numbers are 6 and 16. The numbers strictly between them are 7, 8, 9, 10, 11, 12, 13, 14, 15. Among these, **10** and **15** are divisible by 5. (Here, there are 2 such numbers).\n4. From the cases above, we can see that the number of multiples of 5 lying strictly between $x$ and $x+10$ can be either 1 or 2.\n5. Let's evaluate the given options:\n   - Option 0 states 'There is only one such number', which is false because there can be two.\n   - Option 1 states 'There are only two such numbers', which is false because there can be just one.\n   - Option 2 states 'There can be more than one such number', which is true because as shown in Case 2, it is entirely possible to have two such numbers (which is more than one).\n   - Option 3 states 'No such number exists', which is clearly false.\n6. Therefore, the correct statement is that there can be more than one such number.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",

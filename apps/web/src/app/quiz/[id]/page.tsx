@@ -18,6 +18,8 @@ type PyqQuestionMetadata = QuestionMetadata & {
   hasAnswerKey?: boolean;
   passageSetId?: string;
   passageLabel?: number;
+  upscCorrectOption?: number;
+  geminiPredictedOption?: number;
 };
 
 interface PyqPassage {
@@ -940,11 +942,23 @@ export default function QuizPage() {
                     )}
 
                     {/* Correct Answer */}
-                    <div className="flex items-center gap-2 text-sm font-medium text-green-700">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      <span>Correct Answer: {String.fromCharCode(65 + (question.correctOption ?? 0))}</span>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-2 text-sm font-medium text-green-700">
+                        <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span>Correct Answer: {String.fromCharCode(65 + (question.correctOption ?? 0))}</span>
+                      </div>
+                      {typeof question.metadata?.geminiPredictedOption === "number" &&
+                      question.metadata?.upscCorrectOption !== question.metadata?.geminiPredictedOption && (
+                        <div className="flex items-start gap-2 text-sm text-amber-800 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                          <span className="text-base leading-none mt-0.5">🤖</span>
+                          <p>
+                            <span className="font-semibold block mb-0.5">Gemini's Analysis Mismatch</span>
+                            The official UPSC answer is <strong>Option {String.fromCharCode(65 + (question.correctOption ?? 0))}</strong>, but Gemini originally predicted <strong>Option {String.fromCharCode(65 + question.metadata.geminiPredictedOption as number)}</strong>. The explanation below corresponds to its incorrect prediction.
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     {/* Explanation */}

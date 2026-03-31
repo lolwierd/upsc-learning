@@ -159,8 +159,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Based on the passage, the unsustainability of current production models is explicitly attributed to two factors: their heavy reliance on fossil fuels ('Current production models rely heavily on fossil fuels') and the limited nature of these resources ('this is unsustainable because the resources are finite'). Therefore, Statements 1 and 2 are correct. Statement 3, 'Expansion of recycling', is mentioned in the passage as a measure taken by developed countries to 'alleviate the worst effects' of unsustainability, not as a cause of it. Thus, Statement 3 is incorrect. The correct answer is 1 and 2 only.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -186,8 +186,8 @@
         "2 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Based on the passage, developing countries are specifically 'hampered by the high costs and low availability of clean energy sources.' The passage immediately follows this by stating, 'Developed countries need to support developing countries' transition to sustainable human development.' Therefore, it logically follows that developed countries can support this transition by addressing the specific obstacles mentioned—namely, by making clean energy sources available at a low cost (Statement 1). Statement 2 is incorrect because the passage only mentions investing in public transport as an action taken by developed countries for themselves, not as an area where they should provide loans to developing countries. Statement 3 is incorrect because the passage identifies high costs and low availability of clean energy as the barriers for developing countries, implying they need tangible financial and technological support, not merely 'encouragement' to change their patterns. Thus, only Statement 1 is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -197,7 +197,9 @@
         "source": "upsc-pyq",
         "year": "2022",
         "paper": "CSAT",
-        "questionNumber": 2
+        "questionNumber": 2,
+        "upscCorrectOption": 1,
+        "geminiPredictedOption": 0
       },
       "passageSetId": "set_1",
       "passageLabel": 1
@@ -213,8 +215,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Based on the passage, deforestation and denudation will lead to 'soil erosion by wind and water', which directly corresponds to the 'depletion of soil resource' (Statement 1). The passage also states that there will be 'no water in the streams and springs except in the rainy season' and that 'agriculture... will gradually become impossible', which clearly points to a 'lack of water for cultivation' (Statement 3). However, the passage makes no mention of a 'shortage of land for the common man' (Statement 2). Therefore, only statements 1 and 3 are correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -240,8 +242,8 @@
         "150",
         "225"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The sequence follows a pattern where each term is multiplied by an increasing multiple of 0.5 to get the next term.\n\nStep-by-step breakdown:\n- 1st term to 2nd term: 20 × 0.5 = 10\n- 2nd term to 3rd term: 10 × 1.0 = 10\n- 3rd term to 4th term: 10 × 1.5 = 15\n- 4th term to 5th term: 15 × 2.0 = 30\n- 5th term to 6th term: 30 × 2.5 = 75\n- 6th term to 7th term (X): 75 × 3.0 = 225\n\nTherefore, the value of X is 225.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -265,8 +267,8 @@
         "11",
         "12"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the 7-digit number be represented as $d_1 d_2 d_3 d_4 d_5 d_6 d_7$. The given digits are 1, 2, 4, 5, 7, 8, 9.\n\n1. **Divisible by 9:** The sum of all given digits is $1 + 2 + 4 + 5 + 7 + 8 + 9 = 36$. Since 36 is divisible by 9, any arrangement of these 7 digits will be divisible by 9.\n2. **Divisible by 6 (after deleting 1 digit):** The 6-digit number $d_1 d_2 d_3 d_4 d_5 d_6$ must be divisible by 6, meaning it must be even (so $d_6$ is even) and its sum of digits must be a multiple of 3. Since the total sum of all 7 digits is 36, the deleted digit $d_7$ must also be a multiple of 3. The only digit in our set divisible by 3 is 9. Thus, $d_7 = 9$.\n3. **Divisible by 5 (after deleting 2 digits):** The 5-digit number $d_1 d_2 d_3 d_4 d_5$ must be divisible by 5. This means $d_5$ must be 5 (since 0 is not in the set). Thus, $d_5 = 5$.\n4. **Divisible by 4 (after deleting 3 digits):** The 4-digit number $d_1 d_2 d_3 d_4$ must be divisible by 4. For a number to be divisible by 4, its last two digits ($d_3 d_4$) must form a number divisible by 4. This also requires $d_4$ to be even.\n5. **Divisible by 3 (after deleting 4 digits):** The 3-digit number $d_1 d_2 d_3$ must be divisible by 3, so $d_1 + d_2 + d_3$ is a multiple of 3.\n6. **Divisible by 2 (after deleting 5 digits):** The 2-digit number $d_1 d_2$ must be divisible by 2, so $d_2$ must be even.\n\nFrom the above, the even digits are $d_2, d_4,$ and $d_6$. The available even digits are 2, 4, and 8. \nThe odd digits are $d_1, d_3, d_5,$ and $d_7$. We already know $d_5 = 5$ and $d_7 = 9$. This leaves 1 and 7 for $d_1$ and $d_3$.\n\nNow, let's find $d_2$:\nWe know $d_1 + d_2 + d_3$ must be a multiple of 3. Since $d_1$ and $d_3$ are 1 and 7 in some order, $d_1 + d_3 = 8$. \nSo, $8 + d_2$ must be a multiple of 3. Testing the available even digits (2, 4, 8):\n- If $d_2 = 2$, $8 + 2 = 10$ (No)\n- If $d_2 = 4$, $8 + 4 = 12$ (Yes)\n- If $d_2 = 8$, $8 + 8 = 16$ (No)\nThus, $d_2 = 4$.\n\nNow, let's find $d_4$:\nThe remaining even digits for $d_4$ and $d_6$ are 2 and 8. The number $d_3 d_4$ must be divisible by 4. \nSince $d_3$ can be 1 or 7:\n- If $d_3 = 1$, $d_4$ can be 2 (12 is divisible by 4) but not 8 (18 is not).\n- If $d_3 = 7$, $d_4$ can be 2 (72 is divisible by 4) but not 8 (78 is not).\nIn both cases, $d_4$ must be 2. This leaves $d_6 = 8$.\n\nThe middle three digits of the 7-digit number are $d_3, d_4,$ and $d_5$.\nWe know $d_4 = 2$ and $d_5 = 5$. $d_3$ can be either 1 or 7.\n- If $d_3 = 1$, the sum is $1 + 2 + 5 = 8$.\n- If $d_3 = 7$, the sum is $7 + 2 + 5 = 14$.\n\nLooking at the given options, 8 is a possible value.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -290,8 +292,8 @@
         "60 m",
         "50 m"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let's trace the movements of X and Y step by step using a coordinate system. Assume they start at the origin (0,0) and run 50 m North. \n\n1. Both reach the point (0, 50) facing North.\n2. X turns right (facing East) and runs 60 m. X's new position is (60, 50).\n3. Y turns left (facing West) and runs 40 m. Y's new position is (-40, 50).\n4. X then turns left (facing North again) and runs 50 m. X's final position is (60, 100).\n5. Y turns right (facing North again) and runs 50 m. Y's final position is (-40, 100).\n\nSince both X and Y are at the same vertical distance (y = 100), the distance between them is simply the horizontal distance between their x-coordinates. \nDistance = 60 - (-40) = 60 + 40 = 100 m.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -315,8 +317,8 @@
         "6",
         "7"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find which date of June 2099 is a Sunday, we first determine the day of the week for 1st June 2099 by calculating the total number of 'odd days' from 1 AD.\n\nStep 1: Calculate odd days for the years up to 2098.\n- The first 2000 years have 0 odd days.\n- The remaining 98 years contain leap years and ordinary years. The number of leap years in 98 years = 98 / 4 = 24 leap years.\n- Total odd days for 98 years = 98 (for each year) + 24 (extra for leap years) = 122 days.\n- 122 mod 7 = 3 odd days.\n\nStep 2: Calculate odd days for the months in 2099 up to May.\n2099 is an ordinary year, so February has 28 days.\n- January: 31 days → 3 odd days\n- February: 28 days → 0 odd days\n- March: 31 days → 3 odd days\n- April: 30 days → 2 odd days\n- May: 31 days → 3 odd days\n- Total odd days for these months = 3 + 0 + 3 + 2 + 3 = 11 days.\n- 11 mod 7 = 4 odd days.\n\nStep 3: Add the odd days for the date (1st June).\n- 1st June contributes 1 odd day.\n\nStep 4: Calculate the total odd days.\n- Total odd days = 3 (from years) + 4 (from months) + 1 (from date) = 8 odd days.\n- 8 mod 7 = 1 odd day.\n\nIn the standard odd day calendar system, 0 = Sunday, 1 = Monday, 2 = Tuesday, etc. \nSince we have 1 odd day, 1st June 2099 is a Monday.\n\nStep 5: Find the date for Sunday.\n- 1st June = Monday\n- 2nd June = Tuesday\n- 3rd June = Wednesday\n- 4th June = Thursday\n- 5th June = Friday\n- 6th June = Saturday\n- 7th June = Sunday\n\nTherefore, the 7th of June 2099 is a Sunday.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -340,8 +342,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the number of ₹ 50, ₹ 20, and ₹ 10 notes be x, y, and z respectively.  From the given information, we can form two equations: 1) Total number of notes: x + y + z = 50 2) Total value of the bill: 50x + 20y + 10z = 1840  Let's evaluate each statement to see if it's possible:  **Statement 1: 25 notes of ₹ 50 are used.** If x = 25",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -365,8 +367,8 @@
         "4^18",
         "8^12"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the smallest number, let's first simplify the given numbers by expressing them with a common base where possible.\n\nStep 1: Simplify the numbers with base 2.\n- 2^40 remains 2^40\n- 4^18 can be written as (2^2)^18 = 2^(2 × 18) = 2^36\n- 8^12 can be written as (2^3)^12 = 2^(3 × 12) = 2^36\n\nStep 2: Compare the powers of 2.\nClearly, 2^40 > 2^36. Therefore, 2^40 is the largest among the base-2 numbers, leaving 2^36 (which is both 4^18 and 8^12) as the smaller value.\n\nStep 3: Compare the remaining numbers, 2^36 and 3^21.\nTo compare these two numbers, we can make their exponents equal by finding the Highest Common Factor (HCF) of 36 and 21, which is 3.\n- Rewrite 2^36 as (2^12)^3\n- Rewrite 3^21 as (3^7)^3\n\nStep 4: Evaluate the bases inside the parentheses.\n- 2^12 = 4096\n- 3^7 = 2187\n\nStep 5: Compare the final values.\nSince 2187 < 4096, it logically follows that 2187^3 < 4096^3.\nTherefore, 3^21 < 2^36.\n\nConclusion: 3^21 is the smallest number among the given options.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -390,8 +392,8 @@
         "2",
         "1"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the 3-digit number in the first row be $x$. According to the problem, the number in the second row is $2x$ and the number in the third row is $3x$. Together, $x$, $2x$, and $3x$ must use all the digits from 1 to 9 exactly once.  Since $3x$ must be a 3-digit number, $3x \\le 999$, which means $x \\le 333$.   The problem states that the first row ($x$) is formed using exactly three of the four digits {2, 3, 7, 9}. Because $x \\le 333$, the first digit of $x$ can only be 2 or 3.  Let's test all possible valid permutations for $x$ from the set {2, 3, 7, 9} that are less than 333:  1. **If the first digit is 2:**    - $x = 237 \\implies 2x = 474$ (The digit 4 is repeated. Invalid)    - $x = 273 \\implies 2x = 546$ and $3x = 819$. The digits used are 2, 7, 3, 5, 4, 6, 8, 1, 9. All digits from 1 to 9 are distinct. **(Valid)**    - $x = 239 \\implies 2x = 478$ and $3x = 717$ (The digit 7 is repeated. Invalid)    - $x = 293 \\implies 2x = 586$ and $3x = 879$ (The digits 8 and 9 are repeated. Invalid)    - $x = 279 \\implies 2x = 558$ (The digit 5 is repeated. Invalid)    - $x = 297 \\implies 2x = 594$ and $3x = 891$ (The digit 9 is repeated. Invalid)  2. **If the first digit is 3:**    Since $x \\le 333$, the second digit must be 2 (as 37_ and 39_ are greater than 333).    - $x = 327 \\implies 2x = 654$ and $3x = 981$. The digits used are 3, 2, 7, 6",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -415,8 +417,8 @@
         "We need to devise a method of barring incompetence from public office.",
         "As voters select their administrators, the eligibility of politicians to administer a State cannot be questioned."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The author uses the analogies of shoemaking and medicine to emphasize that specific tasks require specially trained individuals with technical competence. The author criticizes the current political system where the mere ability to win votes is equated with the ability to administer a State. By asking, 'when the whole State is ill should we not look for the service and guidance of the wisest and the best?', the author strongly implies that just like physicians and shoemakers, politicians who administer the State should also be specifically trained and competent in their field (administration). Therefore, Option 1 best reflects the author's core message.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -426,7 +428,9 @@
         "source": "upsc-pyq",
         "year": "2022",
         "paper": "CSAT",
-        "questionNumber": 11
+        "questionNumber": 11,
+        "upscCorrectOption": 2,
+        "geminiPredictedOption": 1
       },
       "passageSetId": "set_2",
       "passageLabel": 1
@@ -442,8 +446,8 @@
         "There is no uniform global standard for measuring income poverty.",
         "It is based on the proposition of poverty as meagre income or buying capacity."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage explicitly states that the poverty line in India is unsatisfactory and its methodology debatable because of a 'fundamental assumption underlying it.' It further explains this assumption by stating, 'It exclusively relies on the notion of poverty as insufficient income or insufficient purchasing power.' Option 3 perfectly captures this by stating that the methodology is based on the proposition of poverty as meagre income or buying capacity. The other options mention concepts (confusion over the poverty line, rural/urban diversities, global standards) that are not discussed in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -469,8 +473,8 @@
         "Income poverty is not a permanent condition, it changes from time to time.",
         "Income poverty restricts human choices only at a point of time."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage explicitly states, 'If poverty is ultimately about deprivations affecting human well-being, then income poverty is only one aspect of it.' It further explains that poverty also includes 'the lack of real opportunity given by social constraints as well as personal circumstances.' This indicates that income poverty focuses solely on insufficient income or purchasing power (one kind of deprivation) while ignoring other crucial deprivations that restrict human choices and capabilities. Therefore, Option 0 is the most accurate and directly supported answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -496,8 +500,8 @@
         "Missed opportunities in diverse personal circumstances",
         "Material as well as non-material deprivations in a human life which restrict human choices permanently"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage explicitly defines 'poverty of a life' by stating that it 'lies not merely in the impoverished state in which the person actually lives, but also in the lack of real opportunity given by social constraints as well as personal circumstances'. This directly corresponds to Option 0, which encompasses deprivations stemming from both a lack of income (the impoverished state) and a lack of real opportunities. Option 3 is incorrect because the passage mentions 'severely restricting' choices, not restricting them 'permanently'.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -523,8 +527,8 @@
         "4",
         "5"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. **Understand the given parameters:**\n   - Total distance of the race = 3 km = 3000 m.\n   - Length of the circular course (track) = 300 m.\n   - Ratio of speeds of X and Y = 3 : 2.\n\n2. **Set up the speeds:**\n   - Let the speed of X be $3v$ m/s and the speed of Y be $2v$ m/s.\n   - Since they are running in the same direction, their relative speed is the difference between their speeds: $3v - 2v = v$ m/s.\n\n3. **Calculate the time taken for X to finish the race:**\n   - Time = Distance / Speed\n   - Time taken by X to complete 3000 m = $3000 / 3v = 1000 / v$ seconds.\n\n4. **Calculate the time taken for X to pass Y once:**\n   - In a circular track, the faster runner passes the slower runner when the faster runner covers exactly one full track length (300 m) more than the slower runner.\n   - Time taken to pass for the first time = Track length / Relative speed = $300 / v$ seconds.\n\n5. **Determine the number of passes:**\n   - The number of times X passes Y is the total time X runs divided by the time it takes to pass Y once.\n   - Number of passes = $(1000 / v) / (300 / v) = 1000 / 300 = 3.33$.\n   - Since the number of passes must be a whole integer, X will pass Y exactly 3 times before finishing the race.\n\n6. **Verification by distance:**\n   - 1st pass happens at time $300/v$. Distance covered by X = $3v \\times (300/v) = 900$ m.\n   - 2nd pass happens at time $600/v$. Distance covered by X = $3v \\times (600/v) = 1800$ m.\n   - 3rd pass happens at time $900/v$. Distance covered by X = $3v \\times (900/v) = 2700$ m.\n   - X finishes the race at 3000 m, which is before the 4th pass (which would have occurred at 3600 m).\n   - Thus, X passes Y exactly 3 times.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -548,8 +552,8 @@
         "OFXPMLE",
         "OFXPMLD"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "When the English alphabet is reversed, each letter is replaced by its corresponding letter from the opposite end of the alphabet. The sum of the alphabetical positions of the original letter and its replacement is always 27.\n\nLet's find the replacement for each letter in 'LUCKNOW':\n- L is the 12th letter. Its replacement is 27 - 12 = 15th letter, which is O.\n- U is the 21st letter. Its replacement is 27 - 21 = 6th letter, which is F.\n- C is the 3rd letter. Its replacement is 27 - 3 = 24th letter, which is X.\n- K is the 11th letter. Its replacement is 27 - 11 = 16th letter, which is P.\n- N is the 14th letter. Its replacement is 27 - 14 = 13th letter, which is M.\n- O is the 15th letter. Its replacement is 27 - 15 = 12th letter, which is L.\n- W is the 23rd letter. Its replacement is 27 - 23 = 4th letter, which is D.\n\nCombining these, 'LUCKNOW' is represented as 'OFXPMLD'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -573,8 +577,8 @@
         "149",
         "148"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "In a knockout tournament, every match played results in exactly one player being eliminated (since there are no ties or draws). To find the single winner of the tournament out of 150 entrants, exactly 149 players must be eliminated. Since each match eliminates exactly one player, the total number of matches played must be exactly equal to the number of players eliminated. Therefore, 149 matches are played. Formula used: Number of matches in a knockout tournament = n - 1 (where n is the total number of players).",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -598,8 +602,8 @@
         "16",
         "24"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Step 1: Identify the conditions given in the problem.\n- The number must be a 3-digit natural number.\n- Digits cannot be repeated (without repetition).\n- Each digit must be an odd number. The available odd digits are 1, 3, 5, 7, and 9.\n- The number must be divisible by 5.\n\nStep 2: Apply the divisibility rule for 5.\n- A number is divisible by 5 if its units (last) digit is either 0 or 5.\n- Since all digits must be odd, the last digit cannot be 0. Therefore, the last digit must be exactly 5.\n\nStep 3: Determine the number of choices for each digit position (Hundreds, Tens, Units).\n- Units digit: Must be 5. (1 choice)\n- Hundreds digit: We have 5 odd digits in total {1, 3, 5, 7, 9}. Since '5' is already used in the units place and repetition is not allowed, we are left with 4 digits {1, 3, 7, 9}. (4 choices)\n- Tens digit: Out of the original 5 odd digits, 2 have already been used (one for the units place, one for the hundreds place). This leaves us with 3 available digits. (3 choices)\n\nStep 4: Calculate the total number of possible 3-digit numbers.\n- Using the fundamental principle of counting (multiplication rule):\nTotal numbers = (Choices for Hundreds) × (Choices for Tens) × (Choices for Units)\nTotal numbers = 4 × 3 × 1 = 12.\n\nThese 12 numbers are: 135, 175, 195, 315, 375, 395, 715, 735, 795, 915, 935, and 975.\n\nTherefore, there are 12 such numbers.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -623,8 +627,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine if x is an integer, let's evaluate the given statements.\n\nStatement-1: x / 3 is not an integer.\nIf x = 1 (an integer), x / 3 = 1/3 (not an integer). \nIf x = 1.5 (not an integer), x / 3 = 0.5 (not an integer).\nSince x can be either an integer or a non-integer, Statement-1 alone is not sufficient.\n\nStatement-2: 3x is an integer.\nIf x = 1 (an integer), 3x = 3 (an integer).\nIf x = 1/3 (not an integer), 3x = 1 (an integer).\nSince x can be either an integer or a non-integer, Statement-2 alone is not sufficient.\n\nCombining both statements:\nLet's test the values from above that satisfy both statements simultaneously.\nCase 1: Let x = 1. \n- x / 3 = 1/3 (not an integer) -> Satisfies Statement-1.\n- 3x = 3 (an integer) -> Satisfies Statement-2.\n- Is x an integer? Yes.\n\nCase 2: Let x = 1/3.\n- x / 3 = 1/9 (not an integer) -> Satisfies Statement-1.\n- 3x = 1 (an integer) -> Satisfies Statement-2.\n- Is x an integer? No.\n\nEven after combining both statements, we cannot definitively answer whether x is an integer or not. Therefore, both Statement-1 and Statement-2 together are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -648,8 +652,8 @@
         "12.5%",
         "15%"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Let the initial price of the item be Rs. 100.\n\nStep 1: The price is increased by 25%.\nNew Price = 100 + (25% of 100) = 100 + 25 = Rs. 125.\n\nStep 2: The price is then decreased by 20%.\nNew Price = 125 - (20% of 125) = 125 - 25 = Rs. 100.\n\nStep 3: The price is again increased by 10%.\nFinal Price = 100 + (10% of 100) = 100 + 10 = Rs. 110.\n\nStep 4: Calculate the resultant increase.\nResultant Increase = Final Price - Initial Price = 110 - 100 = Rs. 10.\nPercentage Increase = (Increase / Initial Price) × 100 = (10 / 100) × 100 = 10%.\n\nAlternatively, using the successive percentage change formula:\nFinal Price = Initial Price × (1 + 25/100) × (1 - 20/100) × (1 + 10/100)\nFinal Price = P × 1.25 × 0.80 × 1.10\nFinal Price = P × 1.00 × 1.10 = 1.10P\nThis represents a 10% increase over the original price P.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -673,8 +677,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Assumption 1 is invalid because the passage states that 'Much of this change is brought about by affluent farmers in the West/Americas.' The phrase 'much of' indicates that while a significant portion of agricultural technology development happens in the West, it is not exclusively 'confined' to developed countries.\n\nAssumption 2 is invalid because the passage explicitly mentions that 'Techniques developed in the West are being adapted in some places to make tropical crops more productive.' Since tropical crops are primarily grown in developing regions, this shows that adaptation is indeed taking place, contradicting the absolute statement that agricultural technology is not adapted in developing countries.\n\nTherefore, neither assumption is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -700,8 +704,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption 1 is valid because the passage explicitly states that in the developing world (poor countries), there is a need to adapt 'existing farming techniques' and extend 'the best of today's agricultural practices' to smallholders and subsistence farmers to increase food availability. This clearly implies that poor countries need to bring about a change in their current farming methods. Assumption 2 is invalid because, while the passage suggests that better roads and storage facilities would reduce wastage (implying a need for better infrastructure in developing nations), it does not make any claims or assumptions about the infrastructure or the scale of food wastage in developed countries. Therefore, only assumption 1 is logically derived from the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -727,8 +731,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Assumption 1 is valid because the passage explicitly highlights several challenges to future food production: plateauing yields of staple crops, lack of unfarmed land, and the threat of rising global temperatures making some areas unsuitable for farming. These points collectively imply that growing enough food for future generations will indeed be a challenge. Assumption 2 is invalid because the passage does not mention or advocate for 'corporate farming' as a solution for poor countries. Instead, it emphasizes extending better agricultural practices and technologies to 'smallholders and subsistence farmers of Africa and Asia' to increase food availability. Therefore, only assumption 1 is logically supported by the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -754,8 +758,8 @@
         "24",
         "36"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "1. We have 5 letters: A, B, C, D, and E, which need to be arranged in 5 positions (1, 2, 3, 4, 5).\n2. The condition is that there must be exactly two letters between A and E. This means the difference between their position indices must be 3.\n3. The possible position pairs for A and E are (1, 4) and (2, 5).\n4. Since A and E can be swapped in each of these pairs (i.e., A comes first or E comes first), there are 2 × 2 = 4 ways to place A and E.\n5. Once A and E are placed, there are 3 remaining positions for the other 3 letters (B, C, D).\n6. These 3 letters can be arranged in the remaining 3 positions in 3! (3 factorial) ways. \n   3! = 3 × 2 × 1 = 6 ways.\n7. The total number of possible arrangements is the product of the number of ways to place A and E and the number of ways to arrange the remaining letters: 4 × 6 = 24.\n\nTherefore, there are 24 such arrangements possible.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -779,8 +783,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To determine if Z is the brother of X, we need to know the gender of Z.\n\nFrom Statement-1: 'X is a brother of Y and Y is a brother of Z.' This tells us that X and Y are male, and that X, Y, and Z are siblings. However, it does not specify the gender of Z. Z could either be a brother or a sister to X. Thus, Statement-1 alone is not sufficient.\n\nFrom Statement-2: 'X, Y and Z are siblings.' This only establishes their sibling relationship but provides no information about any of their genders. Thus, Statement-2 alone is not sufficient.\n\nCombining both statements: Statement-2 provides no new information that isn't already implied by Statement-1. The gender of Z remains unknown. Therefore, even by using both statements together, we cannot definitively answer whether Z is the brother of X.\n\nHence, both Statement-1 and Statement-2 are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -804,8 +808,8 @@
         "50 m",
         "50.5 m"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "1. First, convert the total length of the road from kilometers to meters. \n   1.01 km = 1.01 × 1000 = 1010 meters.\n\n2. There are 101 plants planted at equal distances. The number of gaps (intervals) between these 101 plants is:\n   Number of gaps = Total plants - 1 = 101 - 1 = 100 gaps.\n\n3. Calculate the distance between any two consecutive plants (which is the length of one gap):\n   Distance per gap = Total distance / Number of gaps = 1010 m / 100 = 10.1 meters.\n\n4. The question asks for the total distance between 5 consecutive plants. The number of gaps between 5 consecutive plants is:\n   Number of gaps = 5 - 1 = 4 gaps.\n\n5. Calculate the total distance for these 4 gaps:\n   Total distance = 4 × 10.1 m = 40.4 meters.\n\nTherefore, the total distance between 5 consecutive plants is 40.4 m.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -829,8 +833,8 @@
         "15",
         "36"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the total number of different ways to travel from A to C, we need to consider all possible routes. There are two main ways to travel from A to C based on the given roads:\n\n1. Direct route from A to C:\nThe problem states there are 3 different roads directly from A to C. \nSo, there are 3 ways to travel directly.\n\n2. Route from A to C via B:\nThe problem states there are 3 different roads from A to B, and 4 different roads from B to C. \nUsing the Fundamental Principle of Counting (Multiplication Rule), the number of ways to travel from A to C through B is the product of the number of ways to get from A to B and the number of ways to get from B to C.\nNumber of ways via B = 3 (roads from A to B) × 4 (roads from B to C) = 12 ways.\n\nTotal number of ways to travel from A to C = (Number of direct ways) + (Number of ways via B)\nTotal ways = 3 + 12 = 15.\n\nComparing this result with the given options, 15 matches option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -854,8 +858,8 @@
         "60",
         "52"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Step 1: Identify the number of coins D has. The problem states that D has the smallest two-digit number of coins, which is 10. So, D receives 10 coins.\n\nStep 2: Work backwards to find how many coins C had. C gives half of his coins and 2 more to D. \nLet C's coins be 'c'. \n(c / 2) + 2 = 10 \nc / 2 = 8 \nc = 16 coins.\n\nStep 3: Work backwards to find how many coins B had. B gives half of his coins and 2 more to C. \nLet B's coins be 'b'. \n(b / 2) + 2 = 16 \nb / 2 = 14 \nb = 28 coins.\n\nStep 4: Work backwards to find how many coins A had in the beginning. A gives half of his coins and 2 more to B. \nLet A's initial coins be 'a'. \n(a / 2) + 2 = 28 \na / 2 = 26 \na = 52 coins.\n\nStep 5: Verify the answer. \nIf A starts with 52 coins, he gives (52/2) + 2 = 28 coins to B. \nB gives (28/2) + 2 = 16 coins to C. \nC gives (16/2) + 2 = 10 coins to D. \n10 is indeed the smallest two-digit number. The calculations are correct.\n\nTherefore, A had 52 coins in the beginning.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -879,8 +883,8 @@
         "I",
         "J"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The given series can be divided into groups of letters as follows:\nGroup 1: A (1 letter)\nGroup 2: A B (2 letters)\nGroup 3: A B C (3 letters)\nGroup 4: A B C D (4 letters)\n... and so on.\n\nThe total number of letters in the first 'n' groups is the sum of the first 'n' natural numbers, which is given by the formula: Sum = n(n + 1) / 2.\n\nLet's find the maximum number of complete groups that can fit within 100 letters by finding an 'n' such that n(n + 1) / 2 is just less than 100.\nIf we take n = 13:\nSum = 13(13 + 1) / 2 = (13 × 14) / 2 = 91.\n\nThis means the first 13 groups contain exactly 91 letters. The 13th group ends at the 91st position.\n\nThe 14th group starts at the 92nd position and follows the standard alphabetical order (A, B, C, D, ...).\nTo find the 100th letter, we need to find its position within this 14th group:\nPosition in 14th group = 100 - 91 = 9.\n\nThe 9th letter of the English alphabet is 'I'.\nTherefore, the letter at the 100th place is 'I'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -904,8 +908,8 @@
         "32",
         "38"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the positions in the queue be numbered 1, 2, 3, ... starting from the front.\n\n1. Since there are 11 persons ahead of C, C is at position 12.\n2. There are 7 persons between B and C. This means the difference between their positions is 8. So, B can be at position 12 - 8 = 4 or 12 + 8 = 20.\n3. There are 4 persons between A and B, meaning the difference between their positions is 5. \n   - If B is at position 4, A can be at 4 + 5 = 9 (position cannot be negative, so 4 - 5 = -1 is invalid).\n   - If B is at position 20, A can be at 20 - 5 = 15 or 20 + 5 = 25.\n4. We are given that there are 13 persons behind A. Therefore, the total number of persons in the queue is (Position of A) + 13.\n   - If A is at position 9, total persons = 9 + 13 = 22.\n   - If A is at position 15, total persons = 15 + 13 = 28.\n   - If A is at position 25, total persons = 25 + 13 = 38.\n\nTo find the minimum number of persons in the queue, we take the smallest valid total, which is 22. In this scenario, the order from the front is B (at 4), A (at 9), and C (at 12), which perfectly satisfies all conditions.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -929,8 +933,8 @@
         "1, 3 and 4",
         "1, 2 and 4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Statement 1 is correct: The passage explicitly states that because natural selection cannot anticipate future environments, organisms are never fully prepared for environmental catastrophes, and an outcome of this is the extinction of species that cannot overcome such adversity.\n\nStatement 2 is incorrect: The passage does not claim that 'all' existing species will go extinct. It specifically mentions the extinction of 'those species which cannot overcome environmental adversity' and notes that 'more than 90%' (not all) of species that have ever lived are extinct.\n\nStatement 3 is correct: The passage attributes the failure to survive to 'genomes which are unable to withstand geological vagaries or biological mishaps'.\n\nStatement 4 is correct: The passage directly states, 'In biological evolution on the earth, extinction of species has been a major feature.'\n\nBy eliminating the extreme and incorrect Statement 2, we are left with Statements 1, 3, and 4, which corresponds to Option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -956,8 +960,8 @@
         "there are no evidences to refute it",
         "existence of organisms is attributed to a creator"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage states, 'Therefore, the so-called Darwinian theory of evolution is not a theory at all. Evolution happens—this is a fact.' It then immediately justifies this by explaining that the mechanism of evolution is 'amply supported by scientific data' and emphasizes that 'to date no single zoological, botanical, geological, paleontological, genetic or physical evidence has refuted either of the central two main Darwinian ideas.' Because there is no evidence to refute it and it is backed by extensive scientific data, the author considers it a proven fact rather than just a 'theory'. This directly aligns with option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -967,7 +971,9 @@
         "source": "upsc-pyq",
         "year": "2022",
         "paper": "CSAT",
-        "questionNumber": 32
+        "questionNumber": 32,
+        "upscCorrectOption": 1,
+        "geminiPredictedOption": 2
       },
       "passageSetId": "set_4",
       "passageLabel": 1
@@ -983,8 +989,8 @@
         "3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Statement 1 is a valid assumption. The passage explicitly states, 'An outcome of this is the extinction of those species which cannot overcome environmental adversity.' This logically implies that only the species capable of overcoming such environmental catastrophes will survive and perpetuate.\n\nStatement 2 is invalid. The passage mentions that 'more than 90% of species that have ever lived on the earth are now extinct.' It does not state that 90% of the currently existing species are in danger of extinction.\n\nStatement 3 is invalid. The passage states that Darwinian laws are 'sets of natural laws that explain natural phenomena in the universe,' alongside the laws of Copernicus, Galileo, Newton, and Einstein. It does not claim that Darwin's theory alone explains 'all' natural phenomena.\n\nTherefore, only assumption 1 is valid.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1010,8 +1016,8 @@
         "Modern technological developments result in the change of cultural and social behaviour of the people.",
         "Water management practices in India need to change dramatically in the coming years."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage explicitly connects the rise of the Indian middle class and their changing lifestyle choices (higher protein diets and increased use of electronic gadgets/vehicles) to a single underlying resource: water. It states that protein-based diets 'need significantly more water to produce' and that the 'generation of energy needs water.' Since the central theme revolves around the exponentially increasing demand for water due to economic affluence, the logical crux or most critical implication is that India will face a severe water demand. Therefore, water management practices need to change dramatically to address these growing needs. The other options either offer prescriptive dietary advice not found in the passage (Option 0), miss the central focus on water (Option 1), or make broad sociological generalizations (Option 2).",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1037,8 +1043,8 @@
         "694860x",
         "694861x"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the total number of seconds, we need to convert each unit of time into seconds and then sum them up.\n\n1. **x minutes:** \n1 minute = 60 seconds\nSo, x minutes = 60x seconds\n\n2. **x hours:** \n1 hour = 60 minutes = 60 × 60 = 3600 seconds\nSo, x hours = 3600x seconds\n\n3. **x days:** \n1 day = 24 hours = 24 × 3600 = 86400 seconds\nSo, x days = 86400x seconds\n\n4. **x weeks:** \n1 week = 7 days = 7 × 86400 = 604800 seconds\nSo, x weeks = 604800x seconds\n\n5. **x seconds:** \nThis is simply 1x seconds.\n\nNow, we add all the seconds together:\nTotal seconds = (604800 + 86400 + 3600 + 60 + 1)x\n\nLet's calculate the sum:\n604800 + 86400 = 691200\n691200 + 3600 = 694800\n694800 + 60 = 694860\n694860 + 1 = 694861\n\nTherefore, the total number of seconds is 694861x.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1062,8 +1068,8 @@
         "R is the mother of P",
         "T is the granddaughter of Q"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's break down the family relationships step by step:\n1. 'U is the mother of T' and 'P's daughter is T' implies that P and U are the parents of T. Since U is the mother, P must be the father. Thus, P and U form the first married couple.\n2. 'S is the daughter of U' means S and T are siblings (both are daughters of P and U).\n3. 'R's son is P' means R is a parent of P.\n4. 'R is the spouse of Q' means R and Q are the parents of P. They form the second married couple.\n\nFrom this family tree, we can determine the generations:\n- 1st Generation: Q and R (Grandparents)\n- 2nd Generation: P (Son of Q & R) and U (Wife of P)\n- 3rd Generation: T and S (Daughters of P & U)\n\nNow let's evaluate the options:\n- Options 0 and 1: We know Q is a grandparent of T, but the problem does not specify the genders of Q and R. Therefore, we cannot definitively say whether Q is the grandfather or the grandmother.\n- Option 2: Similarly, we do not know if R is the mother or the father of P.\n- Option 3: We know for a fact that T is the daughter of P, and P is the son of Q. Since T's gender is explicitly given as female ('P's daughter is T'), T is undoubtedly the granddaughter of Q. This statement is definitively correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1087,8 +1093,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the distance between city P and city Q, we need to know their relative positions.\n- Statement-1 tells us that the distance between Q and R is 18 km. This alone is insufficient.\n- Statement-2 tells us that the distance between P and R is 43 km. This alone is also insufficient.\n- Combining both statements, we know the distances of P and Q from R. However, we do not know the directions or the angle between them. The three cities could be in a straight line (collinear) or form a triangle. If they are in a straight line with R in the middle, the distance between P and Q would be 43 + 18 = 61 km. If Q is between P and R, the distance would be 43 - 18 = 25 km. If they form a triangle, the distance could be any value between 25 km and 61 km. \nSince we cannot determine a unique distance, both Statement-1 and Statement-2 together are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1112,8 +1118,8 @@
         "Both Conclusion-III and Conclusion-IV",
         "None of the Conclusions follows"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's analyze the given statements using set theory or Venn diagrams:\n- Statement-1: All pens are books. (Set of Pens is a subset of the Set of Books: P ⊆ B)\n- Statement-2: No chair is a pen. (Intersection of Set of Chairs and Set of Pens is empty: C ∩ P = ∅)\n\nNow let's evaluate each conclusion:\n- Conclusion-I: All chairs are books. We only know that chairs are not pens. Chairs could be entirely outside the set of books, partially overlapping, or entirely inside. Since it's not a definite certainty, Conclusion-I does not follow.\n- Conclusion-II: Some chairs are pens. This directly contradicts Statement-2 ('No chair is a pen'). Thus, Conclusion-II does not follow.\n- Conclusion-III: All books are chairs. We know that all pens are books, and no pen is a chair. Therefore, the books that are pens can never be chairs. This makes it impossible for all books to be chairs. Thus, Conclusion-III does not follow.\n- Conclusion-IV: No chair is a book. While no chair is a pen, a chair could still be a book (overlapping with the books set outside the pens set). Since this is a possibility and not a definite fact, Conclusion-IV does not follow.\n\nSince none of the conclusions logically follow from the given statements, the correct choice is 'None of the Conclusions follows'.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1137,8 +1143,8 @@
         "Both Conclusion-I and Conclusion-III",
         "Both Conclusion-I and Conclusion-II"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's analyze the given statements step by step using set theory or Venn diagrams:\n\n1. Statement-1: Some doctors are teachers. (This means there is an intersection between Doctors and Teachers; at least one doctor is a teacher).\n2. Statement-2: All teachers are engineers. (This means the entire set of Teachers is inside the set of Engineers).\n3. Statement-3: All engineers are scientists. (This means the entire set of Engineers is inside the set of Scientists).\n\nNow let's evaluate the Conclusions:\n- Conclusion-III: Some engineers are doctors. \nSince some doctors are teachers, and all teachers are engineers, those doctors who are teachers must also be engineers. Therefore, some doctors are engineers, which is the same as saying some engineers are doctors. Conclusion-III is TRUE.\n\n- Conclusion-I: Some scientists are doctors.\nWe already established that some doctors are engineers. Since all engineers are scientists, those doctors who are engineers must also be scientists. Therefore, some scientists are doctors. Conclusion-I is TRUE.\n\n- Conclusion-II: All engineers are doctors.\nWhile we know that *some* engineers are doctors, there is no information given to suggest that *all* engineers are doctors. The statements allow for engineers who are neither teachers nor doctors. Conclusion-II is FALSE.\n\nThus, both Conclusion-I and Conclusion-III logically follow from the given statements.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1162,8 +1168,8 @@
         "E sits opposite to F",
         "None of the above"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's place the 8 seats in a circle, numbered 1 to 8 in clockwise order.  Condition 2 states A sits between E and D. Let's place E at 1, A at 2, and D at 3. Condition 3 states F sits between B and H. This means B, F, and H must occupy 3 consecutive seats. Condition 1 states B and D sit neither adjacent to C nor opposite to C.  Since D is at 3, C cannot be at 2 or 4 (adjacent) and cannot be at 7 (opposite). Thus, C can only",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1187,8 +1193,8 @@
         "man cannot think well",
         "man cannot care for his spiritual welfare"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage is fundamentally based on the idea that 'an excessive amount of labour is rule today' (overstrain), which acts as the root cause for various negative consequences in modern society. The author explains that because of this overstrain, man's spiritual element cannot thrive, he cannot engage in serious thought, and he seeks mindless entertainment over self-improvement. Options 2 and 3 are merely the symptoms or results of this excessive labour, not the foundational idea. Option 0 is incorrect because the passage criticizes 'excessive' labour, not hard work in general. Therefore, Option 1 best captures the central premise that overstrain is the great evil of our age.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1214,8 +1220,8 @@
         "is distracted by materialism",
         "loves amusement and is mentally idle"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage explicitly states, 'He seeks not self-improvement, but entertainment which would enable him to be mentally idle and to forget his usual activities.' This directly implies that instead of self-improvement, man seeks amusement (entertainment) because he wants to remain mentally idle after an excessive amount of labour. Therefore, Option 3 is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1241,8 +1247,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "Based on the passage, the demographic dividend is defined as 'a swelling in the working age population, which conversely means that the relative ratio of very young and very old will, for a while, be on the decline.' This directly supports Statement 2 as an invariable outcome. Statement 1 is incorrect because the passage states that reaping the benefits of the demographic dividend requires a focus on education and skill acquisition; it does not state that illiteracy will automatically or invariably decrease. Statement 3 is incorrect because the passage makes no mention of the population growth rate quickly stabilizing.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1268,8 +1274,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage focuses on the negative impact of excessive labor on human beings, highlighting how it deprives them of spiritual growth, serious thinking, and self-improvement, leading them to seek mindless entertainment instead. It does not discuss or even mention concepts like 'demographic dividend', 'higher education', or 'rapid economic growth'. Therefore, neither statement 1 nor statement 2 can be logically inferred from the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1295,8 +1301,8 @@
         "₹ 2,360",
         "₹ 2,320"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the number of notebooks purchased by P, Q, X, Y, and Z be represented by their respective letters.\n\nFrom the given information, we can form the following equations:\n1. Z = X + 8\n2. P + Q = 21\n3. Q = P - 5\n4. X + Y = 28\n5. P = X + 5\n\nStep 1: Find the values of P and Q.\nSubstitute equation (3) into equation (2):\nP + (P - 5) = 21\n2P - 5 = 21\n2P = 26\nP = 13\n\nNow, substitute P = 13 into equation (3) to find Q:\nQ = 13 - 5 = 8\n\nStep 2: Find the value of X.\nSubstitute P = 13 into equation (5):\n13 = X + 5\nX = 13 - 5 = 8\n\nStep 3: Find the value of Z.\nSubstitute X = 8 into equation (1):\nZ = 8 + 8 = 16\n\nStep 4: Find the value of Y.\nSubstitute X = 8 into equation (4):\n8 + Y = 28\nY = 28 - 8 = 20\n\nStep 5: Calculate the total number of notebooks.\nTotal notebooks = P + Q + X + Y + Z\nTotal notebooks = 13 + 8 + 8 + 20 + 16 = 65\n\nStep 6: Calculate the total cost.\nEach notebook is priced at ₹ 40.\nTotal cost = Total notebooks × Price per notebook\nTotal cost = 65 × 40 = ₹ 2,600\n\nTherefore, the total cost of all the notebooks is ₹ 2,600.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1320,8 +1326,8 @@
         "10 minutes fast",
         "5 minutes fast"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the time taken for the onward journey be T1 and the return journey be T2.\nLet the distance to the village be D and the initial speed be V.\nThen, T1 = D / V.\n\nFor the return journey, the distance is 1.25D and the speed is 2V.\nSo, T2 = 1.25D / 2V = 0.625 (D / V) = 0.625 * T1 = (5/8) * T1.\n\nThe man started from home at 14:30 and returned at 16:00 (according to the home clock). \nThe total time he was away from home is 1 hour 30 minutes, which is 90 minutes.\n\nThis total time consists of the onward journey, the 25 minutes stay at the village, and the return journey.\nTherefore, T1 + 25 + T2 = 90\nT1 + T2 = 65\n\nSubstitute T2 = (5/8) * T1 into the equation:\nT1 + (5/8) * T1 = 65\n(13/8) * T1 = 65\nT1 = 65 * (8 / 13)\nT1 = 5 * 8 = 40 minutes.\n\nThe onward journey took 40 minutes. \nSince he started at 14:30 (home time), he actually arrived at the village at 14:30 + 40 minutes = 15:10 (home time).\n\nHowever, the village clock indicated 15:15 when he arrived. \nComparing the two, the village clock is 15:15 - 15:10 = 5 minutes ahead of the home clock.\n\nThus, the village clock is 5 minutes fast.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1345,8 +1351,8 @@
         "294",
         "300"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the number of pens received by A, B, C, D, E, and F be a, b, c, d, e, and f respectively.\n\nAccording to the problem:\na = 2b \na = 3c \na = 4d \na = 5e \na = 6f \n\nThis means 'a' must be a common multiple of 2, 3, 4, 5, and 6. \nTo find the minimum number of pens, we first find the Least Common Multiple (LCM) of 2, 3, 4, 5, and 6.\nLCM(2, 3, 4, 5, 6) = 60.\n\nLet a = 60k, where k is a positive integer.\nThen the number of pens each child gets is:\nb = a / 2 = 30k\nc = a / 3 = 20k\nd = a / 4 = 15k\ne = a / 5 = 12k\nf = a / 6 = 10k\n\nThe problem states that the number of pens each child gets must be an EVEN number.\nIf we take k = 1 (the smallest positive integer):\na = 60, b = 30, c = 20, d = 15, e = 12, f = 10.\nHere, D gets 15 pens, which is an odd number. Thus, k = 1 is not possible.\n\nTo make all shares even, we must multiply by the next smallest integer, which is k = 2.\nLet's check for k = 2:\na = 60 × 2 = 120\nb = 30 × 2 = 60\nc = 20 × 2 = 40\nd = 15 × 2 = 30\ne = 12 × 2 = 24\nf = 10 × 2 = 20\n\nNow, all children have an even number of pens.\nThe total minimum number of pens X should buy is the sum of all these pens:\nTotal = a + b + c + d + e + f\nTotal = 120 + 60 + 40 + 30 + 24 + 20 = 294.\n\nTherefore, the minimum number of pens X should buy is 294.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1370,8 +1376,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's determine the seating arrangement of the 6 persons (A, B, C, D, E, F) around the circular table. We can number the seats 1 to 6 in a clockwise direction. When facing the center, the 'immediate left' corresponds to the next seat in the clockwise direction.\n\nFrom Statement-1: \n- B is opposite to C. \n- D is opposite to E. \nSince there are 6 seats and 3 pairs of opposite seats, the remaining two persons, A and F, must be sitting opposite to each other.\n\nFrom Statement-2: \n- F is sitting on the immediate left of B.\n\nCombining both statements:\n1. Let B be seated at position 1.\n2. F is on the immediate left of B, so F is at position 2.\n3. B is opposite to C, so C must be at position 4.\n4. F is opposite to A, so A must be at position 5.\n5. The remaining positions are 3 and 6, which must be occupied by the opposite pair D and E. However, we do not know whether D is at position 3 and E is at position 6, or vice versa.\n\nThe question asks: \"Who is sitting on the immediate left of A?\"\n- A is at position 5.\n- The immediate left of A (clockwise) is position 6.\n- Position 6 is occupied by either D or E.\n\nSince we cannot uniquely determine whether D or E is sitting on the immediate left of A, both Statement-1 and Statement-2 together are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1395,8 +1401,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let Manisha's present age be M and her mother's present age be Mo.\n\nFrom Statement-1: Manisha is 24 years younger than her mother. \nEquation: M = Mo - 24 (or Mo = M + 24). \nThis gives us a relationship between their ages, but we cannot find Manisha's exact age. Thus, Statement-1 alone is not sufficient.\n\nFrom Statement-2: 5 years later, the ratio of their ages will be 3:5. \nEquation: (M + 5) / (Mo + 5) = 3 / 5. \nThis gives us another relationship, but again, we cannot find the exact age with just this equation. Thus, Statement-2 alone is not sufficient.\n\nCombining both statements:\nSubstitute Mo = M + 24 into the second equation:\n(M + 5) / ((M + 24) + 5) = 3 / 5\n(M + 5) / (M + 29) = 3 / 5\nCross-multiplying gives:\n5(M + 5) = 3(M + 29)\n5M + 25 = 3M + 87\n2M = 62\nM = 31\n\nSince we can determine Manisha's exact age (31 years) by using both statements together, both Statement-1 and Statement-2 are required to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1420,8 +1426,8 @@
         "Both Statement-1 and Statement-2 are sufficient to answer the Question",
         "Both Statement-1 and Statement-2 are not sufficient to answer the Question"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "There are 6 lectures scheduled in 6 periods (from 8:00 a.m. to 2:00 p.m.). We need to find the lecture in the 3rd period.\n\nFrom Statement-1: Lecture F is preceded by A and followed by C. This gives us a block of three consecutive lectures: A - F - C. However, this block could be scheduled in periods 1-2-3, 2-3-4, 3-4-5, or 4-5-6. Thus, the 3rd period could be C, F, or A. Statement-1 alone is not sufficient.\n\nFrom Statement-2: There is no lecture after lecture B. This simply means B is scheduled in the 6th period. This gives no information about the 3rd period. Statement-2 alone is not sufficient.\n\nCombining both statements: We know B is in the 6th period, and we have the block A - F - C. The remaining lectures are D and E. The schedule could be:\n1. A, F, C, D, E, B (3rd period is C)\n2. D, A, F, C, E, B (3rd period is F)\n3. D, E, A, F, C, B (3rd period is A)\n\nSince there are still multiple possibilities for the 3rd period, both statements combined are not sufficient to answer the question.",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1445,8 +1451,8 @@
         "An increase in the educated population of a country leads to an increase in the happiness of its people.",
         "Use of machines should be encouraged in order to create a large leisured population."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage argues that the productivity of machines (which represents economic progress) leads to increased leisure time. However, it explicitly states that this leisure will be 'tedious except to those who have intelligent activities and interests' and that for a leisured population to be happy, 'it must be an educated population.' Therefore, the underlying message is that the benefits of economic progress (leisure) can only be truly enjoyed and utilized by an educated population. Option 0 perfectly captures this central theme.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1472,8 +1478,8 @@
         "The author does not know why adults feel less thrilled by presents.",
         "Adults have less capacity to feel the joy of loving or being loved."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "The passage explicitly suggests multiple reasons for why adults might feel less thrilled by presents, stating: 'perhaps it is because we have too much already; or perhaps it is because we have lost the fullness of the joy of giving...' This directly supports the statement that there can be more than one reason why adults feel less thrilled by presents. Option 0 is incorrect because the passage says presents bring 'less thrill', not that it is impossible to feel thrilled. Option 2 is incorrect because the author actively proposes specific reasons rather than expressing complete ignorance. Option 3 introduces the concepts of 'loving or being loved', which are not discussed in the passage.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1499,8 +1505,8 @@
         "not being thrilled by new things",
         "giving and receiving joy only partially"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Based on the options provided, the passage discusses the contrast between a child's ability to fully experience joy and an adult's tendency to lose this ability. The root cause of this loss, as highlighted by the options, is the adult habit of 'worrying too much about the past and future.' Because of this worry, adults are 'not thrilled by new things' and end up 'giving and receiving joy only partially.' These latter points are symptoms or consequences of the main issue. Therefore, the primary behavior the author is arguing against is worrying too much about the past and the future, as it robs individuals of their ability to live in the present and experience joy fully.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1524,8 +1530,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let the three distinct non-zero digits be A, B, and C. \n\nThe 3-digit numbers that can be formed using A, B, and C without repetition are: \nABC, ACB, BAC, BCA, CAB, and CBA. \nThere are 3! = 6 such numbers.\n\nTo find the sum of these 6 numbers (x), we can add their place values:\nEach digit (A, B, and C) appears exactly twice in the hundreds place, twice in the tens place, and twice in the units place.\nSum of hundreds place = 200(A + B + C)\nSum of tens place = 20(A + B + C)\nSum of units place = 2(A + B + C)\n\nTotal sum, x = 200(A + B + C) + 20(A + B + C) + 2(A + B + C) \nx = 222(A + B + C)\n\nSince A, B, and C are distinct non-zero digits, to find the minimum possible value of x, we must take the smallest distinct non-zero digits, which are 1, 2, and 3.\nMinimum value of (A + B + C) = 1 + 2 + 3 = 6.\n\nTherefore, the least possible value of x = 222 × 6 = 1332.\n\nNow let's evaluate the given statements:\n1. \"The 4-digit least value of x is 1332.\" \nSince the absolute minimum value of x is 1332 (which is a 4-digit number), this statement is correct.\n\n2. \"The 3-digit greatest value of x is 888.\" \nAs calculated, the minimum possible value of x is 1332. It is impossible for x to be a 3-digit number under the given conditions (distinct non-zero digits). Thus, this statement is incorrect.\n\nTherefore, only Statement 1 is correct.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1549,8 +1555,8 @@
         "10",
         "12"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the 3-digit PIN be represented as $d_1 d_2 d_3$.\n\nAccording to the problem, the PIN must satisfy the following conditions:\n1. The digits are chosen from 1 to 7: $d_1, d_2, d_3 \\in \\{1, 2, 3, 4, 5, 6, 7\\}$.\n2. The digits are in decreasing order from left to right: $d_1 > d_2 > d_3$.\n3. Any two digits differ by at least 2: $d_1 - d_2 \\ge 2$ and $d_2 - d_3 \\ge 2$.\n\nFrom the conditions, we can determine the minimum possible values for the digits:\n- The smallest possible value for $d_3$ is 1.\n- The smallest possible value for $d_2$ is $d_3 + 2 = 1 + 2 = 3$.\n- The smallest possible value for $d_1$ is $d_2 + 2 = 3 + 2 = 5$.\n\nThus, $d_1$ can only take the values 5, 6, or 7. Let's systematically list all the possible PIN combinations based on the value of $d_1$:\n\n**Case 1: If $d_1 = 7$**\n- If $d_2 = 5$, then $d_3$ can be 3, 2, or 1. (3 combinations: 753, 752, 751)\n- If $d_2 = 4$, then $d_3$ can be 2 or 1. (2 combinations: 742, 741)\n- If $d_2 = 3$, then $d_3$ can only be 1. (1 combination: 731)\nTotal combinations for $d_1 = 7$ is $3 + 2 + 1 = 6$.\n\n**Case 2: If $d_1 = 6$**\n- If $d_2 = 4$, then $d_3$ can be 2 or 1. (2 combinations: 642, 641)\n- If $d_2 = 3$, then $d_3$ can only be 1. (1 combination: 631)\nTotal combinations for $d_1 = 6$ is $2 + 1 = 3$.\n\n**Case 3: If $d_1 = 5$**\n- If $d_2 = 3$, then $d_3$ can only be 1. (1 combination: 531)\nTotal combinations for $d_1 = 5$ is 1.\n\nAdding them all up, the total number of valid PINs is $6 + 3 + 1 = 10$.\n\nTo find the PIN with absolute certainty, a person might have to try every single valid combination in the worst-case scenario. Therefore, the maximum number of attempts needed is 10.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1574,8 +1580,8 @@
         "12",
         "8"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. For a triangle inscribed in a circle to be a right-angled triangle, its hypotenuse must be a diameter of the circle. This is based on the geometric theorem that the angle subtended by a diameter at any point on the circumference is exactly 90 degrees.\n2. We are given 8 equidistant points on the circle. A diameter is formed by connecting two points that are exactly opposite each other.\n3. The number of diameters that can be drawn using these 8 points is 8 / 2 = 4 diameters.\n4. For each of these 4 diameters, we need to choose a third vertex to form a triangle. Since 2 points are already used for the diameter, there are 8 - 2 = 6 remaining points on the circle.\n5. Any of these 6 remaining points will form a right-angled triangle when connected to the ends of the diameter.\n6. Therefore, the total number of right-angled triangles that can be formed is: (Number of diameters) × (Number of remaining points per diameter) = 4 × 6 = 24.\n7. This matches the first option (24).",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1599,8 +1605,8 @@
         "Less than 30 days or more than 30 days",
         "Data is inadequate to draw any conclusion"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let the amount of work done by 1 man in 1 day be 'm' and by 1 woman in 1 day be 'w'.\n\nAccording to the given information, 24 men and 12 women can complete the work in 30 days.\nTotal Work (W) = (24m + 12w) × 30\n\nWe need to find the number of days (D) required for 12 men and 24 women to complete the same work.\nWork done by 12 men and 24 women in 1 day = 12m + 24w\n\nNumber of days (D) = Total Work / Work done in 1 day\nD = [(24m + 12w) × 30] / (12m + 24w)\n\nTaking 12 common from both the numerator and the denominator:\nD = [12(2m + w) × 30] / [12(m + 2w)]\nD = 30 × [(2m + w) / (m + 2w)]\n\nTo find the exact value of D, we need the ratio of the efficiency of a man to a woman (m/w). \n- If m = w (men and women are equally efficient), D = 30 × (3/3) = 30 days.\n- If m > w (men are more efficient), the fraction (2m + w) / (m + 2w) > 1, so D > 30 days.\n- If m < w (women are more efficient), the fraction (2m + w) / (m + 2w) < 1, so D < 30 days.\n\nSince the problem does not provide the ratio of the efficiencies of men and women, we cannot determine the exact number of days. Therefore, the data is inadequate to draw any conclusion.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1624,8 +1630,8 @@
         "1",
         "0"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "To find the remainder when the product 91 × 92 × 93 × 94 × 95 × 96 × 97 × 98 × 99 is divided by 1261, let's first find the prime factorization of the divisor, 1261.\n\nChecking for prime factors:\n- It is not divisible by 2, 3, 5, 7, or 11.\n- Let's check 13: 1261 ÷ 13 = 97.\nSo, 1261 = 13 × 97.\n\nNow, let's look at the numbers in the given product:\nProduct (P) = 91 × 92 × 93 × 94 × 95 × 96 × 97 × 98 × 99\n\nNotice that:\n1. The number 91 is present in the product, and 91 = 13 × 7. This means 13 is a factor of the product.\n2. The number 97 is explicitly present in the product.\n\nSince both 13 and 97 are factors of the product, their product (13 × 97 = 1261) must also be a factor of the entire product.\n\nTherefore, the given product is perfectly divisible by 1261. When a number is perfectly divisible by another, the remainder is 0.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1649,8 +1655,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's evaluate both statements step by step:\n\n**Statement 1: It is possible to cut the sheet exactly into 4 square sheets.**\n- The dimensions of the rectangular sheet are 20 cm (length) × 8 cm (breadth).\n- We can cut the rectangle to form squares. First, we can cut out a square of 8 cm × 8 cm. \n- The remaining sheet will have dimensions of (20 - 8) = 12 cm × 8 cm.\n- From this remaining sheet, we can cut out another square of 8 cm × 8 cm.\n- The remaining sheet will now have dimensions of (12 - 8) = 4 cm × 8 cm.\n- This 4 cm × 8 cm rectangle can be divided exactly in half to form two smaller squares, each of 4 cm × 4 cm.\n- In total, we have exactly 4 square sheets: two (8 cm × 8 cm) squares and two (4 cm × 4 cm) squares. \n- Therefore, Statement 1 is correct.\n\n**Statement 2: It is possible to cut the sheet into 10 triangular sheets of equal area.**\n- The total area of the rectangular sheet is 20 cm × 8 cm = 160 sq cm.\n- If we want 10 triangular sheets of equal area, each triangle must have an area of 160 / 10 = 16 sq cm.\n- We can divide the length of the rectangle (20 cm) into 5 equal parts of 4 cm each. This divides the original sheet into 5 smaller rectangles, each measuring 4 cm × 8 cm.\n- The area of each of these smaller rectangles is 4 × 8 = 32 sq cm.\n- By drawing a diagonal across each of these 5 smaller rectangles, we cut each one into 2 identical right-angled triangles.\n- This gives us a total of 5 × 2 = 10 triangles.\n- The area of each triangle will be exactly half of the smaller rectangle: 32 / 2 = 16 sq cm.\n- Therefore, Statement 2 is also correct.\n\nSince both Statement 1 and Statement 2 are correct, the correct option is 'Both 1 and 2'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1674,8 +1680,8 @@
         "y < x < z",
         "z < y < x"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Step 1: Translate the first statement into an algebraic equation.\n'70% of a number x is added to another number y, the sum becomes 165% of the value of y.'\n0.70x + y = 1.65y\n\nStep 2: Solve for y in terms of x.\n0.70x = 1.65y - y\n0.70x = 0.65y\ny = (0.70 / 0.65)x\ny = (70 / 65)x = (14 / 13)x\nSince 14/13 is greater than 1, we can conclude that y > x (assuming x is a positive number, which is standard for such aptitude problems).\n\nStep 3: Translate the second statement into an algebraic equation.\n'60% of the number x is added to another number z, then the sum becomes 165% of the value of z.'\n0.60x + z = 1.65z\n\nStep 4: Solve for z in terms of x.\n0.60x = 1.65z - z\n0.60x = 0.65z\nz = (0.60 / 0.65)x\nz = (60 / 65)x = (12 / 13)x\nSince 12/13 is less than 1, we can conclude that z < x.\n\nStep 5: Combine the inequalities.\nFrom the above steps, we have z < x and x < y.\nTherefore, the correct relationship is z < x < y.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1699,8 +1705,8 @@
         "There are people who fail to accumulate money for their needs.",
         "There is no need to accumulate money."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage begins with the phrase 'The majority of people who fail to accumulate money sufficient for their needs...'. This phrasing logically implies the existence of a specific group of people—namely, those who fail to accumulate enough money for their needs. The passage does not state that 'most' people in general fail to accumulate money (Option 0), nor does it state that most people succeed (Option 1). It also explicitly mentions 'money sufficient for their needs,' contradicting the idea that there is no need to accumulate money (Option 3). Therefore, the only valid implication is that there are indeed people who fail to accumulate money for their needs.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1726,8 +1732,8 @@
         "People should neither give nor accept the opinions.",
         "People will succeed in any undertaking if they do not accept any opinion at all."
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "The passage highlights that people who fail to accumulate sufficient money or succeed in their undertakings are those who are easily influenced by the opinions of others. The concluding sentence explicitly states, 'If you are influenced by opinions when you reach decisions, you will not succeed in any undertaking.' Therefore, the central message or main idea is that people should not let the opinions of others influence their thinking and decision-making. Option 1 is incorrect because the passage talks about accumulating money 'sufficient for their needs,' not 'as much as they can.' Option 2 is incorrect as the passage does not forbid giving opinions. Option 3 is a logical fallacy; the passage states that being influenced by opinions leads to failure, but it does not guarantee that simply ignoring opinions will automatically result in success.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1753,8 +1759,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Statement 1 is correct: The passage states that the social order is 'founded on conventions' and that it is 'the basis of all other rights'. By logical deduction, if conventions are the foundation of the social order, and the social order is the basis of all other rights, then conventions are the ultimate source of the rights of man.\n\nStatement 2 is correct: The passage explicitly mentions that the social order is 'the basis of all other rights'. This implies that all other rights stem from and depend upon the existence of a social order, meaning they can only be exercised when a social order is in place.\n\nSince both statements are logically supported by the passage, 'Both 1 and 2' is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1780,8 +1786,8 @@
         "9600",
         "5000"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. Let the total number of voters in the voters list be V.\n2. According to the problem, 80% of voters cast their vote. So, the number of votes cast = 0.8V.\n3. Candidate X got 56% of the votes cast. Since there are only two candidates, no invalid votes, and no NOTA option, Candidate Y must have received the remaining votes: (100% - 56%) = 44% of the votes cast.\n4. The winning margin is the difference between the votes received by X and Y, which is (56% - 44%) = 12% of the votes cast.\n5. We are given that X won by 1440 votes. Therefore, 12% of the votes cast = 1440.\n6. Let C be the total votes cast. We have 0.12 * C = 1440, which means C = 1440 / 0.12 = 12000.\n7. Since the votes cast (C) is equal to 80% of the total voters (0.8V), we can set up the equation: 0.8V = 12000.\n8. Solving for V, we get V = 12000 / 0.8 = 15000.\n9. The total number of voters in the voters list is 15000.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1805,8 +1811,8 @@
         "1083",
         "1183"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Find the Least Common Multiple (LCM) of the given divisors: 6, 9, 12, 15, and 18.\nPrime factorization of the numbers:\n6 = 2 × 3\n9 = 3²\n12 = 2² × 3\n15 = 3 × 5\n18 = 2 × 3²\n\nLCM = 2² × 3² × 5 = 4 × 9 × 5 = 180.\n\nStep 2: Any number that leaves a remainder of 3 when divided by these numbers will be of the form:\nN = (LCM × k) + 3, where k is a positive integer.\nSo, N = 180k + 3.\n\nStep 3: We need the smallest number greater than 1000.\n180k + 3 > 1000\n180k > 997\nk > 997 / 180\nk > 5.538...\n\nSince k must be an integer, the smallest possible value for k is 6.\n\nStep 4: Substitute k = 6 into the equation.\nN = 180(6) + 3\nN = 1080 + 3\nN = 1083.\n\nStep 5: Verify the answer.\n1083 ÷ 6 = 180 remainder 3\n1083 ÷ 9 = 120 remainder 3\n1083 ÷ 12 = 90 remainder 3\n1083 ÷ 15 = 72 remainder 3\n1083 ÷ 18 = 60 remainder 3\n\nThe smallest number greater than 1000 satisfying the condition is 1083, which matches option 2.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1830,8 +1836,8 @@
         "18",
         "9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. Let the two-digit number 'p' be represented as 10a + b, where 'a' and 'b' are its digits.\n2. Then 'q', which is 'p' reversed, will be 10b + a.\n3. We are given that p × q = 2430.\n4. Since the product ends in a zero, at least one of the numbers must be a multiple of 5, and the other must be an even number. \n5. Neither 'a' nor 'b' can be 0, because if one of them were 0, either 'p' or 'q' would become a single-digit number (e.g., if b=0, q = 0a = a). Thus, the multiple of 5 must end in the digit 5.\n6. This means one of the digits is 5, and the other digit must be an even number (2, 4, 6, or 8).\n7. Let's test the possible pairs of such numbers and their reverses:\n   - If the digits are 2 and 5: 25 × 52 = 1300 (Incorrect)\n   - If the digits are 4 and 5: 45 × 54 = 2430 (Correct!)\n   - If the digits are 6 and 5: 65 × 56 = 3640 (Incorrect)\n8. Therefore, the two numbers 'p' and 'q' are 45 and 54.\n9. The difference between p and q is: |54 - 45| = 9.\n10. This matches the option 9.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1855,8 +1861,8 @@
         "1 and 3 only",
         "1, 2 and 3"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "Let's evaluate each statement one by one based on the given conditions: $p$ is a prime number and $q$ is a composite number.\n\n**Statement 1: $p \\times q$ can be an odd number.**\nFor the product of two numbers to be odd, both numbers must be odd. \n- Let $p = 3$ (which is an odd prime number).\n- Let $q = 9$ (which is an odd composite number).\n- Then, $p \\times q = 3 \\times 9 = 27$, which is an odd number.\nThus, Statement 1 is correct.\n\n**Statement 2: $q / p$ can be a prime number.**\nFor $q / p$ to be a prime number, let's say $q / p = r$, where $r$ is a prime number. This implies $q = p \\times r$. Since $p$ and $r$ are both primes, their product $q$ will naturally have more than two factors (1, $p$, $r$, and $p \\times r$), making $q$ a composite number.\n- Let $p = 2$ (a prime number).\n- Let $q = 6$ (a composite number).\n- Then, $q / p = 6 / 2 = 3$, which is a prime number.\nThus, Statement 2 is correct.\n\n**Statement 3: $p + q$ can be a prime number.**\nWe need to find a prime $p$ and a composite $q$ such that their sum is prime.\n- Let $p = 2$ (a prime number).\n- Let $q = 9$ (a composite number).\n- Then, $p + q = 2 + 9 = 11$, which is a prime number.\n- Alternatively, let $p = 3$ (prime) and $q = 4$ (composite). Then $p + q = 3 + 4 = 7$ (prime).\nThus, Statement 3 is correct.\n\nSince all three statements are correct, the correct option is '1, 2 and 3'.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1880,8 +1886,8 @@
         "Both 1 and 2",
         "Neither 1 nor 2"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let's evaluate both statements step by step:  **Statement 1: Between 3:16 p.m. and 3:17 p.m., both hour hand and minute hand coincide.** - At exactly 3:16 p.m., the minute hand has moved for 16 minutes. Its angle from the 12 o'clock position is 16 × 6° = 96°. - The hour hand at 3:00 p.m. is at 90°. In 16 minutes, it moves an additional 16 × 0.5",
       "metadata": {
         "category": "pure-static",
         "subject": "logical_reasoning",
@@ -1905,8 +1911,8 @@
         "m < n",
         "Cannot be determined due to insufficient data"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "Let us solve the problem step by step:\n\n**Step 1: Initial State**\n- Container X has 100 ml of milk and 0 ml of water. (Total volume = 100 ml)\n- Container Y has 0 ml of milk and 100 ml of water. (Total volume = 100 ml)\n\n**Step 2: First Transfer (20 ml from X to Y)**\n- 20 ml of milk is taken from X and added to Y.\n- Container X now has: 100 - 20 = 80 ml of milk. (Total volume = 80 ml)\n- Container Y now has: 20 ml of milk and 100 ml of water. (Total volume = 120 ml)\n- The ratio of milk to water in Container Y is 20 : 100, which simplifies to 1 : 5.\n\n**Step 3: Second Transfer (20 ml from Y to X)**\n- 20 ml of the well-mixed solution in Y is transferred back to X.\n- Since the ratio of milk to water in Y is 1 : 5, the 20 ml mixture will contain:\n  - Milk = (1/6) * 20 = 10/3 ml\n  - Water = (5/6) * 20 = 50/3 ml\n\n**Step 4: Final State**\n- Container X receives this 20 ml mixture. \n  - Final milk in X = 80 + 10/3 = 250/3 ml\n  - Final water in X = 0 + 50/3 = 50/3 ml\n  - Total volume in X = 80 + 20 = 100 ml\n- Container Y loses this 20 ml mixture.\n  - Final milk in Y = 20 - 10/3 = 50/3 ml\n  - Final water in Y = 100 - 50/3 = 250/3 ml\n  - Total volume in Y = 120 - 20 = 100 ml\n\n**Step 5: Calculate Proportions (m and n)**\n- 'm' is the proportion of milk in X: \n  m = (Volume of milk in X) / (Total volume of X) = (250/3) / 100 = 250 / 300 = 5/6\n- 'n' is the proportion of water in Y: \n  n = (Volume of water in Y) / (Total volume of Y) = (250/3) / 100 = 250 / 300 = 5/6\n\nComparing the two proportions, we get m = 5/6 and n = 5/6. Therefore, m = n.\n\n*(Logical Shortcut: Since both containers end up with their original total volumes of 100 ml, any milk missing from Container X must have been exactly replaced by water from Container Y. Thus, the fraction of water in X is equal to the fraction of milk in Y, leaving the proportion of milk in X exactly equal to the proportion of water in Y.)*",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -1930,8 +1936,8 @@
         "155/9",
         "250/9"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. The total angle of a pie chart is always 360°.\n2. The sum of the angles for items B, C, D, and E is given as 90° + 50° + 45° + 75° = 260°.\n3. The angle corresponding to item A is the remaining angle in the pie chart, which is 360° - 260° = 100°.\n4. To find the percentage of expenditure on item A, we divide its angle by the total angle and multiply by 100.\n5. Percentage = (100° / 360°) × 100 = (10 / 36) × 100 = (5 / 18) × 100 = 500 / 18 = 250 / 9 %.\n6. Therefore, the percentage of expenditure on item A is 250/9.",
       "metadata": {
         "category": "pure-static",
         "subject": "data_interpretation",
@@ -1955,8 +1961,8 @@
         "it is never without some value",
         "it is always very valuable"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage explicitly states, 'Scientific research is probably never completely valueless.' This directly translates to the idea that scientific research always has at least some value, or in other words, it is 'never without some value'. The author further explains that even seemingly silly or insignificant research might eventually be useful to a talented investigator. Therefore, Option 2 is the correct answer.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -1982,8 +1988,8 @@
         "any research result can be of value to an intelligent investigator",
         "a research result must always be of some value to an intelligent investigator"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "The passage explicitly states that 'there is always a chance that the results may be of value to the investigator of talent' regardless of how silly, insignificant, mechanical, or unintelligent the research may seem. This directly supports the idea that 'any research result can be of value to an intelligent investigator'. Options 1 and 3 use absolute terms like 'is always' and 'must always', which contradict the passage's use of 'may be' and 'a chance'. Option 0 contradicts the passage entirely.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2009,8 +2015,8 @@
         "Interlinking of rivers across the country",
         "Buffer stocking of water through dams and recharging aquifers"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "The passage highlights the temporal skewness of water availability in India, noting that 75% of annual precipitation occurs in just 120 days, leading to floods, while the remaining 245 days see 'too little' water, leading to droughts. To manage and regulate this skewed availability for year-round consumption, the excess water from the monsoon months must be stored for the dry months. 'Buffer stocking of water through dams and recharging aquifers' is the most practical, rational, and lasting solution to achieve this, as it directly addresses the need to capture and store 'too much' water to mitigate both floods and droughts.",
       "metadata": {
         "category": "pure-static",
         "subject": "comprehension",
@@ -2036,8 +2042,8 @@
         "5",
         "4"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the maximum value of m such that 15! (15 x 14 x 13 x ... x 3 x 2 x 1) is divisible by 3^m, we need to find the highest power of the prime number 3 that divides 15!.\n\nWe can use Legendre's formula, which states that the highest power of a prime p dividing N! is given by:\nE_p(N!) = ⌊N / p⌋ + ⌊N / p^2⌋ + ⌊N / p^3⌋ + ...\nwhere ⌊x⌋ represents the greatest integer less than or equal to x.\n\nHere, N = 15 and p = 3.\nStep 1: Divide 15 by 3.\n⌊15 / 3⌋ = 5\n\nStep 2: Divide 15 by 3^2 (which is 9).\n⌊15 / 9⌋ = 1\n\nStep 3: Divide 15 by 3^3 (which is 27).\n⌊15 / 27⌋ = 0\n\nStep 4: Add the quotients together.\nMaximum value of m = 5 + 1 + 0 = 6.\n\nAlternatively, we can manually count the powers of 3 in the multiples of 3 up to 15:\n- 3 = 3^1 (one power of 3)\n- 6 = 2 × 3^1 (one power of 3)\n- 9 = 3^2 (two powers of 3)\n- 12 = 4 × 3^1 (one power of 3)\n- 15 = 5 × 3^1 (one power of 3)\nTotal powers of 3 = 1 + 1 + 2 + 1 + 1 = 6.\n\nTherefore, the maximum value of m is 6.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2061,8 +2067,8 @@
         "258",
         "262"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 1,
+      "explanation": "To find the value of X, we can analyze the sequence by looking for a mathematical pattern in the terms.\n\n**Method 1: Sum of Squares and Cubes**\nLet's express each term as the sum of the square and the cube of its position (n) in the sequence:\n- 1st term (n=1): 1² + 1³ = 1 + 1 = 2\n- 2nd term (n=2): 2² + 2³ = 4 + 8 = 12\n- 3rd term (n=3): 3² + 3³ = 9 + 27 = 36\n- 4th term (n=4): 4² + 4³ = 16 + 64 = 80\n- 5th term (n=5): 5² + 5³ = 25 + 125 = 150\n\nFollowing this exact pattern, the 6th term (X) will be:\n- 6th term (n=6): 6² + 6³ = 36 + 216 = 252\n\n**Method 2: Method of Differences**\nLet's find the differences between consecutive terms:\n- First differences: (12 - 2) = 10, (36 - 12) = 24, (80 - 36) = 44, (150 - 80) = 70\n- Second differences: (24 - 10) = 14, (44 - 24) = 20, (70 - 44) = 26\n- Third differences: (20 - 14) = 6, (26 - 20) = 6\n\nSince the third differences are constant (6), we can work backwards to find the next terms:\n- The next second difference will be: 26 + 6 = 32\n- The next first difference will be: 70 + 32 = 102\n- Therefore, the next term in the sequence (X) will be: 150 + 102 = 252\n\nBoth methods yield the same result. The value of X is 252, which matches Option 1.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2086,8 +2092,8 @@
         "945",
         "1050"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "To find the total number of passwords that can be generated, we need to determine the number of choices for each character in the password based on the given conditions.\n\n1. **Identify the components of the password:**\n   The password is made up of exactly 3 characters: 1 non-zero digit, 1 vowel, and 1 consonant.\n\n2. **Identify the arrangement (order) of the characters:**\n   The problem states that the password must start with a vowel and end with a consonant. Therefore, the only possible arrangement for the 3 characters is:\n   Position 1: Vowel\n   Position 2: Non-zero digit\n   Position 3: Consonant\n\n3. **Calculate the number of options for each position:**\n   - **Vowels:** There are 5 vowels in the English alphabet (A, E, I, O, U).\n   - **Non-zero digits:** There are 9 non-zero digits (1, 2, 3, 4, 5, 6, 7, 8, 9).\n   - **Consonants:** There are 21 consonants in the English alphabet (26 total letters - 5 vowels).\n\n4. **Calculate the total number of passwords:**\n   Using the Fundamental Principle of Counting (multiplication rule), we multiply the number of choices for each position:\n   Total passwords = (Number of Vowels) × (Number of Non-zero digits) × (Number of Consonants)\n   Total passwords = 5 × 9 × 21\n   Total passwords = 45 × 21 = 945\n\nComparing this result to the given options, 945 matches the third option.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2111,8 +2117,8 @@
         "54",
         "81"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 3,
+      "explanation": "1. **Understand the Grid**: The problem states that 9 cups are arranged in an equal number of rows and columns. This means they are placed in a 3x3 grid (3 rows and 3 columns).\n\n2. **Identify the Items**: We have 6 cups of coffee (C) and 3 cups of tea (T). Since the problem asks for the number of arrangements based on the type of drink, we treat the coffee cups as identical to each other, and the tea cups as identical to each other.\n\n3. **Total Unrestricted Arrangements**: The total number of ways to arrange 6 C's and 3 T's in 9 available positions is given by the combination formula 9C3 (choosing 3 positions for the tea cups out of 9):\n   Total ways = 9! / (6! * 3!) = (9 × 8 × 7) / (3 × 2 × 1) = 84 ways.\n\n4. **Identify the Restriction**: The condition is that *each row should contain at least one cup of coffee*. The only way this condition is violated is if a row contains NO cups of coffee, meaning the row is entirely filled with cups of tea.\n\n5. **Calculate Invalid Arrangements**: Since there are exactly 3 cups of tea, they can completely fill exactly one row. There are 3 rows in the grid, so there are exactly 3 ways to place the 3 tea cups such that they fill an entire row (either all in Row 1, all in Row 2, or all in Row 3).\n\n6. **Calculate Valid Arrangements**: Subtract the invalid arrangements from the total unrestricted arrangements.\n   Valid ways = Total ways - Invalid ways\n   Valid ways = 84 - 3 = 81.\n\n**Alternative Method (Constructive Approach)**:\nWe can distribute the 3 tea cups into the 3 rows such that no row gets 3 tea cups. The possible distributions of tea cups per row are:\n- **Case 1: 2 tea cups in one row, 1 in another, 0 in the last (2, 1, 0)**\n  Ways to assign these quantities to the 3 rows = 3! = 6 ways.\n  Ways to place 2 tea cups in a row of 3 = 3C2 = 3 ways.\n  Ways to place 1 tea cup in a row of 3 = 3C1 = 3 ways.\n  Ways to place 0 tea cups in a row of 3 = 3C0 = 1 way.\n  Total for Case 1 = 6 × 3 × 3 × 1 = 54 ways.\n\n- **Case 2: 1 tea cup in each row (1, 1, 1)**\n  Ways to assign these quantities = 1 way.\n  Ways to place 1 tea cup in each of the 3 rows = 3C1 × 3C1 × 3C1 = 3 × 3 × 3 = 27 ways.\n  Total for Case 2 = 27 ways.\n\nTotal valid arrangements = 54 + 27 = 81 ways.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2136,8 +2142,8 @@
         "Only three",
         "No such possibility is there"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Let the three consecutive integers be (x - 1), x, and (x + 1).\n\nAccording to the given condition, their sum is equal to their product.\nSum = (x - 1) + x + (x + 1) = 3x\nProduct = (x - 1) * x * (x + 1) = x(x^2 - 1) = x^3 - x\n\nEquating the sum and the product:\n3x = x^3 - x\nx^3 - 4x = 0\n\nFactoring out x, we get:\nx(x^2 - 4) = 0\nx(x - 2)(x + 2) = 0\n\nThis gives three possible values for x: 0, 2, and -2.\n\nLet's verify each case:\nCase 1: If x = 0, the integers are -1, 0, and 1. \nSum = -1 + 0 + 1 = 0. Product = -1 * 0 * 1 = 0. (Valid)\n\nCase 2: If x = 2, the integers are 1, 2, and 3. \nSum = 1 + 2 + 3 = 6. Product = 1 * 2 * 3 = 6. (Valid)\n\nCase 3: If x = -2, the integers are -3, -2, and -1. \nSum = -3 + (-2) + (-1) = -6. Product = (-3) * (-2) * (-1) = -6. (Valid)\n\nThus, there are exactly three such possibilities.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2161,8 +2167,8 @@
         "90",
         "100"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 0,
+      "explanation": "1. The numbers are of the form 0.XY, where X and Y are distinct non-zero digits.\n2. The possible non-zero digits are 1, 2, 3, 4, 5, 6, 7, 8, and 9. There are 9 such digits in total.\n3. For the first digit X, we can choose any of these 9 digits. So, there are 9 possible choices for X.\n4. For the second digit Y, it must be a non-zero digit and distinct from X. Therefore, we cannot use the digit already chosen for X, leaving us with 9 - 1 = 8 possible choices for Y.\n5. Using the fundamental principle of counting, the total number of such numbers is the product of the number of choices for X and Y.\n6. Total numbers = 9 × 8 = 72.\n7. This matches the first option (72).",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
@@ -2186,8 +2192,8 @@
         "41 kg",
         "Cannot be determined as data is inadequate"
       ],
-      "correctOption": -1,
-      "explanation": "",
+      "correctOption": 2,
+      "explanation": "Step 1: Use the formula for average: Average = Sum of observations / Number of observations.\n\nStep 2: From the first condition, the average weight of A, B, and C is 40 kg. \nTherefore, the sum of their weights is:\nA + B + C = 40 × 3 = 120 kg.\n\nStep 3: From the second condition, the average weight of B, D, and E is 42 kg. \nTherefore, the sum of their weights is:\nB + D + E = 42 × 3 = 126 kg.\nFrom this, we can express the sum of D and E as:\nD + E = 126 - B.\n\nStep 4: From the third condition, the weight of F is equal to that of B:\nF = B.\n\nStep 5: We need to find the average weight of all 6 individuals (A, B, C, D, E, and F). \nFirst, let's find the total sum of their weights:\nTotal Sum = A + B + C + D + E + F\n\nWe can group the terms based on the values we found:\nTotal Sum = (A + B + C) + (D + E) + F\n\nSubstitute the known values into the equation:\nTotal Sum = 120 + (126 - B) + B\nTotal Sum = 120 + 126 - B + B\nTotal Sum = 246 kg.\n\nStep 6: Calculate the average weight of the 6 individuals:\nAverage = Total Sum / 6\nAverage = 246 / 6 = 41 kg.\n\nThe average weight of A, B, C, D, E, and F is 41 kg.",
       "metadata": {
         "category": "pure-static",
         "subject": "math",
