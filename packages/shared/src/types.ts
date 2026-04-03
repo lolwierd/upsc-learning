@@ -462,6 +462,7 @@ export interface RunAttemptAnswerWithQuestion extends RunAttemptAnswer {
   subject: Subject;
   theme?: string;
   sequenceNumber: number;
+  metadata?: QuestionMetadata;
 }
 
 export interface RunAttemptWithAnswers extends RunAttempt {

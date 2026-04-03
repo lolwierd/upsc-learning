@@ -61,6 +61,7 @@ interface RunAttemptAnswerWithQuestionRow extends RunAttemptAnswerRow {
   options: string;
   correct_option: number;
   explanation: string;
+  metadata: string | null;
   subject: string;
   theme: string | null;
   sequence_number: number;
@@ -325,7 +326,7 @@ runAttemptById.get("/:id", async (c) => {
   // Get answers with question details
   const answersResult = await c.env.DB.prepare(
     `SELECT raa.*,
-            q.question_text, q.question_type, q.options, q.correct_option, q.explanation, q.sequence_number,
+            q.question_text, q.question_type, q.options, q.correct_option, q.explanation, q.sequence_number, q.metadata,
             qz.subject, qz.theme
      FROM run_attempt_answers raa
      JOIN questions q ON raa.question_id = q.id
@@ -354,6 +355,7 @@ runAttemptById.get("/:id", async (c) => {
     subject: a.subject as Subject,
     theme: a.theme || undefined,
     sequenceNumber: a.sequence_number,
+    metadata: a.metadata ? JSON.parse(a.metadata) : undefined,
   }));
 
   const response: RunAttemptWithAnswers = {

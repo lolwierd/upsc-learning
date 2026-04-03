@@ -8,10 +8,29 @@ import Link from "next/link";
 import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { getRunAttempt } from "@/lib/api";
-import type { RunAttemptWithAnswers, Subject } from "@mcqs/shared";
+import type { RunAttemptAnswerWithQuestion, RunAttemptWithAnswers, Subject } from "@mcqs/shared";
 import { SUBJECT_LABELS } from "@mcqs/shared";
 
-type FilterType = "all" | "wrong" | "marked";
+type FilterType = "all" | "wrong" | "wrong_marked" | "wrong_unmarked" | "marked";
+
+const GS_CORRECT_MARKS = 2;
+const GS_WRONG_PENALTY = 0.66;
+const CSAT_CORRECT_MARKS = 2.5;
+const CSAT_WRONG_PENALTY = 0.83;
+
+function isCsatQuestion(answer: Pick<RunAttemptAnswerWithQuestion, "questionType" | "metadata">) {
+  return /csat|gs2/i.test(String(answer.metadata?.paper || "")) || [
+    "comprehension",
+    "logical_reasoning",
+    "math",
+    "data_interpretation",
+    "decision_making",
+  ].includes(answer.questionType);
+}
+
+function formatUpscScore(score: number) {
+  return score.toFixed(2).replace(/\.?0+$/, "");
+}
 
 interface SubjectScore {
   subject: Subject;
@@ -150,11 +169,38 @@ export default function CombinedResultsPage() {
   // Sort by total questions (descending)
   subjectBreakdown.sort((a, b) => b.total - a.total);
 
+  const correctCount = attempt.answers.filter((a) => a.isCorrect === true).length;
   const wrongCount = attempt.answers.filter((a) => a.isCorrect === false).length;
   const markedCount = attempt.answers.filter((a) => a.markedForReview).length;
+  const markedWrongCount = attempt.answers.filter(
+    (a) => a.markedForReview && a.isCorrect === false
+  ).length;
+  const unmarkedWrongCount = attempt.answers.filter(
+    (a) => !a.markedForReview && a.isCorrect === false
+  ).length;
+  const unattemptedCount = attempt.answers.filter((a) => a.selectedOption === null).length;
+  const csatQuestionCount = attempt.answers.filter((a) => isCsatQuestion(a)).length;
+  const gsQuestionCount = total - csatQuestionCount;
+  const upscScore = attempt.answers.reduce((sum, answer) => {
+    if (answer.isCorrect === true) {
+      return sum + (isCsatQuestion(answer) ? CSAT_CORRECT_MARKS : GS_CORRECT_MARKS);
+    }
+    if (answer.isCorrect === false) {
+      return sum - (isCsatQuestion(answer) ? CSAT_WRONG_PENALTY : GS_WRONG_PENALTY);
+    }
+    return sum;
+  }, 0);
+  const scoreFormulaLabel =
+    csatQuestionCount > 0 && gsQuestionCount > 0
+      ? "GS +2/-0.66, CSAT +2.5/-0.83"
+      : csatQuestionCount > 0
+        ? "CSAT +2.5/-0.83"
+        : "GS +2/-0.66";
 
   const filteredAnswers = attempt.answers.filter((a) => {
     if (filter === "wrong") return a.isCorrect === false;
+    if (filter === "wrong_marked") return a.markedForReview && a.isCorrect === false;
+    if (filter === "wrong_unmarked") return !a.markedForReview && a.isCorrect === false;
     if (filter === "marked") return a.markedForReview;
     return true;
   });
@@ -186,7 +232,7 @@ export default function CombinedResultsPage() {
               <p className={cn("text-5xl font-bold", getScoreColor())}>
                 {score}/{total}
               </p>
-              <p className="text-sm text-gray-500 mt-1">Score</p>
+              <p className="text-sm text-gray-500 mt-1">Correct</p>
             </div>
             <div className="w-px h-16 bg-gray-200" />
             <div>
@@ -201,6 +247,42 @@ export default function CombinedResultsPage() {
                 {minutes}:{String(seconds).padStart(2, "0")}
               </p>
               <p className="text-sm text-gray-500 mt-1">Time Taken</p>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-4 mb-6 text-left">
+            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-blue-700">
+                Actual UPSC Score
+              </p>
+              <p className="mt-1 text-2xl font-bold text-blue-900">
+                {formatUpscScore(upscScore)}
+              </p>
+              <p className="text-xs text-blue-700">{scoreFormulaLabel}</p>
+            </div>
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-red-700">
+                Wrong
+              </p>
+              <p className="mt-1 text-2xl font-bold text-red-900">{wrongCount}</p>
+              <p className="text-xs text-red-700">All incorrect answers</p>
+            </div>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-amber-700">
+                Marked But Wrong
+              </p>
+              <p className="mt-1 text-2xl font-bold text-amber-900">{markedWrongCount}</p>
+              <p className="text-xs text-amber-700">Reviewed and still incorrect</p>
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-700">
+                Unmarked Wrong
+              </p>
+              <p className="mt-1 text-2xl font-bold text-gray-900">{unmarkedWrongCount}</p>
+              <p className="text-xs text-gray-600">
+                Incorrect without review mark
+                {unattemptedCount > 0 ? ` · ${unattemptedCount} unattempted` : ""}
+              </p>
             </div>
           </div>
 
@@ -270,6 +352,28 @@ export default function CombinedResultsPage() {
           )}
         >
           Wrong ({wrongCount})
+        </button>
+        <button
+          onClick={() => setFilter("wrong_marked")}
+          className={cn(
+            "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+            filter === "wrong_marked"
+              ? "bg-amber-100 text-amber-700"
+              : "text-gray-600 hover:bg-gray-100"
+          )}
+        >
+          Marked But Wrong ({markedWrongCount})
+        </button>
+        <button
+          onClick={() => setFilter("wrong_unmarked")}
+          className={cn(
+            "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+            filter === "wrong_unmarked"
+              ? "bg-gray-200 text-gray-800"
+              : "text-gray-600 hover:bg-gray-100"
+          )}
+        >
+          Unmarked Wrong ({unmarkedWrongCount})
         </button>
         <button
           onClick={() => setFilter("marked")}
@@ -434,7 +538,11 @@ export default function CombinedResultsPage() {
           <p className="text-gray-500">
             {filter === "wrong"
               ? "No wrong answers. Great job!"
-              : "No marked questions."}
+              : filter === "wrong_marked"
+                ? "No marked-but-wrong questions."
+                : filter === "wrong_unmarked"
+                  ? "No unmarked wrong questions."
+                  : "No marked questions."}
           </p>
         </Card>
       )}
