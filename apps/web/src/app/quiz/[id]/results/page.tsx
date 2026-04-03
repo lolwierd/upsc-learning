@@ -162,7 +162,6 @@ export default function ResultsPage() {
   const minutes = Math.floor(timeTaken / 60);
   const seconds = timeTaken % 60;
 
-  const correctCount = attempt.answers.filter((a) => a.isCorrect === true).length;
   const wrongCount = attempt.answers.filter((a) => a.isCorrect === false).length;
   const markedCount = attempt.answers.filter((a) => a.markedForReview).length;
   const markedWrongCount = attempt.answers.filter(

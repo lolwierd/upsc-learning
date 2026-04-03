@@ -169,7 +169,6 @@ export default function CombinedResultsPage() {
   // Sort by total questions (descending)
   subjectBreakdown.sort((a, b) => b.total - a.total);
 
-  const correctCount = attempt.answers.filter((a) => a.isCorrect === true).length;
   const wrongCount = attempt.answers.filter((a) => a.isCorrect === false).length;
   const markedCount = attempt.answers.filter((a) => a.markedForReview).length;
   const markedWrongCount = attempt.answers.filter(
