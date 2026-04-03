@@ -32,6 +32,16 @@ function formatUpscScore(score: number) {
   return score.toFixed(2).replace(/\.?0+$/, "");
 }
 
+function isAnsweredWrong(
+  answer: Pick<RunAttemptAnswerWithQuestion, "selectedOption" | "isCorrect">
+) {
+  return answer.selectedOption !== null && answer.isCorrect === false;
+}
+
+function isAnsweredCorrect(answer: Pick<RunAttemptAnswerWithQuestion, "isCorrect">) {
+  return answer.isCorrect === true;
+}
+
 interface SubjectScore {
   subject: Subject;
   score: number;
@@ -169,22 +179,22 @@ export default function CombinedResultsPage() {
   // Sort by total questions (descending)
   subjectBreakdown.sort((a, b) => b.total - a.total);
 
-  const wrongCount = attempt.answers.filter((a) => a.isCorrect === false).length;
+  const wrongCount = attempt.answers.filter((a) => isAnsweredWrong(a)).length;
   const markedCount = attempt.answers.filter((a) => a.markedForReview).length;
   const markedWrongCount = attempt.answers.filter(
-    (a) => a.markedForReview && a.isCorrect === false
+    (a) => a.markedForReview && isAnsweredWrong(a)
   ).length;
   const unmarkedWrongCount = attempt.answers.filter(
-    (a) => !a.markedForReview && a.isCorrect === false
+    (a) => !a.markedForReview && isAnsweredWrong(a)
   ).length;
   const unattemptedCount = attempt.answers.filter((a) => a.selectedOption === null).length;
   const csatQuestionCount = attempt.answers.filter((a) => isCsatQuestion(a)).length;
   const gsQuestionCount = total - csatQuestionCount;
   const upscScore = attempt.answers.reduce((sum, answer) => {
-    if (answer.isCorrect === true) {
+    if (isAnsweredCorrect(answer)) {
       return sum + (isCsatQuestion(answer) ? CSAT_CORRECT_MARKS : GS_CORRECT_MARKS);
     }
-    if (answer.isCorrect === false) {
+    if (isAnsweredWrong(answer)) {
       return sum - (isCsatQuestion(answer) ? CSAT_WRONG_PENALTY : GS_WRONG_PENALTY);
     }
     return sum;
@@ -197,9 +207,9 @@ export default function CombinedResultsPage() {
         : "GS +2/-0.66";
 
   const filteredAnswers = attempt.answers.filter((a) => {
-    if (filter === "wrong") return a.isCorrect === false;
-    if (filter === "wrong_marked") return a.markedForReview && a.isCorrect === false;
-    if (filter === "wrong_unmarked") return !a.markedForReview && a.isCorrect === false;
+    if (filter === "wrong") return isAnsweredWrong(a);
+    if (filter === "wrong_marked") return a.markedForReview && isAnsweredWrong(a);
+    if (filter === "wrong_unmarked") return !a.markedForReview && isAnsweredWrong(a);
     if (filter === "marked") return a.markedForReview;
     return true;
   });
@@ -390,7 +400,9 @@ export default function CombinedResultsPage() {
       {/* Questions with Answers */}
       <div className="space-y-4">
         {filteredAnswers.map((answer, displayIndex) => {
-          const isCorrect = answer.isCorrect;
+          const isCorrect = isAnsweredCorrect(answer);
+          const isWrong = isAnsweredWrong(answer);
+          const isUnattempted = answer.selectedOption === null;
           const selectedOption = answer.selectedOption;
           const correctOption = answer.correctOption;
 
@@ -414,7 +426,9 @@ export default function CombinedResultsPage() {
                     "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-medium text-sm",
                     isCorrect
                       ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                      : isWrong
+                        ? "bg-red-100 text-red-700"
+                        : "bg-gray-100 text-gray-600"
                   )}
                 >
                   {displayIndex + 1}
@@ -467,7 +481,7 @@ export default function CombinedResultsPage() {
                   if (isCorrectOption) {
                     bgColor = "bg-green-50 border-green-300";
                     textColor = "text-green-700";
-                  } else if (isSelected && !isCorrect) {
+                  } else if (isSelected && isWrong) {
                     bgColor = "bg-red-50 border-red-300";
                     textColor = "text-red-700";
                   }
@@ -525,6 +539,12 @@ export default function CombinedResultsPage() {
                     Explanation
                   </p>
                   <Markdown className="text-sm text-blue-700" text={answer.explanation} />
+                </div>
+              )}
+
+              {isUnattempted && (
+                <div className="mt-4 ml-11 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                  <p className="text-sm text-gray-700">Unattempted. No penalty should apply.</p>
                 </div>
               )}
             </Card>

@@ -275,16 +275,16 @@ attempt.post("/:id/submit", async (c) => {
 
   let score = 0;
   for (const answer of answers.results) {
-    const isCorrect =
-      answer.selected_option !== null &&
-      answer.selected_option === answer.correct_option;
-    if (isCorrect) score++;
+    const isCorrect = answer.selected_option === null
+      ? null
+      : answer.selected_option === answer.correct_option;
+    if (isCorrect === true) score++;
 
     // Update is_correct field
     await c.env.DB.prepare(
       `UPDATE attempt_answers SET is_correct = ? WHERE id = ?`
     )
-      .bind(isCorrect ? 1 : 0, answer.id)
+      .bind(isCorrect === null ? null : isCorrect ? 1 : 0, answer.id)
       .run();
   }
 

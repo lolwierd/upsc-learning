@@ -473,14 +473,15 @@ runAttemptById.post("/:id/submit", async (c) => {
   const subjectScores: Map<string, { score: number; total: number }> = new Map();
 
   for (const answer of answers.results) {
-    const isCorrect =
-      answer.selected_option !== null && answer.selected_option === answer.correct_option;
+    const isCorrect = answer.selected_option === null
+      ? null
+      : answer.selected_option === answer.correct_option;
 
-    if (isCorrect) totalScore++;
+    if (isCorrect === true) totalScore++;
 
     // Update is_correct field
     await c.env.DB.prepare(`UPDATE run_attempt_answers SET is_correct = ? WHERE id = ?`)
-      .bind(isCorrect ? 1 : 0, answer.id)
+      .bind(isCorrect === null ? null : isCorrect ? 1 : 0, answer.id)
       .run();
 
     // Track quiz scores
@@ -491,13 +492,13 @@ runAttemptById.post("/:id/submit", async (c) => {
       total: 0,
     };
     existing.total++;
-    if (isCorrect) existing.score++;
+    if (isCorrect === true) existing.score++;
     quizScores.set(answer.quiz_id, existing);
 
     // Track subject scores
     const subjectExisting = subjectScores.get(answer.subject) || { score: 0, total: 0 };
     subjectExisting.total++;
-    if (isCorrect) subjectExisting.score++;
+    if (isCorrect === true) subjectExisting.score++;
     subjectScores.set(answer.subject, subjectExisting);
   }
 
