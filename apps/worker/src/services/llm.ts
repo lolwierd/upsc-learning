@@ -118,6 +118,7 @@ interface GenerateQuizParams {
   temperatureOverride?: number; // Override temperature for this call (used for regen diversity)
   previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
   forceStatic?: boolean; // Force pure-static generation only
+  difficulty?: "standard" | "hard" | "brutal"; // Cognitive difficulty knob
 }
 
 export interface GenerateQuizMetrics {
@@ -527,6 +528,7 @@ async function generateQuizCall(
     shuffleSeed,
     previousSearchQueries,
     forceStatic = false,
+    difficulty = "standard",
   } = params;
 
   // Use primary generation model for all cases (including grounding)
@@ -556,6 +558,7 @@ async function generateQuizCall(
     shuffleSeed,
     previousSearchQueries,
     forceStatic,
+    difficulty,
   });
 
   const promptChars = prompt.length;
@@ -699,7 +702,10 @@ Generate exactly ${count} questions now.`;
       location: env.GOOGLE_VERTEX_LOCATION || "global",
       responseSchema: GENERATED_QUESTION_ARRAY_SCHEMA,
       enableGrounding: forceStatic ? false : enableCurrentAffairs,
-      thinkingLevel: forceStatic || !enableCurrentAffairs ? "high" : undefined,
+      thinkingLevel:
+        forceStatic || !enableCurrentAffairs || difficulty === "hard" || difficulty === "brutal"
+          ? "high"
+          : undefined,
       temperature: effectiveTemperature,
     });
 

@@ -89,8 +89,10 @@ const runQuizGeneration = async ({
       // apiKey not needed - using GCP_SERVICE_ACCOUNT for Vertex AI
       enableFactCheck: env.ENABLE_FACT_CHECK === "1",
       enableDeduplication: true,
-      enableCurrentAffairs: true, // Force enable current affairs for all quizzes
-      currentAffairsTheme,
+      enableCurrentAffairs: body.forceStatic ? false : true,
+      currentAffairsTheme: body.forceStatic ? undefined : currentAffairsTheme,
+      forceStatic: body.forceStatic,
+      difficulty: body.difficulty,
     });
 
     // Insert questions

@@ -55,6 +55,8 @@ export default function NewQuizPage() {
   const [questionCount, setQuestionCount] = useState<number>(40);
   // Current affairs theme (current affairs is now always enabled)
   const [currentAffairsTheme, setCurrentAffairsTheme] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<"standard" | "hard" | "brutal">("standard");
+  const [forceStatic, setForceStatic] = useState<boolean>(false);
 
   // Load default question count from settings
   useEffect(() => {
@@ -125,8 +127,10 @@ export default function NewQuizPage() {
         styles: [], // Empty array = auto-distribute based on UPSC pattern
         questionCount,
 
-        enableCurrentAffairs: true, // Always enabled
-        currentAffairsTheme: currentAffairsTheme || undefined,
+        enableCurrentAffairs: !forceStatic,
+        currentAffairsTheme: forceStatic ? undefined : currentAffairsTheme || undefined,
+        difficulty,
+        forceStatic,
       });
 
       // API returned successfully (async started)
@@ -205,14 +209,81 @@ export default function NewQuizPage() {
 
 
 
+          {/* Difficulty */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">🔥 Difficulty</span>
+              <span className="text-xs text-white bg-orange-500 px-2 py-0.5 rounded-full">
+                Cognitive load
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {(
+                [
+                  { value: "standard", label: "Standard", hint: "UPSC 2024-25 baseline" },
+                  { value: "hard", label: "Hard", hint: "Toughest tier of recent PYQs" },
+                  { value: "brutal", label: "Brutal", hint: "Top 10% PYQ difficulty" },
+                ] as const
+              ).map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setDifficulty(opt.value)}
+                  className={cn(
+                    "px-3 py-2 rounded-lg text-sm font-medium border transition-colors text-left",
+                    difficulty === opt.value
+                      ? "bg-orange-500 text-white border-orange-500"
+                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                  )}
+                >
+                  <div>{opt.label}</div>
+                  <div
+                    className={cn(
+                      "text-[11px] font-normal mt-0.5",
+                      difficulty === opt.value ? "text-orange-50" : "text-gray-500"
+                    )}
+                  >
+                    {opt.hint}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500">
+              Hard / Brutal force elimination-proof distractors, 4-5 statement questions, named
+              trap patterns, and precise-fact answers. Uses higher Gemini thinking budget.
+            </p>
+          </div>
+
+          {/* Static Only */}
+          <label className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={forceStatic}
+              onChange={(e) => setForceStatic(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+            <div>
+              <div className="text-sm font-medium text-gray-900">Static Only Mode</div>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Pure static questions only — no current affairs, no web search. Difficulty
+                directive still applies.
+              </p>
+            </div>
+          </label>
+
           {/* Current Affairs Theme (always enabled, optional focus) */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">
                 🌐 Current Affairs Integration
               </span>
-              <span className="text-xs text-white bg-green-500 px-2 py-0.5 rounded-full">
-                Always On
+              <span
+                className={cn(
+                  "text-xs text-white px-2 py-0.5 rounded-full",
+                  forceStatic ? "bg-gray-400" : "bg-green-500"
+                )}
+              >
+                {forceStatic ? "Disabled (Static Only)" : "Always On"}
               </span>
             </div>
             <p className="text-xs text-gray-500">
@@ -225,7 +296,12 @@ export default function NewQuizPage() {
               placeholder="e.g., G20 Summit, Budget 2024, Climate Agreements"
               value={currentAffairsTheme}
               onChange={(e) => setCurrentAffairsTheme(e.target.value)}
-              helperText="Optionally specify a current affairs topic to prioritize"
+              helperText={
+                forceStatic
+                  ? "Unavailable while Static Only mode is enabled"
+                  : "Optionally specify a current affairs topic to prioritize"
+              }
+              disabled={forceStatic}
             />
             {subject === 'random' && (
               <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">

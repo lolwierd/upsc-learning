@@ -7,6 +7,8 @@ interface StyleDistribution {
   count: number;
 }
 
+export type Difficulty = "standard" | "hard" | "brutal";
+
 interface PromptParams {
   subject: string;
   theme?: string;
@@ -19,6 +21,102 @@ interface PromptParams {
   shuffleSeed?: number; // Seed for theme randomization (changes per call)
   previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
   forceStatic?: boolean; // Force pure-static generation only
+  difficulty?: Difficulty; // Cognitive difficulty knob (default: "standard")
+}
+
+// ============================================================================
+// DIFFICULTY DIRECTIVE — COGNITIVE HARDNESS KNOB
+// ============================================================================
+// Injected near the top of every generation prompt (normal, static-only, random).
+// This is the highest-priority section after system instructions — it overrides
+// the model's natural tendency to produce safe, easy questions.
+
+function buildDifficultyDirective(difficulty: Difficulty = "standard"): string {
+  if (difficulty === "standard") {
+    return `
+DIFFICULTY TARGET: STANDARD (UPSC 2024-2025 baseline)
+- Match the average difficulty of UPSC Prelims 2024-2025 PYQs.
+- A well-prepared candidate (NCERT + one standard reference) should be able to answer ~60% confidently.
+`;
+  }
+
+  const isBrutal = difficulty === "brutal";
+  const label = isBrutal ? "BRUTAL (top 10% of UPSC PYQs)" : "HARD (UPSC 2023-2024 toughest tier)";
+  const allTrueAllFalsePct = isBrutal ? "50%" : "40%";
+  const fourPlusStmtPct = isBrutal ? "50%" : "35%";
+  const elimSeconds = isBrutal ? "10" : "5";
+  const factualCap = isBrutal ? "5%" : "10%";
+
+  return `
+═══════════════════════════════════════════════════════════════════════════════
+DIFFICULTY TARGET: ${label}  ←  HIGHEST PRIORITY OVERRIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+This directive OVERRIDES any softer guidance below about "avoid deep minutiae"
+or "test concepts not facts." For this generation, you MUST produce questions
+at the upper bound of UPSC difficulty. Easy or generic questions will be REJECTED.
+
+HARD-MODE RULES (NON-NEGOTIABLE — apply to every question):
+
+1. ELIMINATION-PROOFING (the single most important rule):
+   - Each of the 4 options must be defensible to a candidate who has read NCERT
+     + one standard reference (Laxmikanth / Spectrum / Shankar IAS) ONCE.
+   - Only a candidate who knows the SPECIFIC sub-clause, exception, year,
+     threshold, or footnote should be able to eliminate confidently.
+   - Self-check: "Could a 70th-percentile aspirant eliminate any option in
+     under ${elimSeconds} seconds?" If yes, REWRITE that option.
+   - No option may be eliminated by detecting absolute words (only/always/never/all/none).
+     If you catch such a word in a wrong option, REWRITE it with a softer hedged
+     formulation that is still factually false on a precise point.
+
+2. STATEMENT-QUESTION HARDENING:
+   - At least ${allTrueAllFalsePct} of statement questions must have ALL statements true OR
+     ALL statements false (forces complete knowledge — eliminates the
+     "1-true-1-false → pick 'both'" shortcut).
+   - At least ${fourPlusStmtPct} of statement questions must use 4 OR 5 statements
+     (not 2 or 3). Use the "How many of the above" format for these.
+   - Every wrong statement must use ONE of these specific traps:
+     {Scope, Exception, Terminology, Time/Version, Authority, Endemism, Quantity}
+     and the explanation MUST name the trap used (e.g., "Statement 2 uses an
+     Exception trap: Article 19(1)(g) is restricted by Art 19(6) for...").
+
+3. PRECISION-BIAS (override any "avoid deep minutiae" guidance):
+   - The correct answer must rest on a SPECIFIC fact: an exact year, sub-clause,
+     section number, threshold value, named exception, scientific name,
+     committee report number, or sub-paragraph reference.
+   - Generic "concept understanding" questions are TOO EASY for this difficulty.
+   - Prefer asking about: post-amendment article wording, exception clauses,
+     specific endemism (genus + region), production-rank by state, exact years
+     of treaties, sub-categories of IUCN status, named provisions of acts.
+
+4. STYLE BIAS:
+   - Cap pure factual / "standard" questions at ${factualCap} of the batch.
+   - Push the rest into Statement (4-5 stmt "How many"), Match ("How many pairs"
+     where the answer is frequently "Only one" or "None"), and Statement-I/II
+     where Statement-II is true but does NOT explain Statement-I.
+   - Country-Species, Party-Founder, Article-Provision, Scheme-Ministry pairs
+     are gold for this difficulty — use them aggressively.
+
+5. DISTRACTOR CONSTRUCTION:
+   - In every question, AT LEAST 2 distractors must independently use a different
+     trap pattern from the SUBJECT TRAP LIBRARY below.
+   - At least 1 distractor per question must be a "factually-correct-but-irrelevant"
+     option (true statement about the topic, just not the answer to THIS question).
+
+6. ANSWER DISTRIBUTION:
+   - Across the batch, the answer key must be roughly uniform across A/B/C/D.
+   - For "How many" questions, the correct answer must NOT default to "Only two"
+     — use "Only one", "All four", and "None" frequently. "None" is especially
+     valuable: forces candidates to verify every item rather than eliminate.
+
+7. SELF-VERIFICATION (perform mentally before emitting each question):
+   - Could a candidate guess this correctly without knowing the specific fact? → Rewrite.
+   - Are 2+ options trivially true or trivially false? → Rewrite.
+   - Does any wrong option use an absolute word? → Rewrite that option.
+   - Is the trap pattern named in the explanation? → Add it.
+
+═══════════════════════════════════════════════════════════════════════════════
+`;
 }
 
 // ============================================================================
@@ -338,7 +436,8 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, currentAffairsTheme, totalCount, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [], forceStatic = false } = params;
+  const { theme, styles, currentAffairsTheme, totalCount, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [], forceStatic = false, difficulty = "standard" } = params;
+  const difficultyDirective = buildDifficultyDirective(difficulty);
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
   const seed = shuffleSeed ?? Date.now();
 
@@ -368,6 +467,8 @@ function getRandomModePrompt(params: PromptParams): string {
   if (forceStatic) {
     return `
 UPSC PRELIMS 2026 - RANDOM MODE: PURE STATIC ONLY
+
+${difficultyDirective}
 
 MISSION: Generate ${totalCount} high-quality UPSC Prelims questions across multiple subjects.
 
@@ -406,6 +507,8 @@ NOW GENERATE ${totalCount} PURE-STATIC MULTI-SUBJECT QUESTIONS:
 
   return `
 UPSC PRELIMS 2026 - RANDOM MODE: MULTI-SUBJECT QUIZ GENERATION
+
+${difficultyDirective}
 
 MISSION: Generate ${totalCount} high-quality UPSC Prelims questions across
 multiple subjects, prioritizing topics likely to appear in May 2026 exam.
@@ -734,6 +837,7 @@ function getStaticOnlySubjectPrompt(params: PromptParams): string {
     excludeTopics,
     regenerationIndex = 0,
     shuffleSeed,
+    difficulty = "standard",
   } = params;
 
   const seed = shuffleSeed ?? Date.now();
@@ -775,6 +879,8 @@ GENERATE ${totalCount} UPSC STATIC-ONLY MCQ QUESTIONS
 
 SUBJECT: ${subject.toUpperCase()}
 ${staticThemeContext}
+
+${buildDifficultyDirective(difficulty)}
 
 STATIC-ONLY MODE (HIGHEST PRIORITY):
 - Generate ONLY pure-static questions.
@@ -2252,6 +2358,7 @@ export function getPrompt(params: PromptParams): string {
     regenerationIndex = 0,
     shuffleSeed,
     forceStatic = false,
+    difficulty = "standard",
   } = params;
 
   // Special handling for random mode - multi-subject quiz generation
@@ -2319,6 +2426,8 @@ GENERATE ${totalCount} UPSC - STANDARD MCQ QUESTIONS
 
 SUBJECT: ${subject.toUpperCase()}
 ${themeContext}
+
+${buildDifficultyDirective(difficulty)}
 
 ${PRELIMS_2026_FOCUS}
 

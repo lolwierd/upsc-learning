@@ -49,6 +49,8 @@ export const questionMetadataSchema = z.object({
 // Request Schemas
 // ============================================
 
+export const difficultySchema = z.enum(["standard", "hard", "brutal"]);
+
 export const generateQuizRequestSchema = z.object({
   subject: subjectSchema,
   theme: z.string().max(200).optional(),
@@ -59,6 +61,10 @@ export const generateQuizRequestSchema = z.object({
   // Current affairs integration
   enableCurrentAffairs: z.boolean().optional().default(true), // Enable Google Search grounding
   currentAffairsTheme: z.string().max(200).optional(), // Optional focus area for current affairs
+  // Cognitive difficulty knob
+  difficulty: difficultySchema.optional().default("standard"),
+  // Force pure-static generation (no current affairs)
+  forceStatic: z.boolean().optional().default(false),
 });
 
 export const startAttemptRequestSchema = z.object({
