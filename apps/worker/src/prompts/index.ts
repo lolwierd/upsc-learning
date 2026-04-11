@@ -7,6 +7,18 @@ interface StyleDistribution {
   count: number;
 }
 
+export interface CurrentAffairsMonthWindow {
+  startLabel: string;
+  endLabel: string;
+  rangeLabel: string;
+  monthLabels: string[];
+}
+
+interface WeightedCurrentAffairsWindowConfig {
+  monthLabels: readonly [string, string, string];
+  weight: number;
+}
+
 interface PromptParams {
   subject: string;
   theme?: string;
@@ -14,6 +26,7 @@ interface PromptParams {
   totalCount: number;
   enableCurrentAffairs?: boolean; // Enable current affairs context injection
   currentAffairsTheme?: string; // Optional focus area for current affairs
+  currentAffairsWindow?: CurrentAffairsMonthWindow; // Scoped 3-month CA window for this generation
   excludeTopics?: string[]; // Topics already covered — model should avoid these
   regenerationIndex?: number; // 0 = initial call, >0 = regeneration call index
   shuffleSeed?: number; // Seed for theme randomization (changes per call)
@@ -77,6 +90,63 @@ function shuffleArray<T>(arr: T[], rng: () => number): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+const CURRENT_AFFAIRS_WINDOW_OPTIONS: readonly WeightedCurrentAffairsWindowConfig[] = [
+  {
+    monthLabels: ["March 2025", "April 2025", "May 2025"],
+    weight: 1.1,
+  },
+  {
+    monthLabels: ["June 2025", "July 2025", "August 2025"],
+    weight: 1.1,
+  },
+  {
+    monthLabels: ["September 2025", "October 2025", "November 2025"],
+    weight: 1.1,
+  },
+  {
+    monthLabels: ["December 2025", "January 2026", "February 2026"],
+    weight: 0.8,
+  },
+] as const;
+
+export function selectCurrentAffairsMonthWindow(seed: number): CurrentAffairsMonthWindow {
+  const rng = seededRandom(seed ^ 0x5f3759df);
+  const totalWeight = CURRENT_AFFAIRS_WINDOW_OPTIONS.reduce(
+    (sum, option) => sum + option.weight,
+    0
+  );
+  let target = rng() * totalWeight;
+  let selected = CURRENT_AFFAIRS_WINDOW_OPTIONS[CURRENT_AFFAIRS_WINDOW_OPTIONS.length - 1];
+
+  for (const option of CURRENT_AFFAIRS_WINDOW_OPTIONS) {
+    target -= option.weight;
+    if (target <= 0) {
+      selected = option;
+      break;
+    }
+  }
+
+  const monthLabels = [...selected.monthLabels];
+
+  return {
+    startLabel: monthLabels[0],
+    endLabel: monthLabels[monthLabels.length - 1],
+    rangeLabel: `${monthLabels[0]} to ${monthLabels[monthLabels.length - 1]}`,
+    monthLabels,
+  };
+}
+
+function buildCurrentAffairsWindowSection(currentAffairsWindow: CurrentAffairsMonthWindow): string {
+  return `
+CURRENT AFFAIRS MONTH WINDOW (HIGHEST PRIORITY FOR CA TOPIC SELECTION):
+- For THIS quiz, use ONLY this contiguous 3-month CA window: ${currentAffairsWindow.rangeLabel}.
+- Eligible months for current-affairs discovery are ONLY: ${currentAffairsWindow.monthLabels.join(", ")}.
+- Scope BOTH direct-ca and derived-static topic selection to this exact 3-month window.
+- Do NOT choose CA triggers from outside this window unless a nearby official source is needed only to verify a fact already rooted in this window.
+- When you mention relevance, cite the correct month and year explicitly.
+`;
 }
 
 /**
@@ -338,9 +408,28 @@ export { calculateStyleDistribution };
 // ============================================================================
 
 function getRandomModePrompt(params: PromptParams): string {
-  const { theme, styles, currentAffairsTheme, totalCount, excludeTopics, regenerationIndex = 0, shuffleSeed, previousSearchQueries = [], forceStatic = false } = params;
+  const {
+    theme,
+    styles,
+    enableCurrentAffairs = true,
+    currentAffairsTheme,
+    currentAffairsWindow,
+    totalCount,
+    excludeTopics,
+    regenerationIndex = 0,
+    shuffleSeed,
+    previousSearchQueries = [],
+    forceStatic = false,
+  } = params;
   const styleDistribution = styles || calculateStyleDistribution(totalCount);
   const seed = shuffleSeed ?? Date.now();
+  const activeCurrentAffairsWindow = enableCurrentAffairs
+    ? currentAffairsWindow ?? selectCurrentAffairsMonthWindow(seed)
+    : undefined;
+  const currentAffairsRangeLabel = activeCurrentAffairsWindow?.rangeLabel || "recent relevant developments";
+  const currentAffairsWindowSection = activeCurrentAffairsWindow
+    ? buildCurrentAffairsWindowSection(activeCurrentAffairsWindow)
+    : "";
 
   // Apply theme randomization to subject-specific theme data
   // In random mode, each subject gets themes proportional to its share of the quiz
@@ -410,6 +499,8 @@ UPSC PRELIMS 2026 - RANDOM MODE: MULTI-SUBJECT QUIZ GENERATION
 MISSION: Generate ${totalCount} high-quality UPSC Prelims questions across
 multiple subjects, prioritizing topics likely to appear in May 2026 exam.
 
+${currentAffairsWindowSection}
+
 SUBJECT DISTRIBUTION STRATEGY (INTELLIGENT, NOT UNIFORM)
 
 UPSC-WEIGHTED DISTRIBUTION (Target for ${totalCount} questions):
@@ -465,18 +556,18 @@ Example - Theme "Current Affairs 2025":
 UPSC 2026 PREDICTION MODE (No specific theme)
 
 PREDICTION STRATEGY:
-- Focus on developments from JANUARY 2025 to PRESENT (Jan 2026)
+- Focus on developments ONLY from ${currentAffairsRangeLabel}
 - Prioritize topics with high exam probability:
-  - Legislation passed in 2025-2026
+  - Legislation, judgments, schemes, and summits from ${currentAffairsRangeLabel}
   - International summits involving India
   - Major policy launches and reforms
-  - Significant Supreme Court judgments
+  - Significant Supreme Court judgments from the selected window
   - Scientific missions and achievements
   - Environmental milestones and conventions
 
 CURRENT AFFAIRS QUESTION DESIGN (for CA questions per subject ratios above):
-- Use 2025-2026 events as the primary source (most recent)
-- Can include significant 2024 events if still relevant
+- Use events from ${currentAffairsRangeLabel} as the primary source
+- Do NOT use 2024 or out-of-window developments as CA triggers
 - MUST use Google Search to verify facts and get sources
 
 ${buildSearchDiversitySection(previousSearchQueries)}
@@ -504,7 +595,7 @@ Science/Economy/Environment questions should have MAJORITY CA integration — mo
 GENERATE THREE CATEGORIES PER SUBJECT:
 
 1. DIRECT CURRENT AFFAIRS (per subject % above):
-   - Question explicitly mentions recent events from 2025-2026
+   - Question explicitly mentions recent events from ${currentAffairsRangeLabel}
    - Examples: "In context of Union Budget 2025-26...", "With reference to COP30..."
    - MUST include [Relevance: ...] tag in explanation
    - MUST include "Sources: <URL>" with verified links
@@ -529,17 +620,17 @@ GENERATE THREE CATEGORIES PER SUBJECT:
 
 DIRECT CA QUESTIONS (per the subject-specific ratios above):
 
-${CURRENT_AFFAIRS_CONTEXT}
+${activeCurrentAffairsWindow ? CURRENT_AFFAIRS_CONTEXT(activeCurrentAffairsWindow) : ""}
 
 ${currentAffairsTheme ? `
 CURRENT AFFAIRS FOCUS: "${currentAffairsTheme}"
 
 Prioritize this theme when selecting current affairs topics. Use web search
-to find recent developments (2025+) related to this theme.
+to find developments from ${currentAffairsRangeLabel} related to this theme.
 ` : ''}
 
 DERIVED STATIC QUESTIONS (per subject ratios above):
-- Topics trending in news (last 12 months) but framed as pure static questions
+- Topics trending in news from ${currentAffairsRangeLabel} but framed as pure static questions
 - Use CA to SELECT topic, use NCERT/textbooks to FRAME question
 - NO explicit mention of dates, events, or recent developments
 - Subject-wise examples:
@@ -629,7 +720,7 @@ ${styleInstructions}
    - Link current affairs to underlying static concepts
    - For current affairs questions, include:
      [Relevance: <event + date + source>]
-     Sources: <URL from 2025+>
+     Sources: <URL from ${currentAffairsRangeLabel}>
 
 OUTPUT FORMAT
 
@@ -700,11 +791,11 @@ Out of ${totalCount} questions, apply PER-SUBJECT CA ratios:
 CATEGORY 1: DIRECT CA (per subject %)
   - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
   - MUST include [Relevance: ...] in explanation
-  - MUST include "Sources: <URL>" with verified links from 2025+
+  - MUST include "Sources: <URL>" with verified links from ${currentAffairsRangeLabel}
   - Applies most to Economy/Environment/Science, least to History/Geography
 
 CATEGORY 2: DERIVED STATIC (per subject %)
-  - Topic selected because it's trending in news (last 12 months)
+  - Topic selected because it's trending in news from ${currentAffairsRangeLabel}
   - Question framed purely from textbook - NO mention of recent events
   - NO [Relevance] tag, NO Sources needed
   - Looks identical to pure static question to the student
@@ -892,7 +983,7 @@ NOW GENERATE ${totalCount} HIGH-QUALITY STATIC-ONLY UPSC MCQ QUESTIONS: `;
 // ============================================================================
 // CURRENT AFFAIRS INTEGRATION CONTEXT
 // ============================================================================
-const CURRENT_AFFAIRS_CONTEXT = `
+const CURRENT_AFFAIRS_CONTEXT = (currentAffairsWindow: CurrentAffairsMonthWindow) => `
 CURRENT AFFAIRS GUIDELINES (TWO USAGE MODES):
 
 IMPORTANT: Current affairs influence questions in TWO ways (ratios vary per subject):
@@ -900,6 +991,8 @@ IMPORTANT: Current affairs influence questions in TWO ways (ratios vary per subj
 2. DERIVED STATIC: Use CA to pick topic, but frame purely from textbooks (NO [Relevance])
 
 You have access to Google Search for retrieving recent information.
+
+${buildCurrentAffairsWindowSection(currentAffairsWindow)}
 
 FOR DIRECT CA QUESTIONS (per the subject-specific ratios specified above):
 
@@ -909,39 +1002,40 @@ FOR DIRECT CA QUESTIONS (per the subject-specific ratios specified above):
    - "Considering the Union Budget 2025-26..." → Test fiscal policy concepts
 
 2. TIME FRAME for current affairs (STRICT):
-   - Events from JANUARY 2025 TO PRESENT (Feb 2026)
-   - Prefer 2025-2026 sources over older sources
-   - Focus on the 18 months leading up to the May 2026 exam
-   - Reference official sources (PIB, government websites, official reports) dated 2025+
+   - Events ONLY from ${currentAffairsWindow.rangeLabel}
+   - Prefer sources published within ${currentAffairsWindow.rangeLabel}
+   - If a fact needs verification, first seek official sources from the same selected months
+   - Reference official sources (PIB, government websites, official reports) dated within the selected window whenever possible
 
 3. QUESTION DESIGN with current affairs:
    - Current event as TRIGGER, static syllabus as ANSWER
    - Don't test obscure news details - test concepts triggered by news
    - These questions must add a [Relevance] note in explanation
 
-4. HIGH-VALUE CURRENT AFFAIRS TOPICS (2025-2026 Focus):
+4. HIGH-VALUE CURRENT AFFAIRS TOPICS (${currentAffairsWindow.rangeLabel} Focus):
    - International summits and India's role
-   - New government schemes launched in 2025/2026
-   - Recent Constitutional amendments and bills
-   - Supreme Court judgments from 2025 onwards
+   - New government schemes launched in the selected window
+   - Constitutional amendments, bills, and ordinances active in the selected window
+   - Supreme Court judgments from the selected window
    - Major scientific achievements and milestones
    - Recent environmental conventions (COP30 etc.)
-   - Economic surveys and budget analyses of 2025-26
+   - Economic survey, budget, and policy analyses relevant to the selected window
 
 5. EXPLANATION FORMAT (for current-affairs questions ONLY):
-   - RELEVANCE: How this relates to recent events (MUST BE 2025+)
+   - RELEVANCE: How this relates to events from ${currentAffairsWindow.rangeLabel}
    - STATIC LINK: The underlying concept from UPSC syllabus
    - Append: [Relevance: <event + month/year + source type>]
    - Include: Sources: https://pib.gov.in/... ; https://example.gov.in/...
 
 MANDATORY WEB SEARCH (for Direct CA only):
 - MUST use Google Search for the Direct CA questions
-- Filter search results to prioritize 2025 and 2026 dates
+- Filter search results to prioritize ${currentAffairsWindow.monthLabels.join(", ")}
 - Each Direct CA question must cite at least one URL
 
 FOR DERIVED STATIC QUESTIONS (per the subject-specific ratios specified above):
-- Use web search to identify trending topics from past 12 months
+- Use web search to identify trending topics from the selected 3-month window
 - Examples: Governor-state conflicts, SEBI regulatory debates, Heatwave discussions
+- The triggering development must come from ${currentAffairsWindow.rangeLabel}
 - Frame question purely from textbook/NCERT as if the topic is timeless
 - NO mention of the triggering event in question text
 - NO [Relevance] tag, NO Sources
@@ -953,13 +1047,16 @@ CRITICAL REMINDER (ratios vary per subject — see subject-specific ratios above
 - Pure Static (no CA influence)
 `;
 
-const CURRENT_AFFAIRS_THEME_CONTEXT = (theme: string) => `
+const CURRENT_AFFAIRS_THEME_CONTEXT = (
+  theme: string,
+  currentAffairsWindow: CurrentAffairsMonthWindow
+) => `
 CURRENT AFFAIRS FOCUS THEME: ${theme}
 
 Generate questions specifically focusing on recent developments related to: "${theme}"
 
 Use Google Search to find the latest information on this topic and create questions
-that test understanding of underlying concepts through the lens of these recent events.
+that test understanding of underlying concepts through the lens of events from ${currentAffairsWindow.rangeLabel}.
 `;
 
 // ============================================================================
@@ -1407,11 +1504,15 @@ UPSC EVOLUTION INSIGHT:
 - Current affairs TRIGGERS static concepts (not standalone static)
 `;
 
-function getContentBalanceRatio(subject: string): string {
+function getContentBalanceRatio(
+  subject: string,
+  currentAffairsWindow?: CurrentAffairsMonthWindow
+): string {
   const { directCA, derivedStatic } = getSubjectCARatio(subject);
   const dcPct = Math.round(directCA * 100);
   const dsPct = Math.round(derivedStatic * 100);
   const psPct = 100 - dcPct - dsPct; // ensure they sum to 100
+  const currentAffairsWindowLabel = currentAffairsWindow?.rangeLabel || "recent relevant developments";
 
   return `
 CONTENT BALANCE: THREE-TIER SYSTEM (CALIBRATED PER SUBJECT FROM PYQ ANALYSIS 2013-2025)
@@ -1419,7 +1520,7 @@ CONTENT BALANCE: THREE-TIER SYSTEM (CALIBRATED PER SUBJECT FROM PYQ ANALYSIS 201
 ${dcPct}% DIRECT CA + ${dsPct}% DERIVED STATIC + ${psPct}% PURE STATIC (for ${subject})
 
 1. DIRECT CA (${dcPct}%):
-   - Explicit mention of recent events (2025-2026)
+   - Explicit mention of recent events from ${currentAffairsWindowLabel}
    - MUST include [Relevance: ...] and Sources in explanation
    - Example: "With reference to India's inclusion in the JP Morgan Bond Index in 2025..."
 
@@ -2264,6 +2365,10 @@ export function getPrompt(params: PromptParams): string {
   }
 
   const seed = shuffleSeed ?? Date.now();
+  const activeCurrentAffairsWindow = enableCurrentAffairs
+    ? params.currentAffairsWindow ?? selectCurrentAffairsMonthWindow(seed)
+    : undefined;
+  const currentAffairsRangeLabel = activeCurrentAffairsWindow?.rangeLabel || "recent relevant developments";
 
   // Auto-calculate style distribution if not provided (UPSC 2024-2025 realistic pattern)
   const styles = providedStyles && providedStyles.length > 0
@@ -2300,9 +2405,10 @@ export function getPrompt(params: PromptParams): string {
   // Current affairs is always included now for better 2026 predictions
   const previousSearchQueries = params.previousSearchQueries ?? [];
   const searchDiversity = buildSearchDiversitySection(previousSearchQueries);
-  const currentAffairsSection = !forceStatic && enableCurrentAffairs
-    ? `${CURRENT_AFFAIRS_CONTEXT}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme) : ""} `
-    : "";
+  let currentAffairsSection = "";
+  if (!forceStatic && enableCurrentAffairs && activeCurrentAffairsWindow) {
+    currentAffairsSection = `${CURRENT_AFFAIRS_CONTEXT(activeCurrentAffairsWindow)}\n\n${searchDiversity}${currentAffairsTheme ? CURRENT_AFFAIRS_THEME_CONTEXT(currentAffairsTheme, activeCurrentAffairsWindow) : ""} `;
+  }
   // Build style distribution instructions — map "factual" to "standard" for model clarity
   const styleInstructions = styles
     .map(({ style, count }) => {
@@ -2322,7 +2428,7 @@ ${themeContext}
 
 ${PRELIMS_2026_FOCUS}
 
-${getContentBalanceRatio(subject)}
+${getContentBalanceRatio(subject, activeCurrentAffairsWindow)}
 
 ${RELEVANCE_FILTER}
 
@@ -2476,13 +2582,13 @@ ${(() => {
 CATEGORY 1: DIRECT CA (${dcPct}% = ${dcCount} questions)
   - Explicitly mention recent events: "In context of COP30...", "With reference to Budget 2025-26..."
   - MUST include [Relevance: ...] in explanation
-  - MUST include "Sources: <URL>" with verified links from 2025+
+  - MUST include "Sources: <URL>" with verified links from ${currentAffairsRangeLabel}
   - Test static concepts THROUGH current events
   - Example: "With reference to the Union Budget 2025-26's focus on green energy, consider the
     following statements about Green Hydrogen..."
 
 CATEGORY 2: DERIVED STATIC (${dsPct}% = ${dsCount} questions)
-  - Topic selected because it's trending in news (last 12 months)
+  - Topic selected because it's trending in ${currentAffairsRangeLabel}
   - Question framed purely from textbook - NO mention of recent events in question text
   - NO [Relevance] tag, NO Sources needed in explanation
   - Looks identical to pure static question to the student

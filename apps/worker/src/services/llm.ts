@@ -1,6 +1,11 @@
 import type { Env } from "../types.js";
 import type { GeneratedQuestion, QuestionStyle, QuestionSubject } from "@mcqs/shared";
-import { getPrompt, calculateStyleDistribution } from "../prompts/index.js";
+import {
+  getPrompt,
+  calculateStyleDistribution,
+  selectCurrentAffairsMonthWindow,
+  type CurrentAffairsMonthWindow,
+} from "../prompts/index.js";
 import {
   validateBatch,
   autoFixQuestion,
@@ -118,6 +123,7 @@ interface GenerateQuizParams {
   temperatureOverride?: number; // Override temperature for this call (used for regen diversity)
   previousSearchQueries?: string[]; // Web search queries from prior calls — model should search differently
   forceStatic?: boolean; // Force pure-static generation only
+  currentAffairsWindow?: CurrentAffairsMonthWindow; // Stable CA month window for the full generation
 }
 
 export interface GenerateQuizMetrics {
@@ -527,6 +533,7 @@ async function generateQuizCall(
     shuffleSeed,
     previousSearchQueries,
     forceStatic = false,
+    currentAffairsWindow,
   } = params;
 
   // Use primary generation model for all cases (including grounding)
@@ -551,6 +558,7 @@ async function generateQuizCall(
     totalCount: count,
     enableCurrentAffairs: forceStatic ? false : enableCurrentAffairs,
     currentAffairsTheme,
+    currentAffairsWindow,
     excludeTopics,
     regenerationIndex,
     shuffleSeed,
@@ -568,6 +576,7 @@ async function generateQuizCall(
     day: "numeric",
     timeZone: "UTC",
   });
+  const currentAffairsWindowLabel = currentAffairsWindow?.rangeLabel;
 
   const systemPrompt = forceStatic
     ? `You are a UPSC Civil Services Preliminary Examination expert question generator with deep knowledge of the Indian civil services examination pattern, syllabus, and question standards.
@@ -626,7 +635,9 @@ CRITICAL REQUIREMENTS:
 3. SMART DISTRACTORS: DO NOT use absolute words (only, always, never, all, none) in wrong options - UPSC aspirants know this pattern.
 4. EDUCATIONAL EXPLANATIONS: Explain WHY correct answer is right AND why each distractor is wrong.
 5. TIME CONTEXT: Today's date is ${currentDateHuman} (UTC date: ${currentDateISO}).
-6. CURRENT AFFAIRS FOCUS: When generating current affairs questions or using search, STRICTLY PRIORITY news/events from JANUARY 2025 TO PRESENT (2026). Do NOT use 2023 or 2024 news unless absolutely necessary for historical context. The target exam is UPSC 2026.
+6. CURRENT AFFAIRS FOCUS:${currentAffairsWindowLabel
+  ? ` For this quiz, use ONLY the contiguous 3-month CA window ${currentAffairsWindowLabel}. Do NOT use out-of-window developments as current-affairs triggers unless absolutely necessary for minimal historical context.`
+  : " Current-affairs grounding is disabled for this quiz."} The target exam is UPSC 2026.
 
 OUTPUT REQUIREMENTS:
 - Generate exactly ${count} questions.
@@ -929,6 +940,9 @@ export async function generateQuiz(
 
   // Stable seed for theme randomization — changes per quiz but deterministic within a quiz
   const shuffleSeed = Math.floor(Math.random() * 2147483647);
+  const currentAffairsWindow = !groundingEnabled
+    ? undefined
+    : params.currentAffairsWindow ?? selectCurrentAffairsMonthWindow(shuffleSeed);
 
   // Get retry config from env or use defaults
   const maxRetries = parseInt(env.LLM_MAX_RETRIES || String(DEFAULT_MAX_RETRIES), 10);
@@ -960,6 +974,7 @@ export async function generateQuiz(
             ? [...new Set([...(params.excludeTopics ?? []), ...initialExcludeTopics])]
             : params.excludeTopics,
           shuffleSeed,
+          currentAffairsWindow,
           regenerationIndex: 0,
           forceStatic,
         },
@@ -1346,6 +1361,7 @@ export async function generateQuiz(
               excludeTopics: currentExcludeTopics,
               regenerationIndex,
               shuffleSeed,
+              currentAffairsWindow,
               previousSearchQueries: accumulatedSearchQueries,
               ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
             },
@@ -1502,6 +1518,7 @@ export async function generateQuiz(
                 excludeTopics: emergencyExcludeTopics,
                 regenerationIndex: 1000 + emergencyAttempt,
                 shuffleSeed,
+                currentAffairsWindow,
                 previousSearchQueries: accumulatedSearchQueries,
                 ...(regenTemperature >= 0 ? { temperatureOverride: regenTemperature } : {}),
               },
