@@ -3,7 +3,7 @@
 export const runtime = "edge";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Card, Button, Markdown } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -42,8 +42,10 @@ interface Answer {
 export default function CombinedQuizPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setId = params.id as string;
   const runId = params.runId as string;
+  const shouldShuffle = searchParams.get("shuffle") !== "false";
 
   const [questions, setQuestions] = useState<CombinedQuestion[]>([]);
   const [attemptId, setAttemptId] = useState<string | null>(null);
@@ -109,7 +111,7 @@ export default function CombinedQuizPage() {
         setAttemptId(null);
         setRevealedQuestions(new Set());
 
-        const questionsData = await getCombinedQuestions(setId, runId);
+        const questionsData = await getCombinedQuestions(setId, runId, shouldShuffle);
         setQuestions(questionsData.questions);
         setLearnMode(questionsData.learnMode);
 
@@ -131,11 +133,11 @@ export default function CombinedQuizPage() {
         }
 
         // Start or resume attempt (non-learn mode)
-        const startResult = await startRunAttempt(setId, runId);
+        const startResult = await startRunAttempt(setId, runId, shouldShuffle);
 
         // If already completed, redirect to results
         if (startResult.status === "completed") {
-          router.replace(`/sets/${setId}/runs/${runId}/combined/results?attempt=${startResult.attemptId}`);
+          router.replace(`/sets/${setId}/runs/${runId}/combined/results?attempt=${startResult.attemptId}${!shouldShuffle ? "&shuffle=false" : ""}`);
           return;
         }
 
@@ -177,7 +179,7 @@ export default function CombinedQuizPage() {
       }
     }
     load();
-  }, [setId, runId, router]);
+  }, [setId, runId, router, shouldShuffle]);
 
   // Handle answer selection
   const handleAnswer = useCallback(
@@ -265,7 +267,7 @@ export default function CombinedQuizPage() {
     setSubmitting(true);
     try {
       await submitRunAttempt(attemptId);
-      router.push(`/sets/${setId}/runs/${runId}/combined/results?attempt=${attemptId}`);
+      router.push(`/sets/${setId}/runs/${runId}/combined/results?attempt=${attemptId}${!shouldShuffle ? "&shuffle=false" : ""}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit quiz");
       setSubmitting(false);
@@ -328,7 +330,9 @@ export default function CombinedQuizPage() {
         <Card className="text-center py-12">
           <div className="animate-spin h-8 w-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Combined Quiz...</h2>
-          <p className="text-gray-600">Shuffling questions from all quizzes in this run.</p>
+          <p className="text-gray-600">
+            {shouldShuffle ? "Shuffling questions from all quizzes in this run." : "Loading questions in original order."}
+          </p>
         </Card>
       </div>
     );
@@ -384,7 +388,7 @@ export default function CombinedQuizPage() {
                 )}
               </div>
               <p className="text-sm text-gray-500">
-                {questions.length} questions from all quizzes in this run (shuffled)
+                {questions.length} questions from all quizzes in this run ({shouldShuffle ? "shuffled" : "original order"})
               </p>
             </div>
             <div className="flex items-center gap-4 text-sm">

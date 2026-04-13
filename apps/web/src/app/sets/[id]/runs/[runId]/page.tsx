@@ -210,11 +210,15 @@ export default function QuizSetRunPage() {
               <Link href={`/sets/${setId}/runs/${runId}/combined`}>
                 <Button variant="secondary">Combined Quiz (Jumbled)</Button>
               </Link>
+              <Link href={`/sets/${setId}/runs/${runId}/combined?shuffle=false`}>
+                <Button variant="secondary">Combined Quiz (Unjumbled)</Button>
+              </Link>
             </>
           ) : (
             <>
               <Button disabled>Attempt Run</Button>
               <Button variant="secondary" disabled>Combined Quiz (Jumbled)</Button>
+              <Button variant="secondary" disabled>Combined Quiz (Unjumbled)</Button>
             </>
           )}
           <Link href={`/sets/${setId}/runs/${runId}/summary`}>

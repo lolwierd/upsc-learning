@@ -144,11 +144,14 @@ runAttempt.get("/:setId/runs/:runId/combined-questions", async (c) => {
     .bind(...quizIds)
     .all<QuestionRow & { subject: string; theme: string | null }>();
 
-  // Shuffle questions using run ID as seed
-  const shuffled = seededShuffle(questionsResult.results, runId);
+  // Shuffle questions using run ID as seed (unless shuffle=false)
+  const shouldShuffle = c.req.query("shuffle") !== "false";
+  const ordered = shouldShuffle
+    ? seededShuffle(questionsResult.results, runId)
+    : questionsResult.results;
 
   // Map to response format
-  const questions: CombinedQuestion[] = shuffled.map((q, index) => {
+  const questions: CombinedQuestion[] = ordered.map((q, index) => {
     const base: CombinedQuestion = {
       id: q.id,
       quizId: q.quiz_id,
@@ -204,11 +207,21 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
     return c.json({ error: "Run not found" }, 404);
   }
 
-  // Check for existing attempt for this run
+  // Parse shuffle preference from request body (default: true)
+  let shouldShuffle = true;
+  try {
+    const body = await c.req.json();
+    if (body.shuffle === false) shouldShuffle = false;
+  } catch {
+    // No body or invalid JSON — default to shuffle=true
+  }
+  const shuffleSeed = shouldShuffle ? runId : "__unshuffled__";
+
+  // Check for existing attempt for this run with matching shuffle mode
   const existingAttempt = await c.env.DB.prepare(
-    `SELECT * FROM run_attempts WHERE run_id = ? ORDER BY started_at DESC LIMIT 1`
+    `SELECT * FROM run_attempts WHERE run_id = ? AND shuffle_seed = ? ORDER BY started_at DESC LIMIT 1`
   )
-    .bind(runId)
+    .bind(runId, shuffleSeed)
     .first<RunAttemptRow>();
 
   if (existingAttempt) {
@@ -257,8 +270,10 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
     return c.json({ error: "No questions found in this run" }, 400);
   }
 
-  // Shuffle questions using run ID as seed
-  const shuffled = seededShuffle(questionsResult.results, runId);
+  // Shuffle or keep original order
+  const ordered = shouldShuffle
+    ? seededShuffle(questionsResult.results, runId)
+    : questionsResult.results;
 
   // Create new attempt
   const attemptId = nanoid();
@@ -268,12 +283,12 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
     `INSERT INTO run_attempts (id, run_id, user_id, started_at, total_questions, status, shuffle_seed)
      VALUES (?, ?, ?, ?, ?, 'in_progress', ?)`
   )
-    .bind(attemptId, runId, "public", now, totalQuestions, runId)
+    .bind(attemptId, runId, "public", now, totalQuestions, shuffleSeed)
     .run();
 
-  // Create answer records for each question with shuffled index
-  for (let i = 0; i < shuffled.length; i++) {
-    const q = shuffled[i];
+  // Create answer records for each question with index
+  for (let i = 0; i < ordered.length; i++) {
+    const q = ordered[i];
     const answerId = nanoid();
     await c.env.DB.prepare(
       `INSERT INTO run_attempt_answers (id, run_attempt_id, question_id, quiz_id, shuffled_index, marked_for_review)
