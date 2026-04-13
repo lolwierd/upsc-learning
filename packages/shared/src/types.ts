@@ -191,6 +191,7 @@ export interface UserSettings {
   defaultQuestionCount: number;
   learnModeEnabled: boolean;
   defaultQuizSetId: string | null;
+  defaultShuffleMode: boolean;
 }
 
 // ============================================

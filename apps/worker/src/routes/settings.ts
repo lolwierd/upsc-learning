@@ -12,6 +12,7 @@ type UserSettingsRow = {
   default_question_count: number | null;
   learn_mode_enabled: number | null;
   default_quiz_set_id: string | null;
+  default_shuffle_mode: number | null;
 };
 
 const updateSettingsSchema = z.object({
@@ -20,6 +21,7 @@ const updateSettingsSchema = z.object({
   defaultQuestionCount: z.number().int().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT).optional(),
   learnModeEnabled: z.boolean().optional(),
   defaultQuizSetId: z.string().nullable().optional(),
+  defaultShuffleMode: z.boolean().optional(),
 });
 
 // Get user settings
@@ -38,6 +40,7 @@ settings.get("/", async (c) => {
       defaultQuestionCount: 10,
       learnModeEnabled: false,
       defaultQuizSetId: null,
+      defaultShuffleMode: true,
     });
   }
 
@@ -47,6 +50,7 @@ settings.get("/", async (c) => {
     defaultQuestionCount: result.default_question_count || 10,
     learnModeEnabled: !!result.learn_mode_enabled,
     defaultQuizSetId: result.default_quiz_set_id || null,
+    defaultShuffleMode: result.default_shuffle_mode !== 0,
   });
 });
 
@@ -67,8 +71,8 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     const defaultQuizSetId = body.defaultQuizSetId ? body.defaultQuizSetId : null;
 
     await c.env.DB.prepare(
-      `INSERT INTO user_settings (user_id, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, default_quiz_set_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO user_settings (user_id, openai_api_key, gemini_api_key, default_question_count, learn_mode_enabled, default_quiz_set_id, default_shuffle_mode, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         "public",
@@ -77,6 +81,7 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
         body.defaultQuestionCount || 10,
         body.learnModeEnabled ? 1 : 0,
         defaultQuizSetId,
+        body.defaultShuffleMode === false ? 0 : 1,
         now,
         now
       )
@@ -105,6 +110,10 @@ settings.patch("/", zValidator("json", updateSettingsSchema), async (c) => {
     if (body.defaultQuizSetId !== undefined) {
       updates.push("default_quiz_set_id = ?");
       params.push(body.defaultQuizSetId ? body.defaultQuizSetId : null);
+    }
+    if (body.defaultShuffleMode !== undefined) {
+      updates.push("default_shuffle_mode = ?");
+      params.push(body.defaultShuffleMode ? 1 : 0);
     }
 
     if (updates.length > 0) {

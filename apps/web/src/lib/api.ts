@@ -229,6 +229,7 @@ export async function updateSettings(
     defaultQuestionCount: number;
     learnModeEnabled: boolean;
     defaultQuizSetId: string | null;
+    defaultShuffleMode: boolean;
   }>
 ): Promise<{ success: boolean }> {
   return fetchAPI(API_ENDPOINTS.SETTINGS, {
