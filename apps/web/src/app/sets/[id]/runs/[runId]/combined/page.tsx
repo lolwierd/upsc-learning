@@ -61,6 +61,7 @@ export default function CombinedQuizPage() {
   const [copiedQuestionId, setCopiedQuestionId] = useState<string | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [studiedQuestions, setStudiedQuestions] = useState<Set<string>>(new Set());
+  const [hideCA, setHideCA] = useState(false);
 
   // Track when questions are 50% out of view
   useEffect(() => {
@@ -359,6 +360,15 @@ export default function CombinedQuizPage() {
   ).length;
   // In learn mode, show studied count; otherwise show answered count
   const progressCount = learnMode ? studiedQuestions.size : answeredCount;
+
+  // Filter out CA questions when toggle is active
+  const displayQuestions = hideCA
+    ? questions.filter(q => getMetadata(q)?.category !== "direct-ca")
+    : questions;
+  // Map from original index to display index for navigation
+  const originalIndexMap = new Map(
+    displayQuestions.map((q, displayIdx) => [q.id, { displayIdx, originalIdx: questions.indexOf(q) }])
+  );
   const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
@@ -386,9 +396,24 @@ export default function CombinedQuizPage() {
                     {showAnswers ? "Hide Answers" : "Show Answers"}
                   </button>
                 )}
+                {questions.some(q => getMetadata(q)?.category === "direct-ca") && (
+                  <button
+                    onClick={() => setHideCA(!hideCA)}
+                    className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-medium transition-colors",
+                      hideCA
+                        ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    )}
+                  >
+                    {hideCA ? `Show CA (${questions.filter(q => getMetadata(q)?.category === "direct-ca").length})` : "Hide CA"}
+                  </button>
+                )}
               </div>
               <p className="text-sm text-gray-500">
-                {questions.length} questions from all quizzes in this run ({shouldShuffle ? "shuffled" : "original order"})
+                {hideCA
+                  ? `${questions.filter(q => getMetadata(q)?.category !== "direct-ca").length} of ${questions.length} questions (CA hidden)`
+                  : `${questions.length} questions from all quizzes in this run (${shouldShuffle ? "shuffled" : "original order"})`}
               </p>
             </div>
             <div className="flex items-center gap-4 text-sm">
@@ -439,7 +464,8 @@ export default function CombinedQuizPage() {
           <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2 max-h-[35vh] overflow-y-auto">
-              {questions.map((q, i) => {
+              {displayQuestions.map((q) => {
+                const indices = originalIndexMap.get(q.id)!;
                 const answer = answers.get(q.id);
                 const isAnswered = answer?.selectedOption !== null;
                 const isMarked = answer?.markedForReview;
@@ -452,7 +478,7 @@ export default function CombinedQuizPage() {
                     key={q.id}
                     onClick={() => {
                       document
-                        .getElementById(`question-${i}`)
+                        .getElementById(`question-${indices.displayIdx}`)
                         ?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }}
                     className={cn(
@@ -471,7 +497,7 @@ export default function CombinedQuizPage() {
                     )}
                     title={`${SUBJECT_LABELS[q.subject as keyof typeof SUBJECT_LABELS]}${q.theme ? ` - ${q.theme}` : ""}`}
                   >
-                    {i + 1}
+                    {indices.originalIdx + 1}
                   </button>
                 );
               })}
@@ -513,7 +539,8 @@ export default function CombinedQuizPage() {
 
         {/* Questions */}
         <div className="lg:col-span-3 space-y-6">
-          {questions.map((question, i) => {
+          {displayQuestions.map((question, i) => {
+            const indices = originalIndexMap.get(question.id)!;
             const answer = answers.get(question.id);
             const isMarked = answer?.markedForReview;
             const isRevealed = revealedQuestions.has(question.id);
@@ -530,6 +557,7 @@ export default function CombinedQuizPage() {
                   !learnMode && isMarked && "ring-2 ring-amber-400"
                 )}
               >
+
                 {/* Subject/Theme Badge + Category Badges (Learn Mode) */}
                 {(() => {
                   const meta = getMetadata(question);
@@ -558,13 +586,13 @@ export default function CombinedQuizPage() {
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center font-medium text-sm">
-                      {i + 1}
+                      {indices.originalIdx + 1}
                     </span>
                     <Markdown className="text-gray-900" text={question.questionText} />
                   </div>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleCopyQuestion(question, i)}
+                      onClick={() => handleCopyQuestion(question, indices.originalIdx)}
                       className={cn(
                         "flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors",
                         copiedQuestionId === question.id
@@ -679,7 +707,7 @@ export default function CombinedQuizPage() {
                   <div
                     className={cn(
                       "mt-4 ml-11 space-y-3 transition-all duration-200",
-                      i < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
+                      indices.originalIdx < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
                     )}
                   >
                     {/* Answer Below Indicator */}

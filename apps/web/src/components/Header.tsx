@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
+  { href: "/quiz/new", label: "New Quiz" },
   { href: "/pyqs", label: "PYQs" },
   { href: "/sets", label: "Sets" },
   { href: "/history", label: "History" },

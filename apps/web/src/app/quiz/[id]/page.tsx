@@ -127,6 +127,7 @@ export default function QuizPage() {
   const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
   const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
   const [studiedQuestions, setStudiedQuestions] = useState<Set<string>>(new Set());
+  const [hideCA, setHideCA] = useState(false);
 
   // Track when questions are 50% out of view
   useEffect(() => {
@@ -523,6 +524,14 @@ export default function QuizPage() {
     ? (quiz.theme || `UPSC ${quiz.sourceMeta?.year || ""} ${quiz.sourceMeta?.paper || "PYQ"}`)
     : `${SUBJECT_LABELS[quiz.subject as keyof typeof SUBJECT_LABELS]}${quiz.theme ? ` - ${quiz.theme}` : ""}`;
 
+  // Filter out CA questions when toggle is active
+  const displayQuizQuestions = hideCA
+    ? quiz.questions.filter(q => q.metadata?.category !== "direct-ca")
+    : quiz.questions;
+  const quizOriginalIndexMap = new Map(
+    displayQuizQuestions.map((q, displayIdx) => [q.id, { displayIdx, originalIdx: quiz.questions.indexOf(q) }])
+  );
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       {isPyq && (
@@ -568,6 +577,19 @@ export default function QuizPage() {
                 {showAnswers ? "Hide Answers" : "Show Answers"}
               </button>
             )}
+            {quiz.questions.some(q => q.metadata?.category === "direct-ca") && (
+              <button
+                onClick={() => setHideCA(!hideCA)}
+                className={cn(
+                  "text-xs px-2 py-0.5 rounded-full font-medium transition-colors",
+                  hideCA
+                    ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                )}
+              >
+                {hideCA ? `Show CA (${quiz.questions.filter(q => q.metadata?.category === "direct-ca").length})` : "Hide CA"}
+              </button>
+            )}
           </div>
           <p className="text-sm text-gray-500">
             {displayStyleLabel}
@@ -594,11 +616,12 @@ export default function QuizPage() {
           <Card>
             <p className="text-sm font-medium text-gray-700 mb-3">Questions</p>
             <div className="grid grid-cols-5 gap-2">
-              {quiz.questions.map((q, i) => {
+              {displayQuizQuestions.map((q) => {
+                const indices = quizOriginalIndexMap.get(q.id)!;
                 const answer = answers.get(q.id);
                 const isAnswered = answer?.selectedOption !== null;
                 const isMarked = answer?.markedForReview;
-                const isCurrent = i === currentQuestion;
+                const isCurrent = indices.originalIdx === currentQuestion;
                 const isRevealed = revealedQuestions.has(q.id);
                 const isCorrect = canRevealAnswers && isRevealed && answer?.selectedOption === q.correctOption;
                 const isIncorrect = canRevealAnswers && isRevealed && answer?.selectedOption !== q.correctOption;
@@ -608,9 +631,9 @@ export default function QuizPage() {
                   <button
                     key={q.id}
                     onClick={() => {
-                      setCurrentQuestion(i);
+                      setCurrentQuestion(indices.originalIdx);
                       document
-                        .getElementById(`question-${i}`)
+                        .getElementById(`question-${indices.displayIdx}`)
                         ?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }}
                     className={cn(
@@ -631,7 +654,7 @@ export default function QuizPage() {
                             : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     )}
                   >
-                    {i + 1}
+                    {indices.originalIdx + 1}
                   </button>
                 );
               })}
@@ -683,7 +706,8 @@ export default function QuizPage() {
 
         {/* Questions */}
         <div className="lg:col-span-3 space-y-6">
-          {quiz.questions.map((question, i) => {
+          {displayQuizQuestions.map((question, i) => {
+            const indices = quizOriginalIndexMap.get(question.id)!;
             const answer = answers.get(question.id);
             const isMarked = answer?.markedForReview;
             const isRevealed = revealedQuestions.has(question.id);
@@ -696,7 +720,7 @@ export default function QuizPage() {
             const passageSet = question.passageSetId ? passageSetsById.get(question.passageSetId) : undefined;
             const inlinePassage = (isCsat && passageSet && typeof question.passageLabel === "number")
               ? (() => {
-                  const firstWithThisPassage = quiz.questions.find(
+                  const firstWithThisPassage = displayQuizQuestions.find(
                     (q) => q.passageSetId === question.passageSetId && q.passageLabel === question.passageLabel,
                   );
                   if (firstWithThisPassage?.id !== question.id) return null;
@@ -742,7 +766,7 @@ export default function QuizPage() {
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-8 h-8 bg-primary-100 text-primary-700 rounded-lg flex items-center justify-center font-medium text-sm">
-                      {i + 1}
+                      {indices.originalIdx + 1}
                     </span>
                     <div>
                       {isCsat && (
@@ -770,7 +794,7 @@ export default function QuizPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleCopyQuestion(question, i)}
+                      onClick={() => handleCopyQuestion(question, indices.originalIdx)}
                       className={cn(
                         "flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors",
                         copiedQuestionId === question.id
@@ -901,7 +925,7 @@ export default function QuizPage() {
                     className={cn(
                       "mt-4 ml-11 space-y-3 transition-all duration-200",
                       // First 2 questions: blur until hover
-                      i < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
+                      indices.originalIdx < 2 && !isRevealed && "blur-sm hover:blur-none select-none hover:select-auto"
                     )}
                   >
                     {/* Answer Below Indicator */}
