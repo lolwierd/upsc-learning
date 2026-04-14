@@ -229,6 +229,7 @@ export async function updateSettings(
     defaultQuestionCount: number;
     learnModeEnabled: boolean;
     defaultQuizSetId: string | null;
+    defaultShuffleMode: boolean;
   }>
 ): Promise<{ success: boolean }> {
   return fetchAPI(API_ENDPOINTS.SETTINGS, {
@@ -513,21 +514,27 @@ export async function deleteQuizSetNotifierApi(
 // Run Attempt APIs (Combined Quiz)
 // ============================================
 
-// Get all questions from a run, shuffled
+// Get all questions from a run, optionally shuffled
 export async function getCombinedQuestions(
   setId: string,
-  runId: string
+  runId: string,
+  shuffle = true
 ): Promise<{ questions: CombinedQuestion[]; totalQuestions: number; learnMode: boolean }> {
-  return fetchAPI(API_ENDPOINTS.RUN_COMBINED_QUESTIONS(setId, runId));
+  const url = shuffle
+    ? API_ENDPOINTS.RUN_COMBINED_QUESTIONS(setId, runId)
+    : `${API_ENDPOINTS.RUN_COMBINED_QUESTIONS(setId, runId)}?shuffle=false`;
+  return fetchAPI(url);
 }
 
 // Start or resume a run attempt
 export async function startRunAttempt(
   setId: string,
-  runId: string
+  runId: string,
+  shuffle = true
 ): Promise<{ attemptId: string; status: string; message?: string; totalQuestions?: number }> {
   return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_START(setId, runId), {
     method: "POST",
+    body: JSON.stringify({ shuffle }),
   });
 }
 

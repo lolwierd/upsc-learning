@@ -18,9 +18,11 @@ export default function Home() {
     async function loadData() {
       try {
         let defaultQuizSetId: string | null = null;
+        let defaultShuffleMode = true;
         try {
           const settings = await getSettings();
           defaultQuizSetId = settings.defaultQuizSetId ?? null;
+          defaultShuffleMode = settings.defaultShuffleMode ?? true;
         } catch (err) {
           console.warn("Failed to load settings for default quiz set:", err);
         }
@@ -59,7 +61,8 @@ export default function Home() {
             }
 
             if (redirectRun) {
-              router.replace(`/sets/${defaultQuizSetId}/runs/${redirectRun.id}/combined`);
+              const shuffleParam = defaultShuffleMode ? "" : "?shuffle=false";
+              router.replace(`/sets/${defaultQuizSetId}/runs/${redirectRun.id}/combined${shuffleParam}`);
               return;
             }
           } catch (err) {

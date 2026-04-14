@@ -15,6 +15,7 @@ export default function SettingsPage() {
   const [defaultQuestionCount, setDefaultQuestionCount] = useState(10);
   const [learnModeEnabled, setLearnModeEnabled] = useState(false);
   const [defaultQuizSetId, setDefaultQuizSetId] = useState<string | null>(null);
+  const [defaultShuffleMode, setDefaultShuffleMode] = useState(true);
   const [quizSets, setQuizSets] = useState<QuizSetListItem[]>([]);
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function SettingsPage() {
           setDefaultQuestionCount(settingsResult.value.defaultQuestionCount);
           setLearnModeEnabled(settingsResult.value.learnModeEnabled);
           setDefaultQuizSetId(settingsResult.value.defaultQuizSetId ?? null);
+          setDefaultShuffleMode(settingsResult.value.defaultShuffleMode ?? true);
         } else {
           setError(
             settingsResult.reason instanceof Error
@@ -57,6 +59,7 @@ export default function SettingsPage() {
         defaultQuestionCount,
         learnModeEnabled,
         defaultQuizSetId,
+        defaultShuffleMode,
       });
       setSuccess(true);
     } catch (err) {
@@ -134,6 +137,43 @@ export default function SettingsPage() {
             </p>
           </div>
         </Card>
+
+        {/* Default Shuffle Mode */}
+        {defaultQuizSetId && (
+          <Card>
+            <CardTitle className="text-base">Dashboard Quiz Order</CardTitle>
+            <CardDescription>
+              Choose question order when the dashboard redirects to the combined quiz
+            </CardDescription>
+            <div className="mt-4 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setDefaultShuffleMode(true)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-colors ${
+                  defaultShuffleMode
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Jumbled
+              </button>
+              <button
+                type="button"
+                onClick={() => setDefaultShuffleMode(false)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-colors ${
+                  !defaultShuffleMode
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Unjumbled
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Jumbled shuffles questions across all quizzes. Unjumbled keeps original order.
+            </p>
+          </Card>
+        )}
 
         {/* Learn Mode */}
         <Card>

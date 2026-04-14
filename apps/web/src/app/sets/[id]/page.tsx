@@ -368,12 +368,17 @@ export default function QuizSetDetailPage() {
               <div>
                 <h3 className="font-semibold text-primary-900 mb-1">Quick Start</h3>
                 <p className="text-sm text-primary-700">
-                  Take a combined quiz with all {totalQuestions} questions from the latest run (shuffled)
+                  Take a combined quiz with all {totalQuestions} questions from the latest run
                 </p>
               </div>
-              <Link href={`/sets/${setId}/runs/${latestRun.id}/combined`}>
-                <Button>Start Combined Quiz</Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href={`/sets/${setId}/runs/${latestRun.id}/combined`}>
+                  <Button>Jumbled</Button>
+                </Link>
+                <Link href={`/sets/${setId}/runs/${latestRun.id}/combined?shuffle=false`}>
+                  <Button variant="secondary">Unjumbled</Button>
+                </Link>
+              </div>
             </div>
           </Card>
         );
