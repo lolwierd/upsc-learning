@@ -20,11 +20,11 @@ const SUBJECTS = [
 // Exact CA ratios (matching SUBJECT_CA_RATIOS in prompts/index.ts)
 // Validated by Gemini 3 Pro classification — 2017-2025 PYQs only
 const SUBJECT_CA_RATIOS = {
-  history:     0.17,
+  history:     0.20,  // TEMP-CA-OVERRIDE: was 0.17. Revert here AND in prompts/index.ts.
   geography:   0.44,
   art_culture: 0.23,
   science:     0.80,
-  polity:      0.49,
+  polity:      0.20,  // TEMP-CA-OVERRIDE: was 0.49. Revert here AND in prompts/index.ts.
   economy:     0.71,
   environment: 0.63,
 };
@@ -110,13 +110,18 @@ const randomPrompt = getPrompt({
 });
 
 // Random mode should have the per-subject table
+// TEMP-CA-OVERRIDE: History/Polity rows asserted at 20% Total CA (was 17%/49%).
 assert(
-  randomPrompt.includes("| History        | 6%"),
-  "random: Per-subject table should include History 6%"
+  randomPrompt.includes("| History        | 20%"),
+  "random: Per-subject table should include History 20%"
 );
 assert(
-  randomPrompt.includes("| Environment    | 42%"),
-  "random: Per-subject table should include Environment 42%"
+  randomPrompt.includes("| Polity         | 20%"),
+  "random: Per-subject table should include Polity 20%"
+);
+assert(
+  randomPrompt.includes("| Environment    | 63%"),
+  "random: Per-subject table should include Environment 63%"
 );
 assert(
   !randomPrompt.includes("EXACTLY 15% Direct CA"),

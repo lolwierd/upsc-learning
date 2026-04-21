@@ -45,10 +45,10 @@ interface PromptParams {
  * The direct:derived split within CA is ~37.5% : 62.5% (preserving 15:25 ratio).
  */
 const SUBJECT_CA_RATIOS: Record<string, number> = {
-  history:     0.17,  // 17% CA  — mostly static, some derived-static from heritage/policy events
+  history:     0.20,  // TEMP-CA-OVERRIDE: 20% CA / 80% static (was 0.17). Revert by restoring 0.17.
   art_culture: 0.23,  // 23% CA  — volatile (SD=29); heritage designations, cultural events
   geography:   0.44,  // 44% CA  — disasters, resource discoveries, mapping exercises linked to news
-  polity:      0.49,  // 49% CA  — amendments, schemes, judgments, governance reforms
+  polity:      0.20,  // TEMP-CA-OVERRIDE: 20% CA / 80% static (was 0.49). Revert by restoring 0.49.
   environment: 0.63,  // 63% CA  — climate summits, conservation policy, species in news
   economy:     0.71,  // 71% CA  — budget, RBI policy, trade, fiscal events dominate
   science:     0.80,  // 80% CA  — missions, emerging tech, defense, space; heavily CA-driven
@@ -407,6 +407,11 @@ export { calculateStyleDistribution };
 // RANDOM MODE PROMPT (Multi-Subject Quiz Generation)
 // ============================================================================
 
+// TEMP-CA-OVERRIDE: Two hardcoded ratio tables inside this function's template
+// literal have History/Polity rows overridden to 20% CA / 80% static (7/13/80).
+// Originals: History was 17%/6%/11%/83% and 2%/4%/94%; Polity was 49%/18%/31%/51%
+// and 12%/20%/68%. The FINAL CHECKLIST line and the SUBJECT_CA_RATIOS map also
+// carry the same marker — revert all of them together.
 function getRandomModePrompt(params: PromptParams): string {
   const {
     theme,
@@ -581,10 +586,10 @@ Different subjects have different CA intensities. Apply these ratios PER SUBJECT
 
 | Subject        | Total CA | Direct CA | Derived Static | Pure Static |
 |----------------|----------|-----------|----------------|-------------|
-| History        | 17%      | 6%        | 11%            | 83%         |
+| History        | 20%      | 7%        | 13%            | 80%         |
 | Art & Culture  | 23%      | 9%        | 14%            | 77%         |
 | Geography      | 44%      | 17%       | 28%            | 56%         |
-| Polity         | 49%      | 18%       | 31%            | 51%         |
+| Polity         | 20%      | 7%        | 13%            | 80%         |
 | Environment    | 63%      | 24%       | 39%            | 37%         |
 | Economy        | 71%      | 27%       | 44%            | 29%         |
 | Science & Tech | 80%      | 30%       | 50%            | 20%         |
@@ -761,7 +766,7 @@ A question with the WRONG questionType will be rejected and regenerated. Label c
 
 FINAL CHECKLIST BEFORE GENERATION:
 - Subject distribution follows UPSC pattern (not uniform)
-- CA ratios applied PER SUBJECT (see table above): History ~6% CA, Environment ~42% CA, etc.
+- CA ratios applied PER SUBJECT (see table above): History ~20% CA, Polity ~20% CA, Environment ~63% CA, etc.
 - Direct CA questions include [Relevance] and Sources
 - Derived Static questions: CA topics with static framing, NO [Relevance]
 - Pure Static: NO CA influence at all
@@ -780,11 +785,11 @@ Out of ${totalCount} questions, apply PER-SUBJECT CA ratios:
 
 | Subject        | Direct CA | Derived Static | Pure Static |
 |----------------|-----------|----------------|-------------|
-| History        | 2%        | 4%             | 94%         |
+| History        | 7%        | 13%            | 80%         |
 | Geography      | 5%        | 9%             | 86%         |
 | Art & Culture  | 7%        | 12%            | 81%         |
 | Science & Tech | 12%       | 20%            | 68%         |
-| Polity         | 12%       | 20%            | 68%         |
+| Polity         | 7%        | 13%            | 80%         |
 | Economy        | 15%       | 24%            | 61%         |
 | Environment    | 16%       | 26%            | 58%         |
 
