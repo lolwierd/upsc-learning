@@ -543,6 +543,26 @@ export async function getRunAttempt(id: string): Promise<RunAttemptWithAnswers> 
   return fetchAPI(API_ENDPOINTS.RUN_ATTEMPT_GET(id));
 }
 
+export interface RunAttemptSummary {
+  id: string;
+  runId: string;
+  startedAt: number;
+  submittedAt?: number;
+  score?: number;
+  totalQuestions: number;
+  timeTakenSeconds?: number;
+  status: "in_progress" | "completed" | "abandoned";
+  shuffleSeed: string;
+  shuffled: boolean;
+}
+
+export async function getRunAttempts(
+  setId: string,
+  runId: string
+): Promise<{ attempts: RunAttemptSummary[] }> {
+  return fetchAPI(API_ENDPOINTS.RUN_ATTEMPTS_LIST(setId, runId));
+}
+
 // Save an answer for run attempt
 export async function saveRunAttemptAnswer(
   runAttemptId: string,

@@ -305,6 +305,47 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
   });
 });
 
+// GET /attempts - List all run attempts for a run (combined quiz attempts)
+runAttempt.get("/:setId/runs/:runId/attempts", async (c) => {
+  const setId = c.req.param("setId");
+  const runId = c.req.param("runId");
+
+  const run = await c.env.DB.prepare(
+    `SELECT id FROM quiz_set_runs WHERE id = ? AND quiz_set_id = ?`
+  )
+    .bind(runId, setId)
+    .first<{ id: string }>();
+
+  if (!run) {
+    return c.json({ error: "Run not found" }, 404);
+  }
+
+  const attemptsResult = await c.env.DB.prepare(
+    `SELECT id, run_id, started_at, submitted_at, score, total_questions,
+            time_taken_seconds, status, shuffle_seed
+     FROM run_attempts
+     WHERE run_id = ?
+     ORDER BY started_at DESC`
+  )
+    .bind(runId)
+    .all<RunAttemptRow>();
+
+  const attempts = attemptsResult.results.map((row) => ({
+    id: row.id,
+    runId: row.run_id,
+    startedAt: row.started_at,
+    submittedAt: row.submitted_at || undefined,
+    score: row.score ?? undefined,
+    totalQuestions: row.total_questions,
+    timeTakenSeconds: row.time_taken_seconds ?? undefined,
+    status: row.status,
+    shuffleSeed: row.shuffle_seed,
+    shuffled: row.shuffle_seed !== "__unshuffled__",
+  }));
+
+  return c.json({ attempts });
+});
+
 // ============================================
 // Routes under /api/run-attempt/:id
 // ============================================

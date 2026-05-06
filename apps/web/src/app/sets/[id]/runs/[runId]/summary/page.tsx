@@ -6,7 +6,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Card, CardTitle, Button } from "@/components/ui";
-import { getAttemptsByQuizIds, getQuizSet, getQuizSetRun } from "@/lib/api";
+import {
+  getAttemptsByQuizIds,
+  getQuizSet,
+  getQuizSetRun,
+  getRunAttempts,
+  type RunAttemptSummary,
+} from "@/lib/api";
 import type {
   QuizAttemptSummary,
   QuizSetRunWithItems,
@@ -37,6 +43,7 @@ export default function QuizSetRunSummaryPage() {
   const [run, setRun] = useState<QuizSetRunWithItems | null>(null);
   const [quizSet, setQuizSet] = useState<QuizSetWithSchedule | null>(null);
   const [attempts, setAttempts] = useState<QuizAttemptSummary[]>([]);
+  const [runAttempts, setRunAttempts] = useState<RunAttemptSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,9 +51,10 @@ export default function QuizSetRunSummaryPage() {
     setLoading(true);
     setError(null);
 
-    const [runResult, setResult] = await Promise.allSettled([
+    const [runResult, setResult, runAttemptsResult] = await Promise.allSettled([
       getQuizSetRun(setId, runId),
       getQuizSet(setId),
+      getRunAttempts(setId, runId),
     ]);
 
     if (runResult.status === "fulfilled") {
@@ -57,6 +65,10 @@ export default function QuizSetRunSummaryPage() {
 
     if (setResult.status === "fulfilled") {
       setQuizSet(setResult.value);
+    }
+
+    if (runAttemptsResult.status === "fulfilled") {
+      setRunAttempts(runAttemptsResult.value.attempts);
     }
 
     setLoading(false);
@@ -92,18 +104,39 @@ export default function QuizSetRunSummaryPage() {
     return new Map(attempts.map((attempt) => [attempt.quizId, attempt]));
   }, [attempts]);
 
+  const latestCompletedRunAttempt = useMemo(
+    () =>
+      runAttempts.find(
+        (a) => a.status === "completed" && typeof a.score === "number"
+      ) || null,
+    [runAttempts]
+  );
+
   const totals = useMemo(() => {
-    const totalScore = attempts.reduce((sum, attempt) => sum + attempt.score, 0);
-    const totalQuestions = attempts.reduce(
-      (sum, attempt) => sum + attempt.totalQuestions,
-      0
-    );
-    const totalTime = attempts.reduce(
-      (sum, attempt) => sum + (attempt.timeTakenSeconds || 0),
-      0
-    );
-    return { totalScore, totalQuestions, totalTime };
-  }, [attempts]);
+    if (attempts.length > 0) {
+      const totalScore = attempts.reduce((sum, attempt) => sum + attempt.score, 0);
+      const totalQuestions = attempts.reduce(
+        (sum, attempt) => sum + attempt.totalQuestions,
+        0
+      );
+      const totalTime = attempts.reduce(
+        (sum, attempt) => sum + (attempt.timeTakenSeconds || 0),
+        0
+      );
+      return { totalScore, totalQuestions, totalTime, source: "per-quiz" as const };
+    }
+
+    if (latestCompletedRunAttempt) {
+      return {
+        totalScore: latestCompletedRunAttempt.score ?? 0,
+        totalQuestions: latestCompletedRunAttempt.totalQuestions,
+        totalTime: latestCompletedRunAttempt.timeTakenSeconds ?? 0,
+        source: "combined" as const,
+      };
+    }
+
+    return { totalScore: 0, totalQuestions: 0, totalTime: 0, source: "none" as const };
+  }, [attempts, latestCompletedRunAttempt]);
 
   const nextQuizId = useMemo(() => {
     for (const quizId of quizIds) {
@@ -159,10 +192,17 @@ export default function QuizSetRunSummaryPage() {
       <Card>
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <p className="text-sm text-gray-500">Aggregate Score</p>
+            <p className="text-sm text-gray-500">
+              {totals.source === "combined" ? "Combined Quiz Score" : "Aggregate Score"}
+            </p>
             <p className="text-2xl font-semibold text-gray-900">
               {totals.totalScore}/{totals.totalQuestions || 0}
             </p>
+            {totals.source === "combined" && (
+              <p className="text-xs text-gray-500 mt-0.5">
+                From combined attempt (no per-quiz attempts)
+              </p>
+            )}
           </div>
           <div>
             <p className="text-sm text-gray-500">Accuracy</p>
@@ -194,6 +234,85 @@ export default function QuizSetRunSummaryPage() {
           </div>
         </div>
       </Card>
+
+      {runAttempts.length > 0 && (
+        <Card>
+          <CardTitle className="text-base mb-4">Combined Quiz Attempts</CardTitle>
+          <div className="space-y-2">
+            {runAttempts.map((attempt) => {
+              const shuffleParam = attempt.shuffled ? "" : "&shuffle=false";
+              const isCompleted = attempt.status === "completed";
+              const startedLabel = new Date(attempt.startedAt * 1000).toLocaleString(
+                "en-IN",
+                {
+                  day: "numeric",
+                  month: "short",
+                  hour: "numeric",
+                  minute: "2-digit",
+                }
+              );
+              return (
+                <div
+                  key={attempt.id}
+                  className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-medium text-gray-900 text-sm">
+                        {attempt.shuffled ? "Jumbled" : "Unjumbled"}
+                      </span>
+                      <span className="text-gray-300">·</span>
+                      <span className="text-xs text-gray-500">{startedLabel}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-0.5">
+                      {attempt.totalQuestions} questions
+                      {isCompleted && attempt.timeTakenSeconds
+                        ? ` · ${formatTime(attempt.timeTakenSeconds)}`
+                        : ""}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "text-xs font-medium px-2 py-1 rounded-full capitalize",
+                        isCompleted
+                          ? "bg-green-100 text-green-700"
+                          : attempt.status === "in_progress"
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-gray-200 text-gray-700"
+                      )}
+                    >
+                      {attempt.status.replace("_", " ")}
+                    </span>
+                    {isCompleted && typeof attempt.score === "number" && (
+                      <span className="text-sm font-medium text-gray-900">
+                        {attempt.score}/{attempt.totalQuestions}
+                      </span>
+                    )}
+                    {isCompleted ? (
+                      <Link
+                        href={`/sets/${setId}/runs/${runId}/combined/results?attempt=${attempt.id}${shuffleParam}`}
+                      >
+                        <Button size="sm" variant="secondary">
+                          View Results
+                        </Button>
+                      </Link>
+                    ) : attempt.status === "in_progress" ? (
+                      <Link
+                        href={`/sets/${setId}/runs/${runId}/combined${attempt.shuffled ? "" : "?shuffle=false"}`}
+                      >
+                        <Button size="sm" variant="secondary">
+                          Resume
+                        </Button>
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
 
       <Card>
         <CardTitle className="text-base mb-4">Per-Quiz Scores</CardTitle>

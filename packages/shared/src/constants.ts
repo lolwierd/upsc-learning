@@ -138,6 +138,7 @@ export const API_ENDPOINTS = {
   // Run Attempts (Combined Quiz)
   RUN_COMBINED_QUESTIONS: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/combined-questions`,
   RUN_ATTEMPT_START: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/attempt/start`,
+  RUN_ATTEMPTS_LIST: (setId: string, runId: string) => `/api/quiz-sets/${setId}/runs/${runId}/attempts`,
   RUN_ATTEMPT_GET: (id: string) => `/api/run-attempt/${id}`,
   RUN_ATTEMPT_ANSWER: (id: string) => `/api/run-attempt/${id}/answer`,
   RUN_ATTEMPT_ABANDON: (id: string) => `/api/run-attempt/${id}/abandon`,
