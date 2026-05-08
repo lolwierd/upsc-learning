@@ -111,6 +111,16 @@ runAttempt.get("/:setId/runs/:runId/combined-questions", async (c) => {
     return c.json({ error: "Run not found" }, 404);
   }
 
+  if (run.status !== "completed") {
+    return c.json(
+      {
+        error: "Run is still generating. Wait for all quizzes to finish before opening the combined quiz.",
+        runStatus: run.status,
+      },
+      409
+    );
+  }
+
   // Get learn mode setting (match settings.ts pattern - get latest without user filter)
   const settings = await c.env.DB.prepare(
     `SELECT learn_mode_enabled FROM user_settings ORDER BY updated_at DESC LIMIT 1`
@@ -205,6 +215,16 @@ runAttempt.post("/:setId/runs/:runId/attempt/start", async (c) => {
 
   if (!run) {
     return c.json({ error: "Run not found" }, 404);
+  }
+
+  if (run.status !== "completed") {
+    return c.json(
+      {
+        error: "Run is still generating. Wait for all quizzes to finish before starting the combined attempt.",
+        runStatus: run.status,
+      },
+      409
+    );
   }
 
   // Parse shuffle preference from request body (default: true)
